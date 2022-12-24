@@ -1,7 +1,7 @@
 # Template file for 'conky'
 # Keep in sync with 'conky-cli'
 pkgname=conky
-version=1.13.1
+version=1.16.0
 revision=1
 build_style=cmake
 conf_files="/etc/conky/conky.conf /etc/conky/conky_no_x11.conf"
@@ -13,13 +13,13 @@ configure_args="-DMAINTAINER_MODE=ON -DRELEASE=ON
 hostmakedepends="libtool pkg-config docbook2x man-db toluapp"
 makedepends="alsa-lib-devel imlib2-devel libXdamage-devel libXft-devel
  libXinerama-devel libcurl-devel librsvg-devel lua53-devel ncurses-devel
- toluapp-devel wireless_tools-devel"
+ toluapp-devel wireless_tools-devel wayland-devel wayland-protocols pandoc pango-devel python3-yaml python3-Jinja2"
 short_desc="Lightweight system monitor for X"
 maintainer="Orphaned <orphan@voidlinux.org>"
 license="BSD-3-Clause, GPL-3.0-or-later"
 homepage="https://github.com/brndnmtthws/conky"
 distfiles="https://github.com/brndnmtthws/conky/archive/v${version}.tar.gz"
-checksum=f85c96250b501e937b9b5d2ff3f06176e14777c94cec81373bbfc8a619d7a05a
+checksum=f987ff2cb8f7f213b7a196250b536b51eaaeaef7add5f931c8f25171ce2f4646
 
 post_install() {
 	vmkdir etc/conky
