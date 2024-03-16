@@ -17,4 +17,5 @@ checksum=0caa9f3a5efbd7492ce57fc6952e7f78e2d6ee71d4a430aeb0aa7535abecdab5
 
 post_install() {
 	vlicense LICENSE
+	vdoc README.md
 }
