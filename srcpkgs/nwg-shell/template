@@ -3,46 +3,46 @@ pkgname=nwg-shell
 version=0.5.49
 revision=1
 build_style=python3-pep517
-#hostmakedepends="go python3-setuptools python3-wheel nwg-shell-config nwg-bar nwg-clipman nwg-displays nwg-dock nwg-drawer nwg-look nwg-menu nwg-panel python3-geopy python3-yaml python3-requests python3-netifaces"
 hostmakedepends="go python3-setuptools"
 makedepends="python3-gobject-devel gtk+3-devel gtk-layer-shell-devel"
-depends="azote
- nwg-bar
- nwg-clipman
- nwg-displays
- nwg-dock
- nwg-drawer
- nwg-look
- nwg-menu
- nwg-panel
- nwg-readme-browser
- nwg-shell-config
- nwg-shell-wallpapers
- dejavu-fonts-ttf
- gnome-themes-extra
- grim
- gtklock
- ImageMagick
- jq
- libayatana-appindicator
- network-manager-applet
- papirus-icon-theme
- playerctl
- polkit-gnome
- python3-geopy
- python3-netifaces
- python3-requests
- python3-yaml
- slurp
- sway
- swappy
- swaybg
- swayidle
- swaylock
- SwayNotificationCenter
- wl-clipboard
- wlsunset
- xorg-server-xwayland"
+depends="
+	azote
+	nwg-bar
+	nwg-clipman
+	nwg-displays
+	nwg-dock
+	nwg-drawer
+	nwg-hello
+	nwg-look
+	nwg-menu
+	nwg-panel
+	nwg-readme-browser
+	nwg-shell-config
+	nwg-shell-wallpapers
+	dejavu-fonts-ttf
+	gnome-themes-extra
+	grim
+	gtklock
+	ImageMagick
+	jq
+	libayatana-appindicator
+	network-manager-applet
+	papirus-icon-theme
+	playerctl
+	polkit-gnome
+	python3-geopy
+	python3-netifaces
+	python3-requests
+	python3-yaml
+	slurp
+	swappy
+	swaybg
+	swayidle
+	swaylock
+	SwayNotificationCenter
+	wl-clipboard
+	wlsunset
+	xorg-server-xwayland"
 short_desc="GTK based shell for sway and Hyprland Wayland compositors"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
@@ -54,10 +54,11 @@ make_check=no # No checks provided
 
 post_install() {
 	for f in scripts/*; do
-		vbin $f
+		vbin "$f"
 	done
-	vinstall nwg-shell.jpg 644 /usr/share/backgrounds
-	vinstall nwg-readme.desktop 644 /usr/share/applications
+	vinstall nwg-shell.jpg 644 usr/share/backgrounds
+	vinstall nwg-readme.desktop 644 usr/share/applications
+	vinstall nwg-shell/skel 644 etc
 	vdoc README.md
 	vlicense LICENSE
 }
