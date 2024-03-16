@@ -16,12 +16,12 @@ distfiles="https://github.com/nwg-piotr/nwg-displays/archive/refs/tags/v${versio
 checksum=d9595196995f6295ffba1ed74ec038cecdc85c75cec6bafc67cb2b04ebbf0112
 
 post_install() {
-	vinstall nwg-displays.svg 644 /usr/share/pixmaps
-	vinstall nwg-displays.desktop 644 /usr/share/applications
-	vinstall README.md 644 /usr/share/doc/nwg-displays
+	vinstall nwg-displays.svg 644 usr/share/pixmaps
+	vinstall nwg-displays.desktop 644 usr/share/applications
+	vinstall README.md 644 usr/share/doc/nwg-displays
 
 	for lang in nwg_displays/langs/*.json; do
-		vinstall "${lang}" 644 /usr/share/nwg-displays/langs
+		vinstall "${lang}" 644 usr/share/nwg-displays/langs
 	done
 
 	vlicense LICENSE
