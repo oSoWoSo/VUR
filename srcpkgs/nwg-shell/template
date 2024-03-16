@@ -13,16 +13,15 @@ depends="azote gnome-themes-extra grim gtklock ImageMagick jq sway slurp
  nwg-readme-browser nwg-shell-config papirus-icon-theme dejavu-fonts-ttf
  playerctl polkit-gnome swaybg swayidle swaylock SwayNotificationCenter
  wl-clipboard wlsunset xorg-server-xwayland python3-geopy python3-yaml
- python3-requests python3-netifaces"
-# nwg-shell-wallpapers
-checkdepends="python3-wheel python3-pytest"
-short_desc="GTK3-based shell for sway and Hyprland Wayland compositors"
+ python3-requests python3-netifaces nwg-shell-wallpapers"
+short_desc="GTK based shell for sway and Hyprland Wayland compositors"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
 homepage="https://nwg-piotr.github.io/nwg-shell"
 changelog="https://github.com/nwg-piotr/nwg-shell/discussions/categories/changelog"
 distfiles="https://github.com/nwg-piotr/nwg-shell/archive/refs/tags/v${version}.tar.gz"
 checksum=6bcacbb99cd517d9a26a821262d15e00a89dcd7e276ac467a8004dcf3dc37379
+make_check=no # No checks provided
 
 #do_install() {
 #	python3 setup.py install --optimize=1
@@ -34,6 +33,6 @@ post_install() {
 	#done
 	#vinstall nwg-shell.jpg 644 /usr/share/backgrounds
 	#vinstall nwg-readme.desktop 644 /usr/share/applications
-	vinstall README.md 644 usr/share/doc/nwg-shell
+	vdoc README.md
 	vlicense LICENSE
 }
