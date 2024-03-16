@@ -1,0 +1,10 @@
+# Template file for 'nwg'
+pkgname=nwg
+version=0.1
+revision=1
+build_style=meta
+depends="azote gtklock nwg-dock-hyprland nwg-shell nwg-shell-config nwg-displays nwg-drawer nwg-hello nwg-launchers nwg-look nwg-menu nwg-panel nwg-readme-browser SwayNotificationCenter wlsunset gtk-layer-shell python3-i3ipc python3-psutil python3-geopy python3-dbus python3-netifaces brightnessctl ddcutil playerctl wlr-randr bluez-utils"
+short_desc="Meta-package for the nwg-shell project"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://nwg-piotr.github.io/nwg-shell"
