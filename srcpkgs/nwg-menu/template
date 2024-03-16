@@ -22,7 +22,6 @@ post_install() {
 
 	vinstall menu-start.css 644 usr/share/nwg-menu
 	vbin nwg-menu
-
-	vinstall README.md 644 usr/share/doc/nwg-menu
+	vdoc README.md
 	vlicense LICENSE
 }
