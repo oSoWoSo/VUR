@@ -9,7 +9,7 @@ depends="azote gnome-themes-extra grim gtklock ImageMagick jq
  libayatana-appindicator network-manager-applet nwg-bar nwg-clipman
  nwg-displays nwg-dock nwg-dock-hyprland nwg-drawer nwg-look nwg-menu
  nwg-panel nwg-readme-browser nwg-shell-config papirus-icon-theme
- playerctl polkit-gnome slurp swappy swaybg swayidle swaylock
+ playerctl polkit-gnome slurp swappy sway swaybg swayidle swaylock
  SwayNotificationCenter dejavu-fonts-ttf wl-clipboard wlsunset
  xorg-server-xwayland python3-geopy python3-yaml python3-requests
  python3-netifaces"
@@ -22,7 +22,6 @@ homepage="https://nwg-piotr.github.io/nwg-shell"
 #changelog=""
 distfiles="https://github.com/nwg-piotr/nwg-shell/archive/refs/tags/v${version}.tar.gz"
 checksum=6bcacbb99cd517d9a26a821262d15e00a89dcd7e276ac467a8004dcf3dc37379
-make_check=no # no tests provided
 
 #do_install() {
 #	python3 setup.py install --optimize=1
@@ -32,8 +31,8 @@ post_install() {
 	#for file in scripts/*; do
 	#	vbin ${file}
 	#done
-	vinstall nwg-shell.jpg 644 /usr/share/backgrounds
-	vinstall nwg-readme.desktop 644 /usr/share/applications
-	vdoc README.md
+	#vinstall nwg-shell.jpg 644 /usr/share/backgrounds
+	#vinstall nwg-readme.desktop 644 /usr/share/applications
+	vinstall README.md 644 /usr/share/doc/nwg-shell
 	vlicense LICENSE
 }
