@@ -21,22 +21,22 @@ checksum=43e3c97259a80d14170a1b3ba9bdfc10fe0028121dbac9a8b439c2d0a2b4ef21
 #}
 
 post_install() {
-	vinstall nwg-shell-config.svg 644 /usr/share/pixmaps
-	vinstall nwg-shell-config.svg 644 /usr/share/pixmaps
-	vinstall nwg-shell-update.svg 644 /usr/share/pixmaps
-	vinstall nwg-shell-translate.svg 644 /usr/share/pixmaps
-	vinstall nwg-update-noupdate.svg 644 /usr/share/pixmaps
-	vinstall nwg-update-available.svg 644 /usr/share/pixmaps
-	vinstall nwg-update-checking.svg 644 /usr/share/pixmaps
-	vinstall nwg-screenshot.svg 644 /usr/share/pixmaps
-	vinstall nwg-1.svg 644 /usr/share/pixmaps
-	vinstall nwg-2.svg 644 /usr/share/pixmaps
-	vinstall nwg-3.svg 644 /usr/share/pixmaps
-	vinstall nwg-shell-config.desktop 644 /usr/share/applications
-	vinstall README.md 644 /usr/share/doc/nwg-shell-config
+	vinstall nwg-shell-config.svg 644 usr/share/pixmaps
+	vinstall nwg-shell-config.svg 644 usr/share/pixmaps
+	vinstall nwg-shell-update.svg 644 usr/share/pixmaps
+	vinstall nwg-shell-translate.svg 644 usr/share/pixmaps
+	vinstall nwg-update-noupdate.svg 644 usr/share/pixmaps
+	vinstall nwg-update-available.svg 644 usr/share/pixmaps
+	vinstall nwg-update-checking.svg 644 usr/share/pixmaps
+	vinstall nwg-screenshot.svg 644 usr/share/pixmaps
+	vinstall nwg-1.svg 644 usr/share/pixmaps
+	vinstall nwg-2.svg 644 usr/share/pixmaps
+	vinstall nwg-3.svg 644 usr/share/pixmaps
+	vinstall nwg-shell-config.desktop 644 usr/share/applications
+	vinstall README.md 644 usr/share/doc/nwg-shell-config
 	vbin nwg-system-update
 
-	#vinstall usr/bin/nwg-autotiling 644 /usr/bin
+	#vinstall usr/bin/nwg-autotiling 644 usr/bin
 	#vbin usr/bin/nwg-autotranslate
 	#vbin usr/bin/nwg-lock
 	#vbin usr/bin/nwg-screenshot-applet
