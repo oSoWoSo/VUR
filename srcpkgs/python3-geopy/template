@@ -3,8 +3,10 @@ pkgname=python3-geopy
 version=2.4.1
 revision=1
 build_style=python3-pep517
-hostmakedepends="pkg-config python3-setuptools python3-wheel python3-pip python3-docutils python3-geographiclib"
-checkdepends="python3-pytest python3-pytest-asyncio python3-pytz python3-urllib3 geocode-glib-libsoup2"
+hostmakedepends="pkg-config python3-setuptools python3-wheel python3-pip
+ python3-docutils python3-geographiclib"
+checkdepends="python3-pytest python3-pytest-asyncio python3-pytz
+ python3-urllib3 geocode-glib-libsoup2"
 depends="python3-geographiclib"
 short_desc="Geocoding library for Python"
 maintainer="zenobit <zenobit@disroot.org>"
