@@ -1,0 +1,22 @@
+# Template file for 'libgeographic'
+pkgname=libgeographic
+version=2.3
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=cmake
+configure_args="-DCMAKE_INSTALL_PREFIX=/usr -DBUILD_BOTH_LIBS=ON"
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="make cmake gcc pkg-config"
+#makedepends=""
+#depends=""
+short_desc="Geographic library"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://geographiclib.sourceforge.io/"
+#changelog=""
+distfiles="https://sourceforge.net/projects/geographiclib/files/distrib-C%2B%2B/GeographicLib-${version}.tar.gz"
+checksum=3114847839453ee6bbe2228e41dc73cad6de6160055442b747adc9c76f0a3198
