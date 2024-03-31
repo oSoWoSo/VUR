@@ -1,0 +1,30 @@
+# Template file for 'python3-geographiclib'
+pkgname=python3-geographiclib
+version=2.0
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=python3-pep517
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="cmake gcc make python3-setuptools"
+makedepends=""
+depends=""
+short_desc="Python implementation of the geodesic routines"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://geographiclib.sourceforge.io/"
+#changelog=""
+distfiles="https://github.com/geographiclib/geographiclib-python/archive/refs/tags/v${version}.tar.gz"
+checksum=3756afaaa5ca79e153827a2da972180bf045bd89c8415d643d9645f52f2cadef
+
+do_install() {
+	pip install geographiclib
+}
+
+post_install() {
+	vlicence LICENSE
+}
