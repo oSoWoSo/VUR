@@ -13,10 +13,11 @@ homepage="https://github.com/nwg-piotr/nwg-icon-picker"
 #changelog=""
 distfiles="https://github.com/nwg-piotr/nwg-icon-picker/archive/refs/tags/v${version}.tar.gz"
 checksum=264df7a4fa3ab8e9bfeecb2505b5ef4c58d3b5f9d1e7d8e1255f95f4bc869ffc
+make_check=no # No checks provided
 
 post_install() {
 	vinstall nwg-icon-picker.svg 644 usr/share/pixmaps
 	vinstall nwg-icon-picker.desktop 644 usr/share/applications
-	vinstall README.md 644 usr/share/doc/nwg-icon-picker
+	vdoc README.md
 	vlicense LICENSE
 }
