@@ -4,7 +4,7 @@ version=0.5.34
 revision=1
 build_style=python3-pep517
 hostmakedepends="go python3-setuptools python3-geopy python3-wheel"
-makedepends="python3-gobject-devel gtk+3-devel gtk-layer-shell-devel libzip-devel"
+makedepends="python3-gobject-devel gtk+3-devel gtk-layer-shell-devel"
 checkdepends="python3-wheel python3-pytest"
 depends="azote gnome-themes-extra grim gtklock ImageMagick jq
  libayatana-appindicator network-manager-applet nwg-bar nwg-clipman
@@ -27,11 +27,11 @@ do_install() {
 }
 
 post_install() {
-	for file in scripts/*; do
-		vbin ${file}
-	done
-	vinstall nwg-shell.jpg 644 /usr/share/backgrounds
-	vinstall nwg-readme.desktop 644 /usr/share/applications
+	#for file in scripts/*; do
+	#	vbin ${file}
+	#done
+	#vinstall nwg-shell.jpg 644 /usr/share/backgrounds
+	#vinstall nwg-readme.desktop 644 /usr/share/applications
 	vinstall README.md 644 /usr/share/doc/nwg-shell
 	vlicense LICENSE
 }
