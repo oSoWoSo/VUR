@@ -3,7 +3,10 @@ pkgname=nwg-shell-config
 version=0.5.34
 revision=1
 build_style=python3-module
-hostmakedepends="python3-setuptools"
+hostmakedepends="python3-setuptools python3-geopy"
+makedepends="python3-gobject-devel gtk+3-devel gtk-layer-shell-devel"
+checkdepends=""
+depends=""
 short_desc="Graphical user interface for configuring sway and Hyprland"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
@@ -11,6 +14,10 @@ homepage="https://nwg-piotr.github.io/nwg-shell/nwg-shell-config"
 #changelog=""
 distfiles="https://github.com/nwg-piotr/nwg-shell-config/archive/refs/tags/v${version}.tar.gz"
 checksum=5b197ffcfed47be6bdddc58a8dbe52fe8603eb769ea29b6be447aa15d0090659
+
+do_install() {
+	python3 setup.py install --optimize=1
+}
 
 post_install() {
 	vlicense LICENSE
