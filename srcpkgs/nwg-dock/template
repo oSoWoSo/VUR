@@ -6,7 +6,6 @@ build_style=go
 go_import_path="github.com/nwg-piotr/nwg-dock"
 hostmakedepends="pkg-config"
 makedepends="pkg-config gtk+3-devel gtk-layer-shell-devel"
-#depends="gtk-layer-shell gtk+3 zlib pango libharfbuzz atk gdk-pixbuf fontconfig freetype"
 short_desc="GTK based dock for sway"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
@@ -17,15 +16,12 @@ checksum=e4c617ae1b4c6ebca623d728a130591d3240750132f3fdfc8e1c0bcc19c572f2
 make_check=no # No checks provided
 
 post_install() {
-	vlicense LICENSE
-	vdoc README.md
-	vmkdir usr/share/nwg-dock
-
 	for f in images/*; do
-		vinstall $f 644 usr/share/nwg-dock
+		vinstall "$f" 644 usr/share/nwg-dock
 	done
-
 	for f in config/*; do
-		vinstall $f 644 usr/share/nwg-dock
+		vinstall "$f" 644 usr/share/nwg-dock
 	done
+	vdoc README.md
+	vlicense LICENSE
 }
