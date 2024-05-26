@@ -1,15 +1,15 @@
 # Template file for 'amdvlk'
 pkgname=amdvlk
-version=2024.Q1.3
+version=2024.Q2.3
 revision=1
-_xgl_commit=b7100c18eb2d134098738f97d7cc3a26e485862f
-_pal_commit=42e29f4d3d528c6a59c2db77fb6d70127fb9ffab
-_llpc_commit=14535c028dc70a093d95a95efedb749812c1e77d
-_gpurt_commit=2e6d528610f45a99723d6e4f15f24da12fd6a1e5
-_llvm_project_commit=da55e9e39bc7868016b7b265aa535dff84b7d591
+_xgl_commit=5dd432ade87244461b8cf357b5cb641e7ee7ff15
+_pal_commit=695337aa8131913d883ff15787cd75f6fcb11229
+_llpc_commit=f64d106c023e7bed59bfb441ffb258c127e500c1
+_gpurt_commit=6ca06bbba1c0e4bbb82f10e93423e607b2227985
+_llvm_project_commit=72a6d2843ca05fa8d18a789664a642b4d0c9e069
 _MetroHash_commit=18893fb28601bb9af1154cd1a671a121fff6d8d3
 _CWPack_commit=4f8cf0584442a91d829d269158567d7ed926f026
-_llvm_dialects_commit=3f9e17f5f44e825de6450cc8a5aff7f3d5a32ef2
+_llvm_dialects_commit=ed4b46e8425066a96a5e79afc29bce3d82eecf71
 archs="i686* x86_64*"
 create_wrksrc=yes
 build_wrksrc="xgl"
@@ -19,7 +19,7 @@ configure_args="-DBUILD_WAYLAND_SUPPORT=ON
  -DLLVM_PARALLEL_LINK_JOBS=2"
 hostmakedepends="pkg-config python3 perl"
 makedepends="libxml2-devel xorg-server-devel libXrandr-devel libffi-devel wayland-devel
- DirectXShaderCompiler-devel glslang-devel python3-Jinja2"
+ DirectXShaderCompiler-devel glslang-devel python3-Jinja2 python3-ruamel.yaml"
 depends="vulkan-loader"
 short_desc="AMD Open Source Driver For Vulkan"
 maintainer="John <me@johnnynator.dev>"
@@ -34,15 +34,15 @@ distfiles="https://github.com/GPUOpen-Drivers/AMDVLK/archive/v-${version}.tar.gz
  https://github.com/GPUOpen-Drivers/MetroHash/archive/${_MetroHash_commit}.tar.gz
  https://github.com/GPUOpen-Drivers/CWPack/archive/${_CWPack_commit}.tar.gz
  https://github.com/GPUOpen-Drivers/llvm-dialects/archive/${_llvm_dialects_commit}.tar.gz"
-checksum="1d9c1d6db54f3f33882d01ce82bf6aa55f87e079d9ded460768392e07f0e939b
- a1d1640d7db89be37b76a595ec5cee3882575edfbe14964b7bbbd2e414ba0eef
- 87c28616b8ce88bdbe58b988c8f18368e7dd6ff047b33058f5d9c21ca3cd69e6
- 9aa6ef9dbddc37b0dff73f8fefdceea21d1b2aed306652e288d0b09d774e2599
- cbc83121e6a160d92b8f61c2911ea8fbf21e17c9310201fdb06c12cd356d854c
- 6cf55ce86ff23d7e8924e145869af76905233d80b8f5cf5f1849f15e3b571236
- 141e6c156a834b8e0f90ba108664d7f35193df11acddefa117f394dbf2b7371a
- 87ed9209c129f47d0b64c914fb99d6c69e59a257445ec3a394c3e00d5e2b4484
- 127ca534fcf8051aeba8cfe02d1dc309d0a6df2ba4d08508713ddea308370250"
+checksum="3dd43ce83bf3e9aa32f2d6d02817c8547092b46fc135e4c4e783750d77939c6e
+a7d101ca216cf3df1ba0eb428d9f490cf2fded068bbf9cdd15d02bead9dab8e4
+dabb381102aae721c48e8ec24e83504258f0009fa72bc4efaf0254a99ff9c531
+771d9b2006393ecbcae90edf6e197cc63056a4c935bafb87f4522a4b9ebe5c66
+b2cd8b047e15e90f13be9474dd024dca518979801dc8e77265ae49b25b954f77
+ba92d72d0a1298a683a8bb4e540bdea653f84559f735bb9ade9968e021f8b462
+141e6c156a834b8e0f90ba108664d7f35193df11acddefa117f394dbf2b7371a
+87ed9209c129f47d0b64c914fb99d6c69e59a257445ec3a394c3e00d5e2b4484
+a6d4a7aabfa887ee332c5136a1fc6d123ff9b5daf6d864a973978362cf011183"
 nocross=yes
 lib32files="/usr/share/vulkan/icd.d/amd_icd32.json"
 

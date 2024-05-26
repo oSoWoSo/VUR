@@ -1,7 +1,8 @@
 # Template file for 'nv-codec-headers'
 pkgname=nv-codec-headers
+reverts="12.2.72.0_1"
 version=11.1.5.1
-revision=1
+revision=2
 build_style=gnu-makefile
 short_desc="FFmpeg version of headers required to interface with Nvidias codec APIs"
 maintainer="Orphaned <orphan@voidlinux.org>"

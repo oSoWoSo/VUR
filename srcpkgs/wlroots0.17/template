@@ -1,6 +1,6 @@
 # Template file for 'wlroots0.17'
 pkgname=wlroots0.17
-version=0.17.3
+version=0.17.4
 revision=1
 build_style=meson
 # Follow upstream packaging recommendations:
@@ -10,7 +10,7 @@ configure_args="--auto-features=enabled -Dexamples=false -Dwerror=false
 hostmakedepends="pkg-config wayland-devel glslang hwids"
 _devel_depends="libgbm-devel libglvnd-devel libseat-devel eudev-libudev-devel
  libdrm-devel libinput-devel libxkbcommon-devel pixman-devel wayland-devel
- wayland-protocols vulkan-loader Vulkan-Headers xcb-util-errors-devel
+ wayland-protocols vulkan-loader-devel xcb-util-errors-devel
  xcb-util-wm-devel xcb-util-renderutil-devel libdisplay-info-devel libliftoff-devel"
 makedepends="${_devel_depends}
  libxcb-devel xcb-util-cursor-devel xcb-util-devel xcb-util-image-devel
@@ -20,7 +20,7 @@ maintainer="Andrew J. Hesford <ajh@sideband.org>"
 license="MIT"
 homepage="https://gitlab.freedesktop.org/wlroots/wlroots"
 distfiles="${homepage}/-/releases/${version}/downloads/wlroots-${version}.tar.gz"
-checksum=04d31521bd2b737541b9680098e55ebaaf956e68d692f80479f4ee1236606d98
+checksum=d3190d19d03446955e68a92c77d4c74af78384b0db39a85a0b1582adc80f36d1
 
 post_install() {
 	vlicense LICENSE

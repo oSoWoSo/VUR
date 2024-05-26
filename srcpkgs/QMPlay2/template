@@ -1,6 +1,6 @@
 # Template file for 'QMPlay2'
 pkgname=QMPlay2
-version=24.04.07
+version=24.06.16
 revision=1
 build_style=cmake
 hostmakedepends="pkg-config qt5-qmake qt5-host-tools"
@@ -14,7 +14,7 @@ license="LGPL-3.0-only"
 homepage="http://zaps166.sourceforge.net/?app=QMPlay2"
 changelog="https://raw.githubusercontent.com/zaps166/QMPlay2/master/ChangeLog"
 distfiles="https://github.com/zaps166/QMPlay2/releases/download/${version}/QMPlay2-src-${version}.tar.xz"
-checksum=7c525c936ef9096a3a271865e42fee9f494bd18a3992e56505cac94d07145da7
+checksum=7b06be4b95cb15064015934b24e76e583b85398136fc28b622dc1118d07c55b4
 
 QMPlay2-devel_package() {
 	short_desc+=" - development files"

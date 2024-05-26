@@ -1,7 +1,7 @@
 # Template file for 'soju'
 pkgname=soju
-version=0.7.0
-revision=1
+version=0.8.0
+revision=2
 build_style=go
 go_import_path="git.sr.ht/~emersion/soju"
 go_package="./cmd/... ./contrib/..."
@@ -14,9 +14,9 @@ short_desc="User-friendly IRC bouncer"
 maintainer="classabbyamp <void@placeviolette.net>"
 license="AGPL-3.0-or-later"
 homepage="https://soju.im"
-changelog="https://git.sr.ht/~emersion/soju/refs"
-distfiles="https://git.sr.ht/~emersion/soju/refs/download/v${version}/soju-${version}.tar.gz"
-checksum=0d776a28bfb2b7f9cdca0336a5debc4888b224812094daf0de0e29bae9c865cf
+changelog="https://codeberg.org/emersion/soju/releases"
+distfiles="https://codeberg.org/emersion/soju/archive/v${version}.tar.gz"
+checksum=8c136e93d7404f9b3e50c7fd161a29b72477956282bedf5f76598ae8949fbac8
 conf_files="/etc/soju/config"
 system_accounts="_soju"
 make_dirs="/var/db/soju 0750 _soju _soju

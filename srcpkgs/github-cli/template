@@ -1,6 +1,6 @@
 # Template file for 'github-cli'
 pkgname=github-cli
-version=2.49.2
+version=2.52.0
 revision=1
 build_style=go
 build_helper=qemu
@@ -8,12 +8,12 @@ go_import_path="github.com/cli/cli/v2"
 go_package="${go_import_path}/cmd/gh"
 go_ldflags="-X github.com/cli/cli/v2/internal/build.Version=v${version}"
 short_desc="GitHub CLI tool"
-maintainer="Marcin Puc <tranzystorek.io@protonmail.com>"
+maintainer="tranzystorekk <tranzystorek.io@protonmail.com>"
 license="MIT"
 homepage="https://cli.github.com"
 changelog="https://github.com/cli/cli/releases"
 distfiles="https://github.com/cli/cli/archive/refs/tags/v${version}.tar.gz"
-checksum=e839ea302ad99b70ce3efcb903f938ecbbb919798e49bc2f2034ad506ae0b0f5
+checksum=41de39d0f1bcacb454d9b8a46e5b97ff8b8e803cd26d284e553e45bf025325d9
 
 pre_build() {
 	local _date
