@@ -4494,6 +4494,10 @@ libunicode_loader.so.0.4 libunicode-0.4.0_1
 force-stage.so.0.1 void-force-stage-0.1_1
 libliftoff.so.0 libliftoff-0.4.1_1
 libscfg.so libscfg-0.1.1_1
+libsdbus-c++.so.1 sdbus-cpp-1.5.0_1
+libhyprlang.so.2 hyprlang-0.5.0_1
+libhyprcursor.so.0 hyprcursor-0.1.4_1
+libtomlplusplus.so.3 tomlplusplus-3.4.0_1
 libmsgraph-0.so.1 msgraph-0.2.1_1
 libgtk-session-lock.so.0 gtk-session-lock-0.2.0_1
 libcamera.so.0.2 libcamera-0.2.0_1
