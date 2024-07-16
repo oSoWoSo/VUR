@@ -1,9 +1,9 @@
-# Template file for 'linux6.1'
-pkgname=linux6.1
-version=6.1.99
+# Template file for 'linux6.10'
+pkgname=linux6.10
+version=6.10.0
 revision=1
 short_desc="Linux kernel and modules (${version%.*} series)"
-maintainer="Đoàn Trần Công Danh <congdanhqx@gmail.com>"
+maintainer="Duncaen <duncaen@voidlinux.org>"
 license="GPL-2.0-only"
 homepage="https://www.kernel.org"
 distfiles="${KERNEL_SITE}/kernel/v${version%%.*}.x/linux-${version%.*}.tar.xz"
@@ -13,12 +13,11 @@ if [ "${version##*.}" != 0 ]; then
 	skip_extraction="patch-${version}.xz"
 fi
 
-checksum="2ca1f17051a430f6fed1196e4952717507171acfd97d96577212502703b25deb
- 06fe6378e766b7513d0c2c7575b03daf125f7e844cf9905e2373b067c0ee0ec4"
+checksum=774698422ee54c5f1e704456f37c65c06b51b4e9a8b0866f34580d86fef8e226
 python_version=3
 
 # XXX Restrict archs until a proper <arch>-dotconfig is available in FILESDIR.
-archs="x86_64* i686* aarch64* ppc*"
+archs="x86_64* i686* aarch64*"
 
 nodebug=yes  # -dbg package is generated below manually
 nostrip=yes
@@ -27,7 +26,7 @@ noshlibprovides=yes
 preserve=yes
 
 hostmakedepends="tar xz bc elfutils-devel flex gmp-devel kmod libmpc-devel
- openssl-devel perl uboot-mkimage cpio pahole python3 zstd"
+ pkg-config openssl-devel perl uboot-mkimage cpio pahole python3 zstd"
 
 _kernver="${version}_${revision}"
 triggers="kernel-hooks"
@@ -56,12 +55,20 @@ if [ "$CROSS_BUILD" ]; then
 fi
 
 pre_patch() {
-	if [ ! -f $XBPS_SRCDISTDIR/$pkgname-$version/patch-${version}.xz ]
-	then
+	if [ ! -f $XBPS_SRCDISTDIR/$pkgname-$version/patch-${version}.xz ]; then
 		return
 	fi
 	xzcat $XBPS_SRCDISTDIR/$pkgname-$version/patch-${version}.xz |
 		patch -sNp1 -F0
+}
+
+post_patch() {
+	# avoid the strip wrapper, its used to copy the objects to a new location
+	# and required to avoid absolute relocations.
+	vsed -e "s|\$(STRIP) \(--strip-debug -o \$@ \$<;\)|/usr/bin/${STRIP} \1|" -i drivers/firmware/efi/libstub/Makefile
+
+	# parallel pahole crashes on i686, do one job for now
+	vsed -i "s/\(\$(pahole-flags-y)\)/\1 --jobs=1/" -i scripts/Makefile.btf
 }
 
 do_configure() {
@@ -79,6 +86,7 @@ do_configure() {
 		ppc64*) arch=powerpc; subarch=ppc64;;
 		ppc*) arch=powerpc; subarch=ppc;;
 		mips*) arch=mips;;
+		riscv64*) arch=riscv;;
 	esac
 
 	if [ -f ${FILESDIR}/${subarch:-$arch}-dotconfig-custom ]; then
@@ -90,6 +98,7 @@ do_configure() {
 		cp -f ${FILESDIR}/${subarch:-$arch}-dotconfig .config
 		make ${makejobs} ARCH=$arch ${_cross} oldconfig
 	fi
+
 	# Always use our revision to CONFIG_LOCALVERSION to match our pkg version.
 	sed -i -e "s|^\(CONFIG_LOCALVERSION=\).*|\1\"_${revision}\"|" .config
 }
@@ -104,6 +113,7 @@ do_build() {
 		aarch64*) _args="Image modules dtbs"; arch=arm64;;
 		ppc*) _args="zImage modules"; arch=powerpc;;
 		mips*) _args="uImage modules dtbs"; arch=mips;;
+		riscv64*) _args="Image modules dtbs"; arch=riscv;;
 	esac
 	export LDFLAGS=
 	make ARCH=$arch ${_cross} ${makejobs} prepare
@@ -120,6 +130,7 @@ do_install() {
 		aarch64*) arch=arm64;;
 		ppc*) arch=powerpc;;
 		mips*) arch=mips;;
+		riscv*) arch=riscv;;
 	esac
 
 	# Run depmod after compressing modules - makes depmod.sh a noop
@@ -155,6 +166,10 @@ do_install() {
 			;;
 		mips)
 			vinstall arch/mips/boot/uImage.bin 644 boot uImage-${_kernver}
+			make ${makejobs} ARCH=${subarch:-$arch} INSTALL_DTBS_PATH=${DESTDIR}/boot/dtbs/dtbs-${_kernver} ${_cross} dtbs_install
+			;;
+		riscv)
+			vinstall arch/riscv/boot/Image 644 boot vmlinux-${_kernver}
 			make ${makejobs} ARCH=${subarch:-$arch} INSTALL_DTBS_PATH=${DESTDIR}/boot/dtbs/dtbs-${_kernver} ${_cross} dtbs_install
 			;;
 	esac
@@ -194,6 +209,9 @@ do_install() {
 	cd ${wrksrc}
 	mkdir -p ${hdrdest}/arch/${arch}
 	cp -a arch/${arch}/include ${hdrdest}/arch/${arch}
+
+	# needed for mv-debug
+	cp scripts/sign-file "${XBPS_WRAPPERDIR}"
 
 	# Remove helper binaries built for host,
 	# if generated files from the scripts/ directory need to be included,
@@ -298,6 +316,7 @@ do_install() {
 	(
 	cd ${DESTDIR}
 	export DESTDIR
+	export SIGN_FILE="${XBPS_WRAPPERDIR}/sign-file sha512 ${wrksrc}/certs/signing_key.pem ${wrksrc}/certs/signing_key.x509"
 	find ./ -name '*.ko' -print0 | \
 		xargs -0r -n1 -P ${XBPS_MAKEJOBS} ${FILESDIR}/mv-debug
 	)
@@ -305,7 +324,8 @@ do_install() {
 	depmod -b ${DESTDIR}/usr -F System.map ${_kernver}
 	rm -f ${DESTDIR}/lib
 }
-linux6.1-headers_package() {
+
+linux6.10-headers_package() {
 	preserve=yes
 	nostrip=yes
 	noshlibprovides=yes
@@ -315,7 +335,8 @@ linux6.1-headers_package() {
 		vmove usr/lib/modules/${_kernver}/build
 	}
 }
-linux6.1-dbg_package() {
+
+linux6.10-dbg_package() {
 	preserve=yes
 	nostrip=yes
 	noverifyrdeps=yes
