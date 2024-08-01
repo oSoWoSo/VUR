@@ -992,8 +992,6 @@ libclang.so.18.1 libclang18-18.1.8_1
 libclang.so.17 libclang17-17.0.6_1
 libclang-cpp.so.18.1 libclang-cpp18-18.1.8_1
 libclang-cpp.so.17 libclang-cpp17-17.0.6_1
-libLLVM-11.so libllvm11-11.0.0_1
-libLLVM-12.so libllvm12-12.0.0_1
 libLLVM-17.so libllvm17-17.0.6_1
 libLLVM.so.18.1 libllvm18-18.1.8_1
 libLLVMSPIRVLib.so.18.1 SPIRV-LLVM-Translator-18.1.2_1
@@ -3032,6 +3030,7 @@ libCGAL.so.13 cgal-4.10_1
 libCGAL_Core.so.13 cgal-4.10_1
 libCGAL_ImageIO.so.14 cgal-4.14_1
 libqscintilla2_qt5.so.15 qscintilla-qt5-2.11_1
+libqscintilla2_qt6.so.15 qscintilla-qt6-2.14.1_1
 liblxpanel.so.0 lxpanel-0.9.3_1
 libuim.so.8 uim-1.8.6_1
 libuim-scm.so.0 uim-1.8.6_1
@@ -3274,7 +3273,7 @@ libKF6TextEmoticonsCore.so.1 ktextaddons-1.5.3_2
 libKF6TextGrammarCheck.so.1 ktextaddons-1.5.3_2
 libKF6TextTranslator.so.1 ktextaddons-1.5.3_2
 libKF6TextUtils.so.1 ktextaddons-1.5.3_2
-libz3.so z3-4.6.0_2
+libz3.so libz3-4.13.0_2
 libngspice.so.0 ngspice-35_1
 libvulkan.so.1 vulkan-loader-1.0.57.0_1
 libembb_mtapi_cpp.so embb-1.0.0_3
