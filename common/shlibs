@@ -414,6 +414,7 @@ libavfilter.so.7 libavfilter-4.0_1
 libSDL-1.2.so.0 SDL-1.2.14_1
 libSDL_image-1.2.so.0 SDL_image-1.2.10_1
 libx264.so.157 x264-20190507.2245_1
+libopenh264.so.7 openh264-2.4.1_1
 libxvidcore.so.4 xvidcore-1.2.2_1
 libtag.so.1 taglib-1.6.1_1
 libtag-extras.so.1 taglib-extras-1.0.1_1
@@ -458,6 +459,7 @@ libparted.so.2 libparted-3.1_1
 libparted-fs-resize.so.0 libparted-3.1_1
 libntfs-3g.so.89 ntfs-3g-2021.8.22_1
 libruby.so.3.3 ruby-3.3.2_1
+libada.so.2 ada-2.9.0_1
 librw.so.0 rankwidth-0.9_1
 libKSysGuardFormatter.so.2 libksysguard-6.0.0_1
 libKSysGuardSensorFaces.so.2 libksysguard-6.0.0_1
@@ -4522,3 +4524,4 @@ libopenrazer.so.0 libopenrazer-0.2.0_1
 libstaroffice-0.0.so.0 libstaroffice-0.0.7_1
 libbox2d.so.2 box2d-2.4.1_1
 libhwy.so.1 highway-1.2.0_1
+libscenefx.so.1 scenefx-0.1_1
