@@ -1955,7 +1955,7 @@ libQt5TextToSpeech.so.5 qt5-speech-5.15.2_3
 libQt5Bodymovin.so.5 qt5-lottie-5.15.2_3
 libQt5WebKit.so.5 qt5-webkit-5.6.0_1
 libQt5WebKitWidgets.so.5 qt5-webkit-5.6.0_1
-libx265.so.199 x265-3.5_1
+libx265.so.209 x265-3.6_1
 libQt6Xdg.so.4 libqtxdg-4.0.0_1
 libQt6XdgIconLoader.so.4 libqtxdg-4.0.0_1
 libqwt-qt5.so.6.2 qwt-6.2.0_2
@@ -3309,10 +3309,10 @@ libaacs.so.0 libaacs-0.9.0_1
 libttfautohint.so.1 ttfautohint-1.8.1_1
 libcob.so.4 gnucobol-libs-2.2_1
 libkrfbprivate.so.5.0 krfb-17.08.1_1
-libarcan_shmif.so.0.15 arcan-0.6.1.1_1
-libarcan_shmif_ext.so.0.15 arcan-0.6.1.1_1
-libarcan_shmif_server.so.0.15 arcan-0.6.1.1_1
-libarcan_tui.so.0.15 arcan-0.6.1.1_1
+libarcan_shmif.so.0.16 arcan-0.6.3.3_1
+libarcan_shmif_ext.so.0.16 arcan-0.6.3.3_1
+libarcan_shmif_server.so.0.16 arcan-0.6.3.3_1
+libarcan_tui.so.0.16 arcan-0.6.3.3_1
 libarcan_a12.so.0.1 arcan-0.6.1.1_1
 liblwipv6.so.2 lwipv6-1.5a_1
 libpipewire-0.3.so.0 libpipewire-0.3.6_1
