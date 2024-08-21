@@ -1,6 +1,6 @@
 # Template file for 'nwg-displays'
 pkgname=nwg-displays
-version=0.3.14
+version=0.3.20
 revision=1
 build_style=python3-module
 hostmakedepends="python3-setuptools"
@@ -10,7 +10,7 @@ license="MIT"
 homepage="https://nwg-piotr.github.io/nwg-shell/nwg-displays"
 #changelog=""
 distfiles="https://github.com/nwg-piotr/nwg-displays/archive/refs/tags/v${version}.tar.gz"
-checksum=c1786d4d34c4e046dcba238efc4e0d26805e5374857194b97748a1bb7b477b11
+checksum=6dfdb4bf50fa89b52e675c1fd65bc0c9d48d2ab2b07f0cc662b74a6bfe508c1e
 
 post_install() {
 	vlicense LICENSE
