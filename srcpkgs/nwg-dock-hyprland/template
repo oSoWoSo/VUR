@@ -1,6 +1,6 @@
 # Template file for 'nwg-dock-hyprland'
 pkgname=nwg-dock-hyprland
-version=0.2.2
+version=0.3.0
 revision=1
 #archs="i686 x86_64"
 #build_wrksrc=
@@ -15,7 +15,7 @@ license="MIT"
 homepage="https://nwg-piotr.github.io/nwg-shell/nwg-dock-hyprland"
 #changelog=""
 distfiles="https://github.com/nwg-piotr/nwg-dock-hyprland/archive/refs/tags/v${version}.tar.gz"
-checksum=13ac6842db449ba23cca08a9901f29089b37d7804824a7e0c5272339e3571c22
+checksum=a9a6a36f76a1174fc04cf068ef5db9be4287f907bd32b8a5ab3b3647072ed76d
 
 post_install() {
 	vlicense LICENSE
