@@ -1,0 +1,17 @@
+# Template file for 'nwg-panel'
+pkgname=nwg-panel
+version=0.9.37
+revision=1
+build_style=python3-module
+hostmakedepends="python3-setuptools"
+short_desc="GTK3-based panel for sway and Hyprland Wayland compositors"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://nwg-piotr.github.io/nwg-shell/nwg-panel"
+#changelog=""
+distfiles="https://github.com/nwg-piotr/nwg-panel/archive/refs/tags/v${version}.tar.gz"
+checksum=f897a97e162c363c682a684689d2d8ad4679dec9fd693859dccec52a566cc562
+
+post_install() {
+	vlicense LICENSE
+}

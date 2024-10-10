@@ -1,0 +1,19 @@
+# Template file for 'nwg-drawer'
+pkgname=nwg-drawer
+version=0.5.1
+revision=1
+build_style=go
+go_import_path=github.com/nwg-piotr/nwg-drawer
+hostmakedepends="pkg-config"
+makedepends="cairo-devel gdk-pixbuf-devel gtk+3-devel gtk-layer-shell-devel pango-devel"
+short_desc="Application drawer for wlroots-based Wayland compositors"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://nwg-piotr.github.io/nwg-shell/nwg-drawer"
+#changelog=""
+distfiles="https://github.com/nwg-piotr/nwg-drawer/archive/refs/tags/v${version}.tar.gz"
+checksum=9a0acd2cfaa179d7b189738f1746b0fc57f0bb3e3b388100c088768fe9f2dbf1
+
+post_install() {
+	vlicense LICENSE
+}

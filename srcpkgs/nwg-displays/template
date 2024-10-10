@@ -1,0 +1,17 @@
+# Template file for 'nwg-displays'
+pkgname=nwg-displays
+version=0.3.22
+revision=1
+build_style=python3-module
+hostmakedepends="python3-setuptools"
+short_desc="Intuitive GUI to manage multiple displays for wayland"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://nwg-piotr.github.io/nwg-shell/nwg-displays"
+#changelog=""
+distfiles="https://github.com/nwg-piotr/nwg-displays/archive/refs/tags/v${version}.tar.gz"
+checksum=143b034902200aabeb07ac7331066972127298654ea14d68b4f68fb7c38583da
+
+post_install() {
+	vlicense LICENSE
+}

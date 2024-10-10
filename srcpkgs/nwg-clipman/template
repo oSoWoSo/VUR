@@ -1,0 +1,22 @@
+# Template file for 'nwg-clipman'
+pkgname=nwg-clipman
+version=0.2.3
+revision=1
+build_style=python3-module
+hostmakedepends="python3-setuptools"
+depends="cliphist gtk-layer-shell gtk+3 python3 python3-gobject xdg-utils wl-clipboard"
+checkdepends="python3-wheel"
+short_desc="GTK3-based GUI for cliphist - nwg-shell clipboard manager"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/nwg-piotr/nwg-clipman"
+#changelog=""
+distfiles="https://github.com/nwg-piotr/nwg-clipman/archive/refs/tags/v${version}.tar.gz"
+checksum=5a7aaff9d6668117977741cbc2b772fa0bcb6696289857579b645b23b57ef4bf
+
+post_install() {
+	vinstall nwg-clipman.svg 644 /usr/share/pixmaps
+	vinstall nwg-clipman.desktop 644 /usr/share/applications
+	vinstall README.md 644 /usr/share/doc/nwg-clipman
+	vlicense LICENSE
+}

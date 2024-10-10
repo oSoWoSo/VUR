@@ -1,0 +1,37 @@
+# Template file for 'nwg-shell'
+pkgname=nwg-shell
+version=0.5.38
+revision=1
+build_style=python3-pep517
+hostmakedepends="go python3-setuptools python3-geopy python3-wheel"
+makedepends="python3-gobject-devel gtk+3-devel gtk-layer-shell-devel"
+checkdepends="python3-wheel python3-pytest"
+depends="azote gnome-themes-extra grim gtklock ImageMagick jq
+ libayatana-appindicator network-manager-applet nwg-bar nwg-clipman
+ nwg-displays nwg-dock nwg-dock-hyprland nwg-drawer nwg-look nwg-menu
+ nwg-readme-browser nwg-shell-config papirus-icon-theme playerctl
+ polkit-gnome python3-geopy python3-yaml slurp swappy sway swaybg 
+ swayidle swaylock SwayNotificationCenter dejavu-fonts-ttf wl-clipboard wlsunset
+ xorg-server-xwayland"
+# nwg-shell-wallpapers 
+short_desc="GTK3-based shell for sway and Hyprland Wayland compositors"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://nwg-piotr.github.io/nwg-shell"
+#changelog=""
+distfiles="https://github.com/nwg-piotr/nwg-shell/archive/refs/tags/v${version}.tar.gz"
+checksum=9e637c39a0f49d73db33f83eb7dbb7d454e8df602ced132b648496b4570a7d3c
+
+do_install() {
+	python3 setup.py install --optimize=1
+}
+
+post_install() {
+	#for file in scripts/*; do
+	#	vbin ${file}
+	#done
+	#vinstall nwg-shell.jpg 644 /usr/share/backgrounds
+	#vinstall nwg-readme.desktop 644 /usr/share/applications
+	vinstall README.md 644 /usr/share/doc/nwg-shell
+	vlicense LICENSE
+}

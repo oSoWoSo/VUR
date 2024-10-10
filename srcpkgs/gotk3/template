@@ -1,0 +1,23 @@
+# Template file for 'gotk3'
+pkgname=gotk3
+version=0.6.3
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=go
+go_import_path="github.com/gotk3/gotk3"
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends=""
+makedepends="gtk+3-devel glib-devel cairo-devel"
+depends=""
+short_desc="Go bindings for GTK3"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/gotk3/gotk3"
+#changelog=""
+distfiles="https://github.com/gotk3/gotk3/archive/refs/tags/v${version}.tar.gz"
+checksum=cf233b835b1fdd23afa393d1e7483c44a57ab7729afe3a72e7ae3ded2b27a0c8
