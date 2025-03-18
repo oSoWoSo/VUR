@@ -1,0 +1,61 @@
+# Template file for 'hyprcursor'
+pkgname=hyprcursor
+version=0.1.11
+revision=1
+build_style=cmake
+configure_args=" --no-warn-unused-cli -DCMAKE_BUILD_TYPE=Release"
+hostmakedepends="cmake pkg-config"
+makedepends="
+	libtoml++-devel
+	hyprlang-devel
+	cairo-devel
+	pango-devel
+	harfbuzz-devel
+	librsvg-devel
+	libzip-devel
+"
+short_desc="Hyprland cursor format, library and utilities"
+maintainer="hesam-init <hesam.init@gmail.com>"
+license="BSD-3-Clause"
+homepage="https://github.com/hyprwm/hyprcursor"
+distfiles="https://github.com/hyprwm/hyprcursor/archive/refs/tags/v${version}.tar.gz"
+checksum="17e4576b884e6bdb463b445cffff099ad16647b826a87a67b78d38b8cad4c39e"
+
+build_options="clang gcc"
+build_options_default="gcc"
+desc_option_clang="Use clang to build"
+desc_option_gcc="Use gcc to build"
+
+if [ "$build_option_gcc" ]; then
+	hostmakedepends+=" gcc"
+	makedepends+=" libgcc-devel fmt-devel"
+fi
+
+if [ "$build_option_clang" ]; then
+	hostmakedepends+=" clang19"
+	makedepends+=" libcxx libcxx-devel libcxxabi libcxxabi-devel"
+fi
+
+pre_configure() {
+	if [ "$build_option_clang" ]; then
+		export CC=clang
+		export CXX=clang++
+
+		configure_args+=" -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX -DCMAKE_CXX_STANDARD=23 -DCMAKE_CXX_FLAGS=-stdlib=libc++"
+	fi
+}
+
+post_install() {
+	vlicense LICENSE
+}
+
+hyprcursor-devel_package() {
+	depends="hyprcursor-${version}_${revision}"
+	short_desc+=" - development files"
+
+	pkg_install() {
+		vmove usr/include
+		vmove "usr/lib/*.so"
+		vmove usr/lib/pkgconfig
+	}
+}
