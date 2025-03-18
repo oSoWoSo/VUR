@@ -1,0 +1,64 @@
+# Template file for 'hyprlang'
+pkgname=hyprlang
+version=0.6.0
+revision=1
+build_style=cmake
+configure_args=" --no-warn-unused-cli -DCMAKE_BUILD_TYPE=Release"
+hostmakedepends="cmake pkg-config"
+makedepends="hyprutils-devel"
+short_desc="Official implementation library for the hypr config language"
+maintainer="hesam-init <hesam.init@gmail.com>"
+license="LGPL-3.0-only"
+homepage="https://hyprland.org/hyprlang/index.html"
+changelog="https://github.com/hyprwm/hyprlang/releases"
+distfiles="https://github.com/hyprwm/hyprlang/archive/refs/tags/v${version}.tar.gz"
+checksum="b1a163606402041d92507936fb6dcbc40dd0035b8e8abbf44b0ab59be627b52c"
+
+build_options="clang gcc"
+build_options_default="gcc"
+desc_option_clang="Use clang to build"
+desc_option_gcc="Use gcc to build"
+
+if [ "$build_option_gcc" ]; then
+   hostmakedepends+=" gcc"
+   makedepends+=" libgcc-devel fmt-devel"
+fi
+
+if [ "$build_option_clang" ]; then
+   hostmakedepends+=" clang19"
+   makedepends+=" libcxx libcxx-devel libcxxabi libcxxabi-devel"
+fi
+
+_apply_patch() {
+   local args="$1" pname="$(basename $2)"
+
+   if [ ! -f ".${pname}_done" ]; then
+      patch -N $args -i $2
+      touch .${pname}_done
+   fi
+}
+
+pre_configure() {
+   if [ "$build_option_gcc" ]; then
+      _apply_patch -p1 ${FILESDIR}/cmake.patch
+      _apply_patch -p1 ${FILESDIR}/gcc.patch
+   fi
+
+   if [ "$build_option_clang" ]; then
+      export CC=clang
+      export CXX=clang++
+
+      configure_args+=" -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX -DCMAKE_CXX_STANDARD=23 -DCMAKE_CXX_FLAGS=-stdlib=libc++"
+   fi
+}
+
+hyprlang-devel_package() {
+   depends="hyprlang-${version}_${revision}"
+   short_desc+=" - development files"
+
+   pkg_install() {
+      vmove usr/include
+      vmove "usr/lib/*.so"
+      vmove usr/lib/pkgconfig
+   }
+}
