@@ -4524,5 +4524,5 @@ libsdbus-c++.so.2 sdbus-cpp-2.0.0_1
 libhyprlang.so.2 hyprlang-0.5.3_1
 libhyprcursor.so.0 hyprcursor-0.1.10_1
 libtomlplusplus.so.3 tomlplusplus-3.4.0_1
-libaquamarine.so.3 aquamarine-0.4.1_1
 libhyprutils.so.4 hyprutils-0.5.2_1
+libaquamarine.so.7 aquamarine-0.8.0_1
