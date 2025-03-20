@@ -1,0 +1,79 @@
+# Template file for 'nwg-hello'
+pkgname=nwg-hello
+version=0.3.0
+revision=1
+build_style=python3-module
+hostmakedepends="python3-setuptools python3-installer python3-wheel greetd sudo"
+makedepends="python3-gobject-devel gtk+3-devel gtk-layer-shell-devel"
+depends="gtk-layer-shell gtk+3 python3 python3-gobject greetd gnome-themes-extra"
+checkdepends="python3-wheel"
+short_desc="GTK3-based greeter for greetd written in python"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/nwg-piotr/nwg-hello"
+#changelog=""
+distfiles="https://github.com/nwg-piotr/nwg-hello/archive/refs/tags/v${version}.tar.gz"
+checksum=d12c2785f6212951e980e76384f26065b7616b0eb2d3af4859079a158f9eb04c
+
+do_build() {
+	PROGRAM_NAME="nwg-hello"
+	MODULE_NAME="nwg_hello"
+	SITE_PACKAGES="$(python3 -c "import sysconfig; print(sysconfig.get_paths()['purelib'])")"
+	PATTERN="$SITE_PACKAGES/$MODULE_NAME*"
+
+	# Remove from site_packages
+	for path in $PATTERN; do
+	    if [ -e "$path" ]; then
+	        echo "Removing $path"
+	        rm -r "$path"
+	    fi
+	done
+
+	[ -d "./dist" ] && rm -rf ./dist
+
+	# Remove launcher scripts
+	filenames=("/usr/bin/$PROGRAM_NAME")
+
+	for filename in "${filenames[@]}"; do
+	  rm -f "$filename"
+	  echo "Removing -f $filename"
+	done
+
+	python -m build --wheel --no-isolation
+}
+
+do_install() {
+	#./install.sh --destdir="${DESTDIR}"
+	python -m installer --destdir="${DESTDIR}" dist/*.whl
+}
+
+#post_install() {
+# 	vinstall "${pkgname}-default.json" 644 "${DESTDIR}/etc/${pkgname}/${pkgname}-default.json"
+# 	vinstall "${pkgname}-default.css" 644 "${DESTDIR}/etc/${pkgname}/${pkgname}-default.css"
+# 	vinstall hyprland.conf 644 "${DESTDIR}/etc/${pkgname}/hyprland.conf"
+# 	vinstall sway-config 644 "${DESTDIR}/etc/${pkgname}/sway-config"
+# 	for file in img/*.svg; do
+# 		vinstall "$file" 644 "${DESTDIR}/usr/share/${pkgname}/"
+# 	done
+# 	vinstall nwg.jpg 644 "${DESTDIR}/usr/share/${pkgname}/nwg.jpg"
+# 	vinstall cache.json 644 "${DESTDIR}/var/cache/${pkgname}/cache.json"
+# 	#vinstall "../${pkgname}.tmpfiles" 644 "${DESTDIR}/usr/lib/tmpfiles.d/${pkgname}.conf"
+# 	vinstall README.md 644 /usr/share/doc/nwg-hello/
+# 	vlicense LICENSE
+#}
+
+post_install() {
+	#python -m installer dist/*.whl
+	install -D -m 644 -t "${DESTDIR}"/etc/nwg-hello/ nwg-hello-default.json
+	install -D -m 644 -t "${DESTDIR}"/etc/nwg-hello/ nwg-hello-default.css
+	install -D -m 644 -t "${DESTDIR}"/etc/nwg-hello/ hyprland.conf
+	install -D -m 644 -t "${DESTDIR}"/etc/nwg-hello/ sway-config
+	install -D -m 644 -t "${DESTDIR}"/etc/nwg-hello/ README
+	install -D -m 644 -t "${DESTDIR}"/usr/share/nwg-hello/ nwg.jpg
+	install -D -m 644 -t "${DESTDIR}"/usr/share/nwg-hello/ img/*
+	install -d /var/cache/nwg-hello
+	install -Dm644 -t "${DESTDIR}"/var/cache/nwg-hello cache.json -o greeter
+	#install -Dm 644 -t "/usr/share/licenses/$PROGRAM_NAME" LICENSE
+	vlicense LICENSE
+	install -Dm 644 -t ""${DESTDIR}"/usr/share/doc/$PROGRAM_NAME" README.md
+}
