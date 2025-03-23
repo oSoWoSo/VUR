@@ -2,7 +2,7 @@
 pkgname=nwg-shell-config
 version=0.5.58
 revision=1
-build_style=python3-pep517
+build_style=python3-module
 hostmakedepends="pkg-config python3-setuptools python3-wheel python3-geopy python3-requests"
 #makedepends="python3-gobject-devel gtk+3-devel gtk-layer-shell-devel"
 depends="python3 gtklock noto-fonts-ttf playerctl python3-geopy python3-gobject python3-i3ipc wlsunset"
@@ -14,6 +14,7 @@ homepage="https://nwg-piotr.github.io/nwg-shell/nwg-shell-config"
 #changelog=""
 distfiles="https://github.com/nwg-piotr/nwg-shell-config/archive/refs/tags/v${version}.tar.gz"
 checksum=7378b2f0dc4c8b3dd6f9ab46675d83acc0233cb8f3369b87a5a761b4163adcaa
+make_check=no # no tests provided
 
 #do_install() {
 #	python3 setup.py --help
