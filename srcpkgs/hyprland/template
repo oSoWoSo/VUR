@@ -28,8 +28,10 @@ makedepends="
 	cairo-devel
 	hwids
 	hyprcursor
-	hyprlang
-	hyprutils
+	hyprlang-devel
+	hyprutils-devel
+	hyprgraphics
+	re2-devel
 	libdisplay-info-devel
 	libdrm-devel
 	libgbm-devel
@@ -41,7 +43,7 @@ makedepends="
 	libXcursor-devel
 	libxkbcommon-devel
 	pango-devel
-	tomlplusplus
+	libtoml++
 	wayland-devel
 	wayland-protocols
 	xcb-util-errors-devel
