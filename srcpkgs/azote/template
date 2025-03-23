@@ -15,8 +15,8 @@ distfiles="https://github.com/nwg-piotr/azote/archive/refs/tags/v${version}.tar.
 checksum=d07ea0effa770fe796b4e44dd2a5b5e56af31db5500de318638d83ba8e7efe83
 
 post_install() {
-	vinstall dist/azote.svg 644 usr/share/azote
-	vcopy "dist/indicator_*.png" usr/share/azote
+	vinstall dist/azote.svg 644 /usr/share/pixmaps
+	vcopy "dist/indicator_*.png" /usr/share/pixmaps
 	vinstall dist/azote.desktop 644 usr/share/applications
 	vlicense LICENSE-COLORTHIEF
 }
