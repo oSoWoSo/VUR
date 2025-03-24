@@ -1,6 +1,6 @@
 # Template file for 'nwg-clipman'
 pkgname=nwg-clipman
-version=0.2.4
+version=0.2.5
 revision=1
 build_style=python3-pep517
 hostmakedepends="python3-setuptools cliphist wl-clipboard python3-wheel"
@@ -13,7 +13,7 @@ license="MIT"
 homepage="https://github.com/nwg-piotr/nwg-clipman"
 #changelog=""
 distfiles="https://github.com/nwg-piotr/nwg-clipman/archive/refs/tags/v${version}.tar.gz"
-checksum=a87013203758c49faf318c485669f61aa8987fabe1b368ed62293fb7729a3494
+checksum=f9a8b25791210fd0d9188fb39a7b68afb1f77e8e4d8e098a63732c3f0d9de24e
 
 post_install() {
 	vinstall nwg-clipman.svg 644 /usr/share/pixmaps
