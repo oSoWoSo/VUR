@@ -1,6 +1,6 @@
 # Template file for 'kando'
 pkgname=kando
-version=1.7.0
+version=1.8.0
 revision=1
 build_style=cmake
 hostmakedepends="pkg-config nodejs"
@@ -12,7 +12,7 @@ license="MIT"
 homepage="https://kando.menu"
 changelog="https://github.com/kando-menu/kando/blob/main/docs/changelog.md"
 distfiles="https://github.com/kando-menu/kando/archive/refs/tags/v${version}.tar.gz"
-checksum=c3461edae6082e8616e4a75a2842b1cee8c4a80d779ca14d80c1907352014ef4
+checksum=638fd4b3355962cb3b2c9422ace1074f7fad7b1514c6ac00a74b1fb871be77ce
 
 pre_configure() {
 	npm install
