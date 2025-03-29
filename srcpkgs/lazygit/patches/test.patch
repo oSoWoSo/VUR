@@ -1,0 +1,18 @@
+diff --git a/pkg/i18n/i18n_test.go b/pkg/i18n/i18n_test.go
+index 8c5787fcb..12b0d3af1 100644
+--- a/pkg/i18n/i18n_test.go
++++ b/pkg/i18n/i18n_test.go
+@@ -85,6 +85,13 @@ func TestNewTranslationSetFromConfig(t *testing.T) {
+ 			expected:       "nl",
+ 			expectedErr:    false,
+ 		},
++		{
++			name:           "auto-detection with LANG set to cs_CZ",
++			configLanguage: "auto",
++			envLanguage:    "cs_CZ",
++			expected:       "cs",
++			expectedErr:    false,
++		},
+ 		{
+ 			name:           "auto-detection with LANG set to zh-CN",
+ 			configLanguage: "auto",
