@@ -11,6 +11,14 @@ on:
         description: 'Fork Sync Test Mode'
         type: boolean
         default: false
+      branch:
+        description: 'Branch to sync'
+        type: choice
+        default: master
+        required: true
+
+env:
+  BRANCH: ${{ inputs.branch }}
 
 jobs:
   sync_latest_from_upstream:
@@ -25,7 +33,7 @@ jobs:
       with:
         # optional: set the branch to checkout,
         # sync action checks out your 'target_sync_branch' anyway
-        ref:  master
+        ref: ${{ env.BRANCH }}
         # REQUIRED if your upstream repo is private (see wiki)
         persist-credentials: false
 
@@ -35,7 +43,7 @@ jobs:
       id: sync
       uses: aormsby/Fork-Sync-With-Upstream-action@v3.4.1
       with:
-        target_sync_branch: master
+        target_sync_branch: ${{ env.BRANCH }}
         # REQUIRED 'target_repo_token' exactly like this!
         target_repo_token: ${{ secrets.GITHUB_TOKEN }}
         upstream_sync_branch: master
