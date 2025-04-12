@@ -48,6 +48,7 @@ jobs:
         upstream_sync_branch: master
         upstream_sync_repo: void-linux/void-packages
         upstream_repo_access_token: ${{ secrets.UPSTREAM_REPO_SECRET }}
+        git_config_pull_rebase: true
 
         # Set test_mode true during manual dispatch to run tests instead of the true action!!
         test_mode: ${{ inputs.sync_test_mode }}
