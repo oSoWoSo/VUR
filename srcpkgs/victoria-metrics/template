@@ -1,6 +1,6 @@
 # Template file for 'victoria-metrics'
 pkgname=victoria-metrics
-version=1.111.0
+version=1.115.0
 revision=1
 build_style=go
 go_import_path="github.com/VictoriaMetrics/VictoriaMetrics"
@@ -22,15 +22,13 @@ license="Apache-2.0"
 homepage="https://victoriametrics.com/"
 changelog="https://docs.victoriametrics.com/changelog/"
 distfiles="https://github.com/VictoriaMetrics/VictoriaMetrics/archive/v${version}.tar.gz"
-checksum=421cca69dafdf32d3b0d519a9f84695384ad04bd656d0b179a37dd08bf08f827
+checksum=b7efc59b656bcfd09905aa220515adaad99bd3627e56d39bf20a849314f0c7ab
 
 system_accounts="_vmetrics"
 _vmetrics_homedir="/var/lib/victoria-metrics"
 make_dirs="/var/lib/victoria-metrics 0750 _vmetrics _vmetrics"
 
 pre_build() {
-	vsed -i -e 's/go 1.23.5/go 1.23.4/' go.mod
-
 	# dynamically link system zstd
 	vsed -i 's/#cgo LDFLAGS:.*/#cgo LDFLAGS: -lzstd/' \
 		vendor/github.com/valyala/gozstd/libzstd_*.go

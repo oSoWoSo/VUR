@@ -1,6 +1,6 @@
 # Template file for 'kitty'
 pkgname=kitty
-version=0.39.1
+version=0.41.1
 revision=1
 build_helper="python3"
 pycompile_dirs="usr/lib/kitty"
@@ -17,7 +17,7 @@ license="GPL-3.0-only"
 homepage="https://sw.kovidgoyal.net/kitty/"
 changelog="https://sw.kovidgoyal.net/kitty/changelog.html"
 distfiles="https://github.com/kovidgoyal/kitty/releases/download/v${version}/kitty-${version}.tar.xz"
-checksum=4baa2a59de7569b3b34f44ea8536c53d312aa76d1347121a2d6557abfde21325
+checksum=e30150fad1bcc885a7adbd87380696ef7b67a62a38f74634efbc05c3745f26aa
 python_version=3
 nopie_files="/usr/bin/kitten"
 
