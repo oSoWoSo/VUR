@@ -13,11 +13,9 @@ on:
         default: false
       branch:
         description: 'Branch to sync'
-        type: choice
+        type: string
         default: master
         required: true
-        options:
-          - ${{ github.ref_name }}
 
 env:
   BRANCH: ${{ inputs.branch }}
