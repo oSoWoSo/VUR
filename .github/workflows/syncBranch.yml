@@ -23,7 +23,7 @@ env:
 jobs:
   sync_latest_from_upstream:
     runs-on: ubuntu-latest
-    name: "Sync ${{ env.BRANCH }} branch with Void"
+    name: "Sync with Void"
     steps:
     # REQUIRED step
     # Step 1: run a standard checkout action, provided by github
