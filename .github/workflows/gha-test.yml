@@ -1,0 +1,66 @@
+# This is a basic workflow to help you get started with Actions
+
+name: "CI test"
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "VUR" ]
+  pull_request:
+    branches: [ "VUR" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Check things out
+        run: |
+          echo "CPU:"
+          lscpu
+          echo
+          echo
+          echo "/proc/cpuinfo"
+          cat /proc/cpuinfo
+          echo
+          echo
+          sudo apt install -y --no-install-recommends libvirt-clients qemu-system-x86 qemu-utils ovmf
+          echo
+          echo
+          echo "virt-host-validate:"
+          sudo virt-host-validate || true
+          echo
+          echo
+          printenv
+          echo
+          echo
+          echo "/dev/kvm:"
+          ls -lah /dev/kvm
+          echo
+          echo "/etc/os-release"
+          cat /etc/os-release
+          echo
+          echo
+          which qemu-system-x86_64
+          qemu-system-x86_64 --version
+          echo
+          echo
+          echo "qemu help"
+          qemu-system-x86_64 --help
+          echo
+          echo
+          echo "qemu supported devices"
+          qemu-system-x86_64 -device help
+          echo
+          echo "qemu supported cpus"
+          qemu-system-x86_64 -cpu help
+          
