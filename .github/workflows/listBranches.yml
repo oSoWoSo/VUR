@@ -1,0 +1,34 @@
+name: List Branches
+
+on:
+  create:
+    branches:
+      - '**'
+  delete:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+jobs:
+  list-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: List branches
+        run: |
+          rm -f .github/branchList
+          git branch -a | tail -n +3 | head -n -1 | cut -d '/' -f3- | tee -a .github/branchList
+
+      - name: "Push results"
+        run: |
+          git config --global user.name "web-flow"
+          git config --global user.email "noreply@github.com"
+          git status
+          git add --all || echo "Nothing to add"
+          git commit -m "Update branchList" || echo "Nothing to commit"
+          git push || echo "Nothing to push"
+          git status
