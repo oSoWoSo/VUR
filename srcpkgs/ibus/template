@@ -1,6 +1,6 @@
 # Template file for 'ibus'
 pkgname=ibus
-version=1.5.30
+version=1.5.32
 revision=1
 build_style=gnu-configure
 build_helper="gir"
@@ -23,18 +23,24 @@ maintainer="oreo639 <oreo6391@gmail.com>"
 license="LGPL-2.1-or-later"
 homepage="https://github.com/ibus/ibus"
 distfiles="https://github.com/ibus/ibus/releases/download/${version}/ibus-${version}.tar.gz"
-checksum=05b84d4a45139face161596e5ade8e6c5da55cfaf6f194861da66516190f5b96
+checksum=b24f41ae38b236b254c09f1a8f53c2354b69b0789e89cea888d0494b09d15d67
 
 build_options="ibus_setup dicts"
 desc_option_ibus_setup="Enable support for building the ibus setup UI"
 build_options_default="ibus_setup dicts"
 
-post_configure() {
-	# Force re-generate valac files for gcc 14
-	make -C ui/gtk3 maintainer-clean-generic
+pre_configure() {
+	autoreconf -fi
+
+	# Regenerate sources with new vala
+	find -name '*.vala' -exec touch {} \;
 }
 
 pre_build() {
+	export GIR_EXTRA_LIBS_PATH="${wrksrc}/src/.libs"
+}
+
+pre_install() {
 	export GIR_EXTRA_LIBS_PATH="${wrksrc}/src/.libs"
 }
 

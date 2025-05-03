@@ -1,17 +1,23 @@
 # Template file for 'arduino-cli'
 pkgname=arduino-cli
-version=1.0.4
-revision=2
+version=1.2.2
+revision=1
 build_style=go
 build_helper="qemu"
 go_import_path=github.com/arduino/arduino-cli
-go_ldflags="-X ${go_import_path}/version.versionString=${version}"
+go_ldflags="
+ -X ${go_import_path}/internal/version.versionString=${version}
+ -X ${go_import_path}/internal/version.commit=v${version}
+ -X ${go_import_path}/internal/version.date=${SOURCE_DATE_EPOCH}
+"
 short_desc="Arduino command line interface"
-maintainer="Andrew J. Hesford <ajh@sideband.org>"
+maintainer="Orphaned <orphan@voidlinux.org>"
 license="GPL-3.0-or-later"
 homepage="https://github.com/arduino/arduino-cli"
 distfiles="https://github.com/arduino/arduino-cli/archive/v${version}.tar.gz"
-checksum=9eae425e2629fb8cea2591b87b0a0cb7a8e305bcf3f90c7c121be674d70eca0c
+checksum=c999f61e23c253d567f49c20ac4dc5d4e3187515dc7e1a42ac0482cb7124730a
+# Tests do not find executable in build environment
+make_check=no
 
 case "$XBPS_TARGET_MACHINE" in
 	# the downloaded toolchains use glibc, this allows them to work on musl

@@ -1,7 +1,7 @@
 # Template file for 'xdg-desktop-portal-lxqt'
 pkgname=xdg-desktop-portal-lxqt
-version=1.0.2
-revision=2
+version=1.2.0
+revision=1
 build_style=cmake
 hostmakedepends="qt6-base qt6-tools"
 makedepends="kf6-kwindowsystem-devel libfm-qt-devel qt6-base-private-devel"
@@ -11,4 +11,4 @@ license="LGPL-2.1-or-later"
 homepage="https://github.com/lxqt/xdg-desktop-portal-lxqt"
 changelog="https://github.com/lxqt/xdg-desktop-portal-lxqt/raw/master/CHANGELOG"
 distfiles="https://github.com/lxqt/xdg-desktop-portal-lxqt/archive/${version}.tar.gz"
-checksum=3f13151deb515ce9f17431bd48dfbea717499c698d28267cd225b47ac22a6d6c
+checksum=e062388b7b54c2e20a34fa343586c77ccdf28fa4e9ed242488f6e7f41c73c176

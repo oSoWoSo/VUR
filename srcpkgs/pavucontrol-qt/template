@@ -1,6 +1,6 @@
 # Template file for 'pavucontrol-qt'
 pkgname=pavucontrol-qt
-version=2.0.0
+version=2.2.0
 revision=1
 build_style=cmake
 hostmakedepends="pkg-config lxqt-build-tools qt6-base qt6-tools perl"
@@ -10,4 +10,4 @@ maintainer="Enrico Belleri <idesmi@protonmail.com>"
 license="GPL-2.0-or-later"
 homepage="https://lxqt-project.org"
 distfiles="https://github.com/lxqt/pavucontrol-qt/archive/${version}.tar.gz"
-checksum=dab3f4a038d34e6319021c55c0f4739512e27b3cde1738a95bdc195633505df6
+checksum=7e3db35c6f856d04da69036fdeb93e6874f7059004f21cdeea013691bc6528c4

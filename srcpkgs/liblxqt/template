@@ -1,6 +1,6 @@
 # Template file for 'liblxqt'
 pkgname=liblxqt
-version=2.0.0
+version=2.2.0
 revision=1
 build_style=cmake
 hostmakedepends="pkg-config lxqt-build-tools
@@ -12,7 +12,7 @@ maintainer="Helmut Pozimski <helmut@pozimski.eu>"
 license="LGPL-2.1-or-later"
 homepage="https://lxqt-project.org"
 distfiles="https://github.com/lxqt/liblxqt/archive/${version}.tar.gz"
-checksum=464090c3e3eba5204c59500b2585c4210b44f9438438864fcceb3d09669611a5
+checksum=5994024d06aba5d33e72b578d3c36d56942f43218ecceac6ff172e6499511066
 
 liblxqt-devel_package() {
 	short_desc+=" - development files"

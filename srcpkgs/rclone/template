@@ -1,6 +1,6 @@
 # Template file for 'rclone'
 pkgname=rclone
-version=1.68.1
+version=1.69.0
 revision=1
 build_style=go
 build_helper=qemu
@@ -10,12 +10,12 @@ go_ldflags="-extldflags=-fuse-ld=bfd -X github.com/rclone/rclone/fs.Version=v${v
 depends="mime-types"
 checkdepends="${depends} rsync unzip"
 short_desc="Rsync for cloud storage"
-maintainer="Roberto Ricci <io@r-ricci.it>"
+maintainer="Orphaned <orphan@voidlinux.org>"
 license="MIT"
 homepage="https://rclone.org/"
 changelog="https://rclone.org/changelog/"
 distfiles="https://downloads.rclone.org/v${version}/rclone-v${version}.tar.gz"
-checksum=c5d45b83dd008d08a0903eebf1578a11a40a77152226e22ce5e9287b9db05579
+checksum=45e6a329af4f98e0c71233511ab8543e454eaa22adeeb73179bfdb22456a2123
 make_check_pre="env RCLONE_CONFIG=/notfound"
 # some tests fail on CI
 make_check=ci-skip

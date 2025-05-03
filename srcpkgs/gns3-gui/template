@@ -1,6 +1,6 @@
 # Template file for 'gns3-gui'
 pkgname=gns3-gui
-version=2.2.49
+version=2.2.53
 revision=1
 build_style=python3-module
 hostmakedepends="python3-setuptools"
@@ -14,7 +14,7 @@ license="GPL-3.0-or-later"
 homepage="https://gns3.com"
 changelog="https://raw.githubusercontent.com/GNS3/gns3-gui/master/CHANGELOG"
 distfiles="https://github.com/GNS3/${pkgname}/archive/v${version}.tar.gz"
-checksum=360fe0eab33fe4f8b28bcecc77de7c9afa3da304c77cc4c5caf6339b982dd14e
+checksum=d6d8de369e3aa96ba49e4ba1cbc33c813053af58786817f477cd3fb8ad24066e
 
 
 post_patch() {

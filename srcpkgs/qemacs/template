@@ -1,8 +1,8 @@
 # Template file for 'qemacs'
 pkgname=qemacs
-version=6.1.1b
+version=6.4.1
 revision=1
-_githash=06b3d373bbcc52b51ccb438bf3cab38a49492ff0
+_githash=43b5851958ee13fe0b96cf92b5cfc0aaa085d740
 build_style=configure
 configure_args="--prefix=/usr --mandir=/usr/share/man
  --disable-x11 --disable-plugins"
@@ -11,7 +11,7 @@ maintainer="Leah Neukirchen <leah@vuxu.org>"
 license="MIT"
 homepage="https://github.com/qemacs/qemacs"
 distfiles="https://github.com/qemacs/qemacs/archive/${_githash}.tar.gz"
-checksum=89f8e9acc09ee51fa7d78c96a0e44bb1921616629d965aa7fc8cb696ffa0410f
+checksum=263264060117e81f0a45404d31ec5938f44f89ddb0d4f3bf2598804826e9aeb4
 # make: *** No rule to make target '.objs/Linux-x86_64-riscv64-linux-gnu-gcc/libqhtml.a', needed by 'qe_g'.  Stop.
 disable_parallel_build=yes
 
