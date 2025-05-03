@@ -1,0 +1,15 @@
+name: 'Sync branch'
+
+on:
+  #schedule:
+    #- cron:  '0 7 * * 1,4'
+    # scheduled at 07:00 every Monday and Thursday
+
+  workflow_dispatch:  # click the button on Github repo!
+    inputs:
+      branch:
+        description: 'Branch to sync'
+        type: choice
+        default: master
+        required: true
+        options:
