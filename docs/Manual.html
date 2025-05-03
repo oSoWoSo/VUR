@@ -1,0 +1,2826 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Manual</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+<script>
+  function toggleTheme(){
+    const html=document.documentElement;
+    const current=html.getAttribute("data-theme")||"dark";
+    const next=current==="dark"?"light":"dark";
+    html.setAttribute("data-theme",next);
+    localStorage.setItem("theme",next)
+  }
+  (function(){
+    const saved=localStorage.getItem("theme")||"dark";
+    document.documentElement.setAttribute("data-theme",saved)
+  })();
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toc = document.getElementById("TOC");
+    if (!toc) return;
+
+    // Add toc-title with toggle button
+    const titleEl = document.createElement("div");
+    titleEl.id = "toc-title";
+    titleEl.innerHTML = '<span>Contents</span><span id="toc-toggle-icon">◀</span>';
+    toc.insertBefore(titleEl, toc.firstChild);
+
+    // Wrap TOC + the rest of the content in .page-wrapper
+    const body = document.body;
+    const wrapper = document.createElement("div");
+    wrapper.className = "page-wrapper";
+
+    // Find all elements after <nav> (main nav menu)
+    const topNav = document.querySelector("body > nav");
+    const siblings = [];
+    let el = topNav ? topNav.nextElementSibling : body.firstElementChild;
+    while (el) {
+      siblings.push(el);
+      el = el.nextElementSibling;
+    }
+
+    siblings.forEach((s) => wrapper.appendChild(s));
+    body.appendChild(wrapper);
+
+    // Wrap main content (everything except TOC) in .main-content
+    const mainContent = document.createElement("div");
+    mainContent.className = "main-content";
+    Array.from(wrapper.children).forEach((child) => {
+      if (child.id !== "TOC") mainContent.appendChild(child);
+    });
+    wrapper.appendChild(mainContent);
+
+    // Collapsible toggle
+    const icon = document.getElementById("toc-toggle-icon");
+    const saved = localStorage.getItem("toc-collapsed");
+    if (saved === "true") {
+      toc.classList.add("collapsed");
+      icon.textContent = "▶";
+    }
+
+    titleEl.addEventListener("click", function () {
+      toc.classList.toggle("collapsed");
+      const isCollapsed = toc.classList.contains("collapsed");
+      icon.textContent = isCollapsed ? "▶" : "◀";
+      localStorage.setItem("toc-collapsed", isCollapsed);
+    });
+  });
+</script>
+<nav><ul>
+  <li><a href="https://osowoso.org">oSoWoSo</a></li>
+  <li>⏮️</a></li>
+  <li><a href="index.html">Home</a></li>
+  <li><a class="no-release" href="https://github.com/oSoWoSo/VUR/releases/latest">⏬ release</a></li>
+  <li><a href="https://github.com/oSoWoSo/VUR/archive/refs/heads/main.zip">📦repo zip</a></li>
+  <li><a href="https://github.com/oSoWoSo/VUR">🔗git</a></li>
+  <li>⏭️</a></li>
+  <li><a href="CONTRIBUTING-cz.html">CONTRIBUTING-cz</a></li>
+  <li><a href="CONTRIBUTING.html">CONTRIBUTING</a></li>
+  <li><a href="Manual-cz.html">Manual-cz</a></li>
+  <li><a href="Manual.html" class="active">Manual</a></li>
+  <li><a href="README-cz.html">README-cz</a></li>
+</ul></nav>
+<header id="title-block-header">
+<h1 class="title">Manual</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#the-xbps-source-packages-manual"
+id="toc-the-xbps-source-packages-manual">The XBPS source packages
+manual</a>
+<ul>
+<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#package-build-phases"
+id="toc-package-build-phases">Package build phases</a></li>
+<li><a href="#package-naming-conventions"
+id="toc-package-naming-conventions">Package naming conventions</a></li>
+<li><a href="#global-functions" id="toc-global-functions">Global
+functions</a></li>
+<li><a href="#global-variables" id="toc-global-variables">Global
+variables</a></li>
+<li><a href="#available-variables"
+id="toc-available-variables">Available variables</a></li>
+<li><a href="#repositories" id="toc-repositories">Repositories</a></li>
+<li><a href="#checking-for-new-upstream-releases"
+id="toc-checking-for-new-upstream-releases">Checking for new upstream
+releases</a></li>
+<li><a href="#handling-patches" id="toc-handling-patches">Handling
+patches</a></li>
+<li><a href="#build-style-scripts" id="toc-build-style-scripts">build
+style scripts</a></li>
+<li><a href="#build-helper-scripts" id="toc-build-helper-scripts">build
+helper scripts</a></li>
+<li><a href="#functions" id="toc-functions">Functions</a></li>
+<li><a href="#build-options" id="toc-build-options">Build
+options</a></li>
+<li><a href="#install-and-remove-files"
+id="toc-install-and-remove-files">INSTALL and REMOVE files</a></li>
+<li><a href="#installmsg-and-removemsg-files"
+id="toc-installmsg-and-removemsg-files">INSTALL.msg and REMOVE.msg
+files</a></li>
+<li><a href="#creating-system-accountsgroups-at-runtime"
+id="toc-creating-system-accountsgroups-at-runtime">Creating system
+accounts/groups at runtime</a></li>
+<li><a href="#writing-runit-services"
+id="toc-writing-runit-services">Writing runit services</a></li>
+<li><a href="#32bit-packages" id="toc-32bit-packages">32bit
+packages</a></li>
+<li><a href="#subpackages" id="toc-subpackages">Subpackages</a></li>
+<li><a href="#some-package-classes" id="toc-some-package-classes">Some
+package classes</a></li>
+<li><a href="#renaming-a-package" id="toc-renaming-a-package">Renaming a
+package</a></li>
+<li><a href="#removing-a-package" id="toc-removing-a-package">Removing a
+package</a></li>
+<li><a href="#xbps-triggers" id="toc-xbps-triggers">XBPS
+Triggers</a></li>
+<li><a href="#void-specific-documentation"
+id="toc-void-specific-documentation">Void specific
+documentation</a></li>
+<li><a href="#notes" id="toc-notes">Notes</a></li>
+<li><a href="#contributing-via-git"
+id="toc-contributing-via-git">Contributing via git</a></li>
+<li><a href="#help" id="toc-help">Help</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="the-xbps-source-packages-manual">The XBPS source packages
+manual</h1>
+<p>This article contains an exhaustive manual of how to create new
+source packages for XBPS, the <code>Void Linux</code> native packaging
+system.</p>
+<p><em>Table of Contents</em></p>
+<ul>
+<li>The XBPS source packages manual
+<ul>
+<li><a href="#Introduction">Introduction</a></li>
+<li><a href="#buildphase">Package build phases</a></li>
+<li><a href="#namingconventions">Package naming conventions</a>
+<ul>
+<li><a href="#libs">Libraries</a></li>
+<li><a href="#language_modules">Language Modules</a></li>
+<li><a href="#language_bindings">Language Bindings</a></li>
+<li><a href="#programs">Programs</a></li>
+</ul></li>
+<li><a href="#global_funcs">Global functions</a></li>
+<li><a href="#global_vars">Global variables</a></li>
+<li><a href="#available_vars">Available variables</a>
+<ul>
+<li><a href="#mandatory_vars">Mandatory variables</a></li>
+<li><a href="#optional_vars">Optional variables</a></li>
+<li><a href="#explain_depends">About the depends variables</a></li>
+</ul></li>
+<li><a href="#repositories">Repositories</a>
+<ul>
+<li><a href="#repo_by_branch">Repositories defined by Branch</a></li>
+<li><a href="#pkg_defined_repo">Package defined repositories</a></li>
+</ul></li>
+<li><a href="#updates">Checking for new upstream releases</a></li>
+<li><a href="#patches">Handling patches</a></li>
+<li><a href="#build_scripts">Build style scripts</a></li>
+<li><a href="#build_helper">Build helper scripts</a></li>
+<li><a href="#functions">Functions</a></li>
+<li><a href="#build_options">Build options</a></li>
+<li><a href="#install_remove_files">INSTALL and REMOVE files</a></li>
+<li><a href="#install_remove_files_msg">INSTALL.msg and REMOVE.msg
+files</a></li>
+<li><a href="#runtime_account_creation">Creating system accounts/groups
+at runtime</a></li>
+<li><a href="#writing_runit_services">Writing runit services</a></li>
+<li><a href="#32bit_pkgs">32bit packages</a></li>
+<li><a href="#pkgs_sub">Subpackages</a></li>
+<li><a href="#pkgs_classes">Some package classes</a>
+<ul>
+<li><a href="#pkgs_development">Development packages</a></li>
+<li><a href="#pkgs_data">Data packages</a></li>
+<li><a href="#pkgs_documentation">Documentation packages</a></li>
+<li><a href="#pkgs_python">Python packages</a></li>
+<li><a href="#pkgs_go">Go packages</a></li>
+<li><a href="#pkgs_haskell">Haskell packages</a></li>
+<li><a href="#pkgs_font">Font packages</a></li>
+</ul></li>
+<li><a href="#pkg_rename">Renaming a package</a></li>
+<li><a href="#pkg_remove">Removing a package</a></li>
+<li><a href="#xbps_triggers">XBPS Triggers</a>
+<ul>
+<li><a href="#triggers_appstream_cache">appstream-cache</a></li>
+<li><a href="#triggers_binfmts">binfmts</a></li>
+<li><a href="#triggers_dkms">dkms</a></li>
+<li><a href="#triggers_gconf_schemas">gconf-schemas</a></li>
+<li><a href="#triggers_gdk_pixbuf_loaders">gdk-pixbuf-loaders</a></li>
+<li><a href="#triggers_gio_modules">gio-modules</a></li>
+<li><a href="#triggers_gsettings_schemas">gettings-schemas</a></li>
+<li><a href="#triggers_gtk_icon_cache">gtk-icon-cache</a></li>
+<li><a href="#triggers_gtk_immodules">gtk-immodules</a></li>
+<li><a href="#triggers_gtk_pixbuf_loaders">gtk-pixbuf-loaders</a></li>
+<li><a href="#triggers_gtk3_immodules">gtk3-immodules</a></li>
+<li><a href="#triggers_hwdb.d_dir">hwdb.d-dir</a></li>
+<li><a href="#triggers_info_files">info-files</a></li>
+<li><a
+href="#triggers_initramfs_regenerate">initramfs-regenerate</a></li>
+<li><a href="#triggers_kernel_hooks">kernel-hooks</a></li>
+<li><a href="#triggers_mimedb">mimedb</a></li>
+<li><a href="#triggers_mkdirs">mkdirs</a></li>
+<li><a href="#triggers_pango_module">pango-modules</a></li>
+<li><a href="#triggers_pycompile">pycompile</a></li>
+<li><a href="#triggers_register_shell">register-shell</a></li>
+<li><a href="#triggers_system_accounts">system-accounts</a></li>
+<li><a href="#triggers_texmf_dist">texmf-dist</a></li>
+<li><a href="#triggers_update_desktopdb">update-desktopdb</a></li>
+<li><a href="#triggers_x11_fonts">x11-fonts</a></li>
+<li><a href="#triggers_xml_catalog">xml-catalog</a></li>
+</ul></li>
+<li><a href="#documentation">Void specific documentation</a></li>
+<li><a href="#notes">Notes</a></li>
+<li><a href="#contributing">Contributing via git</a></li>
+<li><a href="#help">Help</a></li>
+</ul></li>
+</ul>
+<p><a id="Introduction"></a></p>
+<h3 id="introduction">Introduction</h3>
+<p>The <code>void-packages</code> repository contains all the recipes to
+download, compile and build binary packages for Void Linux. These
+<code>source</code> package files are called <code>templates</code>.</p>
+<p>The <code>template</code> files are shell scripts that define
+<code>variables</code> and <code>functions</code> to be processed by
+<code>xbps-src</code>, the package builder, to generate binary packages.
+The shell used by <code>xbps-src</code> is GNU bash;
+<code>xbps-src</code> doesn't aim to be compatible with POSIX
+<code>sh</code>.</p>
+<p>By convention, all templates start with a comment saying that it is a
+<code>template file</code> for a certain package. Most of the lines
+should be kept under 80 columns; variables that list many values can be
+split into new lines, with the continuation in the next line indented by
+one space.</p>
+<p>A simple <code>template</code> example is as follows:</p>
+<pre><code># Template file for &#39;foo&#39;
+pkgname=foo
+version=1.0
+revision=1
+build_style=gnu-configure
+short_desc=&quot;Package description, no more than 72 characters&quot;
+maintainer=&quot;name &lt;email&gt;&quot;
+license=&quot;GPL-3.0-or-later&quot;
+homepage=&quot;http://www.foo.org&quot;
+distfiles=&quot;http://www.foo.org/foo-${version}.tar.gz&quot;
+checksum=&quot;fea0a94d4b605894f3e2d5572e3f96e4413bcad3a085aae7367c2cf07908b2ff&quot;</code></pre>
+<p>The template file contains definitions to download, build and install
+the package files to a <code>fake destdir</code>, and after this a
+binary package can be generated with the definitions specified on
+it.</p>
+<p>Don't worry if anything is not clear as it should be. The reserved
+<code>variables</code> and <code>functions</code> will be explained
+later. This <code>template</code> file should be created in a directory
+matching <code>$pkgname</code>, Example:
+<code>void-packages/srcpkgs/foo/template</code>.</p>
+<p>If everything went fine after running</p>
+<pre><code>$ ./xbps-src pkg &lt;pkgname&gt;</code></pre>
+<p>a binary package named <code>foo-1.0_1.&lt;arch&gt;.xbps</code> will
+be generated in the local repository <code>hostdir/binpkgs</code>.</p>
+<p><a id="buildphase"></a></p>
+<h3 id="package-build-phases">Package build phases</h3>
+<p>Building a package consist of the following phases:</p>
+<ul>
+<li><p><code>setup</code> This phase prepares the environment for
+building a package.</p></li>
+<li><p><code>fetch</code> This phase downloads required sources for a
+<code>source package</code>, as defined by the <code>distfiles</code>
+variable or <code>do_fetch()</code> function.</p></li>
+<li><p><code>extract</code> This phase extracts the
+<code>distfiles</code> files into <code>$wrksrc</code> or executes the
+<code>do_extract()</code> function, which is the directory to be used to
+compile the <code>source package</code>.</p></li>
+<li><p><code>patch</code> This phase applies all patches in the patches
+directory of the package and can be used to perform other operations
+before configuring the package.</p></li>
+<li><p><code>configure</code> This phase executes the
+<code>configuration</code> of a <code>source package</code>, i.e
+<code>GNU configure scripts</code>.</p></li>
+<li><p><code>build</code> This phase compiles/prepares the
+<code>source files</code> via <code>make</code> or any other compatible
+method.</p></li>
+<li><p><code>check</code> This optional phase checks the result of the
+<code>build</code> phase by running the testsuite provided by the
+package. If the default <code>do_check</code> function provided by the
+build style doesn't do anything, the template should set
+<code>make_check_target</code> and/or <code>make_check_args</code>
+appropriately or define its own <code>do_check</code> function. If tests
+take too long or can't run in all environments, <code>make_check</code>
+should be set to fitting value or <code>do_check</code> should be
+customized to limit testsuite unless <code>XBPS_CHECK_PKGS</code> is
+<code>full</code>.</p></li>
+<li><p><code>install</code> This phase installs the
+<code>package files</code> into the package destdir
+<code>&lt;masterdir&gt;/destdir/&lt;pkgname&gt;-&lt;version&gt;</code>,
+via <code>make install</code> or any other compatible method.</p></li>
+<li><p><code>pkg</code> This phase builds the
+<code>binary packages</code> with files stored in the
+<code>package destdir</code> and registers them into the local
+repository.</p></li>
+<li><p><code>clean</code> This phase cleans up the package (if
+defined).</p></li>
+</ul>
+<p><code>xbps-src</code> supports running just the specified phase, and
+if it ran successfully, the phase will be skipped later (unless its work
+directory <code>${wrksrc}</code> is removed with
+<code>xbps-src clean</code>).</p>
+<p><a id="namingconventions"></a></p>
+<h3 id="package-naming-conventions">Package naming conventions</h3>
+<p><a id="libs"></a></p>
+<h4 id="libraries">Libraries</h4>
+<p>Libraries are packages which provide shared objects (*.so) in
+/usr/lib. They should be named like their upstream package name with the
+following exceptions:</p>
+<ul>
+<li>The package is a subpackage of a front end application and provides
+shared objects used by the base package and other third party libraries.
+In that case it should be prefixed with 'lib'. An exception from that
+rule is: If an executable is only used for building that package, it
+moves to the -devel package.</li>
+</ul>
+<p>Example: wireshark -&gt; subpkg libwireshark</p>
+<p>Libraries have to be split into two sub packages:
+<code>&lt;name&gt;</code> and <code>&lt;name&gt;-devel</code>.</p>
+<ul>
+<li><p><code>&lt;name&gt;</code> should only contain those parts of a
+package which are needed to run a linked program.</p></li>
+<li><p><code>&lt;name&gt;-devel</code> should contain all files which
+are needed to compile a package against this package. If the library is
+a sub package, its corresponding development package should be named
+<code>lib&lt;name&gt;-devel</code></p></li>
+</ul>
+<p><a id="language_modules"></a></p>
+<h4 id="language-modules">Language Modules</h4>
+<p>Language modules are extensions to script or compiled languages.
+Those packages do not provide any executables themselves, but can be
+used by other packages written in the same language.</p>
+<p>The naming convention to those packages is:</p>
+<pre><code>&lt;language&gt;-&lt;name&gt;</code></pre>
+<p>If a package provides both, a module and a executable, it should be
+split into a package providing the executable named
+<code>&lt;name&gt;</code> and the module named
+<code>&lt;language&gt;-&lt;name&gt;</code>. If a package starts with the
+languages name itself, the language prefix can be dropped. Short names
+for languages are no valid substitute for the language prefix.</p>
+<p>Example: perl-URI, python3-pyside2</p>
+<p><a id="language_bindings"></a></p>
+<h4 id="language-bindings">Language Bindings</h4>
+<p>Language Bindings are packages which allow programs or libraries to
+have extensions or plugins written in a certain language.</p>
+<p>The naming convention to those packages is:</p>
+<pre><code>&lt;name&gt;-&lt;language&gt;</code></pre>
+<p>Example: gimp-python3, irssi-perl</p>
+<p><a id="programs"></a></p>
+<h4 id="programs">Programs</h4>
+<p>Programs put executables under /usr/bin (or in very special cases in
+other .../bin directories)</p>
+<p>For those packages the upstream packages name should be used.
+Remember that in contrast to many other distributions, void doesn't
+lowercase package names. As a rule of thumb, if the tar.gz of a package
+contains uppercase letter, then the package name should contain them
+too; if it doesn't, the package name is lowercase.</p>
+<p>Programs can be split into program packages and library packages. The
+program package should be named as described above. The library package
+should be prefixed with "lib" (see section <code>Libraries</code>)</p>
+<p><a id="global_funcs"></a></p>
+<h3 id="global-functions">Global functions</h3>
+<p>The following functions are defined by <code>xbps-src</code> and can
+be used on any template:</p>
+<ul>
+<li><p><em>vinstall()</em>
+<code>vinstall &lt;file&gt; &lt;mode&gt; &lt;targetdir&gt; [&lt;name&gt;]</code></p>
+<p>Installs <code>file</code> with the specified <code>mode</code> into
+<code>targetdir</code> in the pkg <code>$DESTDIR</code>. The optional
+4th argument can be used to change the <code>file name</code>.</p></li>
+<li><p><em>vcopy()</em>
+<code>vcopy &lt;pattern&gt; &lt;targetdir&gt;</code></p>
+<p>Copies recursively all files in <code>pattern</code> to
+<code>targetdir</code> in the pkg <code>$DESTDIR</code>.</p></li>
+<li><p><em>vmove()</em> <code>vmove &lt;pattern&gt;</code></p>
+<p>Moves <code>pattern</code> to the specified directory in the pkg
+<code>$DESTDIR</code>.</p></li>
+<li><p><em>vmkdir()</em>
+<code>vmkdir &lt;directory&gt; [&lt;mode&gt;]</code></p>
+<p>Creates a directory in the pkg <code>$DESTDIR</code>. The 2nd
+optional argument sets the mode of the directory.</p></li>
+<li><p><em>vbin()</em> <code>vbin &lt;file&gt; [&lt;name&gt;]</code></p>
+<p>Installs <code>file</code> into <code>usr/bin</code> in the pkg
+<code>$DESTDIR</code> with the permissions 0755. The optional 2nd
+argument can be used to change the <code>file name</code>.</p></li>
+<li><p><em>vman()</em> <code>vman &lt;file&gt; [&lt;name&gt;]</code></p>
+<p>Installs <code>file</code> as a man page. <code>vman()</code> parses
+the name and determines the section as well as localization. Also
+transparently converts gzipped (.gz) and bzipped (.bz2) manpages into
+plaintext. Example mappings:</p>
+<ul>
+<li><code>foo.1</code> -&gt;
+<code>${DESTDIR}/usr/share/man/man1/foo.1</code></li>
+<li><code>foo.fr.1</code> -&gt;
+<code>${DESTDIR}/usr/share/man/fr/man1/foo.1</code></li>
+<li><code>foo.1p</code> -&gt;
+<code>${DESTDIR}/usr/share/man/man1/foo.1p</code></li>
+<li><code>foo.1.gz</code> -&gt;
+<code>${DESTDIR}/usr/share/man/man1/foo.1</code></li>
+<li><code>foo.1.bz2</code> -&gt;
+<code>${DESTDIR}/usr/share/man/man1/foo.1</code></li>
+</ul></li>
+<li><p><em>vdoc()</em> <code>vdoc &lt;file&gt; [&lt;name&gt;]</code></p>
+<p>Installs <code>file</code> into
+<code>usr/share/doc/&lt;pkgname&gt;</code> in the pkg
+<code>$DESTDIR</code>. The optional 2nd argument can be used to change
+the <code>file name</code>.</p></li>
+<li><p><em>vconf()</em>
+<code>vconf &lt;file&gt; [&lt;name&gt;]</code></p>
+<p>Installs <code>file</code> into <code>etc</code> in the pkg
+<code>$DESTDIR</code>. The optional 2nd argument can be used to change
+the <code>file name</code>.</p></li>
+<li><p><em>vsconf()</em>
+<code>vsconf &lt;file&gt; [&lt;name&gt;]</code></p>
+<p>Installs <code>file</code> into
+<code>usr/share/examples/&lt;pkgname&gt;</code> in the pkg
+<code>$DESTDIR</code>. The optional 2nd argument can be used to change
+the <code>file name</code>.</p></li>
+<li><p><a id="vlicense"></a> <em>vlicense()</em>
+<code>vlicense &lt;file&gt; [&lt;name&gt;]</code></p>
+<p>Installs <code>file</code> into
+<code>usr/share/licenses/&lt;pkgname&gt;</code> in the pkg
+<code>$DESTDIR</code>. The optional 2nd argument can be used to change
+the <code>file name</code>. See <a href="#var_license">license</a> for
+when to use it.</p></li>
+<li><p><em>vsv()</em>
+<code>vsv &lt;service&gt; [&lt;facility&gt;]</code></p>
+<p>Installs <code>service</code> from <code>${FILESDIR}</code> to
+/etc/sv. The service must be a directory containing at least a run
+script. Note the <code>supervise</code> symlink will be created
+automatically by <code>vsv</code> and that the run script is
+automatically made executable by this function. For further information
+on how to create a new service directory see <a
+href="http://smarden.org/runit/faq.html#create">The corresponding
+section the FAQ</a>. A <code>log</code> sub-service will be
+automatically created if one does not exist in
+<code>${FILESDIR}/$service</code>, containing
+<code>exec vlogger -t $service -p $facility</code>. if a second argument
+is not specified, the <code>daemon</code> facility is used. For more
+information about <code>vlogger</code> and available values for the
+facility, see <a
+href="https://man.voidlinux.org/vlogger.8">vlogger(8)</a>.</p></li>
+<li><p><em>vsed()</em>
+<code>vsed -i &lt;file&gt; -e &lt;regex&gt;</code></p>
+<p>Wrapper around sed that checks sha256sum of a file before and after
+running the sed command to detect cases in which the sed call didn't
+change anything. Takes any arbitrary amount of files and regexes by
+calling <code>-i file</code> and <code>-e regex</code> repeatedly, at
+least one file and one regex must be specified.</p>
+<p>Note that vsed will call the sed command for every regex specified
+against every file specified, in the order that they are given.</p></li>
+<li><p><em>vcompletion()</em>
+<code>&lt;file&gt; &lt;shell&gt; [&lt;command&gt;]</code></p>
+<p>Installs shell completion from <code>file</code> for
+<code>command</code>, in the correct location and with the appropriate
+filename for <code>shell</code>. If <code>command</code> isn't
+specified, it will default to <code>pkgname</code>. The
+<code>shell</code> argument can be one of <code>bash</code>,
+<code>fish</code> or <code>zsh</code>.</p></li>
+<li><p><em>vextract()</em>
+<code>[-C &lt;target directory&gt;] [--no-strip-components|--strip-components=&lt;n&gt;] &lt;file&gt;</code></p>
+<p>Extracts <code>file</code> to <code>target directory</code> with
+<code>n</code> directory components stripped. If
+<code>target directory</code> not specified, defaults to the working
+directory. If <code>--strip-components</code> or
+<code>--no-strip-components</code> is not specified, defaults to
+<code>--strip-components=1</code>.</p></li>
+<li><p><em>vsrcextract()</em>
+<code>[-C &lt;target directory&gt;] [--no-strip-components|--strip-components=&lt;n&gt;] &lt;file&gt;</code></p>
+<p>Extracts <code>$XBPS_SRCDISTDIR/$pkgname-$version/&lt;file&gt;</code>
+to <code>target directory</code> with <code>n</code> directory
+components stripped. If <code>target directory</code> not specified,
+defaults to the working directory. If <code>--strip-components</code> or
+<code>--no-strip-components</code> is not specified, defaults to
+<code>--strip-components=1</code>.</p>
+<p>This is useful when used in conjunction with
+<code>skip_extraction</code> and for submodule distfiles.</p></li>
+<li><p><em>vsrccopy()</em>
+<code>&lt;file&gt;... &lt;target&gt;</code></p>
+<p>Copies <code>file</code>s from
+<code>$XBPS_SRCDISTDIR/$pkgname-$version/</code> into the
+<code>target</code> directory, creating <code>target</code> if it does
+not exist.</p>
+<p>This is useful when used in conjunction with
+<code>skip_extraction</code>.</p></li>
+</ul>
+<blockquote>
+<p>Shell wildcards must be properly quoted, Example:
+<code>vmove "usr/lib/*.a"</code>.</p>
+</blockquote>
+<p><a id="global_vars"></a></p>
+<h3 id="global-variables">Global variables</h3>
+<p>The following variables are defined by <code>xbps-src</code> and can
+be used on any template:</p>
+<ul>
+<li><p><code>makejobs</code> Set to <code>-jX</code> if
+<code>XBPS_MAKEJOBS</code> is defined, to allow parallel jobs with
+<code>GNU make</code>.</p></li>
+<li><p><code>sourcepkg</code> Set to the main package name, can be used
+to match the main package rather than additional binary package
+names.</p></li>
+<li><p><code>CHROOT_READY</code> Set if the target chroot (masterdir) is
+ready for chroot builds.</p></li>
+<li><p><code>CROSS_BUILD</code> Set if <code>xbps-src</code> is cross
+compiling a package.</p></li>
+<li><p><code>XBPS_CHECK_PKGS</code> Set if <code>xbps-src</code> is
+going to run tests for a package. Longer testsuites should only be run
+in <code>do_check()</code> if it is set to <code>full</code>.</p></li>
+<li><p><code>DESTDIR</code> Full path to the fake destdir used by the
+source pkg, set to
+<code>&lt;masterdir&gt;/destdir/${sourcepkg}-${version}</code>.</p></li>
+<li><p><code>FILESDIR</code> Full path to the <code>files</code> package
+directory, i.e <code>srcpkgs/foo/files</code>. The <code>files</code>
+directory can be used to store additional files to be installed as part
+of the source package.</p></li>
+<li><p><code>PKGDESTDIR</code> Full path to the fake destdir used by the
+<code>pkg_install()</code> function in <code>subpackages</code>, set to
+<code>&lt;masterdir&gt;/destdir/${pkgname}-${version}</code>.</p></li>
+<li><p><code>XBPS_BUILDDIR</code> Directory to store the
+<code>source code</code> of the source package being processed, set to
+<code>&lt;masterdir&gt;/builddir</code>. The package <code>wrksrc</code>
+is always stored in this directory such as
+<code>${XBPS_BUILDDIR}/${wrksrc}</code>.</p></li>
+<li><p><code>XBPS_MACHINE</code> The machine architecture as returned by
+<code>xbps-uhelper arch</code>.</p></li>
+<li><p><code>XBPS_ENDIAN</code> The machine's endianness ("le" or
+"be").</p></li>
+<li><p><code>XBPS_LIBC</code> The machine's C library ("glibc" or
+"musl").</p></li>
+<li><p><code>XBPS_WORDSIZE</code> The machine's word size in bits (32 or
+64).</p></li>
+<li><p><code>XBPS_NO_ATOMIC8</code> The machine lacks native 64-bit
+atomics (needs libatomic emulation).</p></li>
+<li><p><code>XBPS_SRCDISTDIR</code> Full path to where the
+<code>source distfiles</code> are stored, i.e
+<code>$XBPS_HOSTDIR/sources</code>.</p></li>
+<li><p><code>XBPS_SRCPKGDIR</code> Full path to the <code>srcpkgs</code>
+directory.</p></li>
+<li><p><code>XBPS_TARGET_MACHINE</code> The target machine architecture
+when cross compiling a package.</p></li>
+<li><p><code>XBPS_TARGET_ENDIAN</code> The target machine's endianness
+("le" or "be").</p></li>
+<li><p><code>XBPS_TARGET_LIBC</code> The target machine's C library
+("glibc" or "musl").</p></li>
+<li><p><code>XBPS_TARGET_WORDSIZE</code> The target machine's word size
+in bits (32 or 64).</p></li>
+<li><p><code>XBPS_TARGET_NO_ATOMIC8</code> The target machine lacks
+native 64-bit atomics (needs libatomic emulation).</p></li>
+<li><p><code>XBPS_FETCH_CMD</code> The utility to fetch files from
+<code>ftp</code>, <code>http</code> of <code>https</code>
+servers.</p></li>
+<li><p><code>XBPS_WRAPPERDIR</code> Full path to where xbps-src's
+wrappers for utilities are stored.</p></li>
+<li><p><code>XBPS_CROSS_BASE</code> Full path to where cross-compile
+dependencies are installed, varies according to the target architecture
+triplet. i.e <code>aarch64</code> -&gt;
+<code>/usr/aarch64-linux-gnu</code>.</p></li>
+<li><p><code>XBPS_RUST_TARGET</code> The target architecture triplet
+used by <code>rustc</code> and <code>cargo</code>.</p></li>
+<li><p><code>XBPS_BUILD_ENVIRONMENT</code> Enables
+continuous-integration-specific operations. Set to
+<code>void-packages-ci</code> if in continuous integration.</p></li>
+</ul>
+<p><a id="available_vars"></a></p>
+<h3 id="available-variables">Available variables</h3>
+<p><a id="mandatory_vars"></a></p>
+<h4 id="mandatory-variables">Mandatory variables</h4>
+<p>The list of mandatory variables for a template:</p>
+<ul>
+<li><p><code>homepage</code> An URL pointing to the upstream
+homepage.</p></li>
+<li><p><a id="var_license"></a> <code>license</code> A string matching
+the license's <a href="https://spdx.org/licenses">SPDX Short
+identifier</a>, <code>Public Domain</code>, or string prefixed with
+<code>custom:</code> for other licenses. Multiple licenses should be
+listed as an <a
+href="https://spdx.github.io/spdx-spec/v3.0/annexes/SPDX-license-expressions/">SPDX
+license expression</a> (examples: <code>MIT OR Apache-2.0</code>,
+<code>MIT AND (LGPL-2.1-or-later OR BSD-3-Clause)</code>). Usage of
+<code>AND</code>, <code>OR</code>, <code>WITH</code>, and
+<code>()</code> are supported by xlint. The legacy comma-separated
+format should be converted when encountered (example:
+<code>GPL-3.0-or-later, custom:Hugware</code>).</p>
+<p>Empty meta-packages that don't include any files and thus have and
+require no license should use <code>Public Domain</code>.</p>
+<p>Note: <code>AGPL</code>, <code>MIT</code>, <code>BSD</code>,
+<code>ISC</code>, <code>X11</code>, and custom licenses require the
+license file to be supplied with the binary package.</p></li>
+<li><p><code>maintainer</code> A string in the form of
+<code>name &lt;user@domain&gt;</code>. The email for this field must be
+a valid email that you can be reached at. Packages using
+<code>users.noreply.github.com</code> emails will not be
+accepted.</p></li>
+<li><p><code>pkgname</code> A string with the package name, matching
+<code>srcpkgs/&lt;pkgname&gt;</code>.</p></li>
+<li><p><code>revision</code> A number that must be set to 1 when the
+<code>source package</code> is created, or updated to a new
+<code>upstream version</code>. This should only be increased when the
+generated <code>binary packages</code> have been modified.</p></li>
+<li><p><code>short_desc</code> A string with a brief description for
+this package. Max 72 chars.</p></li>
+<li><p><code>version</code> A string with the package version. Must not
+contain dashes or underscore and at least one digit is required. Shell's
+variable substitution usage is not allowed.</p></li>
+</ul>
+<p><code>pkgname</code> and <code>version</code> are forbidden to
+contain special characters. Hence, they don't need to be quoted, and by
+convention, they shouldn't be.</p>
+<p><a id="optional_vars"></a></p>
+<h4 id="optional-variables">Optional variables</h4>
+<ul>
+<li><p><code>hostmakedepends</code> The list of <code>host</code>
+dependencies required to build the package, and that will be installed
+to the master directory. There is no need to specify a version because
+the current version in srcpkgs will always be required. Example:
+<code>hostmakedepends="foo blah"</code>.</p></li>
+<li><p><code>makedepends</code> The list of <code>target</code>
+dependencies required to build the package, and that will be installed
+to the master directory. There is no need to specify a version because
+the current version in srcpkgs will always be required. Example:
+<code>makedepends="foo blah"</code>.</p></li>
+<li><p><code>checkdepends</code> The list of dependencies required to
+run the package checks, i.e. the script or make rule specified in the
+template's <code>do_check()</code> function. Example:
+<code>checkdepends="gtest"</code>.</p></li>
+<li><p><code>depends</code> The list of dependencies required to run the
+package. These dependencies are not installed to the master directory,
+rather are only checked if a binary package in the local repository
+exists to satisfy the required version. Dependencies can be specified
+with the following version comparators: <code>&lt;</code>,
+<code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code> or
+<code>foo-1.0_1</code> to match an exact version. If version comparator
+is not defined (just a package name), the version comparator is
+automatically set to <code>&gt;=0</code>. Example:
+<code>depends="foo blah&gt;=1.0"</code>. See the <a
+href="#deps_runtime">Runtime dependencies</a> section for more
+information.</p></li>
+<li><p><code>bootstrap</code> If enabled the source package is
+considered to be part of the <code>bootstrap</code> process and required
+to be able to build packages in the chroot. Only a small number of
+packages must set this property.</p></li>
+<li><p><code>conflicts</code> An optional list of packages conflicting
+with this package. Conflicts can be specified with the following version
+comparators: <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>,
+<code>&gt;=</code> or <code>foo-1.0_1</code> to match an exact version.
+If version comparator is not defined (just a package name), the version
+comparator is automatically set to <code>&gt;=0</code>. Example:
+<code>conflicts="foo blah&gt;=0.42.3"</code>.</p></li>
+<li><p><code>distfiles</code> The full URL to the <code>upstream</code>
+source distribution files. Multiple files can be separated by
+whitespaces. The files must end in <code>.tar.lzma</code>,
+<code>.tar.xz</code>, <code>.txz</code>, <code>.tar.bz2</code>,
+<code>.tbz</code>, <code>.tar.gz</code>, <code>.tgz</code>,
+<code>.gz</code>, <code>.bz2</code>, <code>.tar</code> or
+<code>.zip</code>. To define a target filename, append
+<code>&gt;filename</code> to the URL. Example: distfiles="<a
+href="http://foo.org/foo-1.0.tar.gz">http://foo.org/foo-1.0.tar.gz</a>
+<a
+href="http://foo.org/bar-1.0.tar.gz&gt;bar.tar.gz">http://foo.org/bar-1.0.tar.gz&gt;bar.tar.gz</a>"</p>
+<p>To avoid repetition, several variables for common hosting sites
+exist:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPAN_SITE</td>
+<td><a
+href="https://cpan.perl.org/modules/by-module">https://cpan.perl.org/modules/by-module</a></td>
+</tr>
+<tr>
+<td>DEBIAN_SITE</td>
+<td><a
+href="http://ftp.debian.org/debian/pool">http://ftp.debian.org/debian/pool</a></td>
+</tr>
+<tr>
+<td>FREEDESKTOP_SITE</td>
+<td><a
+href="https://freedesktop.org/software">https://freedesktop.org/software</a></td>
+</tr>
+<tr>
+<td>GNOME_SITE</td>
+<td><a
+href="https://ftp.gnome.org/pub/GNOME/sources">https://ftp.gnome.org/pub/GNOME/sources</a></td>
+</tr>
+<tr>
+<td>GNU_SITE</td>
+<td><a href="https://ftp.gnu.org/gnu">https://ftp.gnu.org/gnu</a></td>
+</tr>
+<tr>
+<td>KERNEL_SITE</td>
+<td><a
+href="https://www.kernel.org/pub/linux">https://www.kernel.org/pub/linux</a></td>
+</tr>
+<tr>
+<td>MOZILLA_SITE</td>
+<td><a
+href="https://ftp.mozilla.org/pub">https://ftp.mozilla.org/pub</a></td>
+</tr>
+<tr>
+<td>NONGNU_SITE</td>
+<td><a
+href="https://download.savannah.nongnu.org/releases">https://download.savannah.nongnu.org/releases</a></td>
+</tr>
+<tr>
+<td>PYPI_SITE</td>
+<td><a
+href="https://files.pythonhosted.org/packages/source">https://files.pythonhosted.org/packages/source</a></td>
+</tr>
+<tr>
+<td>SOURCEFORGE_SITE</td>
+<td><a
+href="https://downloads.sourceforge.net/sourceforge">https://downloads.sourceforge.net/sourceforge</a></td>
+</tr>
+<tr>
+<td>UBUNTU_SITE</td>
+<td><a
+href="http://archive.ubuntu.com/ubuntu/pool">http://archive.ubuntu.com/ubuntu/pool</a></td>
+</tr>
+<tr>
+<td>XORG_SITE</td>
+<td><a
+href="https://www.x.org/releases/individual">https://www.x.org/releases/individual</a></td>
+</tr>
+<tr>
+<td>KDE_SITE</td>
+<td><a
+href="https://download.kde.org/stable">https://download.kde.org/stable</a></td>
+</tr>
+<tr>
+<td>VIDEOLAN_SITE</td>
+<td><a
+href="https://download.videolan.org/pub/videolan">https://download.videolan.org/pub/videolan</a></td>
+</tr>
+</tbody>
+</table></li>
+<li><p><code>checksum</code> The <code>sha256</code> digests matching
+<code>${distfiles}</code>. Multiple files can be separated by blanks.
+Please note that the order must be the same than was used in
+<code>${distfiles}</code>. Example:
+<code>checksum="kkas00xjkjas"</code></p></li>
+</ul>
+<p>If a distfile changes its checksum for every download because it is
+packaged on the fly on the server, like e.g. snapshot tarballs from any
+of the <code>https://*.googlesource.com/</code> sites, the checksum of
+the <code>archive contents</code> can be specified by prepending a
+commercial at (@). For tarballs you can find the contents checksum by
+using the command
+<code>tar xf &lt;tarball.ext&gt; --to-stdout | sha256sum</code>.</p>
+<ul>
+<li><p><code>wrksrc</code> The directory name where the package sources
+are extracted, set to <code>${pkgname}-${version}</code>.</p></li>
+<li><p><code>build_wrksrc</code> A directory relative to
+<code>${wrksrc}</code> that will be used when building the
+package.</p></li>
+<li><p><code>create_wrksrc</code> Usually, after extracting, if there're
+multiple top-level files and/or directories or when there're no
+directories at all, top-level files, and directories will be wrapped
+inside one more layer of directory. Set <code>create_wrksrc</code> to
+force this behaviour.</p></li>
+<li><p><code>build_style</code> This specifies the
+<code>build method</code> for a package. Read below to know more about
+the available package <code>build methods</code> or effect of leaving
+this not set.</p></li>
+<li><p><code>build_helper</code> Whitespace-separated list of files in
+<code>common/build-helper</code> to be sourced and its variables be made
+available on the template. i.e.
+<code>build_helper="rust"</code>.</p></li>
+<li><p><code>configure_script</code> The name of the
+<code>configure</code> script to execute at the <code>configure</code>
+phase if <code>${build_style}</code> is set to <code>configure</code> or
+<code>gnu-configure</code> build methods. By default set to
+<code>./configure</code>.</p></li>
+<li><p><code>configure_args</code> The arguments to be passed in to the
+<code>configure</code> script if <code>${build_style}</code> is set to
+<code>configure</code> or <code>gnu-configure</code> build methods. By
+default, prefix must be set to <code>/usr</code>. In
+<code>gnu-configure</code> packages, some options are already set by
+default:
+<code>--prefix=/usr --sysconfdir=/etc --infodir=/usr/share/info --mandir=/usr/share/man --localstatedir=/var</code>.</p></li>
+<li><p><code>make_cmd</code> The executable to run at the
+<code>build</code> phase if <code>${build_style}</code> is set to
+<code>configure</code>, <code>gnu-configure</code> or
+<code>gnu-makefile</code> build methods. By default set to
+<code>make</code>.</p></li>
+<li><p><code>make_build_args</code> The arguments to be passed in to
+<code>${make_cmd}</code> at the build phase if
+<code>${build_style}</code> is set to <code>configure</code>,
+<code>gnu-configure</code> or <code>gnu-makefile</code> build methods.
+Unset by default.</p></li>
+<li><p><code>make_check_args</code> The arguments to be passed in to
+<code>${make_cmd}</code> at the check phase if
+<code>${build_style}</code> is set to <code>configure</code>,
+<code>gnu-configure</code> or <code>gnu-makefile</code> build methods.
+Unset by default.</p></li>
+<li><p><code>make_install_args</code> The arguments to be passed in to
+<code>${make_cmd}</code> at the <code>install</code> phase if
+<code>${build_style}</code> is set to <code>configure</code>,
+<code>gnu-configure</code> or <code>gnu-makefile</code> build
+methods.</p></li>
+<li><p><code>make_build_target</code> The build target. If
+<code>${build_style}</code> is set to <code>configure</code>,
+<code>gnu-configure</code> or <code>gnu-makefile</code>, this is the
+target passed to <code>${make_cmd}</code> in the build phase; when unset
+the default target is used. If <code>${build_style}</code> is
+<code>python3-pep517</code>, this is the path of the package directory
+that should be built as a Python wheel; when unset, defaults to
+<code>.</code> (the current directory with respect to the
+build).</p></li>
+<li><p><code>make_check_target</code> The target to be passed in to
+<code>${make_cmd}</code> at the check phase if
+<code>${build_style}</code> is set to <code>configure</code>,
+<code>gnu-configure</code> or <code>gnu-makefile</code> build methods.
+By default set to <code>check</code>.</p></li>
+<li><p><code>make_install_target</code> The installation target. When
+<code>${build_style}</code> is set to <code>configure</code>,
+<code>gnu-configure</code> or <code>gnu-makefile</code>, this is the
+target passed to <code>${make_command}</code> in the install phase; when
+unset, it defaults to <code>install</code>. If
+<code>${build_style}</code> is <code>python3-pep517</code>, this is the
+path of the Python wheel produced by the build phase that will be
+installed; when unset, the <code>python3-pep517</code> build style will
+look for a wheel matching the package name and version in the current
+directory with respect to the install.</p></li>
+<li><p><code>make_check_pre</code> The expression in front of
+<code>${make_cmd}</code>. This can be used for wrapper commands or for
+setting environment variables for the check command. By default
+empty.</p></li>
+<li><p><code>patch_args</code> The arguments to be passed in to the
+<code>patch(1)</code> command when applying patches to the package
+sources during <code>do_patch()</code>. Patches are stored in
+<code>srcpkgs/&lt;pkgname&gt;/patches</code> and must be in
+<code>-p1</code> format. By default set to <code>-Np1</code>.</p></li>
+<li><p><code>disable_parallel_build</code> If set the package won't be
+built in parallel and <code>XBPS_MAKEJOBS</code> will be set to 1. If a
+package does not work well with <code>XBPS_MAKEJOBS</code> but still has
+a mechanism to build in parallel, set
+<code>disable_parallel_build</code> and use
+<code>XBPS_ORIG_MAKEJOBS</code> (which holds the original value of
+<code>XBPS_MAKEJOBS</code>) in the template.</p></li>
+<li><p><code>disable_parallel_check</code> If set tests for the package
+won't be built and run in parallel and <code>XBPS_MAKEJOBS</code> will
+be set to 1. If a package does not work well with
+<code>XBPS_MAKEJOBS</code> but still has a mechanism to run checks in
+parallel, set <code>disable_parallel_check</code> and use
+<code>XBPS_ORIG_MAKEJOBS</code> (which holds the original value of
+<code>XBPS_MAKEJOBS</code>) in the template.</p></li>
+<li><p><code>make_check</code> Sets the cases in which the
+<code>check</code> phase is run. This option has to be accompanied by a
+comment explaining why the tests fail. Allowed values:</p>
+<ul>
+<li><code>yes</code> (the default) to run if
+<code>XBPS_CHECK_PKGS</code> is set.</li>
+<li><code>extended</code> to run if <code>XBPS_CHECK_PKGS</code> is
+<code>full</code>.</li>
+<li><code>ci-skip</code> to run locally if <code>XBPS_CHECK_PKGS</code>
+is set, but not as part of pull request checks.</li>
+<li><code>no</code> to never run.</li>
+</ul></li>
+<li><p><code>keep_libtool_archives</code> If enabled the
+<code>GNU Libtool</code> archives won't be removed. By default those
+files are always removed automatically.</p></li>
+<li><p><code>skip_extraction</code> A list of filenames that should not
+be extracted in the <code>extract</code> phase. This must match the
+basename of any url defined in <code>${distfiles}</code>. Example:
+<code>skip_extraction="foo-${version}.tar.gz"</code>.</p></li>
+<li><p><code>nodebug</code> If enabled -dbg packages won't be generated
+even if <code>XBPS_DEBUG_PKGS</code> is set.</p></li>
+<li><p><code>conf_files</code> A list of configuration files the binary
+package owns; this expects full paths, wildcards will be extended, and
+multiple entries can be separated by blanks. Example:
+<code>conf_files="/etc/foo.conf /etc/foo2.conf /etc/foo/*.conf"</code>.</p></li>
+<li><p><code>mutable_files</code> A list of files the binary package
+owns, with the expectation that those files will be changed. These act a
+lot like <code>conf_files</code> but without the assumption that a human
+will edit them.</p></li>
+<li><p><code>make_dirs</code> A list of entries defining directories and
+permissions to be created at install time. Each entry should be space
+separated, and will itself contain spaces.
+<code>make_dirs="/dir 0750 user group"</code>. User and group and mode
+are required on every line, even if they are <code>755 root root</code>.
+By convention, there is only one entry of
+<code>dir perms user group</code> per line.</p></li>
+<li><p><code>repository</code> Defines the repository in which the
+package will be placed. See <em>Repositories</em> for a list of valid
+repositories.</p></li>
+<li><p><code>nostrip</code> If set, the ELF binaries with debugging
+symbols won't be stripped. By default all binaries are
+stripped.</p></li>
+<li><p><code>nostrip_files</code> White-space separated list of ELF
+binaries that won't be stripped of debugging symbols. Files can be given
+by full path or by filename.</p></li>
+<li><p><code>noshlibprovides</code> If set, the ELF binaries won't be
+inspected to collect the provided sonames in shared libraries.</p></li>
+<li><p><code>noverifyrdeps</code> If set, the ELF binaries and shared
+libraries won't be inspected to collect their reverse dependencies. You
+need to specify all dependencies in the <code>depends</code> when you
+need to set this.</p></li>
+<li><p><code>skiprdeps</code> White space separated list of filenames
+specified by their absolute path in the <code>$DESTDIR</code> which will
+not be scanned for runtime dependencies. This may be useful to skip
+files which are not meant to be run or loaded on the host but are to be
+sent to some target device or emulation.</p></li>
+<li><p><code>ignore_elf_files</code> White space separated list of
+machine code files in /usr/share directory specified by absolute path,
+which are expected and allowed.</p></li>
+<li><p><code>ignore_elf_dirs</code> White space separated list of
+directories in /usr/share directory specified by absolute path, which
+are expected and allowed to contain machine code files.</p></li>
+<li><p><code>nocross</code> If set, cross compilation won't be allowed
+and will exit immediately. This should be set to a string describing why
+it fails, or a link to a buildlog (from the official builders, CI
+buildlogs can vanish) demonstrating the failure.</p></li>
+<li><p><code>restricted</code> If set, xbps-src will refuse to build the
+package unless <code>etc/conf</code> has
+<code>XBPS_ALLOW_RESTRICTED=yes</code>. The primary builders for Void
+Linux do not have this setting, so the primary repositories will not
+have any restricted package. This is useful for packages where the
+license forbids redistribution.</p></li>
+<li><p><code>subpackages</code> A white space separated list of
+subpackages (matching <code>foo_package()</code>) to override the
+guessed list. Only use this if a specific order of subpackages is
+required, otherwise the default would work in most cases.</p></li>
+<li><p><code>metapackage</code> If set to <code>yes</code>, the package
+must be an empty meta-package, i.e. a package that only depends on other
+packages.</p></li>
+<li><p><code>broken</code> If set, building the package won't be allowed
+because its state is currently broken. This should be set to a string
+describing why it is broken, or a link to a buildlog demonstrating the
+failure.</p></li>
+<li><p><code>shlib_provides</code> A white space separated list of
+additional sonames the package provides on. This appends to the
+generated file rather than replacing it.</p></li>
+<li><p><code>shlib_requires</code> A white space separated list of
+additional sonames the package requires. This appends to the generated
+file rather than replacing it.</p></li>
+<li><p><code>nopie</code> Only needs to be set to something to make
+active, disables building the package with hardening features (PIE,
+relro, etc). Not necessary for most packages.</p></li>
+<li><p><code>nopie_files</code> White-space separated list of ELF
+binaries that won't be checked for PIE. Files must be given by full
+path.</p></li>
+<li><p><code>reverts</code> xbps supports a unique feature which allows
+to downgrade from broken packages automatically. In the
+<code>reverts</code> field one can define a list of broken pkgver the
+resulting package should revert. This field <em>must</em> be defined
+before <code>version</code> and <code>revision</code> fields in order to
+work as expected. The versions defined in <code>reverts</code> must be
+bigger than the one defined in <code>version</code>. Example:</p>
+<pre><code>reverts=&quot;2.0_1 2.0_2&quot;
+version=1.9
+revision=2</code></pre></li>
+<li><p><code>alternatives</code> A white space separated list of
+supported alternatives the package provides. A list is composed of three
+components separated by a colon: group, symlink and target. Example:
+<code>alternatives="vi:/usr/bin/vi:/usr/bin/nvi ex:/usr/bin/ex:/usr/bin/nvi-ex"</code>.</p></li>
+<li><p><code>font_dirs</code> A white space separated list of
+directories specified by an absolute path where a font package installs
+its fonts. It is used in the <code>x11-fonts</code> xbps-trigger to
+rebuild the font cache during install/removal of the package. Example:
+<code>font_dirs="/usr/share/fonts/TTF /usr/share/fonts/X11/misc"</code></p></li>
+<li><p><code>dkms_modules</code> A white space separated list of Dynamic
+Kernel Module Support (dkms) modules that will be installed and removed
+by the <code>dkms</code> xbps-trigger with the install/removal of the
+package. The format is a white space separated pair of strings that
+represent the name of the module, most of the time <code>pkgname</code>,
+and the version of the module, most of the time <code>version</code>.
+Example: <code>dkms_modules="$pkgname $version zfs 4.14"</code></p></li>
+<li><p><code>register_shell</code> A white space separated list of
+shells defined by absolute path to be registered into the system shells
+database. It is used by the <code>register-shell</code> trigger.
+Example: <code>register_shell="/bin/tcsh /bin/csh"</code></p></li>
+<li><p><code>tags</code> A white space separated list of tags
+(categories) that are registered into the package metadata and can be
+queried with <code>xbps-query</code> by users. Example for qutebrowser:
+<code>tags="browser chromium-based qt5 python3"</code></p></li>
+<li><p><code>perl_configure_dirs</code> A white space separate list of
+directories relative to <code>wrksrc</code> that contain Makefile.PL
+files that need to be processes for the package to work. It is used in
+the perl-module build_style and has no use outside of it. Example:
+<code>perl_configure_dirs="blob/bob foo/blah"</code></p></li>
+<li><p><code>preserve</code> If set, files owned by the package in the
+system are not removed when the package is updated, reinstalled or
+removed. This is mostly useful for kernel packages that shouldn't remove
+the kernel files when they are removed in case it might break the user's
+booting and module loading. Otherwise in the majority of cases it should
+not be used.</p></li>
+<li><p><code>fetch_cmd</code> Executable to be used to fetch URLs in
+<code>distfiles</code> during the <code>do_fetch</code> phase.</p></li>
+<li><p><code>changelog</code> An URL pointing to the upstream changelog.
+Raw text files are preferred.</p></li>
+<li><p><code>archs</code> Whitespace separated list of architectures
+that a package can be built for, available architectures can be found
+under <code>common/cross-profiles</code>. In general, <code>archs</code>
+should only be set if the upstream software explicitly targets certain
+architectures or there is a compelling reason why the software should
+not be available on some supported architectures. Prepending a pattern
+with a tilde means disallowing build on the indicated archs. The first
+matching pattern is taken to allow/deny build. When no pattern matches,
+the package is built if the last pattern includes a tilde. Examples:</p>
+<pre><code># Build package only for musl architectures
+archs=&quot;*-musl&quot;
+# Build package for x86_64-musl and any non-musl architecture
+archs=&quot;x86_64-musl ~*-musl&quot;
+# Default value (all arches)
+archs=&quot;*&quot;</code></pre></li>
+</ul>
+<p>A special value <code>noarch</code> used to be available, but has
+since been removed.</p>
+<ul>
+<li><p><code>nocheckperms</code> If set, xbps-src will not fail on
+common permission errors (world writable files, etc.)</p></li>
+<li><p><code>nofixperms</code> If set, xbps-src will not fix common
+permission errors (executable manpages, etc.)</p></li>
+<li><p><code>no_generic_pkgconfig_link</code> If set, xbps-src will not
+create a symlink from <code>$XBPS_CROSS_TRIPLET-pkg-config</code> to
+<code>$XBPS_WRAPPERDIR/pkg-config</code> before building the
+template.</p></li>
+</ul>
+<p><a id="explain_depends"></a></p>
+<h4 id="about-the-many-types-of-depends-variables">About the many types
+of <code>depends</code> variables</h4>
+<p>So far, we have listed four types of <code>depends</code> variables:
+<code>hostmakedepends</code>, <code>makedepends</code>,
+<code>checkdepends</code> and <code>depends</code>. These different
+kinds of variables are necessary because <code>xbps-src</code> supports
+cross compilation and to avoid installing unnecessary packages in the
+build environment.</p>
+<p>During a build process, there are programs that must be <em>run</em>
+on the host, such as <code>yacc</code> or the C compiler. The packages
+that contain these programs should be listed in
+<code>hostmakedepends</code>, and will be installed on the host when
+building the target package. Some of these packages are dependencies of
+the <code>base-chroot</code> package and don't need to be listed. It is
+possible that some of the programs necessary to build a project are
+located in <code>-devel</code> packages.</p>
+<p>The target package can also depend on other packages for libraries to
+link against or header files. These packages should be listed in
+<code>makedepends</code> and will match the target architecture,
+regardless of the architecture of the build machine. Typically,
+<code>makedepends</code> will contain mainly <code>-devel</code>
+packages.</p>
+<p>Furthermore, if <code>XBPS_CHECK_PKGS</code> is set or the
+<code>-Q</code> option is passed to <code>xbps-src</code>, the target
+package might require specific dependencies or libraries that are linked
+into its test binaries to run its test suite. These dependencies should
+be listed in <code>checkdepends</code> and will be installed as if they
+were part of <code>hostmakedepends</code>. Some dependencies that can be
+included in <code>checkdepends</code> are:</p>
+<ul>
+<li><code>dejagnu</code>: used for some GNU projects</li>
+<li><code>cmocka-devel</code>: linked into test binaries</li>
+<li><code>dbus</code>: makes it possible to run
+<code>dbus-run-session &lt;test-command&gt;</code> to provide a D-Bus
+session for applications that need it</li>
+<li><code>git</code>: some test suites run the <code>git</code>
+command</li>
+</ul>
+<p><a id="deps_runtime"></a> Lastly, a package may require certain
+dependencies at runtime, without which it is unusable. These
+dependencies, when they aren't detected automatically by XBPS, should be
+listed in <code>depends</code>.</p>
+<p>Libraries linked by ELF objects are detected automatically by
+<code>xbps-src</code>, hence they must not be specified in templates via
+<code>depends</code>. This variable should list:</p>
+<ul>
+<li>executables called as separate processes.</li>
+<li>ELF objects using dlopen(3).</li>
+<li>non-object code, e.g. C headers, perl/python/ruby/etc modules.</li>
+<li>data files.</li>
+<li>overriding the minimal version specified in the
+<code>common/shlibs</code> file.</li>
+</ul>
+<p>The runtime dependencies for ELF objects are detected by checking
+which SONAMEs they require and then the SONAMEs are mapped to a binary
+package name with a minimal required version. The
+<code>common/shlibs</code> file sets up the
+<code>&lt;SONAME&gt; &lt;pkgname&gt;&gt;=&lt;version&gt;</code>
+mappings.</p>
+<p>For example the <code>foo-1.0_1</code> package provides the
+<code>libfoo.so.1</code> SONAME and software requiring this library will
+link to <code>libfoo.so.1</code>; the resulting binary package will have
+a run-time dependency on <code>foo&gt;=1.0_1</code> package as specified
+in <code>common/shlibs</code>:</p>
+<pre><code># common/shlibs
+...
+libfoo.so.1 foo-1.0_1
+...</code></pre>
+<ul>
+<li>The first field specifies the SONAME.</li>
+<li>The second field specified the package name and minimal version
+required.</li>
+<li>A third optional field (usually set to <code>ignore</code>) can be
+used to skip checks in soname bumps.</li>
+</ul>
+<p>Dependencies declared via <code>depends</code> are not installed to
+the master directory, rather they are only checked if they exist as
+binary packages, and are built automatically by <code>xbps-src</code> if
+the specified version is not in the local repository.</p>
+<p>As a special case, <code>virtual</code> dependencies may be specified
+as runtime dependencies in the <code>depends</code> template variable.
+Several different packages can provide common functionality by declaring
+a virtual name and version in the <code>provides</code> template
+variable (e.g. <code>provides="vpkg-0.1_1"</code>). Packages that rely
+on the common functionality without concern for the specific provider
+can declare a dependency on the virtual package name with the prefix
+<code>virtual?</code> (e.g., <code>depends="virtual?vpkg-0.1_1"</code>).
+When a package is built by <code>xbps-src</code>, providers for any
+virtual packages will be confirmed to exist and will be built if
+necessary. A map from virtual packages to their default providers is
+defined in <code>etc/defaults.virtual</code>. Individual mappings can be
+overridden by local preferences in <code>etc/virtual</code>. Comments in
+<code>etc/defaults.virtual</code> provide more information on this
+map.</p>
+<p>Finally, as a general rule, if a package is built the exact same way
+whether or not a particular package is present in
+<code>makedepends</code> or <code>hostmakedepends</code>, that package
+shouldn't be added as a build time dependency.</p>
+<p><a id="repositories"></a></p>
+<h3 id="repositories">Repositories</h3>
+<p><a id="repo_by_branch"></a></p>
+<h4 id="repositories-defined-by-branch">Repositories defined by
+Branch</h4>
+<p>The global repository takes the name of the current branch, except if
+the name of the branch is master. Then the resulting repository will be
+at the global scope. The usage scenario is that the user can update
+multiple packages in a second branch without polluting their local
+repository.</p>
+<p><a id="pkg_defined_repo"></a></p>
+<h4 id="package-defined-repositories">Package defined Repositories</h4>
+<p>The second way to define a repository is by setting the
+<code>repository</code> variable in a template. This way the maintainer
+can define repositories for a specific package or a group of packages.
+This is currently used to distinguish between certain classes of
+packages.</p>
+<p>The following repository names are valid:</p>
+<ul>
+<li><code>bootstrap</code>: Repository for xbps-src-specific
+packages.</li>
+<li><code>debug</code>: Repository for packages containing debug
+symbols. In almost all cases, these packages are generated
+automatically.</li>
+<li><code>nonfree</code>: Repository for packages that are closed source
+or have nonfree licenses.</li>
+</ul>
+<p><a id="updates"></a></p>
+<h3 id="checking-for-new-upstream-releases">Checking for new upstream
+releases</h3>
+<p>New upstream versions can be automatically checked using
+<code>./xbps-src update-check &lt;pkgname&gt;</code>. In some cases you
+need to override the sensible defaults by assigning the following
+variables in a <code>update</code> file in the same directory as the
+relevant <code>template</code> file:</p>
+<ul>
+<li><p><code>site</code> contains the URL where the version number is
+mentioned. If unset, defaults to <code>homepage</code> and the
+directories where <code>distfiles</code> reside.</p></li>
+<li><p><code>pkgname</code> is the package name the default pattern
+checks for. If unset, defaults to <code>pkgname</code> from the
+template.</p></li>
+<li><p><code>pattern</code> is a perl-compatible regular expression
+matching the version number. Anchor the version number using
+<code>\K</code> and <code>(?=...)</code>. Example:
+<code>pattern='&lt;b&gt;\K[\d.]+(?=&lt;/b&gt;)'</code>, this matches a
+version number enclosed in <code>&lt;b&gt;...&lt;/b&gt;</code>
+tags.</p></li>
+<li><p><code>ignore</code> is a space-separated list of shell globs that
+match version numbers which are not taken into account for checking
+newer versions. Example: <code>ignore="*b*"</code></p></li>
+<li><p><code>version</code> is the version number used to compare
+against upstream versions. Example:
+<code>version=${version//./_}</code></p></li>
+<li><p><code>single_directory</code> can be set to disable detecting
+directory containing one version of sources in url, then searching new
+version in adjacent directories.</p></li>
+<li><p><code>vdprefix</code> is a perl-compatible regular expression
+matching part that precedes numeric part of version directory in url.
+Defaults to <code>(|v|$pkgname)[-_.]*</code>.</p></li>
+<li><p><code>vdsuffix</code> is a perl-compatible regular expression
+matching part that follows numeric part of version directory in url.
+Defaults to <code>(|\.x)</code>.</p></li>
+<li><p><code>disabled</code> can be set to disable update checking for
+the package, in cases where checking for updates is impossible or does
+not make sense. This should be set to a string describing why it is
+disabled.</p></li>
+</ul>
+<p><a id="patches"></a></p>
+<h3 id="handling-patches">Handling patches</h3>
+<p>Sometimes software needs to be patched, most commonly to fix bugs
+that have been found or to fix compilation with new software.</p>
+<p>To handle this, xbps-src has patching functionality. It will look for
+all files that match the glob
+<code>srcpkgs/$pkgname/patches/*.{diff,patch}</code> and will
+automatically apply all files it finds using <code>patch(1)</code> with
+<code>-Np1</code>. This happens during the <code>do_patch()</code>
+phase. The variable <code>PATCHESDIR</code> is available in the
+template, pointing to the <code>patches</code> directory.</p>
+<p>The patching behaviour can be changed in the following ways:</p>
+<ul>
+<li><p>A file called <code>series</code> can be created in the
+<code>patches</code> directory with a newline separated list of patches
+to be applied in the order presented. When present xbps-src will only
+apply patches named in the <code>series</code> file.</p></li>
+<li><p>A file with the same name as one of the patches but with
+<code>.args</code> as extension can be used to set the args passed to
+<code>patch(1)</code>. As an example, if <code>foo.patch</code> requires
+special arguments to be passed to <code>patch(1)</code> that can't be
+used when applying other patches, <code>foo.patch.args</code> can be
+created containing those args.</p></li>
+</ul>
+<p><a id="build_scripts"></a></p>
+<h3 id="build-style-scripts">build style scripts</h3>
+<p>The <code>build_style</code> variable specifies the build method to
+build and install a package. It expects the name of any available script
+in the <code>void-packages/common/build-style</code> directory. Please
+note that required packages to execute a <code>build_style</code> script
+must be defined via <code>$hostmakedepends</code>.</p>
+<p>The current list of available <code>build_style</code> scripts is the
+following:</p>
+<ul>
+<li><p>If <code>build_style</code> is not set, the template must (at
+least) define <code>do_install()</code> function and optionally more
+build phases such as <code>do_configure()</code>,
+<code>do_build()</code>, etc., and may overwrite default
+<code>do_fetch()</code> and <code>do_extract()</code> that fetch and
+extract files defined in <code>distfiles</code> variable.</p></li>
+<li><p><code>cargo</code> For packages written in rust that use Cargo
+for building. Configuration arguments (such as <code>--features</code>)
+can be defined in the variable <code>configure_args</code> and are
+passed to cargo during <code>do_build</code>.</p></li>
+<li><p><code>cmake</code> For packages that use the CMake build system,
+configuration arguments can be passed in via
+<code>configure_args</code>. The <code>cmake_builddir</code> variable
+may be defined to specify the directory for building under
+<code>build_wrksrc</code> instead of the default
+<code>build</code>.</p></li>
+<li><p><code>configure</code> For packages that use non-GNU configure
+scripts, at least <code>--prefix=/usr</code> should be passed in via
+<code>configure_args</code>.</p></li>
+<li><p><code>fetch</code> For packages that only fetch files and are
+installed as is via <code>do_install()</code>.</p></li>
+<li><p><code>gnu-configure</code> For packages that use GNU
+autotools-compatible configure scripts, additional configuration
+arguments can be passed in via <code>configure_args</code>.</p></li>
+<li><p><code>gnu-makefile</code> For packages that use GNU make, build
+arguments can be passed in via <code>make_build_args</code> and install
+arguments via <code>make_install_args</code>. The build target can be
+overridden via <code>make_build_target</code> and the install target via
+<code>make_install_target</code>. This build style tries to compensate
+for makefiles that do not respect environment variables, so well written
+makefiles, those that do such things as append (<code>+=</code>) to
+variables, should have <code>make_use_env</code> set in the body of the
+template.</p></li>
+<li><p><code>go</code> For programs written in Go that follow the
+standard package structure. The variable <code>go_import_path</code>
+must be set to the package's import path, e.g.
+<code>github.com/github/hub</code> for the <code>hub</code> program.
+This information can be found in the <code>go.mod</code> file for modern
+Go projects. It's expected that the distfile contains the package, but
+dependencies will be downloaded with <code>go get</code>.</p></li>
+<li><p><code>R-cran</code> For packages that are available on The
+Comprehensive R Archive Network (CRAN). The build style requires the
+<code>pkgname</code> to start with <code>R-cran-</code> and any dashes
+(<code>-</code>) in the CRAN-given version to be replaced with the
+character <code>r</code> in the <code>version</code> variable. The
+<code>distfiles</code> location will automatically be set as well as the
+package made to depend on <code>R</code>.</p></li>
+<li><p><code>gemspec</code> For packages that use <a
+href="https://guides.rubygems.org/specification-reference/">gemspec</a>
+files for building a ruby gem and then installing it. The gem command
+can be overridden by <code>gem_cmd</code>. <code>configure_args</code>
+can be used to pass arguments during compilation. If your package does
+not make use of compiled extensions consider using the <code>gem</code>
+build style instead.</p></li>
+<li><p><code>gem</code> For packages that are installed using gems from
+<a href="https://rubygems.org/">RubyGems</a>. The gem command can be
+overridden by <code>gem_cmd</code>. <code>distfiles</code> is set by the
+build style if the template does not do so. If your gem provides
+extensions which must be compiled consider using the
+<code>gemspec</code> build style instead.</p></li>
+<li><p><code>ruby-module</code> For packages that are ruby modules and
+are installable via <code>ruby install.rb</code>. Additional install
+arguments can be specified via <code>make_install_args</code>.</p></li>
+<li><p><code>perl-ModuleBuild</code> For packages that use the Perl <a
+href="https://metacpan.org/pod/Module::Build">Module::Build</a>
+method.</p></li>
+<li><p><code>perl-module</code> For packages that use the Perl <a
+href="http://perldoc.perl.org/ExtUtils/MakeMaker.html">ExtUtils::MakeMaker</a>
+build method.</p></li>
+<li><p><code>raku-dist</code> For packages that use the Raku
+<code>raku-install-dist</code> build method with rakudo.</p></li>
+<li><p><code>waf3</code> For packages that use the Python3
+<code>waf</code> build method with python3.</p></li>
+<li><p><code>slashpackage</code> For packages that use the /package
+hierarchy and package/compile to build, such as <code>daemontools</code>
+or any <code>djb</code> software.</p></li>
+<li><p><code>qmake</code> For packages that use Qt5/Qt6 qmake profiles
+(<code>*.pro</code>), qmake arguments for the configure phase can be
+passed in via <code>configure_args</code>, make build arguments can be
+passed in via <code>make_build_args</code> and install arguments via
+<code>make_install_args</code>. The build target can be overridden via
+<code>make_build_target</code> and the install target via
+<code>make_install_target</code>.</p></li>
+<li><p><code>meson</code> For packages that use the Meson Build system,
+configuration options can be passed via <code>configure_args</code>, the
+meson command can be overridden by <code>meson_cmd</code> and the
+location of the out of source build by
+<code>meson_builddir</code></p></li>
+<li><p><code>void-cross</code> For cross-toolchain packages used to
+build Void systems. There are no mandatory variables (target triplet is
+inferred), but you can specify some optional ones -
+<code>cross_gcc_skip_go</code> can be specified to skip
+<code>gccgo</code>, individual subproject configure arguments can be
+specified via <code>cross_*_configure_args</code> where <code>*</code>
+is <code>binutils</code>, <code>gcc_bootstrap</code> (early gcc),
+<code>gcc</code> (final gcc), <code>glibc</code> (or <code>musl</code>),
+<code>configure_args</code> is additionally passed to both early and
+final <code>gcc</code>. You can also specify custom <code>CFLAGS</code>
+and <code>LDFLAGS</code> for the libc as
+<code>cross_(glibc|musl)_(cflags|ldflags)</code>.</p></li>
+<li><p><code>zig-build</code> For packages using <a
+href="https://ziglang.org">Zig</a>'s build system. Additional arguments
+may be passed to the <code>zig build</code> invocation using
+<code>configure_args</code>.</p></li>
+</ul>
+<p>For packages that use the Python module build method
+(<code>setup.py</code> or <a
+href="https://www.python.org/dev/peps/pep-0517/">PEP 517</a>), you can
+choose one of the following:</p>
+<ul>
+<li><p><code>python3-module</code> to build Python 3.x modules</p></li>
+<li><p><code>python3-pep517</code> to build Python 3.x modules that
+provide a PEP 517 build description without a <code>setup.py</code>
+script</p></li>
+</ul>
+<p>Environment variables for a specific <code>build_style</code> can be
+declared in a filename matching the <code>build_style</code> name,
+Example:</p>
+<pre><code>`common/environment/build-style/gnu-configure.sh`</code></pre>
+<ul>
+<li><code>texmf</code> For texmf zip/tarballs that need to go into
+/usr/share/texmf-dist. Includes duplicates handling.</li>
+</ul>
+<p><a id="build_helper"></a></p>
+<h3 id="build-helper-scripts">build helper scripts</h3>
+<p>The <code>build_helper</code> variable specifies shell snippets to be
+sourced that will create a suitable environment for working with certain
+sets of packages.</p>
+<p>The current list of available <code>build_helper</code> scripts is
+the following:</p>
+<ul>
+<li><p><code>cmake-wxWidgets-gtk3</code> sets the <code>WX_CONFIG</code>
+variable which is used by FindwxWidgets.cmake</p></li>
+<li><p><code>gir</code> specifies dependencies for native and cross
+builds to deal with GObject Introspection. The following variables may
+be set in the template to handle cross builds which require additional
+hinting or exhibit problems. <code>GIR_EXTRA_LIBS_PATH</code> defines
+additional paths to be searched when linking target binaries to be
+introspected. <code>GIR_EXTRA_OPTIONS</code> defines additional options
+for the <code>g-ir-scanner-qemuwrapper</code> calling
+<code>qemu-&lt;target_arch&gt;-static</code> when running the target
+binary. You can for example specify
+<code>GIR_EXTRA_OPTIONS="-strace"</code> to see a trace of what happens
+when running that binary.</p></li>
+<li><p><code>meson</code> creates a cross file,
+<code>${XBPS_WRAPPERDIR}/meson/xbps_meson.cross</code>, which configures
+meson for cross builds. This is particularly useful for building
+packages that wrap meson invocations (e.g., <code>python3-pep517</code>
+packages that use a meson backend) and is added by default for packages
+that use the <code>meson</code> build style. It also sets
+<code>$MESON_PACKAGE_CACHE_DIR</code> to
+<code>$XBPS_SRCDISTDIR/$pkgname-$version/</code> so libraries specified
+as meson wraps can be added to distfiles and will be automatically used
+by meson. See also <code>common/scripts/gen-wrap-distfiles.py</code> for
+a script that generates distfiles entries for wraps.</p></li>
+<li><p><code>numpy</code> configures the environment for
+cross-compilation of python packages that provide compiled extensions
+linking to NumPy C libraries. If the <code>meson</code> build helper is
+also configured, a secondary cross file,
+<code>${XBPS_WRAPPERDIR}/meson/xbps_numpy.cross</code>, will be written
+to inform meson where common NumPy components may be found.</p></li>
+<li><p><code>python3</code> configures the cross-build environment to
+use Python libraries, header files, and interpreter configurations in
+the target root. The <code>python3</code> helper is added by default for
+packages that use the <code>python3-module</code> or
+<code>python3-pep517</code> build styles.</p></li>
+<li><p><code>qemu</code> sets additional variables for the
+<code>cmake</code> and <code>meson</code> build styles to allow
+executing cross-compiled binaries inside qemu. It sets
+<code>CMAKE_CROSSCOMPILING_EMULATOR</code> for cmake and
+<code>exe_wrapper</code> for meson to
+<code>qemu-&lt;target_arch&gt;-static</code> and
+<code>QEMU_LD_PREFIX</code> to <code>XBPS_CROSS_BASE</code>. It also
+creates the <code>vtargetrun</code> function to wrap commands in a call
+to <code>qemu-&lt;target_arch&gt;-static</code> for the target
+architecture.</p></li>
+<li><p><code>qmake</code> creates the <code>qt.conf</code> configuration
+file (cf. <code>qmake</code> <code>build_style</code>) needed for cross
+builds and a qmake-wrapper to make <code>qmake</code> use this
+configuration. This aims to fix cross-builds for when the build-style is
+mixed: e.g. when in a <code>gnu-configure</code> style the configure
+script calls <code>qmake</code> or a <code>Makefile</code> in
+<code>gnu-makefile</code> style, respectively. This is for Qt5
+packages.</p></li>
+<li><p><code>qmake6</code> is like <code>qmake</code> but for
+Qt6.</p></li>
+<li><p><code>rust</code> specifies environment variables required for
+cross-compiling crates via cargo and for compiling cargo -sys crates. It
+also adds a <code>cargo</code> wrapper that detects and passes builds
+through <code>cargo-auditable</code>. This helper is added by default
+for packages that use the <code>cargo</code> build style.</p></li>
+<li><p><code>haskell</code> specifies environment variables for cabal.
+This helper is added by default for packages that use the
+<code>haskell-stack</code> or <code>cabal</code> build style.</p></li>
+</ul>
+<p><a id="functions"></a></p>
+<h3 id="functions">Functions</h3>
+<p>The following functions can be defined to change the behavior of how
+the package is downloaded, compiled and installed.</p>
+<ul>
+<li><p><code>pre_fetch()</code> Actions to execute before
+<code>do_fetch()</code>.</p></li>
+<li><p><code>do_fetch()</code> if defined and <code>distfiles</code> is
+not set, use it to fetch the required sources.</p></li>
+<li><p><code>post_fetch()</code> Actions to execute after
+<code>do_fetch()</code>.</p></li>
+<li><p><code>pre_extract()</code> Actions to execute after
+<code>post_fetch()</code>.</p></li>
+<li><p><code>do_extract()</code> if defined and <code>distfiles</code>
+is not set, use it to extract the required sources.</p></li>
+<li><p><code>post_extract()</code> Actions to execute after
+<code>do_extract()</code>.</p></li>
+<li><p><code>pre_patch()</code> Actions to execute after
+<code>post_extract()</code>.</p></li>
+<li><p><code>do_patch()</code> if defined use it to prepare the build
+environment and run hooks to apply patches.</p></li>
+<li><p><code>post_patch()</code> Actions to execute after
+<code>do_patch()</code>.</p></li>
+<li><p><code>pre_configure()</code> Actions to execute after
+<code>post_patch()</code>.</p></li>
+<li><p><code>do_configure()</code> Actions to execute to configure the
+package; <code>${configure_args}</code> should still be passed in if
+it's a GNU configure script.</p></li>
+<li><p><code>post_configure()</code> Actions to execute after
+<code>do_configure()</code>.</p></li>
+<li><p><code>pre_build()</code> Actions to execute after
+<code>post_configure()</code>.</p></li>
+<li><p><code>do_build()</code> Actions to execute to build the
+package.</p></li>
+<li><p><code>post_build()</code> Actions to execute after
+<code>do_build()</code>.</p></li>
+<li><p><code>pre_check()</code> Actions to execute after
+<code>post_build()</code>.</p></li>
+<li><p><code>do_check()</code> Actions to execute to run checks for the
+package.</p></li>
+<li><p><code>post_check()</code> Actions to execute after
+<code>do_check()</code>.</p></li>
+<li><p><code>pre_install()</code> Actions to execute after
+<code>post_check()</code>.</p></li>
+<li><p><code>do_install()</code> Actions to execute to install the
+package files into the <code>fake destdir</code>.</p></li>
+<li><p><code>post_install()</code> Actions to execute after
+<code>do_install()</code>.</p></li>
+<li><p><code>do_clean()</code> Actions to execute to clean up after a
+successful package phase.</p></li>
+</ul>
+<blockquote>
+<p>A function defined in a template has preference over the same
+function defined by a <code>build_style</code> script.</p>
+</blockquote>
+<p>Current working directory for functions is set as follows:</p>
+<ul>
+<li><p>For pre_fetch, pre_extract, do_clean:
+<code>&lt;masterdir&gt;</code>.</p></li>
+<li><p>For do_fetch, post_fetch: <code>XBPS_BUILDDIR</code>.</p></li>
+<li><p>For do_extract through do_patch: <code>wrksrc</code>.</p></li>
+<li><p>For post_patch through post_install: <code>build_wrksrc</code> if
+it is defined, otherwise <code>wrksrc</code>.</p></li>
+</ul>
+<p><a id="build_options"></a></p>
+<h3 id="build-options">Build options</h3>
+<p>Some packages might be built with different build options to
+enable/disable additional features; The XBPS source packages collection
+allows you to do this with some simple tweaks to the
+<code>template</code> file.</p>
+<p>The following variables may be set to allow package build
+options:</p>
+<ul>
+<li><p><code>build_options</code> Sets the build options supported by
+the source package.</p></li>
+<li><p><code>build_options_default</code> Sets the default build options
+to be used by the source package.</p></li>
+<li><p><code>desc_option_&lt;option&gt;</code> Sets the description for
+the build option <code>option</code>. This must match the keyword set in
+<em>build_options</em>. Note that if the build option is generic enough,
+its description should be added to
+<code>common/options.description</code> instead.</p></li>
+</ul>
+<p>After defining those required variables, you can check for the
+<code>build_option_&lt;option&gt;</code> variable to know if it has been
+set and adapt the source package accordingly. Additionally, the
+following functions are available:</p>
+<ul>
+<li><p><em>vopt_if()</em>
+<code>vopt_if &lt;option&gt; &lt;if_true&gt; [&lt;if_false&gt;]</code></p>
+<p>Outputs <code>if_true</code> if <code>option</code> is set, or
+<code>if_false</code> if it isn't set.</p></li>
+<li><p><em>vopt_with()</em>
+<code>vopt_with &lt;option&gt; [&lt;flag&gt;]</code></p>
+<p>Outputs <code>--with-&lt;flag&gt;</code> if the option is set, or
+<code>--without-&lt;flag&gt;</code> otherwise. If <code>flag</code>
+isn't set, it defaults to <code>option</code>.</p>
+<p>Examples:</p>
+<ul>
+<li><code>vopt_with dbus</code></li>
+<li><code>vopt_with xml xml2</code></li>
+</ul></li>
+<li><p><em>vopt_enable()</em>
+<code>vopt_enable &lt;option&gt; [&lt;flag&gt;]</code></p>
+<p>Same as <code>vopt_with</code>, but uses
+<code>--enable-&lt;flag&gt;</code> and
+<code>--disable-&lt;flag&gt;</code> respectively.</p></li>
+<li><p><em>vopt_conflict()</em>
+<code>vopt_conflict &lt;option 1&gt; &lt;option 2&gt;</code></p>
+<p>Emits an error and exits if both options are set at the same
+time.</p></li>
+<li><p><em>vopt_bool()</em>
+<code>vopt_bool &lt;option&gt; &lt;property&gt;</code></p>
+<p>Outputs <code>-D&lt;property&gt;=true</code> if the option is set, or
+<code>-D&lt;property&gt;=false</code> otherwise.</p></li>
+<li><p><em>vopt_feature()</em>
+<code>vopt_feature &lt;option&gt; &lt;property&gt;</code></p>
+<p>Same as <code>vopt_bool</code>, but uses
+<code>-D&lt;property&gt;=enabled</code> and
+<code>-D&lt;property&gt;=disabled</code> respectively.</p></li>
+</ul>
+<p>The following example shows how to change a source package that uses
+GNU configure to enable a new build option to support PNG images:</p>
+<pre><code># Template file for &#39;foo&#39;
+pkgname=foo
+version=1.0
+revision=1
+build_style=gnu-configure
+configure_args=&quot;... $(vopt_with png)&quot;
+makedepends=&quot;... $(vopt_if png libpng-devel)&quot;
+...
+
+# Package build options
+build_options=&quot;png&quot;
+desc_option_png=&quot;Enable support for PNG images&quot;
+
+# To build the package by default with the `png` option:
+#
+# build_options_default=&quot;png&quot;
+
+...
+</code></pre>
+<p>The supported build options for a source package can be shown with
+<code>xbps-src</code>:</p>
+<pre><code>$ ./xbps-src show-options foo</code></pre>
+<p>Build options can be enabled with the <code>-o</code> flag of
+<code>xbps-src</code>:</p>
+<pre><code>$ ./xbps-src -o option,option1 &lt;cmd&gt; foo</code></pre>
+<p>Build options can be disabled by prefixing them with
+<code>~</code>:</p>
+<pre><code>$ ./xbps-src -o ~option,~option1 &lt;cmd&gt; foo</code></pre>
+<p>Both ways can be used together to enable and/or disable multiple
+options at the same time with <code>xbps-src</code>:</p>
+<pre><code>$ ./xbps-src -o option,~option1,~option2 &lt;cmd&gt; foo</code></pre>
+<p>The build options can also be shown for binary packages via
+<code>xbps-query(8)</code>:</p>
+<pre><code>$ xbps-query -R --property=build-options foo</code></pre>
+<p>Permanent global package build options can be set via
+<code>XBPS_PKG_OPTIONS</code> variable in the <code>etc/conf</code>
+configuration file. Per package build options can be set via
+<code>XBPS_PKG_OPTIONS_&lt;pkgname&gt;</code>.</p>
+<blockquote>
+<p>NOTE: if <code>pkgname</code> contains <code>dashes</code>, those
+should be replaced by <code>underscores</code> Example:
+<code>XBPS_PKG_OPTIONS_xorg_server=opt</code>.</p>
+</blockquote>
+<p>The list of supported package build options and its description is
+defined in the <code>common/options.description</code> file.</p>
+<p><a id="install_remove_files"></a></p>
+<h3 id="install-and-remove-files">INSTALL and REMOVE files</h3>
+<p>The INSTALL and REMOVE shell snippets can be used to execute certain
+actions at a specified stage when a binary package is installed, updated
+or removed. There are some variables that are always set by
+<code>xbps</code> when the scripts are executed:</p>
+<ul>
+<li><code>$ACTION</code>: to conditionalize its actions:
+<code>pre</code> or <code>post</code>.</li>
+<li><code>$PKGNAME</code>: the package name.</li>
+<li><code>$VERSION</code>: the package version.</li>
+<li><code>$UPDATE</code>: set to <code>yes</code> if package is being
+upgraded, <code>no</code> if package is being <code>installed</code> or
+<code>removed</code>.</li>
+<li><code>$CONF_FILE</code>: full path to <code>xbps.conf</code>.</li>
+<li><code>$ARCH</code>: the target architecture it is running on.</li>
+</ul>
+<p>An example of how an <code>INSTALL</code> or <code>REMOVE</code>
+script shall be created is shown below:</p>
+<pre><code># INSTALL
+case &quot;$ACTION&quot; in
+pre)
+    # Actions to execute before the package files are unpacked.
+    ...
+    ;;
+post)
+    if [ &quot;$UPDATE&quot; = &quot;yes&quot; ]; then
+        # actions to execute if package is being updated.
+        ...
+    else
+        # actions to execute if package is being installed.
+        ...
+    fi
+    ;;
+esac</code></pre>
+<p>subpackages can also have their own <code>INSTALL</code> and
+<code>REMOVE</code> files, simply create them as
+<code>srcpkgs/&lt;pkgname&gt;/&lt;subpkg&gt;.INSTALL</code> or
+<code>srcpkgs/&lt;pkgname&gt;/&lt;subpkg&gt;.REMOVE</code>
+respectively.</p>
+<blockquote>
+<p>NOTE: always use paths relative to the current working directory,
+otherwise if the scripts cannot be executed via <code>chroot(2)</code>
+won't work correctly.</p>
+</blockquote>
+<blockquote>
+<p>NOTE: do not use INSTALL/REMOVE scripts to print messages, see the
+next section for more information.</p>
+</blockquote>
+<p><a id="install_remove_files_msg"></a></p>
+<h3 id="installmsg-and-removemsg-files">INSTALL.msg and REMOVE.msg
+files</h3>
+<p>The <code>INSTALL.msg</code> and <code>REMOVE.msg</code> files can be
+used to print a message at post-install or pre-remove time,
+respectively.</p>
+<p>Ideally those files should not exceed 80 chars per line.</p>
+<p>subpackages can also have their own <code>INSTALL.msg</code> and
+<code>REMOVE.msg</code> files, simply create them as
+<code>srcpkgs/&lt;pkgname&gt;/&lt;subpkg&gt;.INSTALL.msg</code> or
+<code>srcpkgs/&lt;pkgname&gt;/&lt;subpkg&gt;.REMOVE.msg</code>
+respectively.</p>
+<p>This should only be used for critical messages, like warning users of
+breaking changes.</p>
+<p><a id="runtime_account_creation"></a></p>
+<h3 id="creating-system-accountsgroups-at-runtime">Creating system
+accounts/groups at runtime</h3>
+<p>There's a trigger along with some variables that are specifically to
+create <strong>system users and groups</strong> when the binary package
+is being configured. The following variables can be used for this
+purpose:</p>
+<ul>
+<li><p><code>system_groups</code> This specifies the names of the new
+<em>system groups</em> to be created, separated by blanks. Optionally
+the <strong>gid</strong> can be specified by delimiting it with a colon,
+i.e <code>system_groups="_mygroup:78"</code> or
+<code>system_groups="_foo _blah:8000"</code>.</p></li>
+<li><p><code>system_accounts</code> This specifies the names of the new
+<strong>system users/groups</strong> to be created, separated by blanks,
+i.e <code>system_accounts="_foo _blah:22"</code>. Optionally the
+<strong>uid</strong> and <strong>gid</strong> can be specified by
+delimiting it with a colon, i.e <code>system_accounts="_foo:48"</code>.
+Additional variables for the <strong>system accounts</strong> can be
+specified to change its behavior:</p>
+<ul>
+<li><code>&lt;account&gt;_homedir</code> the home directory for the
+user. If unset defaults to <code>/var/empty</code>.</li>
+<li><code>&lt;account&gt;_shell</code> the shell for the new user. If
+unset defaults to <code>/sbin/nologin</code>.</li>
+<li><code>&lt;account&gt;_descr</code> the description for the new user.
+If unset defaults to
+<code>&lt;account&gt; unprivileged user</code>.</li>
+<li><code>&lt;account&gt;_groups</code> additional groups to be added to
+for the new user.</li>
+<li><code>&lt;account&gt;_pgroup</code> to set the primary group, by
+default primary group is set to <code>&lt;account&gt;</code>.</li>
+</ul></li>
+</ul>
+<p>The <strong>system user</strong> is created by using a dynamically
+allocated <strong>uid/gid</strong> in your system and it's created as a
+<code>system account</code>, unless the <strong>uid</strong> is set. A
+new group will be created for the specified <code>system account</code>
+and used exclusively for this purpose.</p>
+<p>System accounts and groups must be prefixed with an underscore to
+prevent clashing with names of user accounts.</p>
+<blockquote>
+<p>NOTE: The underscore policy does not apply to old packages, due to
+the inevitable breakage of changing the username only new packages
+should follow it.</p>
+</blockquote>
+<p><a id="writing_runit_services"></a></p>
+<h3 id="writing-runit-services">Writing runit services</h3>
+<p>Void Linux uses <a href="http://smarden.org/runit/">runit</a> for
+booting and supervision of services.</p>
+<p>Most information about how to write them can be found in their <a
+href="http://smarden.org/runit/faq.html#create">FAQ</a>. The following
+are guidelines specific to Void Linux on how to write services.</p>
+<p>If the service daemon supports CLI flags, consider adding support for
+changing it via the <code>OPTS</code> variable by reading a file called
+<code>conf</code> in the same directory as the daemon.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> <span class="ot">-r</span> conf <span class="bu">]</span> <span class="kw">&amp;&amp;</span> <span class="bu">.</span> ./conf</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span> daemon <span class="va">${OPTS</span><span class="op">:-</span> --flag-enabled-by-default<span class="va">}</span></span></code></pre></div>
+<p>If the service requires the creation of a directory under
+<code>/run</code> or its link <code>/var/run</code> for storing runtime
+information (like Pidfiles) write it into the service file. It is
+advised to use <code>install</code> if you need to create it with
+specific permissions instead of <code>mkdir -p</code>.</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install</span> <span class="at">-d</span> <span class="at">-m0700</span> /run/foo</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span> foo</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install</span> <span class="at">-d</span> <span class="at">-m0700</span> <span class="at">-o</span> bar <span class="at">-g</span> bar /run/bar</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span> bar</span></code></pre></div>
+<p>If the service requires directories in parts of the system that are
+not generally in temporary filesystems. Then use the
+<code>make_dirs</code> variable in the template to create those
+directories when the package is installed.</p>
+<p>If the package installs a systemd service file or other unit, leave
+it in place as a reference point so long as including it has no negative
+side effects.</p>
+<p>Examples of when <em>not</em> to install systemd units:</p>
+<ol type="1">
+<li>When doing so changes runtime behavior of the packaged
+software.</li>
+<li>When it is done via a compile time flag that also changes build
+dependencies.</li>
+</ol>
+<p><a id="32bit_pkgs"></a></p>
+<h3 id="32bit-packages">32bit packages</h3>
+<p>32bit packages are built automatically when the builder is x86
+(32bit), but there are some variables that can change the behavior:</p>
+<ul>
+<li><p><code>lib32depends</code> If this variable is set, dependencies
+listed here will be used rather than those detected automatically by
+<code>xbps-src</code> and <strong>depends</strong>. Please note that
+dependencies must be specified with version comparators, Example:
+<code>lib32depends="foo&gt;=0 blah&lt;2.0"</code>.</p></li>
+<li><p><code>lib32disabled</code> If this variable is set, no 32bit
+package will be built.</p></li>
+<li><p><code>lib32files</code> Additional files to be added to the
+<strong>32bit</strong> package. This expect absolute paths separated by
+blanks, Example:
+<code>lib32files="/usr/bin/blah /usr/include/blah."</code>.</p></li>
+<li><p><code>lib32symlinks</code> Makes a symlink of the target filename
+stored in the <code>lib32</code> directory. This expects the basename of
+the target file, Example: <code>lib32symlinks="foo"</code>.</p></li>
+<li><p><code>lib32mode</code> If unset, only shared/static libraries and
+pkg-config files will be copied to the <strong>32bit</strong> package.
+If set to <code>full</code> all files will be copied to the 32bit
+package, unmodified.</p></li>
+</ul>
+<p><a id="pkgs_sub"></a></p>
+<h3 id="subpackages">Subpackages</h3>
+<p>In the example shown above just a binary package is generated, but
+with some simple tweaks multiple binary packages can be generated from a
+single template/build, this is called <code>subpackages</code>.</p>
+<p>To create additional <code>subpackages</code> the
+<code>template</code> must define a new function with this naming:
+<code>&lt;subpkgname&gt;_package()</code>, Example:</p>
+<pre><code># Template file for &#39;foo&#39;
+pkgname=foo
+version=1.0
+revision=1
+build_style=gnu-configure
+short_desc=&quot;A short description max 72 chars&quot;
+maintainer=&quot;name &lt;email&gt;&quot;
+license=&quot;GPL-3.0-or-later&quot;
+homepage=&quot;http://www.foo.org&quot;
+distfiles=&quot;http://www.foo.org/foo-${version}.tar.gz&quot;
+checksum=&quot;fea0a94d4b605894f3e2d5572e3f96e4413bcad3a085aae7367c2cf07908b2ff&quot;
+
+# foo-devel is a subpkg
+foo-devel_package() {
+    short_desc+=&quot; - development files&quot;
+    depends=&quot;${sourcepkg}&gt;=${version}_${revision}&quot;
+    pkg_install() {
+        vmove usr/include
+        vmove &quot;usr/lib/*.a&quot;
+        vmove &quot;usr/lib/*.so&quot;
+        vmove usr/lib/pkgconfig
+    }
+}</code></pre>
+<p>All subpackages need an additional symlink to the <code>main</code>
+pkg, otherwise dependencies requiring those packages won't find its
+<code>template</code> Example:</p>
+<pre><code> /srcpkgs
+  |- foo &lt;- directory (main pkg)
+  |  |- template
+  |- foo-devel &lt;- symlink to `foo`</code></pre>
+<p>The main package should specify all required
+<code>build dependencies</code> to be able to build all subpackages
+defined in the template.</p>
+<p>An important point of <code>subpackages</code> is that they are
+processed after the main package has run its <code>install</code> phase.
+The <code>pkg_install()</code> function specified on them commonly is
+used to move files from the <code>main</code> package destdir to the
+<code>subpackage</code> destdir.</p>
+<p>The helper functions <code>vinstall</code>, <code>vmkdir</code>,
+<code>vcopy</code> and <code>vmove</code> are just wrappers that
+simplify the process of creating, copying and moving files/directories
+between the <code>main</code> package destdir (<code>$DESTDIR</code>) to
+the <code>subpackage</code> destdir (<code>$PKGDESTDIR</code>).</p>
+<p>Subpackages are processed always in alphabetical order; To force a
+custom order, the <code>subpackages</code> variable can be declared with
+the wanted order.</p>
+<p><a id="pkgs_classes"></a></p>
+<h3 id="some-package-classes">Some package classes</h3>
+<p><a id="pkgs_development"></a></p>
+<h4 id="development-packages">Development packages</h4>
+<p>A development package, commonly generated as a subpackage, shall only
+contain files required for development, that is, headers, static
+libraries, shared library symlinks, pkg-config files, API documentation
+or any other script that is only useful when developing for the target
+software.</p>
+<p>A development package should depend on packages that are required to
+link against the provided shared libraries, i.e if <code>libfoo</code>
+provides the <code>libfoo.so.2</code> shared library and the linking
+needs <code>-lbar</code>, the package providing the <code>libbar</code>
+shared library should be added as a dependency; and most likely it shall
+depend on its development package.</p>
+<p>If a development package provides a <code>pkg-config</code> file, you
+should verify what dependencies the package needs for dynamic or static
+linking, and add the appropriate <code>development</code> packages as
+dependencies.</p>
+<p>Development packages for the C and C++ languages usually
+<code>vmove</code> the following subset of files from the main
+package:</p>
+<ul>
+<li>Header files <code>usr/include</code></li>
+<li>Static libraries <code>usr/lib/*.a</code></li>
+<li>Shared library symbolic links <code>usr/lib/*.so</code></li>
+<li>Cmake rules <code>usr/lib/cmake</code>
+<code>usr/share/cmake</code></li>
+<li>Package config files <code>usr/lib/pkgconfig</code>
+<code>usr/share/pkgconfig</code></li>
+<li>Autoconf macros <code>usr/share/aclocal</code></li>
+<li>Gobject introspection XML files <code>usr/share/gir-1.0</code></li>
+<li>Vala bindings <code>usr/share/vala</code></li>
+</ul>
+<p><a id="pkgs_data"></a></p>
+<h4 id="data-packages">Data packages</h4>
+<p>Another common subpackage type is the <code>-data</code> subpackage.
+This subpackage type used to split architecture independent, big(ger) or
+huge amounts of data from a package's main and architecture dependent
+part. It is up to you to decide, if a <code>-data</code> subpackage
+makes sense for your package. This type is common for games (graphics,
+sound and music), part libraries (CAD) or card material (maps). The main
+package must then have
+<code>depends="${pkgname}-data-${version}_${revision}"</code>, possibly
+in addition to other, non-automatic depends.</p>
+<p><a id="pkgs_documentation"></a></p>
+<h4 id="documentation-packages">Documentation packages</h4>
+<p>Packages intended for user interaction do not always unconditionally
+require their documentation part. A user who does not want to e.g.
+develop with Qt5 will not need to install the (huge) qt5-doc package. An
+expert may not need it or opt to use an online version.</p>
+<p>In general a <code>-doc</code> package is useful, if the main package
+can be used both with or without documentation and the size of the
+documentation isn't really small. The base package and the
+<code>-devel</code> subpackage should be kept small so that when
+building packages depending on a specific package there is no need to
+install large amounts of documentation for no reason. Thus the size of
+the documentation part should be your guidance to decide whether or not
+to split off a <code>-doc</code> subpackage.</p>
+<p><a id="pkgs_python"></a></p>
+<h4 id="python-packages">Python packages</h4>
+<p>Python packages should be built with the <code>python3-module</code>
+build style, if possible. This sets some environment variables required
+to allow cross compilation. Support to allow building a python module
+for multiple versions from a single template is also possible. The
+<code>python3-pep517</code> build style provides means to build python
+packages that provide a build-system definition compliant with <a
+href="https://www.python.org/dev/peps/pep-0517/">PEP 517</a> without a
+traditional <code>setup.py</code> script. The
+<code>python3-pep517</code> build style does not provide a specific
+build backend, so packages will need to add an appropriate backend
+provider to <code>hostmakedepends</code>.</p>
+<p>Python packages that rely on <code>python3-setuptools</code> should
+generally map <code>setup_requires</code> dependencies in
+<code>setup.py</code> to <code>hostmakedepends</code> in the template
+and <code>install_requires</code> dependencies to <code>depends</code>
+in the template; include <code>python3</code> in <code>depends</code> if
+there are no other python dependencies. If the package includes a
+compiled extension, the <code>python3-devel</code> packages should be
+added to <code>makedepends</code>, as should any python packages that
+also provide native libraries against which the extension will be linked
+(even if that package is also included in <code>hostmakedepends</code>
+to satisfy <code>setuptools</code>).</p>
+<p><strong>NB</strong>: Python <code>setuptools</code> will attempt to
+use <code>pip</code> or <code>EasyInstall</code> to fetch any missing
+dependencies at build time. If you notice warnings about
+<code>EasyInstall</code> deprecation or python eggs present in
+<code>${wrksrc}/.eggs</code> after building the package, then those
+packages should be added to <code>hostmakedepends</code>.</p>
+<p>The following variables may influence how the python packages are
+built and configured at post-install time:</p>
+<ul>
+<li><p><code>pycompile_module</code>: By default, files and directories
+installed into <code>usr/lib/pythonX.Y/site-packages</code>, excluding
+<code>*-info</code> and <code>*.so</code>, are byte-compiled at install
+time as python modules. This variable expects subset of them that should
+be byte-compiled, if default is wrong. Multiple python modules may be
+specified separated by blanks, Example:
+<code>pycompile_module="foo blah"</code>. If a python module installs a
+file into <code>site-packages</code> rather than a directory, use the
+name of the file, Example:
+<code>pycompile_module="fnord.py"</code>.</p></li>
+<li><p><code>pycompile_dirs</code>: this variable expects the python
+directories that should be <code>byte-compiled</code> recursively by the
+target python version. This differs from <code>pycompile_module</code>
+in that any path may be specified, Example:
+<code>pycompile_dirs="usr/share/foo"</code>.</p></li>
+<li><p><code>python_version</code>: this variable expects the supported
+Python major version. In most cases version is inferred from shebang,
+install path or build style. Only required for some multi-language
+applications (e.g., the application is written in C while the command is
+written in Python) or just single Python file ones that live in
+<code>/usr/bin</code>. If <code>python_version</code> is set to
+<code>ignore</code>, python-containing shebangs will not be rewritten.
+Use this only if a package should not be using a system version of
+python.</p></li>
+<li><p><code>python_extras</code>: Python module extras to consider when
+verifying Python module dependencies. Can be used to ensure additional
+dependency sets are checked. Example:
+<code>python_extras="all"</code>.</p></li>
+<li><p><code>nopyprovides</code>: if set, don't create
+<code>provides</code> entries for Python modules in the
+package.</p></li>
+<li><p><code>noverifypydeps</code>: if set, don't verify Python module
+dependencies.</p></li>
+</ul>
+<p>Also, a set of useful variables are defined to use in the
+templates:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>py2_ver</td>
+<td>2.X</td>
+</tr>
+<tr>
+<td>py2_lib</td>
+<td>usr/lib/python2.X</td>
+</tr>
+<tr>
+<td>py2_sitelib</td>
+<td>usr/lib/python2.X/site-packages</td>
+</tr>
+<tr>
+<td>py2_inc</td>
+<td>usr/include/python2.X</td>
+</tr>
+<tr>
+<td>py3_ver</td>
+<td>3.X</td>
+</tr>
+<tr>
+<td>py3_lib</td>
+<td>usr/lib/python3.X</td>
+</tr>
+<tr>
+<td>py3_sitelib</td>
+<td>usr/lib/python3.X/site-packages</td>
+</tr>
+<tr>
+<td>py3_inc</td>
+<td>usr/include/python3.Xm</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>NOTE: it's expected that additional subpkgs must be generated to
+allow packaging for multiple python versions.</p>
+</blockquote>
+<p><a id="pkgs_go"></a></p>
+<h4 id="go-packages">Go packages</h4>
+<p>Go packages should be built with the <code>go</code> build style, if
+possible. The <code>go</code> build style takes care of downloading Go
+dependencies and setting up cross compilation.</p>
+<p>The following template variables influence how Go packages are
+built:</p>
+<ul>
+<li><code>go_import_path</code>: The import path of the package included
+in the distfile, as it would be used with <code>go get</code>. For
+example, GitHub's <code>hub</code> program has the import path
+<code>github.com/github/hub</code>. This variable is required.</li>
+<li><code>go_package</code>: A space-separated list of import paths of
+the packages that should be built. Defaults to
+<code>go_import_path</code>.</li>
+<li><code>go_build_tags</code>: An optional, space-separated list of
+build tags to pass to Go.</li>
+<li><code>go_mod_mode</code>: The module download mode to use. May be
+<code>off</code> to ignore any go.mod files, <code>default</code> to use
+Go's default behavior, or anything accepted by
+<code>go build -mod MODE</code>. Defaults to <code>vendor</code> if
+there's a vendor directory, otherwise <code>default</code>.</li>
+<li><code>go_ldflags</code>: Arguments to pass to the linking steps of
+go tool.</li>
+</ul>
+<p>The following environment variables influence how Go packages are
+built:</p>
+<ul>
+<li><code>XBPS_MAKEJOBS</code>: Value passed to the <code>-p</code> flag
+of <code>go install</code>, to control the parallelism of the Go
+compiler.</li>
+</ul>
+<p>Occasionally it is necessary to perform operations from within the Go
+source tree. This is usually needed by programs using go-bindata or
+otherwise preping some assets. If possible do this in pre_build(). The
+path to the package's source inside <code>$GOPATH</code> is available as
+<code>$GOSRCPATH</code>.</p>
+<p><a id="pkgs_haskell"></a></p>
+<h4 id="haskell-packages">Haskell packages</h4>
+<p>Haskell packages can be built either with the <code>cabal</code> or
+<code>haskell-stack</code> build style, use whichever is more convenient
+or better supported by upstream, sometimes only one of the two is
+possible. For packages that have haskell parts but use a different build
+style like <code>gnu-makefile</code>, make sure to use the
+<code>haskell</code> build helper.</p>
+<p>The following variables influence how packages are built with
+cabal:</p>
+<ul>
+<li><code>cabal_index_state</code>: The state of the hackage cabal index
+to use for fetching dependencies. The source package of a haskell
+project should come with a freeze file that sets the index state, some
+also set it in their cabal project file. If it does not, then this has
+to be set to an ISO timestamp in the package template. For example
+<code>2025-07-05T14:01:16Z</code>.</li>
+<li><code>configure_args</code>: Arguments passed to
+<code>cabal configure</code>. The configure step generates the
+<code>cabal.project.local</code> file.</li>
+<li><code>make_build_args</code>: Arguments passed to
+<code>cabal build</code>.</li>
+<li><code>make_build_target</code>: Target passed to
+<code>cabal build</code>.</li>
+<li><code>make_check_args</code>: Arguments passed to
+<code>cabal test</code>.</li>
+<li><code>make_check_target</code>: Test target passed to cabal instead
+of "test".</li>
+<li><code>make_install_target</code>: Target passed to
+<code>cabal install</code>.</li>
+</ul>
+<p>And these variables influence how packages are built with stack:</p>
+<ul>
+<li><code>stackage</code>: The Stackage version used to build the
+package, e.g. <code>lts-3.5</code>. Alternatively:
+<ul>
+<li>You can prepare a <code>stack.yaml</code> configuration for the
+project and put it into <code>files/stack.yaml</code>.</li>
+<li>If a <code>stack.yaml</code> file is present in the source files, it
+will be used.</li>
+</ul></li>
+<li><code>make_build_args</code>: This is passed as-is to
+<code>stack build ...</code>, so you can add your
+<code>--flag ...</code> parameters there.</li>
+</ul>
+<p>To patch dependencies of haskell packages they have to be fetched
+explicitly from hackage by adding them to <code>distfiles</code> instead
+of letting cabal or stack download them. Once extracted and patched, the
+path to the patched version can be added to <code>packages</code> in
+<code>cabal.project</code> or <code>stack.yaml</code>. Stack will find
+them automatically if no <code>stack.yaml</code> file exists by scanning
+the directory. The build tool will then use the patched version of the
+depencency instead of downloading it from hackage.</p>
+<p><a id="pkgs_font"></a></p>
+<h4 id="font-packages">Font packages</h4>
+<p>Font packages are very straightforward to write, they are always set
+with the following variables:</p>
+<ul>
+<li><code>depends="font-util"</code>: because they are required for
+regenerating the font cache during the install/removal of the
+package</li>
+<li><code>font_dirs</code>: which should be set to the directory where
+the package installs its fonts</li>
+</ul>
+<p><a id="pkg_rename"></a></p>
+<h3 id="renaming-a-package">Renaming a package</h3>
+<ul>
+<li>Create empty package of old name, depending on new package. This is
+necessary to provide updates to systems where old package is already
+installed. This should be a subpackage of new one, except when version
+number of new package decreased: then create a separate template using
+old version and increased revision.</li>
+<li>Edit references to package in other templates and
+common/shlibs.</li>
+<li>Don't set <code>replaces=</code>, it can result in removing both
+packages from systems by xbps.</li>
+</ul>
+<p><a id="pkg_remove"></a></p>
+<h3 id="removing-a-package">Removing a package</h3>
+<p>Follows a list of things that should be done to help guarantee that a
+package template removal and by extension its binary packages from Void
+Linux's repositories goes smoothly.</p>
+<p>Before removing a package template:</p>
+<ul>
+<li>Guarantee that no package depends on it or any of its subpackages.
+For that you can search the templates for references to the package with
+<code>grep -r '\bpkg\b' srcpkgs/</code>.</li>
+<li>Guarantee that no package depends on shlibs provided by it.</li>
+</ul>
+<p>When removing the package template:</p>
+<ul>
+<li>Remove all symlinks that point to the package.
+<code>find srcpkgs/ -lname &lt;pkg&gt;</code> should be enough.</li>
+<li>If the package provides shlibs make sure to remove them from
+common/shlibs.</li>
+<li>Some packages use patches and files from other packages using
+symlinks, generally those packages are the same but have been split as
+to avoid cyclic dependencies. Make sure that the package you're removing
+is not the source of those patches/files.</li>
+<li>Remove package template.</li>
+<li>Add <code>pkgname&lt;=version_revision</code> to
+<code>replaces</code> variable of <code>removed-packages</code>
+template. All removed subpkgs should be added too. This will uninstall
+package from systems where it is installed.</li>
+<li>Remove the package from the repository index or contact a team
+member that can do so.</li>
+</ul>
+<p><a id="xbps_triggers"></a></p>
+<h3 id="xbps-triggers">XBPS Triggers</h3>
+<p>XBPS triggers are a collection of snippets of code, provided by the
+<code>xbps-triggers</code> package, that are added to the INSTALL/REMOVE
+scripts of packages either manually by setting the <code>triggers</code>
+variable in the template, or automatically, when specific conditions are
+met.</p>
+<p>The following is a list of all available triggers, their current
+status, what each of them does and what conditions need to be for it to
+be included automatically on a package.</p>
+<p>This is not a complete overview of the package. It is recommended to
+read the variables referenced and the triggers themselves.</p>
+<p><a id="triggers_appstream_cache"></a></p>
+<h4 id="appstream-cache">appstream-cache</h4>
+<p>The appstream-cache trigger is responsible for rebuilding the
+appstream metadata cache.</p>
+<p>During installation it executes
+<code>appstreamcli refresh-cache --verbose --force --datapath $APPSTREAM_PATHS --cachepath var/cache/app-info/gv</code>.
+By default APPSTREAM_PATHS are all the paths that appstreamcli will look
+into for metadata files.</p>
+<p>The directories searched by appstreamcli are:</p>
+<ul>
+<li><code>usr/share/appdata</code></li>
+<li><code>usr/share/app-info</code></li>
+<li><code>var/lib/app-info</code></li>
+<li><code>var/cache/app-info</code></li>
+</ul>
+<p>During removal of the <code>AppStream</code> package it will remove
+the <code>var/cache/app-info/gv</code> directory.</p>
+<p>It is automatically added to packages that have XML files under one
+of the directories searched by appstreamcli.</p>
+<p><a id="triggers_binfmts"></a></p>
+<h4 id="binfmts">binfmts</h4>
+<p>The binfmts trigger is responsible for registration and removal of
+arbitrary executable binary formats, know as binfmts.</p>
+<p>During installation/removal it uses <code>update-binfmts</code> from
+the <code>binfmt-support</code> package to register/remove entries from
+the arbitrary executable binary formats database.</p>
+<p>It is automatically added to packages that contain files in
+<code>usr/share/binfmts</code>. These files should be
+<code>update-binfmts</code> format files and will be imported with
+<code>update-binfmts --import</code>.</p>
+<p>While it is not preferred, the trigger can also be added by using the
+<code>binfmts</code> variable, which should contain lines defining
+binfmts to register:</p>
+<pre><code>/path/to/interpreter [update-binfmts binary format specification arguments ...]
+...</code></pre>
+<p>See <a
+href="https://man.voidlinux.org/man8/update-binfmts.8"><code>update-binfmts(8)</code></a>
+for more details.</p>
+<p><a id="triggers_dkms"></a></p>
+<h4 id="dkms">dkms</h4>
+<p>The dkms trigger is responsible for compiling and removing dynamic
+kernel modules of a package.</p>
+<p>During installation the trigger compiles and installs the dynamic
+module for all <code>linux</code> packages that have their corresponding
+linux-headers package installed. During removal the corresponding module
+will be removed</p>
+<p>To include the trigger use the <code>dkms_modules</code> variable, as
+the trigger won't do anything unless it is defined.</p>
+<p><a id="triggers_gconf_schemas"></a></p>
+<h4 id="gconf-schemas">gconf-schemas</h4>
+<p>The gconf-schemas trigger is responsible for registering and removing
+.schemas and .entries files into the schemas database directory</p>
+<p>During installation it uses <code>gconftool-2</code> to install
+.schemas and .entries files into <code>usr/share/gconf/schemas</code>.
+During removal it uses <code>gconftool-2</code> to remove the entries
+and schemas belonging to the package that is being removed from the
+database.</p>
+<p>To include it add <code>gconf-schemas</code> to <code>triggers</code>
+and add the appropriate .schemas in the <code>gconf_schemas</code>
+variable and .entries in <code>gconf_entries</code>.</p>
+<p>It is automatically added to packages that have
+<code>/usr/share/gconf/schemas</code> present as a directory. All files
+with the schemas file extension under that directory are passed to the
+trigger.</p>
+<p><a id="triggers_gdk_pixbuf_loaders"></a></p>
+<h4 id="gdk-pixbuf-loaders">gdk-pixbuf-loaders</h4>
+<p>The gdk-pixbuf-loaders trigger is responsible for maintaining the GDK
+Pixbuf loaders cache.</p>
+<p>During installation it runs
+<code>gdk-pixbuf-query-loaders --update-cache</code> and also deletes
+the obsolete <code>etc/gtk-2.0/gdk-pixbuf.loaders</code> file if
+present. During removal of the gdk-pixbuf package it removes the cache
+file if present. Normally at
+<code>usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache</code>.</p>
+<p>It can be added by defining <code>gdk-pixbuf-loaders</code> in the
+<code>triggers</code> variable. It is also added automatically to any
+package that has the path
+<code>usr/lib/gdk-pixbuf-2.0/2.10.0/loaders</code> available as a
+directory.</p>
+<p><a id="triggers_gio_modules"></a></p>
+<h4 id="gio-modules">gio-modules</h4>
+<p>The gio-modules trigger is responsible for updating the Glib GIO
+module cache with <code>gio-querymodules</code> from the
+<code>glib</code> package</p>
+<p>During install and removal it just runs <code>gio-querymodules</code>
+to update the cache file present under
+<code>usr/lib/gio/modules</code>.</p>
+<p>It is automatically added to packages that have
+<code>/usr/lib/gio/modules</code> present as a directory.</p>
+<p><a id="triggers_gsettings_schemas"></a></p>
+<h4 id="gsettings-schemas">gsettings-schemas</h4>
+<p>The gsettings-schemas trigger is responsible for compiling Glib's
+GSettings XML schema files during installation and removing the compiled
+files during removal.</p>
+<p>During installation it uses <code>glib-compile-schemas</code> from
+<code>glib</code> to compile the schemas into files with the suffix
+.compiled into <code>/usr/share/glib-2.0/schemas</code>.</p>
+<p>During removal of the glib package it deletes all files inside
+<code>/usr/share/glib-2.0/schemas</code> that end with .compiled.</p>
+<p>It is automatically added to packages that have
+<code>/usr/share/glib-2.0/schemas</code> present as a directory.</p>
+<p><a id="triggers_gtk_icon_cache"></a></p>
+<h4 id="gtk-icon-cache">gtk-icon-cache</h4>
+<p>The gtk-icon-cache trigger is responsible for updating the gtk+ icon
+cache.</p>
+<p>During installation it uses <code>gtk-update-icon-cache</code> to
+update the icon cache.</p>
+<p>During removal of the gtk+ package it deletes the
+<code>icon-theme.cache</code> file in the directories defined by the
+variable <code>gtk_iconcache_dirs</code>.</p>
+<p>It is automatically added on packages that have
+<code>/usr/share/icons</code> available as a directory, all directories
+under that directory have their absolute path passed to the trigger.</p>
+<p><a id="triggers_gtk_immodules"></a></p>
+<h4 id="gtk-immodules">gtk-immodules</h4>
+<p>The gtk-immodules trigger is responsible for updating the IM (Input
+Method) modules file for gtk+.</p>
+<p>During installation it uses
+<code>gtk-query-immodules-2.0 --update-cache</code> to update the cache
+file. It also removes the obsolete configuration file
+<code>etc/gtk-2.0/gtk.immodules</code> if present.</p>
+<p>During removal of the <code>gtk+</code> package it removes the cache
+file which is located at
+<code>usr/lib/gtk-2.0/2.10.0/immodules.cache</code>.</p>
+<p>It is automatically added to packages that have
+<code>/usr/lib/gtk-2.0/2.10.0/immodules</code> present as a
+directory.</p>
+<p><a id="triggers_gtk_pixbuf_loaders"></a></p>
+<h4 id="gtk-pixbuf-loaders">gtk-pixbuf-loaders</h4>
+<p>gtk-pixbuf-loaders is the old name for the current
+<code>gdk-pixbuf-loaders</code> trigger and is in the process of being
+removed. It currently re-execs into <code>gdk-pixbuf-loaders</code> as a
+compatibility measure.</p>
+<p>For information about how it works refer to <a
+href="#triggers_gdk_pixbuf_loaders">gdk-pixbuf-loaders</a>.</p>
+<p><a id="triggers_gtk3_immodules"></a></p>
+<h4 id="gtk3-immodules">gtk3-immodules</h4>
+<p>The gtk3-immodules trigger is responsible for updating the IM (Input
+Method) modules file for gtk+3.</p>
+<p>During installation it executes
+<code>gtk-query-immodules-3.0 --update-cache</code> to update the cache
+file. It also removes the obsolete configuration file
+<code>etc/gtk-3.0/gtk.immodules</code> if present.</p>
+<p>During removal of the <code>gtk+3</code> package it removes the cache
+file which is located at
+<code>usr/lib/gtk-3.0/3.0.0/immodules.cache</code>.</p>
+<p>It is automatically added to packages that have
+<code>/usr/lib/gtk-3.0/3.0.0/immodules</code> present as a
+directory.</p>
+<p><a id="triggers_hwdb.d_dir"></a></p>
+<h4 id="hwdbd-dir">hwdb.d-dir</h4>
+<p>The hwdb.d-dir trigger is responsible for updating the hardware
+database.</p>
+<p>During installation and removal it runs
+<code>usr/bin/udevadm hwdb --root=. --update</code>.</p>
+<p>It is automatically added to packages that have
+<code>/usr/lib/udev/hwdb.d</code> present as a directory.</p>
+<p><a id="triggers_info_files"></a></p>
+<h4 id="info-files">info-files</h4>
+<p>The info-files trigger is responsible for registering and
+unregistering the GNU info files of a package.</p>
+<p>It checks the existence of the info files presented to it and if it
+is running under another architecture.</p>
+<p>During installation it uses <code>install-info</code> to register
+info files into <code>usr/share/info</code>.</p>
+<p>During removal it uses <code>install-info --delete</code> to remove
+the info files from the registry located at
+<code>usr/share/info</code>.</p>
+<p>If it is running under another architecture it tries to use the
+host's <code>install-info</code> utility.</p>
+<p><a id="triggers_initramfs_regenerate"></a></p>
+<h4 id="initramfs-regenerate">initramfs-regenerate</h4>
+<p>The initramfs-regenerate trigger will trigger the regeneration of all
+kernel initramfs images after package installation or removal. The
+trigger must be manually requested.</p>
+<p>This hook is probably most useful for DKMS packages because it will
+provide a means to include newly compiled kernel modules in initramfs
+images for all currently available kernels. When used in a DKMS package,
+it is recommended to manually include the <code>dkms</code> trigger
+<em>before</em> the <code>initramfs-regenerate</code> trigger using, for
+example,</p>
+<pre><code>```
+triggers=&quot;dkms initramfs-regenerate&quot;
+```</code></pre>
+<p>Although <code>xbps-src</code> will automatically include the
+<code>dkms</code> trigger whenever <code>dkms_modules</code> is
+installed, the automatic addition will come <em>after</em>
+<code>initramfs-regenerate</code>, which will cause initramfs images to
+be recreated before the modules are compiled.</p>
+<p>By default, the trigger uses <code>dracut --regenerate-all</code> to
+recreate initramfs images. If
+<code>/etc/default/initramfs-regenerate</code> exists and defines
+<code>INITRAMFS_GENERATOR=mkinitcpio</code>, the trigger will instead
+use <code>mkinitcpio</code> and loop over all kernel versions for which
+modules appear to be installed. Alternatively, setting
+<code>INITRAMFS_GENERATOR=none</code> will disable image regeneration
+entirely.</p>
+<p><a id="triggers_kernel_hooks"></a></p>
+<h4 id="kernel-hooks">kernel-hooks</h4>
+<p>The kernel-hooks trigger is responsible for running scripts during
+installation/removal of kernel packages.</p>
+<p>The available targets are pre-install, pre-remove, post-install and
+post-remove.</p>
+<p>When run it will try to run all executables found under
+<code>etc/kernel.d/$TARGET</code>. The <code>TARGET</code> variable is
+one of the 4 targets available for the trigger. It will also create the
+directory if it isn't present.</p>
+<p>During updates it won't try to run any executables when running with
+the pre-remove target.</p>
+<p>It is automatically added if the helper variable
+<code>kernel_hooks_version</code> is defined. However it is not
+obligatory to have it defined.</p>
+<p><a id="triggers_mimedb"></a></p>
+<h4 id="mimedb">mimedb</h4>
+<p>The mimedb trigger is responsible for updating the shared-mime-info
+database.</p>
+<p>In all runs it will just execute
+<code>update-mime-database -n usr/share/mime</code>.</p>
+<p>It is automatically added to packages that have
+<code>/usr/share/mime</code> available as a directory.</p>
+<p><a id="triggers_mkdirs"></a></p>
+<h4 id="mkdirs">mkdirs</h4>
+<p>The mkdirs trigger is responsible for creating and removing
+directories dictated by the <code>make_dirs</code> variable.</p>
+<p>During installation it takes the <code>make_dirs</code> variable and
+splits it into groups of 4 variables.</p>
+<ul>
+<li>dir = full path to the directory</li>
+<li>mode = Unix permissions for the directory</li>
+<li>uid = name of the owning user</li>
+<li>gid = name of the owning group</li>
+</ul>
+<p>It will continue to split the values of <code>make_dirs</code> into
+groups of 4 until the values end.</p>
+<p>During installation it will create a directory with <code>dir</code>
+then set mode with <code>mode</code> and permission with
+<code>uid:gid</code>.</p>
+<p>During removal it will delete the directory using
+<code>rmdir</code>.</p>
+<p>To include this trigger use the <code>make_dirs</code> variable, as
+the trigger won't do anything unless it is defined.</p>
+<p><a id="triggers_pango_module"></a></p>
+<h4 id="pango-modules">pango-modules</h4>
+<p>The pango-modules trigger is currently being removed since upstream
+has removed the code responsible for it.</p>
+<p>It used to update the pango modules file with
+<code>pango-modulesquery</code> during installation of any package.</p>
+<p>Currently it removes <code>etc/pango/pango.modules</code> file during
+removal of the pango package.</p>
+<p>It can be added by defining <code>pango-modules</code> in the
+<code>triggers</code> variable and has no way to get added automatically
+to a package.</p>
+<p><a id="triggers_pycompile"></a></p>
+<h4 id="pycompile">pycompile</h4>
+<p>The pycompile trigger is responsible for compiling python code into
+native bytecode and removing generated bytecode.</p>
+<p>During installation it will compile all python code under the paths
+it is given by <code>pycompile_dirs</code> and all modules described in
+<code>pycompile_module</code> into native bytecode and update the
+ldconfig(8) cache.</p>
+<p>During removal it will remove all the native bytecode and update the
+ldconfig(8) cache.</p>
+<p>To include this trigger use the variables <code>pycompile_dirs</code>
+and <code>pycompile_module</code>. The trigger won't do anything unless
+at least one of those variables is defined.</p>
+<p>A <code>python_version</code> variable can be set to direct behaviour
+of the trigger.</p>
+<p><a id="triggers_register_shell"></a></p>
+<h4 id="register-shell">register-shell</h4>
+<p>The register-shell trigger is responsible for registering and
+removing shell entries into <code>etc/shells</code>.</p>
+<p>During installation it will append the <code>etc/shells</code> file
+with the new shell and also change the permissions to <code>644</code>
+on the file.</p>
+<p>During removal it will use <code>sed</code> to delete the shell from
+the file.</p>
+<p>To include this trigger use the <code>register_shell</code> variable,
+as the trigger won't do anything unless it is defined.</p>
+<p><a id="triggers_system_accounts"></a></p>
+<h4 id="system-accounts">system-accounts</h4>
+<p>The system-accounts trigger is responsible for creating and disabling
+system accounts and groups.</p>
+<p>During removal it will disable the account by setting the Shell to
+/bin/false, Home to /var/empty, and appending ' - for uninstalled
+package $pkgname' to the Description. Example:
+<code>transmission unprivileged user - for uninstalled package transmission</code></p>
+<p>This trigger can only be used by using the
+<code>system_accounts</code> variable.</p>
+<p><a id="triggers_texmf_dist"></a></p>
+<h4 id="texmf-dist">texmf-dist</h4>
+<p>The texmf-dist trigger is responsible for regenerating TeXLive's
+texmf databases.</p>
+<p>During both installation and removal, it regenerates both the texhash
+and format databases using <code>texhash</code> and
+<code>fmtutil-sys</code>, to add or remove any new hashes or
+formats.</p>
+<p>It runs on every package that changes /usr/share/texmf-dist. This is
+likely overkill, but it is much cleaner rather than checking each format
+directory and each directory that is hashed. In addition, it is very
+likely any package touching /usr/share/texmf-dist requires one of these
+triggers anyway.</p>
+<p><a id="triggers_update_desktopdb"></a></p>
+<h4 id="update-desktopdb">update-desktopdb</h4>
+<p>The update-desktopdb trigger is responsible for updating the system's
+MIME database.</p>
+<p>During installation it will execute
+<code>update-desktop-database usr/share/applications</code> which will
+result in a cache file being created at
+<code>usr/share/applications/mimeinfo.cache</code>.</p>
+<p>During removal of the <code>desktop-file-utils</code> package it will
+remove the cache file that was created during installation.</p>
+<p>It is automatically added to packages that have
+<code>/usr/share/applications</code> available as a directory.</p>
+<p><a id="triggers_x11_fonts"></a></p>
+<h4 id="x11-fonts">x11-fonts</h4>
+<p>The x11-fonts trigger is responsible for rebuilding the fonts.dir and
+fonts.scale files for packages that install X11 fonts, and update
+fontconfig's cache for these fonts.</p>
+<p>During installation and removal it executes <code>mkfontdir</code>,
+<code>mkfontscale</code> and <code>fc-cache</code> for all font
+directories it was given via the <code>font_dirs</code> variable.</p>
+<p>To include this trigger use the <code>font_dirs</code> variable, as
+the trigger won't do anything unless it is defined.</p>
+<p><a id="triggers_xml_catalog"></a></p>
+<h4 id="xml-catalog">xml-catalog</h4>
+<p>The xml-catalog trigger is responsible for registering and removing
+SGML/XML catalog entries.</p>
+<p>During installation it uses <code>xmlcatmgr</code> to register all
+catalogs, passed to it by the <code>sgml_entries</code> and
+<code>xml_entries</code> variables, in
+<code>usr/share/sgml/catalog</code> and
+<code>usr/share/xml/catalog</code> respectively.</p>
+<p>During removal it uses <code>xmlcatmgr</code> to remove all catalogs
+passed to it by the <code>sgml_entries</code> and
+<code>xml_entries</code> variables, in
+<code>usr/share/sgml/catalog</code> and
+<code>usr/share/xml/catalog</code> respectively.</p>
+<p>To include this trigger use the <code>sgml_entries</code> variable
+or/and the <code>xml_entries</code> variable, as the trigger won't do
+anything unless either of them are defined.</p>
+<p><a id="documentation"></a></p>
+<h3 id="void-specific-documentation">Void specific documentation</h3>
+<p>When you want document details of package's configuration and usage
+specific to Void Linux, not covered by upstream documentation, put notes
+into <code>srcpkgs/&lt;pkgname&gt;/files/README.voidlinux</code> and
+install with <code>vdoc "${FILESDIR}/README.voidlinux"</code>.</p>
+<p><a id="notes"></a></p>
+<h3 id="notes">Notes</h3>
+<ul>
+<li><p>Make sure that all software is configured to use the
+<code>/usr</code> prefix.</p></li>
+<li><p>Binaries should always be installed at
+<code>/usr/bin</code>.</p></li>
+<li><p>Manual pages should always be installed at
+<code>/usr/share/man</code>.</p></li>
+<li><p>If a software provides <strong>shared libraries</strong> and
+headers, probably you should create a <code>development package</code>
+that contains <code>headers</code>, <code>static libraries</code> and
+other files required for development (not required at runtime).</p></li>
+<li><p>If you are updating a package please be careful with SONAME
+bumps, check the installed files
+(<code>./xbps-src show-files pkg</code>) before pushing new
+updates.</p></li>
+<li><p>Make sure that binaries are not stripped by the software, let
+xbps-src do this; otherwise the <code>debug</code> packages won't have
+debugging symbols.</p></li>
+</ul>
+<p><a id="contributing"></a></p>
+<h3 id="contributing-via-git">Contributing via git</h3>
+<p>To get started, <a
+href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo">fork</a>
+the void-linux <code>void-packages</code> git repository on GitHub and
+clone it:</p>
+<pre><code>$ git clone git@github.com:&lt;user&gt;/void-packages.git</code></pre>
+<p>See <a href="./CONTRIBUTING.md">CONTRIBUTING.md</a> for information
+on how to format your commits and other tips for contributing.</p>
+<p>Once you've made changes to your <code>forked</code> repository,
+submit a github pull request.</p>
+<p>To keep your forked repository always up to date, setup the
+<code>upstream</code> remote to pull in new changes:</p>
+<pre><code>$ git remote add upstream https://github.com/void-linux/void-packages.git
+$ git pull --rebase upstream master</code></pre>
+<p><a id="help"></a></p>
+<h3 id="help">Help</h3>
+<p>If after reading this <code>manual</code> you still need some kind of
+help, please join us at <code>#xbps</code> via IRC at
+<code>irc.libera.chat</code>.</p>
+<script>
+(function () {
+  function hexToRgb(hex) {
+    hex = hex.trim().replace(/^#/, '');
+    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+    const n = parseInt(hex, 16);
+    return [n >> 16 & 255, n >> 8 & 255, n & 255];
+  }
+
+  function clamp(v, min, max) {
+    return Math.min(Math.max(v, min), max);
+  }
+
+  function Color(r, g, b) {
+    this.r = r / 255;
+    this.g = g / 255;
+    this.b = b / 255;
+  }
+
+  Color.prototype.applyFilter = function (funcs) {
+    let [r, g, b] = [this.r * 255, this.g * 255, this.b * 255];
+
+    function multiply(matrix) {
+      const nr = clamp(r * matrix[0] + g * matrix[1] + b * matrix[2], 0, 255);
+      const ng = clamp(r * matrix[3] + g * matrix[4] + b * matrix[5], 0, 255);
+      const nb = clamp(r * matrix[6] + g * matrix[7] + b * matrix[8], 0, 255);
+      r = nr; g = ng; b = nb;
+    }
+
+    function hueRotate(angle) {
+      const a = angle / 180 * Math.PI;
+      const sin = Math.sin(a), cos = Math.cos(a);
+      multiply([
+        0.213 + cos*0.787 - sin*0.213, 0.715 - cos*0.715 - sin*0.715, 0.072 - cos*0.072 + sin*0.928,
+        0.213 - cos*0.213 + sin*0.143, 0.715 + cos*0.285 + sin*0.140, 0.072 - cos*0.072 - sin*0.283,
+        0.213 - cos*0.213 - sin*0.787, 0.715 - cos*0.715 + sin*0.715, 0.072 + cos*0.928 + sin*0.072,
+      ]);
+    }
+
+    function sepia(v) {
+      multiply([
+        0.393 + 0.607*(1-v), 0.769 - 0.769*(1-v), 0.189 - 0.189*(1-v),
+        0.349 - 0.349*(1-v), 0.686 + 0.314*(1-v), 0.168 - 0.168*(1-v),
+        0.272 - 0.272*(1-v), 0.534 - 0.534*(1-v), 0.131 + 0.869*(1-v),
+      ]);
+    }
+
+    function saturate(v) {
+      multiply([
+        0.213 + 0.787*v, 0.715 - 0.715*v, 0.072 - 0.072*v,
+        0.213 - 0.213*v, 0.715 + 0.285*v, 0.072 - 0.072*v,
+        0.213 - 0.213*v, 0.715 - 0.715*v, 0.072 + 0.928*v,
+      ]);
+    }
+
+    for (const [fn, val] of funcs) {
+      if (fn === 'invert')    { r = clamp((1-r/255)*255*val + r/255*255*(1-val),0,255); g = clamp((1-g/255)*255*val + g/255*255*(1-val),0,255); b = clamp((1-b/255)*255*val + b/255*255*(1-val),0,255); }
+      if (fn === 'sepia')     sepia(val);
+      if (fn === 'saturate')  saturate(val);
+      if (fn === 'hueRotate') hueRotate(val);
+      if (fn === 'brightness'){ r = clamp(r*val,0,255); g = clamp(g*val,0,255); b = clamp(b*val,0,255); }
+    }
+
+    return new Color(r, g, b);
+  };
+
+  function loss(result, target) {
+    return (
+      Math.pow(result.r*255 - target.r*255, 2) +
+      Math.pow(result.g*255 - target.g*255, 2) +
+      Math.pow(result.b*255 - target.b*255, 2)
+    );
+  }
+
+  function solve(target) {
+    function css(v) {
+      return [
+        ['invert',    clamp(v[0], 0, 1)],
+        ['sepia',     clamp(v[1], 0, 1)],
+        ['saturate',  clamp(v[2], 0, 20)],
+        ['hueRotate', clamp(v[3], 0, 360)],
+        ['brightness',clamp(v[4], 0, 10)],
+        ['brightness',clamp(v[5], 0, 10)],
+      ];
+    }
+
+    function score(v) {
+      return loss(new Color(0,0,0).applyFilter(css(v)), target);
+    }
+
+    let best = null, bestScore = Infinity;
+    for (let i = 0; i < 30; i++) {
+      let v = [Math.random(), Math.random(), Math.random()*10, Math.random()*360, Math.random()*2, Math.random()*2];
+      for (let step = 1; step > 0.0001; step *= 0.9) {
+        for (let j = 0; j < v.length; j++) {
+          const orig = v[j];
+          v[j] += step * (Math.random() > 0.5 ? 1 : -1);
+          const s = score(v);
+          if (s < bestScore) { bestScore = s; best = [...v]; }
+          else v[j] = orig;
+        }
+      }
+    }
+
+    const f = css(best);
+    return [
+      `invert(${(clamp(f[0][1],0,1)*100).toFixed(0)}%)`,
+      `sepia(${(clamp(f[1][1],0,1)*100).toFixed(0)}%)`,
+      `saturate(${(clamp(f[2][1],0,20)*100).toFixed(0)}%)`,
+      `hue-rotate(${clamp(f[3][1],0,360).toFixed(0)}deg)`,
+      `brightness(${(clamp(f[4][1],0,10)*100).toFixed(0)}%)`,
+      `brightness(${(clamp(f[5][1],0,10)*100).toFixed(0)}%)`,
+    ].join(' ');
+  }
+
+  // Cache solved filters per color so theme switching is instant
+  const cache = {};
+
+  function applyIconColor() {
+    const raw = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-icon').trim();
+    if (!raw) return false;
+
+    let rgb;
+    if (raw.startsWith('#')) {
+      rgb = hexToRgb(raw);
+    } else if (raw.startsWith('rgb')) {
+      rgb = raw.match(/\d+/g).map(Number).slice(0, 3);
+    } else {
+      return false;
+    }
+
+    const key = rgb.join(',');
+    if (!cache[key]) {
+      cache[key] = solve(new Color(...rgb));
+    }
+
+    document.documentElement.style.setProperty('--filter-icon', cache[key]);
+    return true;
+  }
+
+  function init() {
+    if (!applyIconColor()) return;
+
+    // Watch for data-theme attribute changes on <html> — re-apply immediately
+    new MutationObserver(function(mutations) {
+      for (const m of mutations) {
+        if (m.attributeName === 'data-theme') {
+          applyIconColor();
+          break;
+        }
+      }
+    }).observe(document.documentElement, { attributes: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+<script data-goatcounter="https://vur.gocounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<script src="https://giscus.app/client.js"
+        data-repo="osowoso/VUR"
+        data-repo-id="R_kgDOGNy3Og"
+        data-category="General"
+        data-category-id="DIC_kwDOGNy3Os4CBWcR"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="cs"
+        crossorigin="anonymous"
+        async></script>
+</body>
+</html>

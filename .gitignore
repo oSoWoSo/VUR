@@ -11,9 +11,12 @@
 !/.gitignore
 !/.mailmap
 !/CONTRIBUTING.md
+!/CONTRIBUTING-cz.md
 !/COPYING
 !/Manual.md
+!/Manual-cz.md
 !/README.md
+!/README-cz.md
 !/common
 !/etc
 !/srcpkgs
@@ -23,3 +26,10 @@ etc/conf.*
 etc/virtual
 etc/xbps.d/custom
 etc/repo-keys
+
+# Don't exclude website files
+!/src
+!/docs
+!/web-create
+!/web-deploy
+!/lib.sh
