@@ -1,0 +1,78 @@
+name: "Push inputs to deploy.yml"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-lists:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.TOKEN }}
+
+      - name: REPO
+        env:
+          OPTION: ${{ job.name }}
+        run: |
+          inputs=$(jq '.inputIds')
+          echo "$inputs"
+          output=""
+          for input in $(echo $inputs | jq '.[] | .inputTag')
+          echo "$input"
+          do
+             output+="- $input\n          "
+          done
+          sed "s/\$OPTION/$output/g" $GITHUB_WORKSPACE/.github/workflows/deployment-template.yml > $GITHUB_WORKSPACE/.github/workflows/deployment.yml
+
+      - name: BRANCH
+        if: always()
+        env:
+          OPTION: ${{ job.name }}
+        run: |
+          inputs=$(cat  | jq '.inputIds')
+          echo "$inputs"
+          output=""
+          for input in $(echo $inputs | jq '.[] | .inputTag')
+          echo "$input"
+          do
+             output+="- $input\n          "
+          done
+          sed "s/\$OPTION/$output/g" $GITHUB_WORKSPACE/.github/workflows/deployment-template.yml > $GITHUB_WORKSPACE/.github/workflows/deployment.yml
+
+
+      - name: UPSTREAM_REPO
+        if: always()
+        env:
+          OPTION: ${{ job.name }}
+        run: |
+          inputs=$(echo "am amcheck vur" | jq '.inputIds')
+          echo "$inputs"
+          output=""
+          for input in $(echo $inputs | jq '.[] | .inputTag')
+          echo "$input"
+          do
+             output+="- $input\n          "
+          done
+          sed "s/\$OPTION/$output/g" $GITHUB_WORKSPACE/.github/workflows/deployment-template.yml > $GITHUB_WORKSPACE/.github/workflows/deployment.yml
+
+      - name: UPSTREAM_BRANCH
+        if: always()
+        env:
+          OPTION: ${{ job.name }}
+        run: |
+          inputs=$( | (jq '.inputIds'))
+          echo "$inputs"
+          output=""
+          for input in $(echo $inputs | jq '.[] | .inputTag')
+          echo "$input"
+          do
+             output+="- $input\n          "
+          done
+          sed "s/\$OPTION/$output/g" $GITHUB_WORKSPACE/.github/workflows/deployment-template.yml > $GITHUB_WORKSPACE/.github/workflows/deployment.yml
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: autocommit
