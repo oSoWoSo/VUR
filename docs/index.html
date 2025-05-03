@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>VUR</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+<script>
+  function toggleTheme(){
+    const html=document.documentElement;
+    const current=html.getAttribute("data-theme")||"dark";
+    const next=current==="dark"?"light":"dark";
+    html.setAttribute("data-theme",next);
+    localStorage.setItem("theme",next)
+  }
+  (function(){
+    const saved=localStorage.getItem("theme")||"dark";
+    document.documentElement.setAttribute("data-theme",saved)
+  })();
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toc = document.getElementById("TOC");
+    if (!toc) return;
+
+    // Add toc-title with toggle button
+    const titleEl = document.createElement("div");
+    titleEl.id = "toc-title";
+    titleEl.innerHTML = '<span>Contents</span><span id="toc-toggle-icon">◀</span>';
+    toc.insertBefore(titleEl, toc.firstChild);
+
+    // Wrap TOC + the rest of the content in .page-wrapper
+    const body = document.body;
+    const wrapper = document.createElement("div");
+    wrapper.className = "page-wrapper";
+
+    // Find all elements after <nav> (main nav menu)
+    const topNav = document.querySelector("body > nav");
+    const siblings = [];
+    let el = topNav ? topNav.nextElementSibling : body.firstElementChild;
+    while (el) {
+      siblings.push(el);
+      el = el.nextElementSibling;
+    }
+
+    siblings.forEach((s) => wrapper.appendChild(s));
+    body.appendChild(wrapper);
+
+    // Wrap main content (everything except TOC) in .main-content
+    const mainContent = document.createElement("div");
+    mainContent.className = "main-content";
+    Array.from(wrapper.children).forEach((child) => {
+      if (child.id !== "TOC") mainContent.appendChild(child);
+    });
+    wrapper.appendChild(mainContent);
+
+    // Collapsible toggle
+    const icon = document.getElementById("toc-toggle-icon");
+    const saved = localStorage.getItem("toc-collapsed");
+    if (saved === "true") {
+      toc.classList.add("collapsed");
+      icon.textContent = "▶";
+    }
+
+    titleEl.addEventListener("click", function () {
+      toc.classList.toggle("collapsed");
+      const isCollapsed = toc.classList.contains("collapsed");
+      icon.textContent = isCollapsed ? "▶" : "◀";
+      localStorage.setItem("toc-collapsed", isCollapsed);
+    });
+  });
+</script>
+<nav><ul>
+  <li><a href="https://osowoso.org">oSoWoSo</a></li>
+  <li>⏮️</a></li>
+  <li><a href="index.html" class="active">Home</a></li>
+  <li><a class="no-release" href="https://github.com/oSoWoSo/VUR/releases/latest">⏬ release</a></li>
+  <li><a href="https://github.com/oSoWoSo/VUR/archive/refs/heads/main.zip">📦repo zip</a></li>
+  <li><a href="https://github.com/oSoWoSo/VUR">🔗git</a></li>
+  <li>⏭️</a></li>
+  <li><a href="CONTRIBUTING-cz.html">CONTRIBUTING-cz</a></li>
+  <li><a href="CONTRIBUTING.html">CONTRIBUTING</a></li>
+  <li><a href="Manual-cz.html">Manual-cz</a></li>
+  <li><a href="Manual.html">Manual</a></li>
+  <li><a href="README-cz.html">README-cz</a></li>
+</ul></nav>
+<header id="title-block-header">
+<h1 class="title">VUR</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#the-xbps-source-packages-collection"
+id="toc-the-xbps-source-packages-collection">The XBPS source packages
+collection</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of
+Contents</a></li>
+<li><a href="#requirements" id="toc-requirements">Requirements</a></li>
+<li><a href="#quick-start" id="toc-quick-start">Quick start</a></li>
+<li><a href="#chroot-methods" id="toc-chroot-methods">chroot
+methods</a></li>
+<li><a href="#install-the-bootstrap-packages"
+id="toc-install-the-bootstrap-packages">Install the bootstrap
+packages</a></li>
+<li><a href="#configuration"
+id="toc-configuration">Configuration</a></li>
+<li><a href="#directory-hierarchy"
+id="toc-directory-hierarchy">Directory hierarchy</a></li>
+<li><a href="#building-packages" id="toc-building-packages">Building
+packages</a></li>
+<li><a href="#package-build-options"
+id="toc-package-build-options">Package build options</a></li>
+<li><a href="#sharing-and-signing-your-local-repositories"
+id="toc-sharing-and-signing-your-local-repositories">Sharing and signing
+your local repositories</a></li>
+<li><a href="#rebuilding-and-overwriting-existing-local-packages"
+id="toc-rebuilding-and-overwriting-existing-local-packages">Rebuilding
+and overwriting existing local packages</a></li>
+<li><a href="#enabling-distcc-for-distributed-compilation"
+id="toc-enabling-distcc-for-distributed-compilation">Enabling distcc for
+distributed compilation</a></li>
+<li><a href="#distfiles-mirrors" id="toc-distfiles-mirrors">Distfiles
+mirror(s)</a></li>
+<li><a href="#cross-compiling-packages-for-a-target-architecture"
+id="toc-cross-compiling-packages-for-a-target-architecture">Cross
+compiling packages for a target architecture</a></li>
+<li><a href="#using-xbps-src-in-a-foreign-linux-distribution"
+id="toc-using-xbps-src-in-a-foreign-linux-distribution">Using xbps-src
+in a foreign Linux distribution</a></li>
+<li><a href="#remaking-the-masterdir"
+id="toc-remaking-the-masterdir">Remaking the masterdir</a></li>
+<li><a href="#keeping-your-masterdir-uptodate"
+id="toc-keeping-your-masterdir-uptodate">Keeping your masterdir
+uptodate</a></li>
+<li><a href="#building-32bit-packages-on-x86_64"
+id="toc-building-32bit-packages-on-x86_64">Building 32bit packages on
+x86_64</a></li>
+<li><a href="#building-packages-natively-for-the-musl-c-library"
+id="toc-building-packages-natively-for-the-musl-c-library">Building
+packages natively for the musl C library</a></li>
+<li><a href="#building-void-base-system-from-scratch"
+id="toc-building-void-base-system-from-scratch">Building void
+base-system from scratch</a></li>
+</ul></li>
+</ul>
+</nav>
+<h2 id="the-xbps-source-packages-collection">The XBPS source packages
+collection</h2>
+<p>This repository contains the XBPS source packages collection to build
+binary packages for the Void Linux distribution.</p>
+<p>The included <code>xbps-src</code> script will fetch and compile the
+sources, and install its files into a <code>fake destdir</code> to
+generate XBPS binary packages that can be installed or queried through
+the <code>xbps-install(1)</code> and <code>xbps-query(1)</code>
+utilities, respectively.</p>
+<p>See <a href="./CONTRIBUTING.md">Contributing</a> for a general
+overview of how to contribute and the <a href="./Manual.md">Manual</a>
+for details of how to create source packages.</p>
+<h3 id="table-of-contents">Table of Contents</h3>
+<ul>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#quick-start">Quick start</a></li>
+<li><a href="#chroot-methods">chroot methods</a></li>
+<li><a href="#install-bootstrap">Install the bootstrap packages</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#directory-hierarchy">Directory hierarchy</a></li>
+<li><a href="#building-packages">Building packages</a></li>
+<li><a href="#build-options">Package build options</a></li>
+<li><a href="#sharing-and-signing">Sharing and signing your local
+repositories</a></li>
+<li><a href="#rebuilding">Rebuilding and overwriting existing local
+packages</a></li>
+<li><a href="#distcc">Enabling distcc for distributed
+compilation</a></li>
+<li><a href="#distfiles-mirrors">Distfiles mirrors</a></li>
+<li><a href="#cross-compiling">Cross compiling packages for a target
+architecture</a></li>
+<li><a href="#foreign">Using xbps-src in a foreign Linux
+distribution</a></li>
+<li><a href="#remaking-masterdir">Remaking the masterdir</a></li>
+<li><a href="#updating-masterdir">Keeping your masterdir
+uptodate</a></li>
+<li><a href="#building-32bit">Building 32bit packages on x86_64</a></li>
+<li><a href="#building-for-musl">Building packages natively for the musl
+C library</a></li>
+<li><a href="#building-base-system">Building void base-system from
+scratch</a></li>
+</ul>
+<h3 id="requirements">Requirements</h3>
+<ul>
+<li>GNU bash</li>
+<li>xbps &gt;= 0.56</li>
+<li>git(1) - unless configured to not, see etc/defaults.conf</li>
+<li>common POSIX utilities included by default in almost all UNIX
+systems</li>
+<li>curl(1) - required by <code>xbps-src update-check</code></li>
+</ul>
+<p>For bootstrapping from source additionally:</p>
+<ul>
+<li>flock(1) - util-linux</li>
+<li>bsdtar or GNU tar (in that order of preference)</li>
+<li>install(1) - GNU coreutils</li>
+<li>objcopy(1), objdump(1), strip(1): binutils</li>
+</ul>
+<p><code>xbps-src</code> requires <a href="#chroot-methods">a utility to
+chroot</a> and bind mount existing directories into a
+<code>masterdir</code> that is used as its main <code>chroot</code>
+directory. <code>xbps-src</code> supports multiple utilities to
+accomplish this task.</p>
+<blockquote>
+<p>NOTE: <code>xbps-src</code> does not allow building as root anymore.
+Use one of the chroot methods.</p>
+</blockquote>
+<p><a name="quick-start"></a></p>
+<h3 id="quick-start">Quick start</h3>
+<p>Clone the <code>void-packages</code> git repository:</p>
+<pre><code>$ git clone https://github.com/void-linux/void-packages.git
+$ cd void-packages</code></pre>
+<p>Bootstrapping from binary packages will be done automatically when
+first building a package, but it can be done manually with:</p>
+<pre><code>$ ./xbps-src binary-bootstrap</code></pre>
+<p>Build a package by specifying the <code>pkg</code> target and the
+package name:</p>
+<pre><code>$ ./xbps-src pkg &lt;package_name&gt;</code></pre>
+<p>Use <code>./xbps-src -h</code> to list all available targets and
+options.</p>
+<p>To build packages marked as 'restricted', modify
+<code>etc/conf</code>:</p>
+<pre><code>$ echo XBPS_ALLOW_RESTRICTED=yes &gt;&gt; etc/conf</code></pre>
+<p>Once built, the package will be available in
+<code>hostdir/binpkgs</code> or an appropriate subdirectory (e.g.
+<code>hostdir/binpkgs/nonfree</code>). To install the package:</p>
+<pre><code># xbps-install --repository hostdir/binpkgs &lt;package_name&gt;</code></pre>
+<p>Alternatively, packages can be installed with the <code>xi</code>
+utility, from the <code>xtools</code> package. <code>xi</code> takes the
+repository of the current working directory into account.</p>
+<pre><code>$ xi &lt;package_name&gt;</code></pre>
+<p><a name="chroot-methods"></a></p>
+<h3 id="chroot-methods">chroot methods</h3>
+<h4 id="xbps-uunshare1-default">xbps-uunshare(1) (default)</h4>
+<p>XBPS utility that uses <code>user_namespaces(7)</code> (part of xbps,
+default without <code>-t</code> flag).</p>
+<p>This utility requires these Linux kernel options:</p>
+<ul>
+<li>CONFIG_NAMESPACES</li>
+<li>CONFIG_IPC_NS</li>
+<li>CONFIG_UTS_NS</li>
+<li>CONFIG_USER_NS</li>
+</ul>
+<p>This is the default method, and if your system does not support any
+of the required kernel options it will fail with
+<code>EINVAL (Invalid argument)</code>.</p>
+<h4 id="xbps-uchroot1">xbps-uchroot(1)</h4>
+<p>XBPS utility that uses <code>namespaces</code> and must be
+<code>setgid</code> (part of xbps).</p>
+<blockquote>
+<p>NOTE: This is the only method that implements functionality of
+<code>xbps-src -t</code>, therefore the flag ignores the choice made in
+configuration files and enables <code>xbps-uchroot</code>.</p>
+</blockquote>
+<p>This utility requires these Linux kernel options:</p>
+<ul>
+<li>CONFIG_NAMESPACES</li>
+<li>CONFIG_IPC_NS</li>
+<li>CONFIG_PID_NS</li>
+<li>CONFIG_UTS_NS</li>
+</ul>
+<p>Your user must be added to a special group to be able to use
+<code>xbps-uchroot(1)</code> and the executable must be
+<code>setgid</code>:</p>
+<pre><code># chown root:&lt;group&gt; xbps-uchroot
+# chmod 4750 xbps-uchroot
+# usermod -a -G &lt;group&gt; &lt;user&gt;</code></pre>
+<blockquote>
+<p>NOTE: by default in void you shouldn't do this manually, your user
+must be a member of the <code>xbuilder</code> group.</p>
+</blockquote>
+<p>To enable it:</p>
+<pre><code>$ cd void-packages
+$ echo XBPS_CHROOT_CMD=uchroot &gt;&gt; etc/conf</code></pre>
+<p>If for some reason it's erroring out as
+<code>ERROR clone (Operation not permitted)</code>, check that your user
+is a member of the required <code>group</code> and that
+<code>xbps-uchroot(1)</code> utility has the proper permissions and
+owner/group as explained above.</p>
+<h4 id="bwrap1">bwrap(1)</h4>
+<p>bubblewrap, sandboxing tool for unprivileged users that uses user
+namespaces or setuid. See <a
+href="https://github.com/containers/bubblewrap">https://github.com/containers/bubblewrap</a>.</p>
+<h4 id="ethereal">ethereal</h4>
+<p>Destroys host system it runs on. Only useful for one-shot containers,
+i.e docker (used with CI).</p>
+<p><a name="install-bootstrap"></a></p>
+<h3 id="install-the-bootstrap-packages">Install the bootstrap
+packages</h3>
+<p>There is a set of packages that makes up the initial build container,
+called the <code>bootstrap</code>. These packages are installed into the
+<code>masterdir</code> in order to create the container.</p>
+<p>The primary and recommended way to set up this container is using the
+<code>binary-bootstrap</code> command. This will use pre-existing binary
+packages, either from remote <code>xbps</code> repositories or from your
+local repository. This is done automatically when building packages, if
+an initialized masterdir for the host architecture does not exist.</p>
+<p>There is also the <code>bootstrap</code> command, which will build
+all necessary <code>bootstrap</code> packages from scratch. This is
+usually not recommended, since those packages are built using your host
+system's toolchain and are neither fully featured nor reproducible (your
+host system may influence the build) and thus should only be used as a
+stage 0 for bootstrapping new Void systems.</p>
+<p>If you still choose to use <code>bootstrap</code>, use the resulting
+stage 0 container to rebuild all <code>bootstrap</code> packages again,
+then use <code>binary-bootstrap</code> (stage 1) and rebuild the
+<code>bootstrap</code> packages once more (to gain stage 2, and then use
+<code>binary-bootstrap</code> again). Once you've done that, you will
+have a <code>bootstrap</code> set equivalent to using
+<code>binary-bootstrap</code> in the first place.</p>
+<p>Also keep in mind that a full source <code>bootstrap</code> is time
+consuming and will require having an assortment of utilities installed
+in your host system, such as <code>binutils</code>, <code>gcc</code>,
+<code>perl</code>, <code>texinfo</code> and others.</p>
+<h3 id="configuration">Configuration</h3>
+<p>The <code>etc/defaults.conf</code> file contains the possible
+settings that can be overridden through the <code>etc/conf</code>
+configuration file for the <code>xbps-src</code> utility; if that file
+does not exist, will try to read configuration settings from
+<code>$XDG_CONFIG_HOME/xbps-src.conf</code>,
+<code>~/.config/xbps-src.conf</code>, <code>~/.xbps-src.conf</code>.</p>
+<p>If you want to customize default <code>CFLAGS</code>,
+<code>CXXFLAGS</code> and <code>LDFLAGS</code>, don't override those
+defined in <code>etc/defaults.conf</code>, set them on
+<code>etc/conf</code> instead i.e:</p>
+<pre><code>$ echo &#39;XBPS_CFLAGS=&quot;your flags here&quot;&#39; &gt;&gt; etc/conf
+$ echo &#39;XBPS_LDFLAGS=&quot;your flags here&quot;&#39; &gt;&gt; etc/conf</code></pre>
+<p>Native and cross compiler/linker flags are set per architecture in
+<code>common/build-profiles</code> and
+<code>common/cross-profiles</code> respectively. Ideally those settings
+are good enough by default, and there's no need to set your own unless
+you know what you are doing.</p>
+<h4 id="virtual-packages">Virtual packages</h4>
+<p>The <code>etc/defaults.virtual</code> file contains the default
+replacements for virtual packages, used as dependencies in the source
+packages tree.</p>
+<p>If you want to customize those replacements, copy
+<code>etc/defaults.virtual</code> to <code>etc/virtual</code> and edit
+it accordingly to your needs.</p>
+<p><a name="directory-hierarchy"></a></p>
+<h3 id="directory-hierarchy">Directory hierarchy</h3>
+<p>The following directory hierarchy is used with a default
+configuration file:</p>
+<pre><code>     /void-packages
+        |- common
+        |- etc
+        |- srcpkgs
+        |  |- xbps
+        |     |- template
+        |
+        |- hostdir
+        |  |- binpkgs ...
+        |  |- ccache ...
+        |  |- distcc-&lt;arch&gt; ...
+        |  |- repocache ...
+        |  |- sources ...
+        |
+        |- masterdir-&lt;arch&gt;
+        |  |- builddir -&gt; ...
+        |  |- destdir -&gt; ...
+        |  |- host -&gt; bind mounted from &lt;hostdir&gt;
+        |  |- void-packages -&gt; bind mounted from &lt;void-packages&gt;</code></pre>
+<p>The description of these directories is as follows:</p>
+<ul>
+<li><code>masterdir-&lt;arch&gt;</code>: master directory to be used as
+rootfs to build/install packages.</li>
+<li><code>builddir</code>: to unpack package source tarballs and where
+packages are built.</li>
+<li><code>destdir</code>: to install packages, aka <strong>fake
+destdir</strong>.</li>
+<li><code>hostdir/ccache</code>: to store ccache data if the
+<code>XBPS_CCACHE</code> option is enabled.</li>
+<li><code>hostdir/distcc-&lt;arch&gt;</code>: to store distcc data if
+the <code>XBPS_DISTCC</code> option is enabled.</li>
+<li><code>hostdir/repocache</code>: to store binary packages from remote
+repositories.</li>
+<li><code>hostdir/sources</code>: to store package sources.</li>
+<li><code>hostdir/binpkgs</code>: local repository to store generated
+binary packages.</li>
+</ul>
+<p><a name="building-packages"></a></p>
+<h3 id="building-packages">Building packages</h3>
+<p>The simplest form of building package is accomplished by running the
+<code>pkg</code> target in <code>xbps-src</code>:</p>
+<pre><code>$ cd void-packages
+$ ./xbps-src pkg &lt;pkgname&gt;</code></pre>
+<p>When the package and its required dependencies are built, the binary
+packages will be created and registered in the default local repository
+at <code>hostdir/binpkgs</code>; the path to this local repository can
+be added to any xbps configuration file (see xbps.d(5)) or by explicitly
+appending them via cmdline, i.e:</p>
+<pre><code>$ xbps-install --repository=hostdir/binpkgs ...
+$ xbps-query --repository=hostdir/binpkgs ...</code></pre>
+<p>By default <strong>xbps-src</strong> will try to resolve package
+dependencies in this order:</p>
+<ul>
+<li>If a dependency exists in the local repository, use it
+(<code>hostdir/binpkgs</code>).</li>
+<li>If a dependency exists in a remote repository, use it.</li>
+<li>If a dependency exists in a source package, use it.</li>
+</ul>
+<p>It is possible to avoid using remote repositories completely by using
+the <code>-N</code> flag.</p>
+<blockquote>
+<p>The default local repository may contain multiple
+<em>sub-repositories</em>: <code>debug</code>, <code>multilib</code>,
+etc.</p>
+</blockquote>
+<p><a name="build-options"></a></p>
+<h3 id="package-build-options">Package build options</h3>
+<p>The supported build options for a source package can be shown with
+<code>xbps-src show-options</code>:</p>
+<pre><code>$ ./xbps-src show-options foo</code></pre>
+<p>Build options can be enabled with the <code>-o</code> flag of
+<code>xbps-src</code>:</p>
+<pre><code>$ ./xbps-src -o option,option1 pkg foo</code></pre>
+<p>Build options can be disabled by prefixing them with
+<code>~</code>:</p>
+<pre><code>$ ./xbps-src -o ~option,~option1 pkg foo</code></pre>
+<p>Both ways can be used together to enable and/or disable multiple
+options at the same time with <code>xbps-src</code>:</p>
+<pre><code>$ ./xbps-src -o option,~option1,~option2 pkg foo</code></pre>
+<p>The build options can also be shown for binary packages via
+<code>xbps-query(1)</code>:</p>
+<pre><code>$ xbps-query -R --property=build-options foo</code></pre>
+<blockquote>
+<p>NOTE: if you build a package with a custom option, and that package
+is available in an official void repository, an update will ignore those
+options. Put that package on <code>hold</code> mode via
+<code>xbps-pkgdb(1)</code>, i.e <code>xbps-pkgdb -m hold foo</code> to
+ignore updates with <code>xbps-install -u</code>. Once the package is on
+<code>hold</code>, the only way to update it is by declaring it
+explicitly: <code>xbps-install -u foo</code>.</p>
+</blockquote>
+<p>Permanent global package build options can be set via
+<code>XBPS_PKG_OPTIONS</code> variable in the <code>etc/conf</code>
+configuration file. Per package build options can be set via
+<code>XBPS_PKG_OPTIONS_&lt;pkgname&gt;</code>.</p>
+<blockquote>
+<p>NOTE: if <code>pkgname</code> contains <code>dashes</code>, those
+should be replaced by <code>underscores</code> i.e
+<code>XBPS_PKG_OPTIONS_xorg_server=opt</code>.</p>
+</blockquote>
+<p>The list of supported package build options and its description is
+defined in the <code>common/options.description</code> file or in the
+<code>template</code> file.</p>
+<p><a name="sharing-and-signing"></a></p>
+<h3 id="sharing-and-signing-your-local-repositories">Sharing and signing
+your local repositories</h3>
+<p>To share a local repository remotely it's mandatory to sign it and
+the binary packages stored on it. This is accomplished with the
+<code>xbps-rindex(1)</code> utility.</p>
+<p>First a RSA key must be created with <code>openssl(1)</code> or
+<code>ssh-keygen(1)</code>:</p>
+<pre><code>$ openssl genrsa -des3 -out privkey.pem 4096</code></pre>
+<p>or</p>
+<pre><code>$ ssh-keygen -t rsa -b 4096 -m PEM -f privkey.pem</code></pre>
+<blockquote>
+<p>Only RSA keys in PEM format are currently accepted by xbps.</p>
+</blockquote>
+<p>Once the RSA private key is ready you can use it to initialize the
+repository metadata:</p>
+<pre><code>$ xbps-rindex --sign --signedby &quot;I&#39;m Groot&quot; --privkey privkey.pem $PWD/hostdir/binpkgs</code></pre>
+<p>And then make a signature per package:</p>
+<pre><code>$ xbps-rindex --sign-pkg --privkey privkey.pem $PWD/hostdir/binpkgs/*.xbps</code></pre>
+<blockquote>
+<p>If --privkey is unset, it defaults to <code>~/.ssh/id_rsa</code>.</p>
+</blockquote>
+<p>If the RSA key was protected with a passphrase you'll have to type
+it, or alternatively set it via the <code>XBPS_PASSPHRASE</code>
+environment variable.</p>
+<p>Once the binary packages have been signed, check if the repository
+contains the appropriate <code>hex fingerprint</code>:</p>
+<pre><code>$ xbps-query --repository=hostdir/binpkgs -vL
+...</code></pre>
+<p>Each time a binary package is created, a package signature must be
+created with <code>--sign-pkg</code>.</p>
+<blockquote>
+<p>It is not possible to sign a repository with multiple RSA keys.</p>
+</blockquote>
+<p>If packages in <code>hostdir/binpkgs</code> are signed, the key in
+<code>.plist</code> format (as imported by xbps) can be placed in
+<code>etc/repo-keys/</code> to prevent xbps-src from prompting to import
+that key.</p>
+<p><a name="rebuilding"></a></p>
+<h3 id="rebuilding-and-overwriting-existing-local-packages">Rebuilding
+and overwriting existing local packages</h3>
+<p>Packages are overwritten on every build to make getting package with
+changed build options easy. To make xbps-src skip build and preserve
+first package build with given version and revision, same as in official
+void repository, set <code>XBPS_PRESERVE_PKGS=yes</code> in
+<code>etc/conf</code> file.</p>
+<p>Reinstalling a package in your target <code>rootdir</code> can be
+easily done too:</p>
+<pre><code>$ xbps-install --repository=/path/to/local/repo -yf xbps-0.25_1</code></pre>
+<p>Using <code>-f</code> flag twice will overwrite configuration
+files.</p>
+<blockquote>
+<p>Please note that the <code>package expression</code> must be properly
+defined to explicitly pick up the package from the desired
+repository.</p>
+</blockquote>
+<p><a name="distcc"></a></p>
+<h3 id="enabling-distcc-for-distributed-compilation">Enabling distcc for
+distributed compilation</h3>
+<p>Setup the workers (machines that will compile the code):</p>
+<pre><code># xbps-install -Sy distcc</code></pre>
+<p>Update distcc compiler whitelist</p>
+<pre><code># update-distcc-symlinks</code></pre>
+<p>Modify the configuration to allow your local network machines to use
+distcc (e.g. <code>192.168.2.0/24</code>):</p>
+<pre><code># echo &quot;192.168.2.0/24&quot; &gt;&gt; /etc/distcc/clients.allow</code></pre>
+<p>Enable and start the <code>distccd</code> service:</p>
+<pre><code># ln -s /etc/sv/distccd /var/service</code></pre>
+<p>Install distcc on the host (machine that executes xbps-src) as well.
+Unless you want to use the host as worker from other machines, there is
+no need to modify the configuration.</p>
+<p>On the host you can now enable distcc in the
+<code>void-packages/etc/conf</code> file:</p>
+<pre><code>XBPS_DISTCC=yes
+XBPS_DISTCC_HOSTS=&quot;localhost/2 --localslots_cpp=24 192.168.2.101/9 192.168.2.102/2&quot;
+XBPS_MAKEJOBS=16</code></pre>
+<p>The example values assume a localhost CPU with 4 cores of which at
+most 2 are used for compiler jobs. The number of slots for preprocessor
+jobs is set to 24 in order to have enough preprocessed data for other
+CPUs to compile. The worker 192.168.2.101 has a CPU with 8 cores and the
+/9 for the number of jobs is a saturating choice. The worker
+192.168.2.102 is set to run at most 2 compile jobs to keep its load low,
+even if its CPU has 4 cores. The XBPS_MAKEJOBS setting is increased to
+16 to account for the possible parallelism (2 + 9 + 2 + some slack).</p>
+<p><a name="distfiles-mirrors"></a></p>
+<h3 id="distfiles-mirrors">Distfiles mirror(s)</h3>
+<p>In etc/conf you may optionally define a mirror or a list of mirrors
+to search for distfiles.</p>
+<pre><code>$ echo &#39;XBPS_DISTFILES_MIRROR=&quot;ftp://192.168.100.5/gentoo/distfiles&quot;&#39; &gt;&gt; etc/conf</code></pre>
+<p>If more than one mirror is to be searched, you can either specify
+multiple URLs separated with blanks, or add to the variable like
+this</p>
+<pre><code>$ echo &#39;XBPS_DISTFILES_MIRROR+=&quot; https://sources.voidlinux.org/&quot;&#39; &gt;&gt; etc/conf</code></pre>
+<p>Make sure to put the blank after the first double quote in this
+case.</p>
+<p>The mirrors are searched in order for the distfiles to build a
+package until the checksum of the downloaded file matches the one
+specified in the template.</p>
+<p>Ultimately, if no mirror carries the distfile, or in case all
+downloads failed the checksum verification, the original download
+location is used.</p>
+<p>If you use <code>uchroot</code> for your XBPS_CHROOT_CMD, you may
+also specify a local path using the <code>file://</code> prefix or
+simply an absolute path on your build host (e.g. /mnt/distfiles). Mirror
+locations specified this way are bind mounted inside the chroot
+environment under $XBPS_MASTERDIR and searched for distfiles just the
+same as remote locations.</p>
+<p><a name="cross-compiling"></a></p>
+<h3 id="cross-compiling-packages-for-a-target-architecture">Cross
+compiling packages for a target architecture</h3>
+<p>Currently <code>xbps-src</code> can cross build packages for some
+target architectures with a cross compiler. The supported target is
+shown with <code>./xbps-src -h</code>.</p>
+<p>If a source package has been adapted to be <strong>cross
+buildable</strong> <code>xbps-src</code> will automatically build the
+binary package(s) with a simple command:</p>
+<pre><code>$ ./xbps-src -a &lt;target&gt; pkg &lt;pkgname&gt;</code></pre>
+<p>If the build for whatever reason fails, might be a new build issue or
+simply because it hasn't been adapted to be <strong>cross
+compiled</strong>.</p>
+<p><a name="foreign"></a></p>
+<h3 id="using-xbps-src-in-a-foreign-linux-distribution">Using xbps-src
+in a foreign Linux distribution</h3>
+<p>xbps-src can be used in any recent Linux distribution matching the
+CPU architecture.</p>
+<p>To use xbps-src in your Linux distribution use the following
+instructions. Let's start downloading the xbps static binaries:</p>
+<pre><code>$ wget http://repo-default.voidlinux.org/static/xbps-static-latest.&lt;arch&gt;-musl.tar.xz
+$ mkdir ~/XBPS
+$ tar xvf xbps-static-latest.&lt;arch&gt;-musl.tar.xz -C ~/XBPS
+$ export PATH=~/XBPS/usr/bin:$PATH</code></pre>
+<p>If <code>xbps-uunshare</code> does not work because of lack of
+<code>user_namespaces(7)</code> support, try other <a
+href="#chroot-methods">chroot methods</a>.</p>
+<p>Clone the <code>void-packages</code> git repository:</p>
+<pre><code>$ git clone https://github.com/void-linux/void-packages.git</code></pre>
+<p>and <code>xbps-src</code> should be fully functional; optionally,
+start the <code>bootstrap</code> process, i.e:</p>
+<pre><code>$ ./xbps-src binary-bootstrap</code></pre>
+<p>The default masterdir is created in the current working directory,
+i.e. <code>void-packages/masterdir-&lt;arch&gt;</code>, where
+<code>&lt;arch&gt;</code> for the default masterdir is is the native
+xbps architecture.</p>
+<p><a name="remaking-masterdir"></a></p>
+<h3 id="remaking-the-masterdir">Remaking the masterdir</h3>
+<p>If for some reason you must update xbps-src and the
+<code>bootstrap-update</code> target is not enough, it's possible to
+recreate a masterdir with two simple commands (please note that
+<code>zap</code> keeps your <code>ccache/distcc/host</code> directories
+intact):</p>
+<pre><code>$ ./xbps-src zap
+$ ./xbps-src binary-bootstrap</code></pre>
+<p><a name="updating-masterdir"></a></p>
+<h3 id="keeping-your-masterdir-uptodate">Keeping your masterdir
+uptodate</h3>
+<p>Sometimes the bootstrap packages must be updated to the latest
+available version in repositories, this is accomplished with the
+<code>bootstrap-update</code> target:</p>
+<pre><code>$ ./xbps-src bootstrap-update</code></pre>
+<p><a name="building-32bit"></a></p>
+<h3 id="building-32bit-packages-on-x86_64">Building 32bit packages on
+x86_64</h3>
+<p>Two ways are available to build 32bit packages on x86_64:</p>
+<ul>
+<li>native mode with a 32bit masterdir (recommended, used in official
+repository)</li>
+<li>cross compilation mode to i686 <a
+href="#cross-compiling">target</a></li>
+</ul>
+<p>The canonical mode (native) needs a new x86 <code>masterdir</code>,
+which is created when building a package for i686:</p>
+<pre><code>$ ./xbps-src -A i686 ...</code></pre>
+<p><a name="building-for-musl"></a></p>
+<h3 id="building-packages-natively-for-the-musl-c-library">Building
+packages natively for the musl C library</h3>
+<p>The canonical way of building packages for same architecture but
+different C library is through a dedicated masterdir by using the host
+architecture flag <code>-A</code>. To build for x86_64-musl on glibc
+x86_64 system, use <code>-A x86_64-musl</code> in your
+<code>xbps-src</code> invocation. This will create and bootstrap a new
+masterdir called <code>masterdir-x86_64-musl</code> that will be used
+when <code>-A x86_64-musl</code> is specified:</p>
+<pre><code>$ ./xbps-src -A x86_64-musl pkg ...</code></pre>
+<p><a name="building-base-system"></a></p>
+<h3 id="building-void-base-system-from-scratch">Building void
+base-system from scratch</h3>
+<p>To rebuild all packages in <code>base-system</code> for your native
+architecture:</p>
+<pre><code>$ ./xbps-src -N pkg base-system</code></pre>
+<p>It's also possible to cross compile everything from scratch:</p>
+<pre><code>$ ./xbps-src -a &lt;target&gt; -N pkg base-system</code></pre>
+<p>Once the build has finished, you can specify the path to the local
+repository to <code>void-mklive</code>, i.e:</p>
+<pre><code># cd void-mklive
+# make
+# ./mklive.sh ... -r /path/to/hostdir/binpkgs</code></pre>
+<script>
+(function () {
+  function hexToRgb(hex) {
+    hex = hex.trim().replace(/^#/, '');
+    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+    const n = parseInt(hex, 16);
+    return [n >> 16 & 255, n >> 8 & 255, n & 255];
+  }
+
+  function clamp(v, min, max) {
+    return Math.min(Math.max(v, min), max);
+  }
+
+  function Color(r, g, b) {
+    this.r = r / 255;
+    this.g = g / 255;
+    this.b = b / 255;
+  }
+
+  Color.prototype.applyFilter = function (funcs) {
+    let [r, g, b] = [this.r * 255, this.g * 255, this.b * 255];
+
+    function multiply(matrix) {
+      const nr = clamp(r * matrix[0] + g * matrix[1] + b * matrix[2], 0, 255);
+      const ng = clamp(r * matrix[3] + g * matrix[4] + b * matrix[5], 0, 255);
+      const nb = clamp(r * matrix[6] + g * matrix[7] + b * matrix[8], 0, 255);
+      r = nr; g = ng; b = nb;
+    }
+
+    function hueRotate(angle) {
+      const a = angle / 180 * Math.PI;
+      const sin = Math.sin(a), cos = Math.cos(a);
+      multiply([
+        0.213 + cos*0.787 - sin*0.213, 0.715 - cos*0.715 - sin*0.715, 0.072 - cos*0.072 + sin*0.928,
+        0.213 - cos*0.213 + sin*0.143, 0.715 + cos*0.285 + sin*0.140, 0.072 - cos*0.072 - sin*0.283,
+        0.213 - cos*0.213 - sin*0.787, 0.715 - cos*0.715 + sin*0.715, 0.072 + cos*0.928 + sin*0.072,
+      ]);
+    }
+
+    function sepia(v) {
+      multiply([
+        0.393 + 0.607*(1-v), 0.769 - 0.769*(1-v), 0.189 - 0.189*(1-v),
+        0.349 - 0.349*(1-v), 0.686 + 0.314*(1-v), 0.168 - 0.168*(1-v),
+        0.272 - 0.272*(1-v), 0.534 - 0.534*(1-v), 0.131 + 0.869*(1-v),
+      ]);
+    }
+
+    function saturate(v) {
+      multiply([
+        0.213 + 0.787*v, 0.715 - 0.715*v, 0.072 - 0.072*v,
+        0.213 - 0.213*v, 0.715 + 0.285*v, 0.072 - 0.072*v,
+        0.213 - 0.213*v, 0.715 - 0.715*v, 0.072 + 0.928*v,
+      ]);
+    }
+
+    for (const [fn, val] of funcs) {
+      if (fn === 'invert')    { r = clamp((1-r/255)*255*val + r/255*255*(1-val),0,255); g = clamp((1-g/255)*255*val + g/255*255*(1-val),0,255); b = clamp((1-b/255)*255*val + b/255*255*(1-val),0,255); }
+      if (fn === 'sepia')     sepia(val);
+      if (fn === 'saturate')  saturate(val);
+      if (fn === 'hueRotate') hueRotate(val);
+      if (fn === 'brightness'){ r = clamp(r*val,0,255); g = clamp(g*val,0,255); b = clamp(b*val,0,255); }
+    }
+
+    return new Color(r, g, b);
+  };
+
+  function loss(result, target) {
+    return (
+      Math.pow(result.r*255 - target.r*255, 2) +
+      Math.pow(result.g*255 - target.g*255, 2) +
+      Math.pow(result.b*255 - target.b*255, 2)
+    );
+  }
+
+  function solve(target) {
+    function css(v) {
+      return [
+        ['invert',    clamp(v[0], 0, 1)],
+        ['sepia',     clamp(v[1], 0, 1)],
+        ['saturate',  clamp(v[2], 0, 20)],
+        ['hueRotate', clamp(v[3], 0, 360)],
+        ['brightness',clamp(v[4], 0, 10)],
+        ['brightness',clamp(v[5], 0, 10)],
+      ];
+    }
+
+    function score(v) {
+      return loss(new Color(0,0,0).applyFilter(css(v)), target);
+    }
+
+    let best = null, bestScore = Infinity;
+    for (let i = 0; i < 30; i++) {
+      let v = [Math.random(), Math.random(), Math.random()*10, Math.random()*360, Math.random()*2, Math.random()*2];
+      for (let step = 1; step > 0.0001; step *= 0.9) {
+        for (let j = 0; j < v.length; j++) {
+          const orig = v[j];
+          v[j] += step * (Math.random() > 0.5 ? 1 : -1);
+          const s = score(v);
+          if (s < bestScore) { bestScore = s; best = [...v]; }
+          else v[j] = orig;
+        }
+      }
+    }
+
+    const f = css(best);
+    return [
+      `invert(${(clamp(f[0][1],0,1)*100).toFixed(0)}%)`,
+      `sepia(${(clamp(f[1][1],0,1)*100).toFixed(0)}%)`,
+      `saturate(${(clamp(f[2][1],0,20)*100).toFixed(0)}%)`,
+      `hue-rotate(${clamp(f[3][1],0,360).toFixed(0)}deg)`,
+      `brightness(${(clamp(f[4][1],0,10)*100).toFixed(0)}%)`,
+      `brightness(${(clamp(f[5][1],0,10)*100).toFixed(0)}%)`,
+    ].join(' ');
+  }
+
+  // Cache solved filters per color so theme switching is instant
+  const cache = {};
+
+  function applyIconColor() {
+    const raw = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-icon').trim();
+    if (!raw) return false;
+
+    let rgb;
+    if (raw.startsWith('#')) {
+      rgb = hexToRgb(raw);
+    } else if (raw.startsWith('rgb')) {
+      rgb = raw.match(/\d+/g).map(Number).slice(0, 3);
+    } else {
+      return false;
+    }
+
+    const key = rgb.join(',');
+    if (!cache[key]) {
+      cache[key] = solve(new Color(...rgb));
+    }
+
+    document.documentElement.style.setProperty('--filter-icon', cache[key]);
+    return true;
+  }
+
+  function init() {
+    if (!applyIconColor()) return;
+
+    // Watch for data-theme attribute changes on <html> — re-apply immediately
+    new MutationObserver(function(mutations) {
+      for (const m of mutations) {
+        if (m.attributeName === 'data-theme') {
+          applyIconColor();
+          break;
+        }
+      }
+    }).observe(document.documentElement, { attributes: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+<script data-goatcounter="https://vur.gocounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<script src="https://giscus.app/client.js"
+        data-repo="osowoso/VUR"
+        data-repo-id="R_kgDOGNy3Og"
+        data-category="General"
+        data-category-id="DIC_kwDOGNy3Os4CBWcR"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="cs"
+        crossorigin="anonymous"
+        async></script>
+</body>
+</html>
