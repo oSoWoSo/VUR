@@ -1,0 +1,252 @@
+name: 'Sync branch'
+
+on:
+  #schedule:
+    #- cron:  '0 7 * * 1,4'
+    # scheduled at 07:00 every Monday and Thursday
+
+  workflow_dispatch:  # click the button on Github repo!
+    inputs:
+      branch:
+        description: 'Branch to sync'
+        type: choice
+        default: master
+        required: true
+        options:
+        - Hyprland
+        - LACT
+        - ROCm-SMI-LIB
+        - SweetHome3D
+        - VUR
+        - VUR-backup
+        - actions/checkupstream
+        - ansicolor
+        - auto-cpufreq
+        - awesome-appmenu
+        - azote
+        - btop
+        - btop-rocm
+        - bubbletea
+        - calamares
+        - celluloid
+        - check-anywhere
+        - chezmoi
+        - conky
+        - cs
+        - desktop-file-utils
+        - discover
+        - distrobox
+        - distrohopper
+        - dooble-qt6
+        - easybashgui
+        - easyeffects
+        - ebg
+        - emptty
+        - enlightenment
+        - eww
+        - exfatprogs
+        - feature/autosync
+        - fzf
+        - gama
+        - gcompris
+        - gcompris-qt
+        - gh-action
+        - gh-pages
+        - git-filter-repo
+        - gitea
+        - go
+        - godot
+        - grsync
+        - gum
+        - gxkb
+        - h-cursor
+        - h-hypridle
+        - h-hyprland
+        - h-hyprlang
+        - h-hyprlock
+        - h-hyprpaper
+        - h-protocols
+        - h-sdbus-cpp
+        - h-tomlplusplus
+        - h-xdg-desktop-portal
+        - helix
+        - heroic
+        - hw-probe
+        - hypr+gcc
+        - hypr-test
+        - hyprland
+        - hyprland-0.38
+        - hyprpicker
+        - input-remapper
+        - io.elementary.code
+        - jqless
+        - kando
+        - kando2
+        - kirc
+        - kitty
+        - labwc-menu
+        - lapce
+        - lazycli
+        - lazydocker
+        - lazygit
+        - lazygit-CZ
+        - lcl
+        - leftwm-theme
+        - legendary
+        - libgit2
+        - libvirt
+        - liferea
+        - linux
+        - lite-xl
+        - litexl
+        - lokalize
+        - lsp-plugins
+        - lutris
+        - lynx
+        - mame
+        - mangohud
+        - manpages
+        - master
+        - megasync
+        - minikube
+        - mpg123
+        - mpv
+        - musescore
+        - mypkgs
+        - myxer
+        - n/fastfetch
+        - n/superfile
+        - n/yazi
+        - nerd-fonts
+        - nheko
+        - nushell
+        - nvoid
+        - nvtop
+        - nwg
+        - nwg-bar
+        - nwg-clipman
+        - nwg-displays
+        - nwg-dock
+        - nwg-dock-hyprland
+        - nwg-drawer
+        - nwg-icon-picker
+        - nwg-menu
+        - nwg-panel
+        - nwg-readme-browser
+        - nwg-shell
+        - nwg-shell-config
+        - obmenu-generator
+        - octoxbps
+        - oculante
+        - omegat
+        - opentyrian
+        - paperde
+        - papirus-icon-theme
+        - pasystray
+        - pcmanfm-qt
+        - pillow
+        - pmbootstrap
+        - podget
+        - poedit
+        - protontricks
+        - protonup
+        - psuinfo
+        - python3-dasbus
+        - qemu
+        - qpdfview
+        - qt-virt
+        - quickemu
+        - repo-sync/projekty/default
+        - revert-47-wayshot
+        - rust
+        - sakura
+        - scrcpy
+        - skate
+        - smc
+        - soft-serve
+        - spacefm
+        - ssr
+        - sync
+        - system-monitoring-center
+        - tailscale
+        - tailspin
+        - tcl
+        - tere
+        - terminator
+        - test
+        - testing
+        - thunderbird
+        - tips
+        - tk
+        - topgrade
+        - u/conky
+        - u/mergerfs
+        - u/moar
+        - u/papirus
+        - ulauncher
+        - unifetch
+        - virt-manager
+        - vmaf
+        - vtm
+        - waydroid
+        - wayfire
+        - wayland-utils
+        - wayshot
+        - wget2
+        - wifite2
+        - winetricks
+        - wishlist
+        - xdgmenumaker
+        - yacy
+
+      sync_test_mode: # Adds a boolean option that appears during manual workflow run for easy test mode config
+        description: 'Fork Sync Test Mode'
+        type: boolean
+        default: false
+env:
+  BRANCH: ${{ inputs.branch }}
+
+jobs:
+  sync_latest_from_upstream:
+    runs-on: ubuntu-latest
+    name: "Sync with Void"
+    steps:
+    # REQUIRED step
+    # Step 1: run a standard checkout action, provided by github
+    - name: Checkout target
+      uses: actions/checkout@v4
+      with:
+        # optional: set the branch to checkout,
+        # sync action checks out your 'target_sync_branch' anyway
+        ref: ${{ env.BRANCH }}
+        # REQUIRED if your upstream repo is private (see wiki)
+        persist-credentials: false
+
+    # REQUIRED step
+    # Step 2: run the sync action
+    - name: Sync changes
+      id: sync
+      uses: aormsby/Fork-Sync-With-Upstream-action@v3.4.1
+      with:
+        target_sync_branch: ${{ env.BRANCH }}
+        # REQUIRED 'target_repo_token' exactly like this!
+        target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+        upstream_sync_branch: master
+        upstream_sync_repo: void-linux/void-packages
+        #upstream_repo_access_token: ${{ secrets.UPSTREAM_REPO_SECRET }}
+        target_branch_push_args: '--force'
+        git_config_pull_rebase: true
+        # Set test_mode true during manual dispatch to run tests instead of the true action!!
+        test_mode: ${{ inputs.sync_test_mode }}
+
+    # Step 3: Display a sample message based on the sync output var 'has_new_commits'
+    - name: New commits found
+      if: steps.sync.outputs.has_new_commits == 'true'
+      run: echo "New commits were found to sync."
+    
+    - name: No new commits
+      if: steps.sync.outputs.has_new_commits == 'false'
+      run: echo "There were no new commits."
+      
+    - name: Show value of 'has_new_commits'
+      run: echo ${{ steps.sync.outputs.has_new_commits }}
