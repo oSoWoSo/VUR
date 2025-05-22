@@ -6,6 +6,7 @@ on:
     # scheduled at 07:00 every Monday and Thursday
 
   workflow_dispatch:  # click the button on Github repo!
+    inputs:
       sync_test_mode: # Adds a boolean option that appears during manual workflow run for easy test mode config
         description: 'Fork Sync Test Mode'
         type: boolean
@@ -57,3 +58,9 @@ jobs:
       
     - name: Show value of 'has_new_commits'
       run: echo ${{ steps.sync.outputs.has_new_commits }}
+
+    - name: Copy templates
+      run: |
+        echo '#TODO:'
+        #cat common/shlibs >> ../void-packages/common/shlibs
+        #cp -r --remove-destination srcpkgs/* ../void-packages/srcpkgs
