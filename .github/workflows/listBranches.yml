@@ -18,5 +18,15 @@ jobs:
 
       - name: List branches
         run: |
-          git branch -r | sed 's/origin\///' | sort > .github/branchList
-          
+          rm -f .github/branchList
+          git branch -r | sed 's/origin\///' | sort | tee -a .github/branchList
+
+      - name: "Push results"
+        run: |
+          git config --global user.name "web-flow"
+          git config --global user.email "noreply@github.com"
+          git status
+          git add --all
+          git commit -m "Update supported"
+          git push
+          git status
