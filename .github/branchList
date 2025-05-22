@@ -1,187 +1,185 @@
-  remotes/HEAD -> origin/VUR
-  remotes/Hyprland
-  remotes/LACT
-  remotes/ROCm-SMI-LIB
-  remotes/SweetHome3D
-  remotes/VUR
-  remotes/VUR-backup
-  remotes/actions/checkupstream
-  remotes/ansicolor
-  remotes/auto-cpufreq
-  remotes/awesome-appmenu
-  remotes/azote
-  remotes/btop
-  remotes/btop-rocm
-  remotes/bubbletea
-  remotes/calamares
-  remotes/celluloid
-  remotes/check-anywhere
-  remotes/chezmoi
-  remotes/conky
-  remotes/cs
-  remotes/desktop-file-utils
-  remotes/discover
-  remotes/distrobox
-  remotes/distrohopper
-  remotes/dooble-qt6
-  remotes/easybashgui
-  remotes/easyeffects
-  remotes/ebg
-  remotes/emptty
-  remotes/enlightenment
-  remotes/eww
-  remotes/exfatprogs
-  remotes/feature/autosync
-  remotes/fzf
-  remotes/gama
-  remotes/gcompris
-  remotes/gcompris-qt
-  remotes/gh-action
-  remotes/gh-pages
-  remotes/git-filter-repo
-  remotes/gitea
-  remotes/go
-  remotes/godot
-  remotes/grsync
-  remotes/gum
-  remotes/gxkb
-  remotes/h-cursor
-  remotes/h-hypridle
-  remotes/h-hyprland
-  remotes/h-hyprlang
-  remotes/h-hyprlock
-  remotes/h-hyprpaper
-  remotes/h-protocols
-  remotes/h-sdbus-cpp
-  remotes/h-tomlplusplus
-  remotes/h-xdg-desktop-portal
-  remotes/helix
-  remotes/heroic
-  remotes/hw-probe
-  remotes/hypr+gcc
-  remotes/hypr-test
-  remotes/hyprland
-  remotes/hyprland-0.38
-  remotes/hyprpicker
-  remotes/input-remapper
-  remotes/io.elementary.code
-  remotes/jqless
-  remotes/kando
-  remotes/kirc
-  remotes/kitty
-  remotes/labwc-menu
-  remotes/lapce
-  remotes/lazycli
-  remotes/lazydocker
-  remotes/lazygit
-  remotes/lazygit-CZ
-  remotes/lcl
-  remotes/leftwm-theme
-  remotes/legendary
-  remotes/libgit2
-  remotes/libvirt
-  remotes/liferea
-  remotes/linux
-  remotes/lite-xl
-  remotes/litexl
-  remotes/lokalize
-  remotes/lsp-plugins
-  remotes/lutris
-  remotes/lynx
-  remotes/mame
-  remotes/mangohud
-  remotes/manpages
-  remotes/master
-  remotes/megasync
-  remotes/minikube
-  remotes/mpg123
-  remotes/mpv
-  remotes/musescore
-  remotes/mypkgs
-  remotes/myxer
-  remotes/n/fastfetch
-  remotes/n/superfile
-  remotes/n/yazi
-  remotes/nerd-fonts
-  remotes/nheko
-  remotes/nushell
-  remotes/nvoid
-  remotes/nvtop
-  remotes/nwg
-  remotes/nwg-bar
-  remotes/nwg-clipman
-  remotes/nwg-displays
-  remotes/nwg-dock
-  remotes/nwg-dock-hyprland
-  remotes/nwg-drawer
-  remotes/nwg-icon-picker
-  remotes/nwg-menu
-  remotes/nwg-panel
-  remotes/nwg-readme-browser
-  remotes/nwg-shell
-  remotes/nwg-shell-config
-  remotes/obmenu-generator
-  remotes/octoxbps
-  remotes/oculante
-  remotes/omegat
-  remotes/opentyrian
-  remotes/paperde
-  remotes/papirus-icon-theme
-  remotes/pasystray
-  remotes/pcmanfm-qt
-  remotes/pillow
-  remotes/pmbootstrap
-  remotes/podget
-  remotes/poedit
-  remotes/protontricks
-  remotes/protonup
-  remotes/psuinfo
-  remotes/python3-dasbus
-  remotes/qemu
-  remotes/qpdfview
-  remotes/qt-virt
-  remotes/quickemu
-  remotes/repo-sync/projekty/default
-  remotes/revert-47-wayshot
-  remotes/rust
-  remotes/sakura
-  remotes/scrcpy
-  remotes/skate
-  remotes/smc
-  remotes/soft-serve
-  remotes/spacefm
-  remotes/ssr
-  remotes/sync
-  remotes/system-monitoring-center
-  remotes/tailscale
-  remotes/tailspin
-  remotes/tcl
-  remotes/tere
-  remotes/terminator
-  remotes/test
-  remotes/testing
-  remotes/thunderbird
-  remotes/tips
-  remotes/tk
-  remotes/topgrade
-  remotes/u/conky
-  remotes/u/mergerfs
-  remotes/u/moar
-  remotes/u/papirus
-  remotes/ulauncher
-  remotes/unifetch
-  remotes/virt-manager
-  remotes/vmaf
-  remotes/vtm
-  remotes/waydroid
-  remotes/wayfire
-  remotes/wayland-utils
-  remotes/wayshot
-  remotes/wget2
-  remotes/wifite2
-  remotes/winetricks
-  remotes/wishlist
-  remotes/xdgmenumaker
-  remotes/yacy
-  remotes/yad
-* VUR
+origin/HEAD -> origin/VUR
+origin/Hyprland
+origin/LACT
+origin/ROCm-SMI-LIB
+origin/SweetHome3D
+origin/VUR
+origin/VUR-backup
+origin/actions/checkupstream
+origin/ansicolor
+origin/auto-cpufreq
+origin/awesome-appmenu
+origin/azote
+origin/btop
+origin/btop-rocm
+origin/bubbletea
+origin/calamares
+origin/celluloid
+origin/check-anywhere
+origin/chezmoi
+origin/conky
+origin/cs
+origin/desktop-file-utils
+origin/discover
+origin/distrobox
+origin/distrohopper
+origin/dooble-qt6
+origin/easybashgui
+origin/easyeffects
+origin/ebg
+origin/emptty
+origin/enlightenment
+origin/eww
+origin/exfatprogs
+origin/feature/autosync
+origin/fzf
+origin/gama
+origin/gcompris
+origin/gcompris-qt
+origin/gh-action
+origin/gh-pages
+origin/git-filter-repo
+origin/gitea
+origin/go
+origin/godot
+origin/grsync
+origin/gum
+origin/gxkb
+origin/h-cursor
+origin/h-hypridle
+origin/h-hyprland
+origin/h-hyprlang
+origin/h-hyprlock
+origin/h-hyprpaper
+origin/h-protocols
+origin/h-sdbus-cpp
+origin/h-tomlplusplus
+origin/h-xdg-desktop-portal
+origin/helix
+origin/heroic
+origin/hw-probe
+origin/hypr+gcc
+origin/hypr-test
+origin/hyprland
+origin/hyprland-0.38
+origin/hyprpicker
+origin/input-remapper
+origin/io.elementary.code
+origin/jqless
+origin/kando
+origin/kirc
+origin/kitty
+origin/labwc-menu
+origin/lapce
+origin/lazycli
+origin/lazydocker
+origin/lazygit
+origin/lazygit-CZ
+origin/lcl
+origin/leftwm-theme
+origin/legendary
+origin/libgit2
+origin/libvirt
+origin/liferea
+origin/linux
+origin/lite-xl
+origin/litexl
+origin/lokalize
+origin/lsp-plugins
+origin/lutris
+origin/lynx
+origin/mame
+origin/mangohud
+origin/manpages
+origin/master
+origin/megasync
+origin/minikube
+origin/mpg123
+origin/mpv
+origin/musescore
+origin/mypkgs
+origin/myxer
+origin/n/fastfetch
+origin/n/superfile
+origin/n/yazi
+origin/nerd-fonts
+origin/nheko
+origin/nushell
+origin/nvoid
+origin/nvtop
+origin/nwg
+origin/nwg-bar
+origin/nwg-clipman
+origin/nwg-displays
+origin/nwg-dock
+origin/nwg-dock-hyprland
+origin/nwg-drawer
+origin/nwg-icon-picker
+origin/nwg-menu
+origin/nwg-panel
+origin/nwg-readme-browser
+origin/nwg-shell
+origin/nwg-shell-config
+origin/obmenu-generator
+origin/octoxbps
+origin/oculante
+origin/omegat
+origin/opentyrian
+origin/paperde
+origin/papirus-icon-theme
+origin/pasystray
+origin/pcmanfm-qt
+origin/pillow
+origin/pmbootstrap
+origin/podget
+origin/poedit
+origin/protontricks
+origin/protonup
+origin/psuinfo
+origin/python3-dasbus
+origin/qemu
+origin/qpdfview
+origin/qt-virt
+origin/quickemu
+origin/repo-sync/projekty/default
+origin/revert-47-wayshot
+origin/rust
+origin/sakura
+origin/scrcpy
+origin/skate
+origin/smc
+origin/soft-serve
+origin/spacefm
+origin/ssr
+origin/sync
+origin/system-monitoring-center
+origin/tailscale
+origin/tailspin
+origin/tcl
+origin/tere
+origin/terminator
+origin/test
+origin/testing
+origin/thunderbird
+origin/tips
+origin/tk
+origin/topgrade
+origin/u/conky
+origin/u/mergerfs
+origin/u/moar
+origin/u/papirus
+origin/ulauncher
+origin/unifetch
+origin/virt-manager
+origin/vmaf
+origin/vtm
+origin/waydroid
+origin/wayfire
+origin/wayland-utils
+origin/wayshot
+origin/wget2
+origin/wifite2
+origin/winetricks
+origin/wishlist
+origin/xdgmenumaker
+origin/yacy
