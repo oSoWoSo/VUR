@@ -22,6 +22,16 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+
+      #- name: Checkout
+      #  uses: actions/checkout@v4
+
+      - name: Cache dependencies
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libvirt-clients qemu-system-x86 qemu-utils ovmf
+          version: 1.0
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Check things out
         run: |
@@ -31,9 +41,6 @@ jobs:
           echo
           echo "/proc/cpuinfo"
           cat /proc/cpuinfo
-          echo
-          echo
-          sudo apt install -y --no-install-recommends libvirt-clients qemu-system-x86 qemu-utils ovmf
           echo
           echo
           echo "virt-host-validate:"
@@ -63,4 +70,3 @@ jobs:
           echo
           echo "qemu supported cpus"
           qemu-system-x86_64 -cpu help
-          
