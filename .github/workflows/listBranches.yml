@@ -19,7 +19,7 @@ jobs:
       - name: List branches
         run: |
           rm -f .github/branchList
-          git branch -r | sed 's/origin\///' | sort | tee -a .github/branchList
+          git branch -a | sed 's/origin\///' | sort | tee -a .github/branchList
 
       - name: "Push results"
         run: |
