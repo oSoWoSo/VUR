@@ -21,7 +21,7 @@ jobs:
       - name: List branches
         run: |
           rm -f .github/branchList
-          git branch -a | tail -n +2 | head -n -1 | cut -d '/' -f2- | tee -a .github/branchList
+          git branch -a | tail -n +3 | head -n -1 | cut -d '/' -f3- | tee -a .github/branchList
 
       - name: "Push results"
         run: |
