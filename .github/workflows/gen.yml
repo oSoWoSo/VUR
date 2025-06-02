@@ -23,7 +23,7 @@ jobs:
           do
              output+="- $input\n          "
           done
-          sed "s/\$OPTION/$output/g" $GITHUB_WORKSPACE/.github/workflows/deployment.template.yml > $GITHUB_WORKSPACE/.github/workflows/deployment.yml
+          sed "s/\$OPTION/$output/g" $GITHUB_WORKSPACE/.github/workflows/deployment-template.yml > $GITHUB_WORKSPACE/.github/workflows/deployment.yml
 
       - name: BRANCH
         env:
