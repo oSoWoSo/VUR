@@ -35,7 +35,7 @@ jobs:
           do
              output+="- $input\n          "
           done
-          sed "s/\$OPTION/$output/g" $GITHUB_WORKSPACE/.github/workflows/deployment.template.yml > $GITHUB_WORKSPACE/.github/workflows/deployment.yml
+          sed "s/\$OPTION/$output/g" $GITHUB_WORKSPACE/.github/workflows/deployment-template.yml > $GITHUB_WORKSPACE/.github/workflows/deployment.yml
 
 
       - name: UPSTREAM_REPO
@@ -48,7 +48,7 @@ jobs:
           do
              output+="- $input\n          "
           done
-          sed "s/\$OPTION/$output/g" $GITHUB_WORKSPACE/.github/workflows/deployment.template.yml > $GITHUB_WORKSPACE/.github/workflows/deployment.yml
+          sed "s/\$OPTION/$output/g" $GITHUB_WORKSPACE/.github/workflows/deployment-template.yml > $GITHUB_WORKSPACE/.github/workflows/deployment.yml
 
       - name: UPSTREAM_BRANCH
         env:
@@ -60,7 +60,7 @@ jobs:
           do
              output+="- $input\n          "
           done
-          sed "s/\$OPTION/$output/g" $GITHUB_WORKSPACE/.github/workflows/deployment.template.yml > $GITHUB_WORKSPACE/.github/workflows/deployment.yml
+          sed "s/\$OPTION/$output/g" $GITHUB_WORKSPACE/.github/workflows/deployment-template.yml > $GITHUB_WORKSPACE/.github/workflows/deployment.yml
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
