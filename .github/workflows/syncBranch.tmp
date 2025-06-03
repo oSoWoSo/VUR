@@ -9,9 +9,12 @@ on:
     inputs:
       branch:
         description: 'Branch to sync'
-        type: string
+        type: choice
         default: master
         required: true
+        options:
+
+
       sync_test_mode: # Adds a boolean option that appears during manual workflow run for easy test mode config
         description: 'Fork Sync Test Mode'
         type: boolean
