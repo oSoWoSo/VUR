@@ -38,6 +38,7 @@ checksum="228ee52f00627c7d8fa61998179deb01865ece69390829feb1300228d24f7e9e
 python_version=3
 skip_extraction="pycxx-${_pycxx_ver}.tar.gz
  OndselSolver-${_ondsel_ver}.tar.gz"
+nocross="vtk dependency nocross"
 
 if [ "$XBPS_TARGET_LIBC" = musl ]; then
 	makedepends+=" libexecinfo-devel"
