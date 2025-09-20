@@ -440,7 +440,7 @@ Pokud soubor distfile změní svůj kontrolní součet pro každé stažení, pr
 
 - `make_check_target` Cíl, který má být předán do `${make_cmd}` ve fázi kontroly, pokud je `${build_style}` nastaveno na metody sestavení `configure` , `gnu-configure` nebo `gnu-makefile` . Ve výchozím nastavení je nastavena `check` .
 
-- `make_install_target` The installation target. When `${build_style}` is set to `configure`, `gnu-configure` or `gnu-makefile`, this is the target passed to `${make_command}` in the install phase; when unset, it defaults to `install`. If `${build_style}` is `python3-pep517`, this is the path of the Python wheel produced by the build phase that will be installed; when unset, the `python3-pep517` build style will look for a wheel matching the package name and version in the current directory with respect to the install.
+- `make_install_target` Cíl instalace. Když je `${build_style}{/code1} nastaven na {code2}configure{/code2}, {code3}gnu-configure{/code3} nebo {code4}gnu-makefile{/code4}, toto je cíl předaný {code5}${make_command}` ve fázi instalace; pokud není nastaveno, ve výchozím nastavení se `install` . Pokud `${build_style}` je `python3-pep517`, jedná se o cestu pythonovského kola vytvořeného fází sestavení, která se nainstaluje; když není nastaveno, styl sestavení `python3-pep517` bude hledat wheel odpovídající názvu a verzi balíčku v aktuálním adresáři s ohledem na instalaci.
 
 - `make_check_pre` Výraz před `${make_cmd}` . To lze použít pro příkazy wrapper nebo pro nastavení proměnných prostředí pro příkaz check. Ve výchozím nastavení prázdné.
 
@@ -491,7 +491,7 @@ Pokud soubor distfile změní svůj kontrolní součet pro každé stažení, pr
 
 - `subpackages` Seznam dílčích balíčků oddělených mezerami (odpovídající `foo_package()` ), aby se přepsal uhodnutý seznam. Toto použijte pouze v případě, že je vyžadováno specifické pořadí dílčích balíčků, jinak by ve většině případů fungovalo výchozí nastavení.
 
-- `metapackage` If set to `yes`, the package must be an empty meta-package, i.e. a package that only depends on other packages.
+- `metapackage` Pokud je nastaveno na `yes` , balíček musí být prázdný metabalíček, tj. balíček, který závisí pouze na jiných balíčcích.
 
 - `broken` Je-li nastaveno, sestavení balíčku nebude povoleno, protože jeho stav je aktuálně poškozen. Toto by mělo být nastaveno na řetězec popisující, proč je poškozený, nebo na odkaz na buildlog demonstrující selhání.
 
@@ -529,7 +529,7 @@ Pokud soubor distfile změní svůj kontrolní součet pro každé stažení, pr
 
 - `changelog` URL odkazující na upstream changelog. Preferovány jsou soubory s nezpracovaným textem.
 
-- `archs` Whitespace separated list of architectures that a package can be built for, available architectures can be found under `common/cross-profiles`. In general, `archs` should only be set if the upstream software explicitly targets certain architectures or there is a compelling reason why the software should not be available on some supported architectures. Prepending a pattern with a tilde means disallowing build on the indicated archs. The first matching pattern is taken to allow/deny build. When no pattern matches, the package is built if the last pattern includes a tilde. Examples:
+- `archs` Bílými znaky oddělený seznam architektur, pro které lze balíček sestavit, dostupné architektury lze nalézt pod `common/cross-profiles` . Obecně platí, že `archs` by měly být nastaveny pouze tehdy, pokud se upstream software výslovně zaměřuje na určité architektury nebo existuje pádný důvod, proč by software neměl být dostupný na některých podporovaných architekturách. Předřazení vzoru vlnovkou znamená zákaz stavět na naznačených obloucích. První odpovídající vzor se použije pro povolení/zakázání sestavení. Pokud neodpovídá žádný vzor, ​​balíček se sestaví, pokud poslední vzor obsahuje vlnovku. Příklady:
 
     ```
      # Build package only for musl architectures
@@ -546,7 +546,7 @@ Dříve byla k dispozici speciální hodnota `noarch` , ale od té doby byla ods
 
 - `nofixperms` Je-li nastaveno, xbps-src neopraví běžné chyby oprávnění (spustitelné manuálové stránky atd.)
 
-- `no_generic_pkgconfig_link` If set, xbps-src will not create a symlink from `$XBPS_CROSS_TRIPLET-pkg-config` to `$XBPS_WRAPPERDIR/pkg-config` before building the template.
+- `no_generic_pkgconfig_link` Je-li nastaveno, xbps-src nevytvoří před vytvořením šablony symbolický odkaz z `$XBPS_CROSS_TRIPLET-pkg-config{/code1} na {code2}$XBPS_WRAPPERDIR/pkg-config`.
 
 <a id="explain_depends"></a>
 
@@ -604,7 +604,7 @@ A konečně, obecně platí, že pokud je balíček sestavován přesně stejný
 
 #### Repozitáře definované větví
 
-The global repository takes the name of the current branch, except if the name of the branch is master. Then the resulting repository will be at the global scope. The usage scenario is that the user can update multiple packages in a second branch without polluting their local repository.
+Globální úložiště převezme název aktuální větve, kromě případů, kdy je název větve hlavní. Potom bude výsledné úložiště v globálním rozsahu. Scénář použití je takový, že uživatel může aktualizovat více balíčků v druhé větvi, aniž by znečišťoval své místní úložiště.
 
 <a id="pkg_defined_repo"></a>
 
@@ -698,7 +698,7 @@ Aktuální seznam dostupných skriptů `build_style` je následující:
 
 - `slashpackage` Pro balíčky, které k sestavení používají hierarchii /package a package/compile, jako je například `daemontools` nebo jakýkoli `djb` software.
 
-- `qmake` For packages that use Qt5/Qt6 qmake profiles (`*.pro`), qmake arguments for the configure phase can be passed in via `configure_args`, make build arguments can be passed in via `make_build_args` and install arguments via `make_install_args`. The build target can be overridden via `make_build_target` and the install target via `make_install_target`.
+- `qmake` U balíčků, které používají profily Qt5/Qt6 qmake ( `*.pro` ), mohou být argumenty qmake pro fázi configure předány prostřednictvím `configure_args` , argumenty make build mohou být předány pomocí `make_build_args` a argumenty instalace pomocí `make_install_args` . Cíl sestavení lze přepsat pomocí `make_build_target` a cíl instalace pomocí `make_install_target` .
 
 - `meson` U balíčků, které používají systém Meson Build, lze konfigurační volby předat přes `configure_args` , příkaz meson lze přepsat pomocí `meson_cmd` a umístění out of source buildu pomocí `meson_builddir`
 
@@ -740,13 +740,13 @@ Aktuální seznam dostupných skriptů `build_helper` je následující:
 
 - `qemu` nastavuje další proměnné pro styly sestavení `cmake` a `meson` , aby bylo možné spouštět křížově kompilované binární soubory uvnitř qemu. Nastaví `CMAKE_CROSSCOMPILING_EMULATOR` pro cmake a `exe_wrapper` pro meson na `qemu-<target_arch>-static` a `QEMU_LD_PREFIX` na `XBPS_CROSS_BASE` . Vytvoří také funkci `vtargetrun` pro zabalení příkazů do volání `qemu-<target_arch>-static` pro cílovou architekturu.
 
-- `qmake` creates the `qt.conf` configuration file (cf. `qmake` `build_style`) needed for cross builds and a qmake-wrapper to make `qmake` use this configuration. This aims to fix cross-builds for when the build-style is mixed: e.g. when in a `gnu-configure` style the configure script calls `qmake` or a `Makefile` in `gnu-makefile` style, respectively. This is for Qt5 packages.
+- `qmake` vytvoří konfigurační soubor `qt.conf` (srov. `qmake` `build_style` ) potřebný pro křížová sestavení a qmake-wrapper, aby `qmake` použil tuto konfiguraci. Cílem je opravit křížová sestavení pro případ, že je styl sestavení smíšený: např. když ve stylu `gnu-configure` konfigurační skript volá `qmake` nebo `Makefile` ve stylu `gnu-makefile` . Toto je pro balíčky Qt5.
 
 - `qmake6` is like `qmake` but for Qt6.
 
-- `rust` specifies environment variables required for cross-compiling crates via cargo and for compiling cargo -sys crates. It also adds a `cargo` wrapper that detects and passes builds through `cargo-auditable`. This helper is added by default for packages that use the `cargo` build style.
+- `rust` specifikuje proměnné prostředí požadované pro křížovou kompilaci přepravek přes náklad a pro kompilaci cargo -sys přepravek. Přidává také obalovač `cargo` , který detekuje a prochází sestavami `cargo-auditable` . Tento pomocník je standardně přidán pro balíčky, které používají styl sestavení `cargo` .
 
-- `haskell` specifies environment variables for cabal. This helper is added by default for packages that use the `haskell-stack` or `cabal` build style.
+- `haskell` specifikuje proměnné prostředí pro cabal. Tato pomocná funkce je standardně přidána pro balíčky, které používají styl sestavení `haskell-stack` nebo `cabal` .
 
 <a id="functions"></a>
 
@@ -853,7 +853,7 @@ Po definování těchto požadovaných proměnných můžete zkontrolovat promě
 
 - *vopt_feature()* `vopt_feature <option> <property>`
 
-    Same as `vopt_bool`, but uses `-D<property>=enabled` and `-D<property>=disabled` respectively.
+    Stejné jako `vopt_bool` , ale používá `-D<property>=enabled` a `-D<property>=disabled` .
 
 Následující příklad ukazuje, jak změnit zdrojový balíček, který používá konfiguraci GNU, aby povolil novou možnost sestavení pro podporu obrázků PNG:
 
@@ -1138,7 +1138,7 @@ Obecně je balíček `-doc` užitečný, pokud lze hlavní balíček použít s 
 
 #### Python balíčky
 
-Python packages should be built with the `python3-module` build style, if possible. This sets some environment variables required to allow cross compilation. Support to allow building a python module for multiple versions from a single template is also possible. The `python3-pep517` build style provides means to build python packages that provide a build-system definition compliant with [PEP 517](https://www.python.org/dev/peps/pep-0517/) without a traditional `setup.py` script. The `python3-pep517` build style does not provide a specific build backend, so packages will need to add an appropriate backend provider to `hostmakedepends`.
+Balíčky Pythonu by měly být sestaveny se stylem sestavení `python3-module` , pokud je to možné. Tím se nastaví některé proměnné prostředí potřebné k umožnění křížové kompilace. Je také možná podpora umožňující sestavení modulu python pro více verzí z jedné šablony. Styl sestavení `python3-pep517` poskytuje prostředky k sestavení pythonových balíčků, které poskytují definici sestavovacího systému v souladu s [PEP 517](https://www.python.org/dev/peps/pep-0517/) bez tradičního skriptu `setup.py` . Styl sestavení `python3-pep517` neposkytuje konkrétní backend sestavení, takže balíčky budou muset přidat vhodného poskytovatele backendu do `hostmakedepends` .
 
 Balíčky Pythonu, které se spoléhají na `python3-setuptools` by obecně měly mapovat závislosti `setup_requires` v `setup.py` na `hostmakedepends` v šabloně a `install_requires` závislosti na `depends` v šabloně; include `python3` in `depends` , pokud neexistují žádné další závislosti na pythonu. Pokud balíček obsahuje zkompilované rozšíření, měly by být balíčky `python3-devel` přidány do `makedepends` , stejně jako všechny balíčky python, které také poskytují nativní knihovny, se kterými bude rozšíření propojeno (i když je tento balíček také zahrnut v `hostmakedepends` , aby vyhovoval `setuptools` ) .
 
@@ -1146,21 +1146,21 @@ Balíčky Pythonu, které se spoléhají na `python3-setuptools` by obecně měl
 
 Následující proměnné mohou ovlivnit, jak jsou balíčky python sestavovány a konfigurovány v době po instalaci:
 
-- `pycompile_module`: By default, files and directories installed into `usr/lib/pythonX.Y/site-packages`, excluding `*-info` and `*.so`, are byte-compiled at install time as python modules.  This variable expects subset of them that should be byte-compiled, if default is wrong.  Multiple python modules may be specified separated by blanks, Example: `pycompile_module="foo blah"`. If a python module installs a file into `site-packages` rather than a directory, use the name of the file, Example: `pycompile_module="fnord.py"`.
+- `pycompile_module` : Ve výchozím nastavení jsou soubory a adresáře nainstalované do `usr/lib/pythonX.Y/site-packages` , kromě `*-info` a `*.so` , v době instalace kompilovány jako python moduly. Tato proměnná očekává jejich podmnožinu, která by měla být kompilována po bajtech, pokud je výchozí hodnota nesprávná. Více modulů pythonu může být specifikováno oddělených mezerami, Příklad: `pycompile_module="foo blah"` . Pokud modul pythonu nainstaluje soubor do `site-packages` , nikoli do adresáře, použijte název souboru, Příklad: `pycompile_module="fnord.py"` .
 
 - `pycompile_dirs` : tato proměnná očekává adresáře pythonu, které by měly být rekurzivně `byte-compiled` bajty cílovou verzí pythonu. To se liší od `pycompile_module` tím, že lze zadat libovolnou cestu, Příklad: `pycompile_dirs="usr/share/foo"` .
 
-- `python_version`: this variable expects the supported Python major version. In most cases version is inferred from shebang, install path or build style. Only required for some multi-language applications (e.g., the application is written in C while the command is written in Python) or just single Python file ones that live in `/usr/bin`. If `python_version` is set to `ignore`, python-containing shebangs will not be rewritten. Use this only if a package should not be using a system version of python.
+- `python_version` : tato proměnná očekává podporovanou hlavní verzi Pythonu. Ve většině případů je verze odvozena z shebang, instalační cesty nebo stylu sestavení. Vyžaduje se pouze pro některé vícejazyčné aplikace (např. aplikace je napsána v C, zatímco příkaz je napsán v Pythonu) nebo pouze pro ty, které jsou v jednom souboru Pythonu, které jsou uloženy v `/usr/bin` . Pokud je `python_version` nastaveno na `ignore` , shebangy obsahující python nebudou přepsány. Toto použijte pouze v případě, že by balíček neměl používat systémovou verzi pythonu.
 
-- `python_extras`: Python module extras to consider when verifying Python module dependencies. Can be used to ensure additional dependency sets are checked. Example: `python_extras="all"`.
+- `python_extras` : Doplňky modulu Python, které je třeba vzít v úvahu při ověřování závislostí modulu Python. Lze použít k zajištění kontroly dalších sad závislostí. Příklad: `python_extras="all"` .
 
-- `nopyprovides`: if set, don't create `provides` entries for Python modules in the package.
+- `nopyprovides` : pokud je nastaveno, nevytvářet `provides` položky pro moduly Pythonu v balíčku.
 
-- `noverifypydeps`: if set, don't verify Python module dependencies.
+- `noverifypydeps` : pokud je nastaveno, neověřujte závislosti modulu Python.
 
 V šablonách je také definována sada užitečných proměnných:
 
-Variable | Hodnota
+Proměnná | Hodnota
 --- | ---
 py2_ver | 2.X
 py2_lib | usr/lib/python2.X
@@ -1197,26 +1197,26 @@ Občas je nutné provádět operace ze stromu zdroje Go. To obvykle potřebují 
 
 #### Haskell balíčky
 
-Haskell packages can be built either with the `cabal` or `haskell-stack` build style, use whichever is more convenient or better supported by upstream, sometimes only one of the two is possible. For packages that have haskell parts but use a different build style like `gnu-makefile`, make sure to use the `haskell` build helper.
+Haskell balíčky lze sestavit buď stylem `cabal` , nebo `haskell-stack` . Použijte ten, který je pohodlnější nebo lépe podporovaný upstreamem. Někdy je možný pouze jeden z těchto dvou. U balíčků, které obsahují haskellové části, ale používají jiný styl sestavení, jako je `gnu-makefile` , nezapomeňte použít `haskell` build helper.
 
-The following variables influence how packages are built with cabal:
+Následující proměnné ovlivňují, jak jsou balíčky sestavovány pomocí cabal:
 
-- `cabal_index_state`: The state of the hackage cabal index to use for fetching dependencies. The source package of a haskell project should come with a freeze file that sets the index state, some also set it in their cabal project file. If it does not, then this has to be set to an ISO timestamp in the package template. For example `2025-07-05T14:01:16Z`.
-- `configure_args`: Arguments passed to `cabal configure`. The configure step generates the `cabal.project.local` file.
-- `make_build_args`: Arguments passed to `cabal build`.
-- `make_build_target`: Target passed to `cabal build`.
-- `make_check_args`: Arguments passed to `cabal test`.
-- `make_check_target`: Test target passed to cabal instead of "test".
-- `make_install_target`: Target passed to `cabal install`.
+- `cabal_index_state` : Stav indexu hackage cabal, který se má použít pro načítání závislostí. Zdrojový balíček projektu Haskell by měl obsahovat soubor freeze, který nastavuje stav indexu, některé jej také nastavují ve svém souboru projektu cabal. Pokud tomu tak není, musí být v šabloně balíčku nastaveno časové razítko ISO. Například `2025-07-05T14:01:16Z` .
+- `configure_args` : Argumenty předávané `cabal configure` . Krok configure generuje soubor `cabal.project.local` .
+- `make_build_args` : Argumenty předávané příkazu `cabal build` .
+- `make_build_target` : Cíl předán `cabal build` .
+- `make_check_args` : Argumenty předané do `cabal test` .
+- `make_check_target` : Cíl testu byl předán cabalu místo "test".
+- `make_install_target` : Cíl předán `cabal install` .
 
-And these variables influence how packages are built with stack:
+A tyto proměnné ovlivňují, jak jsou balíčky sestavovány pomocí stack:
 
 - `stackage` : Verze Stackage použitá k sestavení balíčku, např `lts-3.5` . Alternativně:
     - Pro projekt můžete připravit konfiguraci `stack.yaml` a vložit ji do `files/stack.yaml` .
-    - If a `stack.yaml` file is present in the source files, it will be used.
+    - Pokud je ve zdrojových souborech přítomen soubor `stack.yaml` , bude použit.
 - `make_build_args` : Toto je předáno tak, jak je, do `stack build ...` , takže tam můžete přidat své parametry `--flag ...`
 
-To patch dependencies of haskell packages they have to be fetched explicitly from hackage by adding them to `distfiles` instead of letting cabal or stack download them. Once extracted and patched, the path to the patched version can be added to `packages` in `cabal.project` or `stack.yaml`. Stack will find them automatically if no `stack.yaml` file exists by scanning the directory. The build tool will then use the patched version of the depencency instead of downloading it from hackage.
+Pro opravu závislostí balíčků Haskell je nutné je explicitně načíst z Hackage přidáním do `distfiles` místo aby je stahoval Cabal nebo Stack. Po extrahování a opravě lze cestu k opravené verzi přidat k `packages` v souboru `cabal.project` nebo `stack.yaml` . Stack je automaticky vyhledá, pokud soubor `stack.yaml` neexistuje, prohledáním adresáře. Nástroj pro sestavení pak použije opravenou verzi závislosti, místo aby ji stahoval z Hackage.
 
 <a id="pkgs_font"></a>
 
@@ -1292,16 +1292,16 @@ Spouštěč binfmts je zodpovědný za registraci a odstranění libovolných sp
 
 Během instalace/odstranění používá `update-binfmts` z balíčku `binfmt-support` k registraci/odstranění položek z libovolné databáze spustitelných binárních formátů.
 
-It is automatically added to packages that contain files in `usr/share/binfmts`. These files should be `update-binfmts` format files and will be imported with `update-binfmts --import`.
+Je automaticky přidán do balíčků, které obsahují soubory v `usr/share/binfmts` . Tyto soubory by měly být ve formátu `update-binfmts` a budou importovány pomocí `update-binfmts --import` .
 
-While it is not preferred, the trigger can also be added by using the `binfmts` variable, which should contain lines defining binfmts to register:
+I když to není preferováno, spouštěč lze přidat také pomocí proměnné `binfmts` , která by měla obsahovat řádky definující binfmts pro registraci:
 
 ```
 /path/to/interpreter [update-binfmts binary format specification arguments ...]
 ...
 ```
 
-See [`update-binfmts(8)`](https://man.voidlinux.org/man8/update-binfmts.8) for more details.
+Viz [`update-binfmts(8)`](https://man.voidlinux.org/man8/update-binfmts.8) pro více podrobností.
 
 <a id="triggers_dkms"></a>
 
@@ -1606,7 +1606,7 @@ Chcete-li zdokumentovat podrobnosti o konfiguraci a použití balíčku specific
 
 ### Přispívání přes git
 
-To get started, [fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo) the void-linux `void-packages` git repository on GitHub and clone it:
+Pro začátek si na GitHubu [vytvořte fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo) void-linux repozitáře `void-packages` a naklonujte ho:
 
 ```
 $ git clone git@github.com:<user>/void-packages.git
