@@ -1,9 +1,9 @@
-## void-packages buildroot containers
+## void-packages buildroot kontejnery
 
-These containers are used for CI and should contain everything needed to run xbps-src.
+Tyto kontejnery se používají pro CI a měly by obsahovat vše potřebné ke spuštění xbps-src.
 
-### Updating
+### Aktualizace
 
-To build a new version, kick off a CI run by pushing something to `common/container/` on `master` or using the `Run workflow` button [here](https://github.com/void-linux/void-packages/actions/workflows/container.yaml).
+Chcete-li sestavit novou verzi, spusťte běh CI tak, že něco přesunete do `common/container/` na `master` nebo pomocí tlačítka `Run workflow` [zde](https://github.com/void-linux/void-packages/actions/workflows/container.yaml) .
 
-Once this is built, update the version where it is used in `.github/workflows/` (typically in the value of a `container.image` key) to the newly-built tag.
+Jakmile je toto vytvořeno, aktualizujte verzi, kde se používá v `.github/workflows/` (obvykle v hodnotě klíče `container.image` ), na nově vytvořenou značku.

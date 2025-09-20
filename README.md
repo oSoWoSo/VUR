@@ -1,517 +1,534 @@
-## The XBPS source packages collection
+## Kolekce zdrojových balíčků XBPS
 
-This repository contains the XBPS source packages collection to build binary packages
-for the Void Linux distribution.
+Toto úložiště obsahuje kolekci zdrojových balíčků XBPS pro sestavení binárních balíčků pro distribuci Void Linux.
 
-The included `xbps-src` script will fetch and compile the sources, and install its
-files into a `fake destdir` to generate XBPS binary packages that can be installed
-or queried through the `xbps-install(1)` and `xbps-query(1)` utilities, respectively.
+Zahrnutý skript `xbps-src` načte a zkompiluje zdrojové kódy a nainstaluje své soubory do `fake destdir` aby se vygenerovaly binární balíčky XBPS, které lze nainstalovat nebo se na ně lze dotazovat pomocí nástrojů `xbps-install(1)` a `xbps-query(1)` . .
 
-See [Contributing](./CONTRIBUTING.md) for a general overview of how to contribute and the
-[Manual](./Manual.md) for details of how to create source packages.
+Obecný přehled o tom, jak přispívat, najdete v části [Přispívání](./CONTRIBUTING.md) a podrobnosti o vytváření zdrojových balíčků najdete [v příručce](./Manual.md) .
 
-### Table of Contents
+### Obsah
 
-- [Requirements](#requirements)
-- [Quick start](#quick-start)
-- [chroot methods](#chroot-methods)
-- [Install the bootstrap packages](#install-bootstrap)
-- [Configuration](#configuration)
-- [Directory hierarchy](#directory-hierarchy)
-- [Building packages](#building-packages)
-- [Package build options](#build-options)
-- [Sharing and signing your local repositories](#sharing-and-signing)
-- [Rebuilding and overwriting existing local packages](#rebuilding)
-- [Enabling distcc for distributed compilation](#distcc)
-- [Distfiles mirrors](#distfiles-mirrors)
-- [Cross compiling packages for a target architecture](#cross-compiling)
-- [Using xbps-src in a foreign Linux distribution](#foreign)
-- [Remaking the masterdir](#remaking-masterdir)
-- [Keeping your masterdir uptodate](#updating-masterdir)
-- [Building 32bit packages on x86_64](#building-32bit)
-- [Building packages natively for the musl C library](#building-for-musl)
-- [Building void base-system from scratch](#building-base-system)
+- [Požadavky](#requirements)
+- [Rychlý start](#quick-start)
+- [chroot metody](#chroot-methods)
+- [Nainstalujte bootstrap balíčky](#install-bootstrap)
+- [Konfigurace](#configuration)
+- [Hierarchie adresářů](#directory-hierarchy)
+- [Stavební balíčky](#building-packages)
+- [Možnosti sestavení balíčku](#build-options)
+- [Sdílení a podepisování místních úložišť](#sharing-and-signing)
+- [Opětovné sestavení a přepsání existujících místních balíčků](#rebuilding)
+- [Povolení distcc pro distribuovanou kompilaci](#distcc)
+- [Zrcadla Distfiles](#distfiles-mirrors)
+- [Křížová kompilace balíčků pro cílovou architekturu](#cross-compiling)
+- [Použití xbps-src v zahraniční distribuci Linuxu](#foreign)
+- [Předělat masterdir](#remaking-masterdir)
+- [Udržujte svůj masterdir aktuální](#updating-masterdir)
+- [Vytváření 32bitových balíčků na x86_64](#building-32bit)
+- [Nativní vytváření balíčků pro knihovnu musl C](#building-for-musl)
+- [Budování prázdného základního systému od nuly](#building-base-system)
 
-### Requirements
+### Požadavky
 
 - GNU bash
-- xbps >= 0.56
-- git(1) - unless configured to not, see etc/defaults.conf
-- common POSIX utilities included by default in almost all UNIX systems
-- curl(1) - required by `xbps-src update-check`
+- xbps &gt;= 0,56
+- git(1) - pokud není nakonfigurováno, viz etc/defaults.conf
+- běžné nástroje POSIX, které jsou standardně součástí téměř všech systémů UNIX
+- curl(1) - vyžaduje `xbps-src update-check`
 
-For bootstrapping from source additionally:
+Pro bootstrapping ze zdrojového kódu navíc:
+
 - flock(1) - util-linux
-- bsdtar or GNU tar (in that order of preference)
+- bsdtar nebo GNU tar (v tomto pořadí preferencí)
 - install(1) - GNU coreutils
 - objcopy(1), objdump(1), strip(1): binutils
 
-`xbps-src` requires [a utility to chroot](#chroot-methods) and bind mount existing directories
-into a `masterdir` that is used as its main `chroot` directory. `xbps-src` supports
-multiple utilities to accomplish this task.
+`xbps-src` vyžaduje [obslužný program pro chroot](#chroot-methods) a svázání připojení existujících adresářů do `masterdir` , který se používá jako jeho hlavní `chroot` adresář. `xbps-src` podporuje více obslužných programů k provedení tohoto úkolu.
 
-> NOTE: `xbps-src` does not allow building as root anymore. Use one of the chroot
-methods.
+> POZNÁMKA: `xbps-src` již neumožňuje sestavení jako root. Použijte jednu z metod chroot.
 
 <a name="quick-start"></a>
-### Quick start
 
-Clone the `void-packages` git repository:
+### Rychlý start
+
+Klonujte git repozitář `void-packages` :
 
 ```
 $ git clone https://github.com/void-linux/void-packages.git
 $ cd void-packages
 ```
 
-Bootstrapping from binary packages will be done automatically when first building
-a package, but it can be done manually with:
+Bootstrapping z binárních balíčků se provede automaticky při prvním sestavení balíčku, ale lze jej provést ručně pomocí:
 
 ```
 $ ./xbps-src binary-bootstrap
 ```
 
-Build a package by specifying the `pkg` target and the package name:
+Sestavte balíček zadáním `pkg` a názvu balíčku:
 
 ```
 $ ./xbps-src pkg <package_name>
 ```
 
-Use `./xbps-src -h` to list all available targets and options.
+Pomocí `./xbps-src -h` vypíšete všechny dostupné cíle a možnosti.
 
-To build packages marked as 'restricted', modify `etc/conf`:
+Chcete-li sestavit balíčky označené jako 'omezené', upravte `etc/conf` :
 
 ```
 $ echo XBPS_ALLOW_RESTRICTED=yes >> etc/conf
 ```
 
-Once built, the package will be available in `hostdir/binpkgs` or an appropriate subdirectory (e.g. `hostdir/binpkgs/nonfree`). To install the package:
+Po sestavení bude balíček dostupný v `hostdir/binpkgs` nebo v příslušném podadresáři (např. `hostdir/binpkgs/nonfree` ). Instalace balíčku:
 
 ```
 # xbps-install --repository hostdir/binpkgs <package_name>
 ```
 
-Alternatively, packages can be installed with the `xi` utility, from the `xtools` package. `xi` takes the repository of the current working directory into account.
+Alternativně lze balíčky nainstalovat pomocí nástroje `xi` z balíčku `xtools` . `xi` bere v úvahu úložiště aktuálního pracovního adresáře.
 
 ```
 $ xi <package_name>
 ```
 
 <a name="chroot-methods"></a>
-### chroot methods
 
-#### xbps-uunshare(1) (default)
+### chroot metody
 
-XBPS utility that uses `user_namespaces(7)` (part of xbps, default without `-t` flag).
+#### xbps-uunshare(1) (výchozí)
 
-This utility requires these Linux kernel options:
+Nástroj XBPS, který používá `user_namespaces(7)` (součást xbps, výchozí bez parametru `-t` ).
 
-- CONFIG\_NAMESPACES
-- CONFIG\_IPC\_NS
-- CONFIG\_UTS\_NS
-- CONFIG\_USER\_NS
+Tento nástroj vyžaduje tyto možnosti jádra Linux:
 
-This is the default method, and if your system does not support any of the required kernel
-options it will fail with `EINVAL (Invalid argument)`.
+- CONFIG_NAMESPACES
+- CONFIG_IPC_NS
+- CONFIG_UTS_NS
+- CONFIG_USER_NS
+
+Toto je výchozí metoda, a pokud váš systém nepodporuje žádnou z požadovaných voleb jádra, selže s `EINVAL (Invalid argument)` .
 
 #### xbps-uchroot(1)
 
-XBPS utility that uses `namespaces` and must be `setgid` (part of xbps).
+Nástroj XBPS, který používá `namespaces` a musí být `setgid` (součást xbps).
 
-> NOTE: This is the only method that implements functionality of `xbps-src -t`, therefore the
-flag ignores the choice made in configuration files and enables `xbps-uchroot`.
+> POZNÁMKA: Toto je jediná metoda, která implementuje funkci `xbps-src -t` , proto příznak ignoruje volbu provedenou v konfiguračních souborech a povolí `xbps-uchroot` .
 
-This utility requires these Linux kernel options:
+Tento nástroj vyžaduje tyto možnosti jádra Linux:
 
-- CONFIG\_NAMESPACES
-- CONFIG\_IPC\_NS
-- CONFIG\_PID\_NS
-- CONFIG\_UTS\_NS
+- CONFIG_NAMESPACES
+- CONFIG_IPC_NS
+- CONFIG_PID_NS
+- CONFIG_UTS_NS
 
-Your user must be added to a special group to be able to use `xbps-uchroot(1)` and the
-executable must be `setgid`:
+Váš uživatel musí být přidán do speciální skupiny, aby mohl používat `xbps-uchroot(1)` a spustitelný soubor musí být `setgid` :
 
-    # chown root:<group> xbps-uchroot
-    # chmod 4750 xbps-uchroot
-    # usermod -a -G <group> <user>
+```
+# chown root:<group> xbps-uchroot
+# chmod 4750 xbps-uchroot
+# usermod -a -G <group> <user>
+```
 
-> NOTE: by default in void you shouldn't do this manually, your user must be a member of
-the `xbuilder` group.
+> POZNÁMKA: ve výchozím nastavení byste to neměli dělat ručně, váš uživatel musí být členem skupiny `xbuilder` .
 
-To enable it:
+Chcete-li to povolit:
 
-    $ cd void-packages
-    $ echo XBPS_CHROOT_CMD=uchroot >> etc/conf
+```
+$ cd void-packages
+$ echo XBPS_CHROOT_CMD=uchroot >> etc/conf
+```
 
-If for some reason it's erroring out as `ERROR clone (Operation not permitted)`, check that
-your user is a member of the required `group` and that `xbps-uchroot(1)` utility has the
-proper permissions and owner/group as explained above.
+Pokud se z nějakého důvodu chybuje jako `ERROR clone (Operation not permitted)` , zkontrolujte, zda je váš uživatel členem požadované `group` a že nástroj `xbps-uchroot(1)` má správná oprávnění a vlastníka/skupinu, jak je vysvětleno výše.
 
-#### bwrap(1)
+#### bwrap (1)
 
-bubblewrap, sandboxing tool for unprivileged users that uses
-user namespaces or setuid.
-See <https://github.com/containers/bubblewrap>.
+bubblewrap, sandboxingový nástroj pro neprivilegované uživatele, který používá uživatelské jmenné prostory nebo setuid. Viz [https://github.com/containers/bubblewrap](https://github.com/containers/bubblewrap) .
 
-#### ethereal
+#### éterický
 
-Destroys host system it runs on. Only useful for one-shot containers, i.e docker (used with CI).
+Zničí hostitelský systém, na kterém běží. Užitečné pouze pro jednorázové kontejnery, tj. docker (používá se s CI).
 
 <a name="install-bootstrap"></a>
-### Install the bootstrap packages
 
-There is a set of packages that makes up the initial build container, called the `bootstrap`.
-These packages are installed into the `masterdir` in order to create the container.
+### Nainstalujte bootstrap balíčky
 
-The primary and recommended way to set up this container is using the `binary-bootstrap`
-command. This will use pre-existing binary packages, either from remote `xbps` repositories
-or from your local repository. This is done automatically when building packages, if an initialized
-masterdir for the host architecture does not exist.
+Existuje sada balíčků, které tvoří počáteční kontejner sestavení, nazývaný `bootstrap` . Tyto balíčky se instalují do `masterdir` za účelem vytvoření kontejneru.
 
-There is also the `bootstrap` command, which will build all necessary `bootstrap` packages from
-scratch. This is usually not recommended, since those packages are built using your host system's
-toolchain and are neither fully featured nor reproducible (your host system may influence the
-build) and thus should only be used as a stage 0 for bootstrapping new Void systems.
+Primárním a doporučeným způsobem nastavení tohoto kontejneru je použití příkazu `binary-bootstrap` . Použije se již existující binární balíčky, buď ze vzdálených repozitářů `xbps` , nebo z vašeho lokálního repozitáře. To se provádí automaticky při sestavování balíčků, pokud neexistuje inicializovaný hlavní adresář pro hostitelskou architekturu.
 
-If you still choose to use `bootstrap`, use the resulting stage 0 container to rebuild all
-`bootstrap` packages again, then use `binary-bootstrap` (stage 1) and rebuild the `bootstrap`
-packages once more (to gain stage 2, and then use `binary-bootstrap` again). Once you've done
-that, you will have a `bootstrap` set equivalent to using `binary-bootstrap` in the first place.
+K dispozici je také příkaz `bootstrap` , který vytvoří všechny potřebné `bootstrap` balíčky od začátku. To se obvykle nedoporučuje, protože tyto balíčky jsou sestaveny pomocí toolchainu vašeho hostitelského systému a nejsou ani plně vybavené ani reprodukovatelné (váš hostitelský systém může ovlivnit sestavení), a proto by měly být použity pouze jako fáze 0 pro bootstraping nových Void systémů.
 
-Also keep in mind that a full source `bootstrap` is time consuming and will require having an
-assortment of utilities installed in your host system, such as `binutils`, `gcc`, `perl`,
-`texinfo` and others.
+Pokud se přesto rozhodnete použít `bootstrap` , použijte výsledný kontejner fáze 0 k opětovnému sestavení všech balíčků `bootstrap` , poté použijte `binary-bootstrap` (fáze 1) a znovu sestavte balíčky `bootstrap` (pro získání fáze 2 a poté znovu použijte `binary-bootstrap` ). Jakmile to uděláte, budete mít sadu `bootstrap` ekvivalentní použití `binary-bootstrap` .
 
-### Configuration
+Také mějte na paměti, že `bootstrap` úplného zdroje je časově náročné a bude vyžadovat instalaci řady utilit ve vašem hostitelském systému, jako jsou `binutils` , `gcc` , `perl` , `texinfo` a další.
 
-The `etc/defaults.conf` file contains the possible settings that can be overridden
-through the `etc/conf` configuration file for the `xbps-src` utility; if that file
-does not exist, will try to read configuration settings from `$XDG_CONFIG_HOME/xbps-src.conf`, `~/.config/xbps-src.conf`, `~/.xbps-src.conf`.
+### Konfigurace
 
-If you want to customize default `CFLAGS`, `CXXFLAGS` and `LDFLAGS`, don't override
-those defined in `etc/defaults.conf`, set them on `etc/conf` instead i.e:
+Soubor `etc/defaults.conf` obsahuje možná nastavení, která lze přepsat pomocí konfiguračního souboru `etc/conf` pro obslužný program `xbps-src` ; pokud tento soubor neexistuje, pokusí se načíst konfigurační nastavení z `$XDG_CONFIG_HOME/xbps-src.conf` , `~/.config/xbps-src.conf` , `~/.xbps-src.conf` .
 
-    $ echo 'XBPS_CFLAGS="your flags here"' >> etc/conf
-    $ echo 'XBPS_LDFLAGS="your flags here"' >> etc/conf
+Pokud chcete upravit výchozí `CFLAGS` , `CXXFLAGS` a `LDFLAGS` , nepřepisujte ty definované v `etc/defaults.conf` , nastavte je na `etc/conf` , tj.
 
-Native and cross compiler/linker flags are set per architecture in `common/build-profiles`
-and `common/cross-profiles` respectively. Ideally those settings are good enough by default,
-and there's no need to set your own unless you know what you are doing.
+```
+$ echo 'XBPS_CFLAGS="your flags here"' >> etc/conf
+$ echo 'XBPS_LDFLAGS="your flags here"' >> etc/conf
+```
 
-#### Virtual packages
+Nativní a křížový kompilátor/linker příznaky jsou nastaveny pro architekturu v `common/build-profiles` a `common/cross-profiles` . V ideálním případě jsou tato nastavení ve výchozím nastavení dostatečně dobrá a není třeba nastavovat vlastní, pokud nevíte, co děláte.
 
-The `etc/defaults.virtual` file contains the default replacements for virtual packages,
-used as dependencies in the source packages tree.
+#### Virtuální balíčky
 
-If you want to customize those replacements, copy `etc/defaults.virtual` to `etc/virtual`
-and edit it accordingly to your needs.
+Soubor `etc/defaults.virtual` obsahuje výchozí náhrady za virtuální balíčky, které se používají jako závislosti ve stromu zdrojových balíčků.
+
+Pokud chcete tyto náhrady přizpůsobit, zkopírujte `etc/defaults.virtual` do `etc/virtual` a upravte jej podle svých potřeb.
 
 <a name="directory-hierarchy"></a>
-### Directory hierarchy
 
-The following directory hierarchy is used with a default configuration file:
+### Hierarchie adresářů
 
-         /void-packages
-            |- common
-            |- etc
-            |- srcpkgs
-            |  |- xbps
-            |     |- template
-            |
-            |- hostdir
-            |  |- binpkgs ...
-            |  |- ccache ...
-            |  |- distcc-<arch> ...
-            |  |- repocache ...
-            |  |- sources ...
-            |
-            |- masterdir-<arch>
-            |  |- builddir -> ...
-            |  |- destdir -> ...
-            |  |- host -> bind mounted from <hostdir>
-            |  |- void-packages -> bind mounted from <void-packages>
+S výchozím konfiguračním souborem se používá následující hierarchie adresářů:
 
+```
+     /void-packages
+        |- common
+        |- etc
+        |- srcpkgs
+        |  |- xbps
+        |     |- template
+        |
+        |- hostdir
+        |  |- binpkgs ...
+        |  |- ccache ...
+        |  |- distcc-<arch> ...
+        |  |- repocache ...
+        |  |- sources ...
+        |
+        |- masterdir-<arch>
+        |  |- builddir -> ...
+        |  |- destdir -> ...
+        |  |- host -> bind mounted from <hostdir>
+        |  |- void-packages -> bind mounted from <void-packages>
+```
 
-The description of these directories is as follows:
+Popis těchto adresářů je následující:
 
- - `masterdir-<arch>`: master directory to be used as rootfs to build/install packages.
- - `builddir`: to unpack package source tarballs and where packages are built.
- - `destdir`: to install packages, aka **fake destdir**.
- - `hostdir/ccache`: to store ccache data if the `XBPS_CCACHE` option is enabled.
- - `hostdir/distcc-<arch>`: to store distcc data if the `XBPS_DISTCC` option is enabled.
- - `hostdir/repocache`: to store binary packages from remote repositories.
- - `hostdir/sources`: to store package sources.
- - `hostdir/binpkgs`: local repository to store generated binary packages.
+- `masterdir-<arch>` : hlavní adresář, který má být použit jako rootfs k sestavení/instalaci balíčků.
+- `builddir` : k rozbalení tarballů se zdrojovými kódy a umístění balíčků.
+- `destdir` : k instalaci balíčků alias **fake destdir** .
+- `hostdir/ccache` : k ukládání dat ccache, pokud je povolena volba `XBPS_CCACHE` .
+- `hostdir/distcc-<arch>` : k ukládání dat distcc, pokud je povolena volba `XBPS_DISTCC` .
+- `hostdir/repocache` : k ukládání binárních balíčků ze vzdálených úložišť.
+- `hostdir/sources` : k uložení zdrojů balíčků.
+- `hostdir/binpkgs` : místní úložiště pro ukládání generovaných binárních balíčků.
 
 <a name="building-packages"></a>
-### Building packages
 
-The simplest form of building package is accomplished by running the `pkg` target in `xbps-src`:
+### Stavební balíčky
+
+Nejjednodušší forma sestavení balíčku se dosáhne spuštěním cíle `pkg` v `xbps-src` :
 
 ```
 $ cd void-packages
 $ ./xbps-src pkg <pkgname>
 ```
 
-When the package and its required dependencies are built, the binary packages will be created
-and registered in the default local repository at `hostdir/binpkgs`; the path to this local repository can be added to
-any xbps configuration file (see xbps.d(5)) or by explicitly appending them via cmdline, i.e:
+Po vytvoření balíčku a jeho požadovaných závislostí budou binární balíčky vytvořeny a zaregistrovány ve výchozím místním úložišti na `hostdir/binpkgs` ; cestu k tomuto lokálnímu úložišti lze přidat do libovolného konfiguračního souboru xbps (viz xbps.d(5)) nebo je explicitně přidat pomocí cmdline, tj.
 
-    $ xbps-install --repository=hostdir/binpkgs ...
-    $ xbps-query --repository=hostdir/binpkgs ...
+```
+$ xbps-install --repository=hostdir/binpkgs ...
+$ xbps-query --repository=hostdir/binpkgs ...
+```
 
-By default **xbps-src** will try to resolve package dependencies in this order:
+Ve výchozím nastavení se **xbps-src** pokusí vyřešit závislosti balíčků v tomto pořadí:
 
- - If a dependency exists in the local repository, use it (`hostdir/binpkgs`).
- - If a dependency exists in a remote repository, use it.
- - If a dependency exists in a source package, use it.
+- Pokud v místním úložišti existuje závislost, použijte ji ( `hostdir/binpkgs` ).
+- Pokud ve vzdáleném úložišti existuje závislost, použijte ji.
+- Pokud ve zdrojovém balíčku existuje závislost, použijte ji.
 
-It is possible to avoid using remote repositories completely by using the `-N` flag.
+Použitím vzdálených úložišť je možné se zcela vyhnout použitím parametru `-N` .
 
-> The default local repository may contain multiple *sub-repositories*: `debug`, `multilib`, etc.
+> Výchozí místní úložiště může obsahovat více *dílčích repozitářů* : `debug` , `multilib` atd.
 
 <a name="build-options"></a>
-### Package build options
 
-The supported build options for a source package can be shown with `xbps-src show-options`:
+### Možnosti sestavení balíčku
 
-    $ ./xbps-src show-options foo
+Podporované možnosti sestavení pro zdrojový balíček lze zobrazit pomocí `xbps-src show-options` :
 
-Build options can be enabled with the `-o` flag of `xbps-src`:
+```
+$ ./xbps-src show-options foo
+```
 
-    $ ./xbps-src -o option,option1 pkg foo
+Možnosti sestavení lze povolit pomocí parametru `-o` `xbps-src` :
 
-Build options can be disabled by prefixing them with `~`:
+```
+$ ./xbps-src -o option,option1 pkg foo
+```
 
-    $ ./xbps-src -o ~option,~option1 pkg foo
+Možnosti sestavení lze zakázat jejich přidáním předponu `~` :
 
-Both ways can be used together to enable and/or disable multiple options
-at the same time with `xbps-src`:
+```
+$ ./xbps-src -o ~option,~option1 pkg foo
+```
 
-    $ ./xbps-src -o option,~option1,~option2 pkg foo
+Oba způsoby lze použít společně k povolení a/nebo zakázání více možností současně s `xbps-src` :
 
-The build options can also be shown for binary packages via `xbps-query(1)`:
+```
+$ ./xbps-src -o option,~option1,~option2 pkg foo
+```
 
-    $ xbps-query -R --property=build-options foo
+Možnosti sestavení lze také zobrazit pro binární balíčky pomocí `xbps-query(1)` :
 
-> NOTE: if you build a package with a custom option, and that package is available
-in an official void repository, an update will ignore those options. Put that package
-on `hold` mode via `xbps-pkgdb(1)`, i.e `xbps-pkgdb -m hold foo` to ignore updates
-with `xbps-install -u`. Once the package is on `hold`, the only way to update it
-is by declaring it explicitly: `xbps-install -u foo`.
+```
+$ xbps-query -R --property=build-options foo
+```
 
-Permanent global package build options can be set via `XBPS_PKG_OPTIONS` variable in the
-`etc/conf` configuration file. Per package build options can be set via
-`XBPS_PKG_OPTIONS_<pkgname>`.
+> POZNÁMKA: Pokud vytvoříte balíček s vlastní možností a tento balíček je dostupný v oficiálním neplatném úložišti, aktualizace bude tyto možnosti ignorovat. Přepněte tento balíček do režimu `hold` pomocí `xbps-pkgdb(1)` , tj. `xbps-pkgdb -m hold foo` pro ignorování aktualizací pomocí `xbps-install -u` . Jakmile je balíček `hold` , jediný způsob, jak jej aktualizovat, je explicitně jej deklarovat: `xbps-install -u foo` .
 
-> NOTE: if `pkgname` contains `dashes`, those should be replaced by `underscores`
-i.e `XBPS_PKG_OPTIONS_xorg_server=opt`.
+Trvalé globální možnosti sestavení balíčku lze nastavit pomocí proměnné `XBPS_PKG_OPTIONS` v konfiguračním souboru `etc/conf` . Možnosti sestavení pro jednotlivé balíčky lze nastavit pomocí `XBPS_PKG_OPTIONS_<pkgname>` .
 
-The list of supported package build options and its description is defined in the
-`common/options.description` file or in the `template` file.
+> POZNÁMKA: Pokud `pkgname` obsahuje `dashes` , měly by být nahrazeny `underscores` , tj `XBPS_PKG_OPTIONS_xorg_server=opt` .
+
+Seznam podporovaných voleb sestavení balíčku a jeho popis je definován v souboru `common/options.description` nebo v souboru `template` .
 
 <a name="sharing-and-signing"></a>
-### Sharing and signing your local repositories
 
-To share a local repository remotely it's mandatory to sign it and the binary packages
-stored on it. This is accomplished with the `xbps-rindex(1)` utility.
+### Sdílení a podepisování místních úložišť
 
-First a RSA key must be created with `openssl(1)` or `ssh-keygen(1)`:
+Chcete-li vzdáleně sdílet místní úložiště, je nutné jej podepsat a binární balíčky v něm uložené. Toho lze dosáhnout pomocí nástroje `xbps-rindex(1)` .
 
-	$ openssl genrsa -des3 -out privkey.pem 4096
+Nejprve je třeba vytvořit klíč RSA pomocí `openssl(1)` nebo `ssh-keygen(1)` :
 
-or
+```
+$ openssl genrsa -des3 -out privkey.pem 4096
+```
 
-	$ ssh-keygen -t rsa -b 4096 -m PEM -f privkey.pem
+nebo
 
-> Only RSA keys in PEM format are currently accepted by xbps.
+```
+$ ssh-keygen -t rsa -b 4096 -m PEM -f privkey.pem
+```
 
-Once the RSA private key is ready you can use it to initialize the repository metadata:
+> xbps aktuálně přijímá pouze klíče RSA ve formátu PEM.
 
-	$ xbps-rindex --sign --signedby "I'm Groot" --privkey privkey.pem $PWD/hostdir/binpkgs
+Jakmile je soukromý klíč RSA připraven, můžete jej použít k inicializaci metadat úložiště:
 
-And then make a signature per package:
+```
+$ xbps-rindex --sign --signedby "I'm Groot" --privkey privkey.pem $PWD/hostdir/binpkgs
+```
 
-	$ xbps-rindex --sign-pkg --privkey privkey.pem $PWD/hostdir/binpkgs/*.xbps
+A pak udělejte podpis na balíček:
 
-> If --privkey is unset, it defaults to `~/.ssh/id_rsa`.
+```
+$ xbps-rindex --sign-pkg --privkey privkey.pem $PWD/hostdir/binpkgs/*.xbps
+```
 
-If the RSA key was protected with a passphrase you'll have to type it, or alternatively set
-it via the `XBPS_PASSPHRASE` environment variable.
+> Pokud není --privkey nastaveno, výchozí je `~/.ssh/id_rsa` .
 
-Once the binary packages have been signed, check if the repository contains the appropriate `hex fingerprint`:
+Pokud byl klíč RSA chráněn přístupovou frází, budete ji muset zadat nebo ji nastavit pomocí proměnné prostředí `XBPS_PASSPHRASE` .
 
-	$ xbps-query --repository=hostdir/binpkgs -vL
-	...
+Jakmile jsou binární balíčky podepsány, zkontrolujte, zda úložiště obsahuje příslušný `hex fingerprint` :
 
-Each time a binary package is created, a package signature must be created with `--sign-pkg`.
+```
+$ xbps-query --repository=hostdir/binpkgs -vL
+...
+```
 
-> It is not possible to sign a repository with multiple RSA keys.
+Pokaždé, když je vytvořen binární balíček, musí být vytvořen podpis balíčku pomocí `--sign-pkg` .
 
-If packages in `hostdir/binpkgs` are signed, the key in `.plist` format (as imported by xbps) can be placed
-in `etc/repo-keys/` to prevent xbps-src from prompting to import that key.
+> Není možné podepsat úložiště pomocí více RSA klíčů.
+
+Pokud jsou podepsány balíčky v `hostdir/binpkgs` , klíč ve formátu `.plist` (importovaný xbps) lze umístit do `etc/repo-keys/` aby xbps-src nevyzval k importu tohoto klíče.
 
 <a name="rebuilding"></a>
-### Rebuilding and overwriting existing local packages
 
-Packages are overwritten on every build to make getting package with changed build options easy.
-To make xbps-src skip build and preserve first package build with given version and revision,
-same as in official void repository, set `XBPS_PRESERVE_PKGS=yes` in `etc/conf` file.
+### Opětovné sestavení a přepsání existujících místních balíčků
 
-Reinstalling a package in your target `rootdir` can be easily done too:
+Balíčky se při každém sestavení přepisují, aby bylo získání balíčku se změněnými možnostmi sestavení snadné. Aby xbps-src přeskočilo sestavení a zachovalo první sestavení balíčku s danou verzí a revizí, stejně jako v oficiálním neplatném repozitáři, nastavte `XBPS_PRESERVE_PKGS=yes` v souboru `etc/conf` .
 
-    $ xbps-install --repository=/path/to/local/repo -yf xbps-0.25_1
+Přeinstalaci balíčku do cílového `rootdir` lze také snadno provést:
 
-Using `-f` flag twice will overwrite configuration files.
+```
+$ xbps-install --repository=/path/to/local/repo -yf xbps-0.25_1
+```
 
-> Please note that the `package expression` must be properly defined to explicitly pick up
-the package from the desired repository.
+Dvojité použití parametru `-f` přepíše konfigurační soubory.
+
+> Vezměte prosím na vědomí, že `package expression` musí být správně definován, aby bylo možné balík explicitně vyzvednou z požadovaného úložiště.
 
 <a name="distcc"></a>
-### Enabling distcc for distributed compilation
 
-Setup the workers (machines that will compile the code):
+### Povolení distcc pro distribuovanou kompilaci
 
-    # xbps-install -Sy distcc
+Nastavte pracovníky (stroje, které budou kompilovat kód):
 
-Update distcc compiler whitelist
+```
+# xbps-install -Sy distcc
+```
 
-    # update-distcc-symlinks
+Aktualizace whitelistu kompilátoru distcc
 
-Modify the configuration to allow your local network machines to use distcc (e.g. `192.168.2.0/24`):
+```
+# update-distcc-symlinks
+```
 
-    # echo "192.168.2.0/24" >> /etc/distcc/clients.allow
+Upravte konfiguraci tak, aby vaše místní síťové počítače mohly používat distcc (např. `192.168.2.0/24` ):
 
-Enable and start the `distccd` service:
+```
+# echo "192.168.2.0/24" >> /etc/distcc/clients.allow
+```
 
-    # ln -s /etc/sv/distccd /var/service
+Povolte a spusťte službu `distccd` :
 
-Install distcc on the host (machine that executes xbps-src) as well.
-Unless you want to use the host as worker from other machines, there is no need
-to modify the configuration.
+```
+# ln -s /etc/sv/distccd /var/service
+```
 
-On the host you can now enable distcc in the `void-packages/etc/conf` file:
+Nainstalujte distcc také na hostitele (stroj, který spouští xbps-src). Pokud nechcete používat hostitele jako pracovníka z jiných počítačů, není třeba upravovat konfiguraci.
 
-    XBPS_DISTCC=yes
-    XBPS_DISTCC_HOSTS="localhost/2 --localslots_cpp=24 192.168.2.101/9 192.168.2.102/2"
-    XBPS_MAKEJOBS=16
+Na hostiteli nyní můžete povolit distcc v souboru `void-packages/etc/conf` :
 
-The example values assume a localhost CPU with 4 cores of which at most 2 are used for compiler jobs.
-The number of slots for preprocessor jobs is set to 24 in order to have enough preprocessed data for other CPUs to compile.
-The worker 192.168.2.101 has a CPU with 8 cores and the /9 for the number of jobs is a saturating choice.
-The worker 192.168.2.102 is set to run at most 2 compile jobs to keep its load low, even if its CPU has 4 cores.
-The XBPS_MAKEJOBS setting is increased to 16 to account for the possible parallelism (2 + 9 + 2 + some slack).
+```
+XBPS_DISTCC=yes
+XBPS_DISTCC_HOSTS="localhost/2 --localslots_cpp=24 192.168.2.101/9 192.168.2.102/2"
+XBPS_MAKEJOBS=16
+```
+
+Hodnoty příkladu předpokládají CPU localhost se 4 jádry, z nichž nejvýše 2 se používají pro úlohy kompilátoru. Počet slotů pro úlohy preprocesoru je nastaven na 24, aby bylo k dispozici dostatek předzpracovaných dat pro ostatní CPU ke kompilaci. Pracovník 192.168.2.101 má CPU s 8 jádry a /9 pro počet úloh je saturující volba. Pracovník 192.168.2.102 je nastaven tak, aby spouštěl maximálně 2 kompilační úlohy, aby byla jeho zátěž nízká, i když má CPU 4 jádra. Nastavení XBPS_MAKEJOBS je zvýšeno na 16, aby se zohlednil možný paralelismus (2 + 9 + 2 + určitá prodleva).
 
 <a name="distfiles-mirrors"></a>
-### Distfiles mirror(s)
 
-In etc/conf you may optionally define a mirror or a list of mirrors to search for distfiles.
+### Zrcadla Distfiles
 
-    $ echo 'XBPS_DISTFILES_MIRROR="ftp://192.168.100.5/gentoo/distfiles"' >> etc/conf
+V etc/conf můžete volitelně definovat zrcadlo nebo seznam zrcadel pro vyhledávání souborů distfiles.
 
-If more than one mirror is to be searched, you can either specify multiple URLs separated
-with blanks, or add to the variable like this
+```
+$ echo 'XBPS_DISTFILES_MIRROR="ftp://192.168.100.5/gentoo/distfiles"' >> etc/conf
+```
 
-    $ echo 'XBPS_DISTFILES_MIRROR+=" https://sources.voidlinux.org/"' >> etc/conf
+Pokud má být prohledáno více než jedno zrcadlo, můžete buď zadat více adres URL oddělených mezerami, nebo přidat do proměnné takto
 
-Make sure to put the blank after the first double quote in this case.
+```
+$ echo 'XBPS_DISTFILES_MIRROR+=" https://sources.voidlinux.org/"' >> etc/conf
+```
 
-The mirrors are searched in order for the distfiles to build a package until the
-checksum of the downloaded file matches the one specified in the template.
+V tomto případě nezapomeňte za první dvojitou uvozovku vložit mezeru.
 
-Ultimately, if no mirror carries the distfile, or in case all downloads failed the
-checksum verification, the original download location is used.
+Zrcadla jsou prohledána, aby distfiles vytvořily balíček, dokud kontrolní součet staženého souboru neodpovídá tomu, který je uveden v šabloně.
 
-If you use `uchroot` for your XBPS_CHROOT_CMD, you may also specify a local path
-using the `file://` prefix or simply an absolute path on your build host (e.g. /mnt/distfiles).
-Mirror locations specified this way are bind mounted inside the chroot environment
-under $XBPS_MASTERDIR and searched for distfiles just the same as remote locations.
+Nakonec, pokud žádné zrcadlo nenese distfile, nebo v případě, že všechna stahování selhala při ověření kontrolního součtu, použije se původní umístění stahování.
+
+Pokud pro XBPS_CHROOT_CMD používáte `uchroot` , můžete také zadat místní cestu pomocí předpony `file://` nebo jednoduše absolutní cestu na hostiteli sestavení (např. /mnt/distfiles). Takto zadaná zrcadlová umístění jsou připojena do chrootového prostředí pod $XBPS_MASTERDIR a vyhledávají distfiles stejně jako vzdálená umístění.
 
 <a name="cross-compiling"></a>
-### Cross compiling packages for a target architecture
 
-Currently `xbps-src` can cross build packages for some target architectures with a cross compiler.
-The supported target is shown with `./xbps-src -h`.
+### Křížová kompilace balíčků pro cílovou architekturu
 
-If a source package has been adapted to be **cross buildable** `xbps-src` will automatically build the binary package(s) with a simple command:
+V současné době může `xbps-src` křížit sestavení balíčků pro některé cílové architektury pomocí křížového kompilátoru. Podporovaný cíl je zobrazen pomocí `./xbps-src -h` .
 
-    $ ./xbps-src -a <target> pkg <pkgname>
+Pokud byl zdrojový balíček upraven tak, aby byl **křížově sestavitelný,** `xbps-src` automaticky sestaví binární balíčky pomocí jednoduchého příkazu:
 
-If the build for whatever reason fails, might be a new build issue or simply because it hasn't been adapted to be **cross compiled**.
+```
+$ ./xbps-src -a <target> pkg <pkgname>
+```
+
+Pokud sestavení z jakéhokoli důvodu selže, může to být problém nového sestavení nebo jednoduše proto, že nebylo upraveno pro **křížovou kompilaci** .
 
 <a name="foreign"></a>
-### Using xbps-src in a foreign Linux distribution
 
-xbps-src can be used in any recent Linux distribution matching the CPU architecture.
+### Použití xbps-src v zahraniční distribuci Linuxu
 
-To use xbps-src in your Linux distribution use the following instructions. Let's start downloading the xbps static binaries:
+xbps-src lze použít v jakékoli nedávné distribuci Linuxu odpovídající architektuře CPU.
 
-    $ wget http://repo-default.voidlinux.org/static/xbps-static-latest.<arch>-musl.tar.xz
-    $ mkdir ~/XBPS
-    $ tar xvf xbps-static-latest.<arch>-musl.tar.xz -C ~/XBPS
-    $ export PATH=~/XBPS/usr/bin:$PATH
+Chcete-li použít xbps-src ve vaší distribuci Linuxu, postupujte podle následujících pokynů. Začněme stahovat statické binární soubory xbps:
 
-If `xbps-uunshare` does not work because of lack of `user_namespaces(7)` support,
-try other [chroot methods](#chroot-methods).
+```
+$ wget http://repo-default.voidlinux.org/static/xbps-static-latest.<arch>-musl.tar.xz
+$ mkdir ~/XBPS
+$ tar xvf xbps-static-latest.<arch>-musl.tar.xz -C ~/XBPS
+$ export PATH=~/XBPS/usr/bin:$PATH
+```
 
-Clone the `void-packages` git repository:
+Pokud `xbps-uunshare` nefunguje kvůli nedostatku podpory `user_namespaces(7)` , zkuste jiné [chroot metody](#chroot-methods) .
 
-    $ git clone https://github.com/void-linux/void-packages.git
+Naklonujte `void-packages` git repozitář:
 
-and `xbps-src` should be fully functional; optionally, start the `bootstrap` process, i.e:
+```
+$ git clone https://github.com/void-linux/void-packages.git
+```
 
-    $ ./xbps-src binary-bootstrap
+a `xbps-src` by měl být plně funkční; volitelně spusťte proces `bootstrap` , tj.:
 
-The default masterdir is created in the current working directory, i.e. `void-packages/masterdir-<arch>`, where `<arch>` for the default masterdir is is the native xbps architecture.
+```
+$ ./xbps-src binary-bootstrap
+```
+
+Výchozí masterdir je vytvořen v aktuálním pracovním adresáři, tj `void-packages/masterdir-<arch>` , kde `<arch>` pro výchozí masterdir je nativní architektura xbps.
 
 <a name="remaking-masterdir"></a>
-### Remaking the masterdir
 
-If for some reason you must update xbps-src and the `bootstrap-update` target is not enough, it's possible to recreate a masterdir with two simple commands (please note that `zap` keeps your `ccache/distcc/host` directories intact):
+### Předělat masterdir
 
-    $ ./xbps-src zap
-    $ ./xbps-src binary-bootstrap
+Pokud z nějakého důvodu musíte aktualizovat xbps-src a cíl `bootstrap-update` nestačí, je možné znovu vytvořit masterdir pomocí dvou jednoduchých příkazů (všimněte si prosím, že `zap` udržuje vaše adresáře `ccache/distcc/host` nedotčené):
+
+```
+$ ./xbps-src zap
+$ ./xbps-src binary-bootstrap
+```
 
 <a name="updating-masterdir"></a>
-### Keeping your masterdir uptodate
 
-Sometimes the bootstrap packages must be updated to the latest available version in repositories, this is accomplished with the `bootstrap-update` target:
+### Udržujte svůj masterdir aktuální
 
-    $ ./xbps-src bootstrap-update
+Někdy musí být balíčky bootstrap aktualizovány na nejnovější dostupnou verzi v repozitářích, to se provádí pomocí cíle `bootstrap-update` :
+
+```
+$ ./xbps-src bootstrap-update
+```
 
 <a name="building-32bit"></a>
-### Building 32bit packages on x86_64
 
-Two ways are available to build 32bit packages on x86\_64:
+### Vytváření 32bitových balíčků na x86_64
 
- - native mode with a 32bit masterdir (recommended, used in official repository)
- - cross compilation mode to i686 [target](#cross-compiling)
+K sestavení 32bitových balíčků na x86_64 jsou k dispozici dva způsoby:
 
-The canonical mode (native) needs a new x86 `masterdir`, which is created when building a package for i686:
+- nativní režim s 32bitovým masterdirem (doporučeno, používá se v oficiálním úložišti)
+- režim křížové kompilace na [cíl](#cross-compiling) i686
 
-    $ ./xbps-src -A i686 ...
+Kanonický režim (nativní) potřebuje nový x86 `masterdir` , který se vytvoří při sestavování balíčku pro i686:
+
+```
+$ ./xbps-src -A i686 ...
+```
 
 <a name="building-for-musl"></a>
-### Building packages natively for the musl C library
 
-The canonical way of building packages for same architecture but different C library is through a dedicated masterdir by using the host architecture flag `-A`.
-To build for x86_64-musl on glibc x86_64 system, use `-A x86_64-musl` in your `xbps-src` invocation.
-This will create and bootstrap a new masterdir called `masterdir-x86_64-musl` that will be used when `-A x86_64-musl` is specified:
+### Nativní vytváření balíčků pro knihovnu musl C
 
-    $ ./xbps-src -A x86_64-musl pkg ...
+Kanonický způsob sestavování balíčků pro stejnou architekturu, ale s jinou knihovnou C, je pomocí vyhrazeného hlavního adresáře (masterdir) s použitím příznaku architektury hostitele `-A` . Pro sestavení pro x86_64-musl na systému glibc x86_64 použijte `-A x86_64-musl` ve volání `xbps-src` . Tím se vytvoří a nabootuje nový hlavní adresář s názvem `masterdir-x86_64-musl` , který bude použit, když je zadán `-A x86_64-musl` :
+
+```
+$ ./xbps-src -A x86_64-musl pkg ...
+```
 
 <a name="building-base-system"></a>
-### Building void base-system from scratch
 
-To rebuild all packages in `base-system` for your native architecture:
+### Budování prázdného základního systému od nuly
 
-    $ ./xbps-src -N pkg base-system
+Chcete-li znovu sestavit všechny balíčky v `base-system` pro vaši nativní architekturu:
 
-It's also possible to cross compile everything from scratch:
+```
+$ ./xbps-src -N pkg base-system
+```
 
-    $ ./xbps-src -a <target> -N pkg base-system
+Je také možné křížově kompilovat vše od začátku:
 
-Once the build has finished, you can specify the path to the local repository to `void-mklive`, i.e:
+```
+$ ./xbps-src -a <target> -N pkg base-system
+```
 
-    # cd void-mklive
-    # make
-    # ./mklive.sh ... -r /path/to/hostdir/binpkgs
+Po dokončení sestavení můžete zadat cestu k místnímu úložišti `void-mklive` , tj.
+
+```
+# cd void-mklive
+# make
+# ./mklive.sh ... -r /path/to/hostdir/binpkgs
+```
