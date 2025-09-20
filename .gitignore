@@ -11,9 +11,12 @@
 !/.gitignore
 !/.mailmap
 !/CONTRIBUTING.md
+!/CONTRIBUTING-en.md
 !/COPYING
 !/Manual.md
+!/Manual-en.md
 !/README.md
+!/README-en.md
 !/common
 !/etc
 !/srcpkgs
