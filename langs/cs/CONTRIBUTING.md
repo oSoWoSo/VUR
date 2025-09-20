@@ -1,8 +1,8 @@
 # Přispívání do void-balíčků
 
-void-packages is the backbone of the Void Linux distribution. It contains all the definitions to build packages from source.
+void-packages jsou páteří distribuce Void Linux. Obsahují všechny definice pro sestavení balíčků ze zdroje.
 
-This document describes how you, as a contributor, can help with adding packages, correcting bugs and adding features to void-packages.
+Tento dokument popisuje, jak můžete jako přispěvatel pomoci s přidáváním balíčků, opravováním chyb a přidáváním funkcí do void-balíčků.
 
 ## Požadavky na balíček
 
