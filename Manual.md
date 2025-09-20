@@ -1,98 +1,90 @@
-# The XBPS source packages manual
+# Manuál ke zdrojovým balíčkům XBPS
 
-This article contains an exhaustive manual of how to create new source
-packages for XBPS, the `Void Linux` native packaging system.
+Tento článek obsahuje vyčerpávající návod, jak vytvořit nové zdrojové balíčky pro XBPS, nativní balíčkovací systém `Void Linux` .
 
-*Table of Contents*
+*Obsah*
 
-* The XBPS source packages manual
-	* [Introduction](#Introduction)
-	* [Package build phases](#buildphase)
-	* [Package naming conventions](#namingconventions)
-		* [Libraries](#libs)
-		* [Language Modules](#language_modules)
-		* [Language Bindings](#language_bindings)
-		* [Programs](#programs)
-	* [Global functions](#global_funcs)
-	* [Global variables](#global_vars)
-	* [Available variables](#available_vars)
-		* [Mandatory variables](#mandatory_vars)
-		* [Optional variables](#optional_vars)
-		* [About the depends variables](#explain_depends)
-	* [Repositories](#repositories)
-		* [Repositories defined by Branch](#repo_by_branch)
-		* [Package defined repositories](#pkg_defined_repo)
-	* [Checking for new upstream releases](#updates)
-	* [Handling patches](#patches)
-	* [Build style scripts](#build_scripts)
-	* [Build helper scripts](#build_helper)
-	* [Functions](#functions)
-	* [Build options](#build_options)
-	* [INSTALL and REMOVE files](#install_remove_files)
-	* [INSTALL.msg and REMOVE.msg files](#install_remove_files_msg)
-	* [Creating system accounts/groups at runtime](#runtime_account_creation)
-	* [Writing runit services](#writing_runit_services)
-	* [32bit packages](#32bit_pkgs)
-	* [Subpackages](#pkgs_sub)
-	* [Some package classes](#pkgs_classes)
-		* [Development packages](#pkgs_development)
-		* [Data packages](#pkgs_data)
-		* [Documentation packages](#pkgs_documentation)
-		* [Python packages](#pkgs_python)
-		* [Go packages](#pkgs_go)
-		* [Haskell packages](#pkgs_haskell)
-		* [Font packages](#pkgs_font)
-	* [Renaming a package](#pkg_rename)
-	* [Removing a package](#pkg_remove)
-	* [XBPS Triggers](#xbps_triggers)
-		* [appstream-cache](#triggers_appstream_cache)
-		* [binfmts](#triggers_binfmts)
-		* [dkms](#triggers_dkms)
-		* [gconf-schemas](#triggers_gconf_schemas)
-		* [gdk-pixbuf-loaders](#triggers_gdk_pixbuf_loaders)
-		* [gio-modules](#triggers_gio_modules)
-		* [gettings-schemas](#triggers_gsettings_schemas)
-		* [gtk-icon-cache](#triggers_gtk_icon_cache)
-		* [gtk-immodules](#triggers_gtk_immodules)
-		* [gtk-pixbuf-loaders](#triggers_gtk_pixbuf_loaders)
-		* [gtk3-immodules](#triggers_gtk3_immodules)
-		* [hwdb.d-dir](#triggers_hwdb.d_dir)
-		* [info-files](#triggers_info_files)
-		* [initramfs-regenerate](#triggers_initramfs_regenerate)
-		* [kernel-hooks](#triggers_kernel_hooks)
-		* [mimedb](#triggers_mimedb)
-		* [mkdirs](#triggers_mkdirs)
-		* [pango-modules](#triggers_pango_module)
-		* [pycompile](#triggers_pycompile)
-		* [register-shell](#triggers_register_shell)
-		* [system-accounts](#triggers_system_accounts)
-		* [texmf-dist](#triggers_texmf_dist)
-		* [update-desktopdb](#triggers_update_desktopdb)
-		* [x11-fonts](#triggers_x11_fonts)
-		* [xml-catalog](#triggers_xml_catalog)
-	* [Void specific documentation](#documentation)
-	* [Notes](#notes)
-	* [Contributing via git](#contributing)
-	* [Help](#help)
+- Manuál ke zdrojovým balíčkům XBPS
+    - [Úvod](#Introduction)
+    - [Fáze sestavení balíčku](#buildphase)
+    - [Konvence pojmenovávání balíčků](#namingconventions)
+        - [Knihovny](#libs)
+        - [Jazykové moduly](#language_modules)
+        - [Jazykové vazby](#language_bindings)
+        - [Programy](#programs)
+    - [Globální funkce](#global_funcs)
+    - [Globální proměnné](#global_vars)
+    - [Dostupné proměnné](#available_vars)
+        - [Povinné proměnné](#mandatory_vars)
+        - [Nepovinné proměnné](#optional_vars)
+        - [O závislých proměnných](#explain_depends)
+    - [Úložiště](#repositories)
+        - [Repozitáře definované větví](#repo_by_branch)
+        - [Repozitáře definované balíčky](#pkg_defined_repo)
+    - [Kontrola nových upstream vydání](#updates)
+    - [Manipulace s náplastmi](#patches)
+    - [Vytvářejte stylové skripty](#build_scripts)
+    - [Vytvářejte pomocné skripty](#build_helper)
+    - [Funkce](#functions)
+    - [Možnosti sestavení](#build_options)
+    - [INSTALOVAT a ODEBRAT soubory](#install_remove_files)
+    - [INSTALL.msg a REMOVE.msg soubory](#install_remove_files_msg)
+    - [Vytváření systémových účtů/skupin za běhu](#runtime_account_creation)
+    - [Psaní runitových služeb](#writing_runit_services)
+    - [32bitové balíčky](#32bit_pkgs)
+    - [Dílčí balíčky](#pkgs_sub)
+    - [Některé třídy balíčků](#pkgs_classes)
+        - [Vývojové balíčky](#pkgs_development)
+        - [Datové balíčky](#pkgs_data)
+        - [Balíčky dokumentace](#pkgs_documentation)
+        - [Python balíčky](#pkgs_python)
+        - [Přejít na balíčky](#pkgs_go)
+        - [Haskell balíčky](#pkgs_haskell)
+        - [Balíčky písem](#pkgs_font)
+    - [Přejmenování balíčku](#pkg_rename)
+    - [Odebírání balíčku](#pkg_remove)
+    - [Spouštěče XBPS](#xbps_triggers)
+        - [appstream-cache](#triggers_appstream_cache)
+        - [binfmts](#triggers_binfmts)
+        - [dkms](#triggers_dkms)
+        - [schémata gconf](#triggers_gconf_schemas)
+        - [gdk-pixbuf-loadery](#triggers_gdk_pixbuf_loaders)
+        - [gio-moduly](#triggers_gio_modules)
+        - [získávání-schémata](#triggers_gsettings_schemas)
+        - [gtk-ikona-mezipaměť](#triggers_gtk_icon_cache)
+        - [gtk-immodules](#triggers_gtk_immodules)
+        - [gtk-pixbuf-loadery](#triggers_gtk_pixbuf_loaders)
+        - [gtk3-immodules](#triggers_gtk3_immodules)
+        - [hwdb.d-dir](#triggers_hwdb.d_dir)
+        - [info-soubory](#triggers_info_files)
+        - [initramfs-regenerate](#triggers_initramfs_regenerate)
+        - [kernel-háky](#triggers_kernel_hooks)
+        - [mimedb](#triggers_mimedb)
+        - [mkdirs](#triggers_mkdirs)
+        - [pango-moduly](#triggers_pango_module)
+        - [pycompile](#triggers_pycompile)
+        - [registr-shell](#triggers_register_shell)
+        - [systémové účty](#triggers_system_accounts)
+        - [texmf-dist](#triggers_texmf_dist)
+        - [update-desktopdb](#triggers_update_desktopdb)
+        - [x11-fonty](#triggers_x11_fonts)
+        - [xml-katalog](#triggers_xml_catalog)
+    - [Zrušte konkrétní dokumentaci](#documentation)
+    - [Poznámky](#notes)
+    - [Přispívání přes git](#contributing)
+    - [Pomoc](#help)
 
 <a id="Introduction"></a>
-### Introduction
 
-The `void-packages` repository contains all the
-recipes to download, compile and build binary packages for Void Linux.
-These `source` package files are called `templates`.
+### Úvod
 
-The `template` files are shell scripts that define `variables` and `functions`
-to be processed by `xbps-src`, the package builder, to generate binary packages.
-The shell used by `xbps-src` is GNU bash; `xbps-src` doesn't aim to be
-compatible with POSIX `sh`.
+Úložiště `void-packages` obsahuje všechny recepty ke stažení, kompilaci a sestavování binárních balíčků pro Void Linux. Tyto soubory `source` balíčků se nazývají `templates` .
 
-By convention, all templates start with a comment saying that it is a
-`template file` for a certain package. Most of the lines should be kept under 80
-columns; variables that list many values can be split into new lines, with the
-continuation in the next line indented by one space.
+Soubory `template` jsou skripty shellu, které definují `variables` a `functions` , které má zpracovat `xbps-src` , tvůrce balíčků, za účelem generování binárních balíčků. Shell používaný `xbps-src` je GNU bash; `xbps-src` si neklade za cíl být kompatibilní s POSIX `sh` .
 
-A simple `template` example is as follows:
+Podle konvence všechny šablony začínají komentářem, který říká, že se jedná o `template file` pro určitý balíček. Většina řádků by měla mít méně než 80 sloupců; proměnné, které vypisují mnoho hodnot, lze rozdělit na nové řádky, přičemž pokračování na dalším řádku je odsazeno o jednu mezeru.
+
+Jednoduchý příklad `template` je následující:
 
 ```
 # Template file for 'foo'
@@ -108,114 +100,90 @@ distfiles="http://www.foo.org/foo-${version}.tar.gz"
 checksum="fea0a94d4b605894f3e2d5572e3f96e4413bcad3a085aae7367c2cf07908b2ff"
 ```
 
-The template file contains definitions to download, build and install the
-package files to a `fake destdir`, and after this a binary package can be
-generated with the definitions specified on it.
+Soubor šablony obsahuje definice ke stažení, sestavení a instalaci souborů balíčků do `fake destdir` a poté lze vygenerovat binární balíček s definicemi v něm uvedenými.
 
-Don't worry if anything is not clear as it should be. The reserved `variables`
-and `functions` will be explained later. This `template` file should be created
-in a directory matching `$pkgname`, Example: `void-packages/srcpkgs/foo/template`.
+Nedělejte si starosti, pokud něco není jasné, jak by mělo být. Rezervované `variables` a `functions` budou vysvětleny později. Tento soubor `template` by měl být vytvořen v adresáři, který odpovídá `$pkgname` , Příklad: `void-packages/srcpkgs/foo/template` .
 
-If everything went fine after running
+Pokud po běhu vše proběhlo v pořádku
 
-    $ ./xbps-src pkg <pkgname>
+```
+$ ./xbps-src pkg <pkgname>
+```
 
-a binary package named `foo-1.0_1.<arch>.xbps` will be generated in the local repository
-`hostdir/binpkgs`.
+v místním úložišti `hostdir/binpkgs` bude vygenerován binární balíček s názvem `foo-1.0_1.<arch>.xbps`
 
 <a id="buildphase"></a>
-### Package build phases
 
-Building a package consist of the following phases:
+### Fáze sestavení balíčku
 
-- `setup` This phase prepares the environment for building a package.
+Sestavení balíčku se skládá z následujících fází:
 
-- `fetch` This phase downloads required sources for a `source package`, as defined by
-the `distfiles` variable or `do_fetch()` function.
+- `setup` Tato fáze připravuje prostředí pro sestavení balíčku.
 
-- `extract` This phase extracts the `distfiles` files into `$wrksrc` or executes the `do_extract()`
-function, which is the directory to be used to compile the `source package`.
+- `fetch` Tato fáze stáhne požadované zdroje pro `source package` , jak je definováno proměnnou `distfiles` nebo funkcí `do_fetch()` .
 
-- `patch` This phase applies all patches in the patches directory of the package and
-can be used to perform other operations before configuring the package.
+- `extract` Tato fáze rozbalí soubory `distfiles` do `$wrksrc` nebo spustí funkci `do_extract()` , což je adresář, který se má použít ke kompilaci `source package` .
 
-- `configure` This phase executes the `configuration` of a `source package`, i.e `GNU configure scripts`.
+- `patch` Tato fáze aplikuje všechny záplaty v adresáři záplat balíčku a lze ji použít k provedení dalších operací před konfigurací balíčku.
 
-- `build` This phase compiles/prepares the `source files` via `make` or any other compatible method.
+- `configure` Tato fáze provede `configuration` `source package` , tj. `GNU configure scripts` .
 
-- `check` This optional phase checks the result of the `build` phase by running the testsuite provided by the package.
-If the default `do_check` function provided by the build style doesn't do anything, the template should set
-`make_check_target` and/or `make_check_args` appropriately or define its own `do_check` function. If tests take too long
-or can't run in all environments, `make_check` should be set to fitting value or
-`do_check` should be customized to limit testsuite unless `XBPS_CHECK_PKGS` is `full`.
+- `build` Tato fáze zkompiluje/připraví `source files` pomocí `make` nebo jiné kompatibilní metody.
 
-- `install` This phase installs the `package files` into the package destdir `<masterdir>/destdir/<pkgname>-<version>`,
-via `make install` or any other compatible method.
+- `check` Tato volitelná fáze kontroluje výsledek fáze `build` spuštěním testovací sady, kterou balíček poskytuje. Pokud výchozí funkce `do_check` poskytovaná stylem sestavení nic nedělá, šablona by měla vhodně nastavit `make_check_target` a/nebo `make_check_args` nebo definovat svou vlastní funkci `do_check` . Pokud testy trvají příliš dlouho nebo se nedají spustit ve všech prostředích, `make_check` by měl být nastaven na odpovídající hodnotu nebo `do_check` by měl být přizpůsoben tak, aby omezil testovací sadu, pokud není `XBPS_CHECK_PKGS` `full` .
 
-- `pkg` This phase builds the `binary packages` with files stored in the
-`package destdir` and registers them into the local repository.
+- `install` Tato fáze nainstaluje `package files` do balíčku destdir `<masterdir>/destdir/<pkgname>-<version>` , pomocí `make install` nebo jakoukoli jinou kompatibilní metodou.
 
-- `clean` This phase cleans up the package (if defined).
+- `pkg` Tato fáze vytvoří `binary packages` se soubory uloženými v `package destdir` a zaregistruje je do místního úložiště.
 
-`xbps-src` supports running just the specified phase, and if it ran
-successfully, the phase will be skipped later (unless its work directory
-`${wrksrc}` is removed with `xbps-src clean`).
+- `clean` Tato fáze vyčistí balíček (pokud je definován).
+
+`xbps-src` podporuje spuštění pouze zadané fáze, a pokud proběhla úspěšně, fáze bude později přeskočena (pokud její pracovní adresář `${wrksrc}` nebude odstraněn pomocí `xbps-src clean` ).
 
 <a id="namingconventions"></a>
-### Package naming conventions
+
+### Konvence pojmenovávání balíčků
 
 <a id="libs"></a>
-#### Libraries
 
-Libraries are packages which provide shared objects (\*.so) in /usr/lib.
-They should be named like their upstream package name with the following
-exceptions:
+#### Knihovny
 
-- The package is a subpackage of a front end application and provides
-shared objects used by the base package and other third party libraries. In that
-case it should be prefixed with 'lib'. An exception from that rule is: If an
-executable is only used for building that package, it moves to the -devel
-package.
+Knihovny jsou balíčky, které poskytují sdílené objekty (*.so) v /usr/lib. Měly by být pojmenovány jako jejich název upstream balíčku s následujícími výjimkami:
 
-Example: wireshark -> subpkg libwireshark
+- Balíček je dílčím balíčkem frontendové aplikace a poskytuje sdílené objekty používané základním balíčkem a dalšími knihovnami třetích stran. V takovém případě by měl mít předponu 'lib'. Výjimka z tohoto pravidla je: Pokud je spustitelný soubor použit pouze pro sestavení tohoto balíčku, přesune se do balíčku -devel.
 
-Libraries have to be split into two sub packages: `<name>` and `<name>-devel`.
+Příklad: wireshark -&gt; subpkg libwireshark
 
-- `<name>` should only contain those parts of a package which are needed to run
-a linked program.
+Knihovny musí být rozděleny do dvou dílčích balíčků: `<name>` a `<name>-devel` .
 
-- `<name>-devel` should contain all files which are needed to compile a package
-against this package. If the library is a sub package, its corresponding
-development package should be named `lib<name>-devel`
+- `<name>` by mělo obsahovat pouze ty části balíčku, které jsou potřebné ke spuštění propojeného programu.
+
+- `<name>-devel` by měl obsahovat všechny soubory, které jsou potřeba ke kompilaci balíčku proti tomuto balíčku. Pokud je knihovna dílčím balíčkem, měl by se jeho odpovídající vývojový balíček jmenovat `lib<name>-devel`
 
 <a id="language_modules"></a>
-#### Language Modules
 
-Language modules are extensions to script or compiled languages. Those packages
-do not provide any executables themselves, but can be used by other packages
-written in the same language.
+#### Jazykové moduly
 
-The naming convention to those packages is:
+Jazykové moduly jsou rozšířením skriptovacích nebo kompilovaných jazyků. Tyto balíčky samy o sobě neposkytují žádné spustitelné soubory, ale mohou je používat jiné balíčky napsané ve stejném jazyce.
+
+Konvence pojmenování těchto balíčků je:
 
 ```
 <language>-<name>
 ```
 
-If a package provides both, a module and a executable, it should be split into
-a package providing the executable named `<name>` and the module named
-`<language>-<name>`. If a package starts with the languages name itself, the
-language prefix can be dropped. Short names for languages are no valid substitute
-for the language prefix.
+Pokud balíček obsahuje modul i spustitelný soubor, měl by být rozdělen na balíček poskytující spustitelný soubor s názvem `<name>` a modul s názvem `<language>-<name>` . Pokud balíček začíná samotným názvem jazyků, lze předponu jazyka vypustit. Krátké názvy jazyků nejsou platnou náhradou jazykové předpony.
 
 Example: perl-URI, python3-pyside2
 
 <a id="language_bindings"></a>
-#### Language Bindings
 
-Language Bindings are packages which allow programs or libraries to have
-extensions or plugins written in a certain language.
+#### Jazykové vazby
 
-The naming convention to those packages is:
+Jazykové vazby jsou balíčky, které umožňují programům nebo knihovnám mít rozšíření nebo zásuvné moduly napsané v určitém jazyce.
+
+Konvence pojmenování těchto balíčků je:
+
 ```
 <name>-<language>
 ```
@@ -223,498 +191,319 @@ The naming convention to those packages is:
 Example: gimp-python3, irssi-perl
 
 <a id="programs"></a>
-#### Programs
 
-Programs put executables under /usr/bin (or in very special cases in other
-.../bin directories)
+#### Programy
 
-For those packages the upstream packages name should be used. Remember that
-in contrast to many other distributions, void doesn't lowercase package names.
-As a rule of thumb, if the tar.gz of a package contains uppercase letter, then
-the package name should contain them too; if it doesn't, the package name
-is lowercase.
+Programy ukládají spustitelné soubory do /usr/bin (nebo ve velmi speciálních případech do jiných .../bin adresářů)
 
-Programs can be split into program packages and library packages. The program
-package should be named as described above. The library package should be
-prefixed with "lib" (see section `Libraries`)
+U těchto balíčků by měl být použit název upstream balíčků. Pamatujte, že na rozdíl od mnoha jiných distribucí, void nepíše názvy balíčků malými písmeny. Obecně platí, že pokud tar.gz balíku obsahuje velká písmena, pak by je měl obsahovat i název balíku; pokud tomu tak není, název balíčku je malá písmena.
+
+Programy lze rozdělit na balíčky programů a balíčky knihoven. Programový balíček by měl být pojmenován tak, jak je popsáno výše. Balíček knihovny by měl mít předponu "lib" (viz část `Libraries` )
 
 <a id="global_funcs"></a>
-### Global functions
 
-The following functions are defined by `xbps-src` and can be used on any template:
+### Globální funkce
+
+Následující funkce jsou definovány `xbps-src` a lze je použít na libovolné šabloně:
 
 - *vinstall()* `vinstall <file> <mode> <targetdir> [<name>]`
 
-	Installs `file` with the specified `mode` into `targetdir` in the pkg `$DESTDIR`.
-	The optional 4th argument can be used to change the `file name`.
+    Nainstaluje `file` se zadaným `mode` do `targetdir` v pkg `$DESTDIR` . Volitelný 4. argument lze použít ke změně `file name` .
 
 - *vcopy()* `vcopy <pattern> <targetdir>`
 
-	Copies recursively all files in `pattern` to `targetdir` in the pkg `$DESTDIR`.
+    Zkopíruje rekurzivně všechny soubory ve `pattern` do `targetdir` v balíčku `$DESTDIR` .
 
 - *vmove()* `vmove <pattern>`
 
-	Moves `pattern` to the specified directory in the pkg `$DESTDIR`.
+    Přesune `pattern` do zadaného adresáře v balíčku `$DESTDIR` .
 
 - *vmkdir()* `vmkdir <directory> [<mode>]`
 
-	Creates a directory in the pkg `$DESTDIR`. The 2nd optional argument sets the mode of the directory.
+    Vytvoří adresář v pkg `$DESTDIR` . 2. volitelný argument nastavuje režim adresáře.
 
 - *vbin()* `vbin <file> [<name>]`
 
-	Installs `file` into `usr/bin` in the pkg `$DESTDIR` with the
-	permissions 0755. The optional 2nd argument can be used to change
-	the `file name`.
+    Nainstaluje `file` do `usr/bin` v pkg `$DESTDIR` s oprávněním 0755. Volitelný 2. argument lze použít ke změně `file name` .
 
 - *vman()* `vman <file> [<name>]`
 
-	Installs `file` as a man page. `vman()` parses the name and
-	determines the section as well as localization. Also transparently
-	converts gzipped (.gz) and bzipped (.bz2) manpages into plaintext.
-	Example mappings:
+    Nainstaluje `file` jako manuálovou stránku. `vman()` analyzuje název a určuje sekci a také lokalizaci. Také transparentně převádí gzipované (.gz) a bzipované (.bz2) manuálové stránky na prostý text. Příklad mapování:
 
-	- `foo.1` -> `${DESTDIR}/usr/share/man/man1/foo.1`
-	- `foo.fr.1` -> `${DESTDIR}/usr/share/man/fr/man1/foo.1`
-	- `foo.1p` -> `${DESTDIR}/usr/share/man/man1/foo.1p`
-	- `foo.1.gz` -> `${DESTDIR}/usr/share/man/man1/foo.1`
-	- `foo.1.bz2` -> `${DESTDIR}/usr/share/man/man1/foo.1`
+    - `foo.1` -&gt; `${DESTDIR}/usr/share/man/man1/foo.1`
+    - `foo.fr.1` -&gt; `${DESTDIR}/usr/share/man/fr/man1/foo.1`
+    - `foo.1p` -&gt; `${DESTDIR}/usr/share/man/man1/foo.1p`
+    - `foo.1.gz` -&gt; `${DESTDIR}/usr/share/man/man1/foo.1`
+    - `foo.1.bz2` -&gt; `${DESTDIR}/usr/share/man/man1/foo.1`
 
 - *vdoc()* `vdoc <file> [<name>]`
 
-	Installs `file` into `usr/share/doc/<pkgname>` in the pkg
-	`$DESTDIR`. The optional 2nd argument can be used to change the
-	`file name`.
+    Nainstaluje `file` do `usr/share/doc/<pkgname>` v balíčku `$DESTDIR` . Volitelný 2. argument lze použít ke změně `file name` .
 
 - *vconf()* `vconf <file> [<name>]`
 
-	Installs `file` into `etc` in the pkg
-	`$DESTDIR`. The optional 2nd argument can be used to change the
-	`file name`.
+    Nainstaluje `file` do `etc` v pkg `$DESTDIR` . Volitelný 2. argument lze použít ke změně `file name` .
 
 - *vsconf()* `vsconf <file> [<name>]`
 
-	Installs `file` into `usr/share/examples/<pkgname>` in the pkg
-	`$DESTDIR`. The optional 2nd argument can be used to change the
-	`file name`.
+    Nainstaluje `file` do `usr/share/examples/<pkgname>` v pkg `$DESTDIR` . Volitelný 2. argument lze použít ke změně `file name` .
 
 - <a id="vlicense"></a>
- *vlicense()* `vlicense <file> [<name>]`
+    *vlicense()* `vlicense <file> [<name>]`
 
-	Installs `file` into `usr/share/licenses/<pkgname>` in the pkg
-	`$DESTDIR`. The optional 2nd argument can be used to change the
-	`file name`. See [license](#var_license) for when to use it.
+    Nainstaluje `file` do `usr/share/licenses/<pkgname>` v balíčku `$DESTDIR` . Volitelný 2. argument lze použít ke změně `file name` . Podívejte se [na licenci](#var_license) , kdy ji použít.
 
 - *vsv()* `vsv <service> [<facility>]`
 
-	Installs `service` from `${FILESDIR}` to /etc/sv. The service must
-	be a directory containing at least a run script. Note the `supervise`
-	symlink will be created automatically by `vsv` and that the run script
-	is automatically made executable by this function.
-	For further information on how to create a new service directory see
-	[The corresponding section the FAQ](http://smarden.org/runit/faq.html#create).
-	A `log` sub-service will be automatically created if one does not exist in
-	`${FILESDIR}/$service`, containing `exec vlogger -t $service -p $facility`.
-	if a second argument is not specified, the `daemon` facility is used.
-	For more information about `vlogger` and available values for the facility,
-	see [vlogger(8)](https://man.voidlinux.org/vlogger.8).
+    Nainstaluje `service` z `${FILESDIR}` do /etc/sv. Služba musí být adresář obsahující alespoň spouštěcí skript. Všimněte si, že `supervise` symbolický odkaz bude automaticky vytvořen `vsv` a že spouštěcí skript je touto funkcí automaticky proveden jako spustitelný. Další informace o tom, jak vytvořit nový adresář služeb, najdete [v příslušné části FAQ](http://smarden.org/runit/faq.html#create) . Pokud ve `${FILESDIR}/$service` neexistuje, bude automaticky vytvořena podslužba `log` obsahující `exec vlogger -t $service -p $facility` . není-li zadán druhý argument, použije se funkce `daemon` . Další informace o `vlogger` a dostupných hodnotách pro zařízení naleznete [v části vlogger(8)](https://man.voidlinux.org/vlogger.8) .
 
 - *vsed()* `vsed -i <file> -e <regex>`
 
-	Wrapper around sed that checks sha256sum of a file before and after running
-	the sed command to detect cases in which the sed call didn't change anything.
-	Takes any arbitrary amount of files and regexes by calling `-i file` and
-	`-e regex` repeatedly, at least one file and one regex must be specified.
+    Wrapper kolem sed, který kontroluje sha256sum souboru před a po spuštění příkazu sed, aby zjistil případy, ve kterých volání sed nic nezměnilo. Přebírá libovolné množství souborů a regexů opakovaným voláním `-i file` a `-e regex` , musí být specifikován alespoň jeden soubor a jeden regex.
 
-	Note that vsed will call the sed command for every regex specified against
-	every file specified, in the order that they are given.
+    Všimněte si, že vsed zavolá příkaz sed pro každý zadaný regulární výraz pro každý zadaný soubor v pořadí, v jakém jsou zadány.
 
 - *vcompletion()* `<file> <shell> [<command>]`
 
-	Installs shell completion from `file` for `command`, in the correct location
-	and with the appropriate filename for `shell`. If `command` isn't specified,
-	it will default to `pkgname`. The `shell` argument can be one of `bash`,
-	`fish` or `zsh`.
+    Nainstaluje dokončení shellu ze `file` pro `command` do správného umístění a s příslušným názvem souboru pro `shell` . Pokud `command` není zadán, bude jako výchozí nastaven `pkgname` . Argument `shell` může být jeden z `bash` , `fish` nebo `zsh` .
 
 - *vextract()* `[-C <target directory>] [--no-strip-components|--strip-components=<n>] <file>`
 
-	Extracts `file` to `target directory` with `n` directory components stripped. If
-	`target directory` not specified, defaults to the working directory. If
-	`--strip-components` or `--no-strip-components` is not specified, defaults to
-	`--strip-components=1`.
+    Extrahuje `file` do `target directory` s odstraněnými `n` adresářovými komponentami. Pokud `target directory` není zadán, použije se jako výchozí pracovní adresář. Pokud není zadáno `--strip-components` nebo `--no-strip-components` , výchozí je `--strip-components=1` .
 
 - *vsrcextract()* `[-C <target directory>] [--no-strip-components|--strip-components=<n>] <file>`
 
-	Extracts `$XBPS_SRCDISTDIR/$pkgname-$version/<file>` to `target directory`
-	with `n` directory components stripped. If `target directory` not specified,
-	defaults to the working directory. If `--strip-components` or `--no-strip-components`
-	is not specified, defaults to `--strip-components=1`.
+    Extrahuje `$XBPS_SRCDISTDIR/$pkgname-$version/<file>` do `target directory` s `n` odstraněnými komponentami adresáře. Pokud `target directory` není zadán, použije se jako výchozí pracovní adresář. Pokud není zadáno `--strip-components` nebo `--no-strip-components` , výchozí je `--strip-components=1` .
 
-	This is useful when used in conjunction with `skip_extraction` and for submodule distfiles.
+    To je užitečné při použití ve spojení s `skip_extraction` a pro submodulové distfiles.
 
 - *vsrccopy()* `<file>... <target>`
 
-	Copies `file`s from `$XBPS_SRCDISTDIR/$pkgname-$version/` into the `target` directory,
-	creating `target` if it does not exist.
+    Zkopíruje `file` z `$XBPS_SRCDISTDIR/$pkgname-$version/` do `target` adresáře a vytvoří `target` , pokud neexistuje.
 
-	This is useful when used in conjunction with `skip_extraction`.
+    To je užitečné při použití ve spojení s `skip_extraction` .
 
-> Shell wildcards must be properly quoted, Example: `vmove "usr/lib/*.a"`.
+> Zástupné znaky shellu musí být správně uvozovány, Příklad: `vmove "usr/lib/*.a"` .
 
 <a id="global_vars"></a>
-### Global variables
 
-The following variables are defined by `xbps-src` and can be used on any template:
+### Globální proměnné
 
-- `makejobs` Set to `-jX` if `XBPS_MAKEJOBS` is defined, to allow parallel jobs with `GNU make`.
+Následující proměnné jsou definovány `xbps-src` a lze je použít v jakékoli šabloně:
 
-- `sourcepkg`  Set to the to main package name, can be used to match the main package
-rather than additional binary package names.
+- `makejobs` Nastavte na `-jX` pokud je definováno `XBPS_MAKEJOBS` , abyste povolili paralelní úlohy s `GNU make` .
 
-- `CHROOT_READY`  Set if the target chroot (masterdir) is ready for chroot builds.
+- `sourcepkg` Nastaveno na hlavní název balíku, lze jej použít pro shodu s hlavním balíkem spíše než s dalšími názvy binárních balíků.
 
-- `CROSS_BUILD` Set if `xbps-src` is cross compiling a package.
+- `CHROOT_READY` Nastavte, zda je cílový chroot (masterdir) připraven pro sestavení chrootu.
 
-- `XBPS_CHECK_PKGS` Set if `xbps-src` is going to run tests for a package.
-Longer testsuites should only be run in `do_check()` if it is set to `full`.
+- `CROSS_BUILD` Nastavte, zda `xbps-src` křížově kompiluje balíček.
 
-- `DESTDIR` Full path to the fake destdir used by the source pkg, set to
-`<masterdir>/destdir/${sourcepkg}-${version}`.
+- `XBPS_CHECK_PKGS` Nastavte, zda bude `xbps-src` spouštět testy pro balíček. Delší testovací sady by měly být spouštěny v `do_check()` pouze pokud je nastaveno na `full` .
 
-- `FILESDIR` Full path to the `files` package directory, i.e `srcpkgs/foo/files`.
-The `files` directory can be used to store additional files to be installed
-as part of the source package.
+- `DESTDIR` Úplná cesta k falešnému destdir používanému zdrojovým balíčkem pkg, nastavená na `<masterdir>/destdir/${sourcepkg}-${version}` .
 
-- `PKGDESTDIR` Full path to the fake destdir used by the `pkg_install()` function in
-`subpackages`, set to `<masterdir>/destdir/${pkgname}-${version}`.
+- `FILESDIR` Úplná cesta k adresáři balíčku `files` , tj. `srcpkgs/foo/files` . Adresář `files` lze použít k uložení dalších souborů, které se mají nainstalovat jako součást zdrojového balíčku.
 
-- `XBPS_BUILDDIR` Directory to store the `source code` of the source package being processed,
-set to `<masterdir>/builddir`. The package `wrksrc` is always stored
-in this directory such as `${XBPS_BUILDDIR}/${wrksrc}`.
+- `PKGDESTDIR` Úplná cesta k falešnému cílovému adresáři používanému funkcí `pkg_install()` v `subpackages` , nastavená na `<masterdir>/destdir/${pkgname}-${version}` .
 
-- `XBPS_MACHINE` The machine architecture as returned by `xbps-uhelper arch`.
+- `XBPS_BUILDDIR` Adresář pro uložení `source code` zpracovávaného zdrojového balíčku, nastavte na `<masterdir>/builddir` . Balíček `wrksrc` je vždy uložen v tomto adresáři, například `${XBPS_BUILDDIR}/${wrksrc}` .
 
-- `XBPS_ENDIAN` The machine's endianness ("le" or "be").
+- `XBPS_MACHINE` Architektura stroje vrácená `xbps-uhelper arch` .
 
-- `XBPS_LIBC` The machine's C library ("glibc" or "musl").
+- `XBPS_ENDIAN` Endianness stroje ("le" nebo "be").
 
-- `XBPS_WORDSIZE` The machine's word size in bits (32 or 64).
+- `XBPS_LIBC` Knihovna C počítače ("glibc" nebo "musl").
 
-- `XBPS_NO_ATOMIC8` The machine lacks native 64-bit atomics (needs libatomic emulation).
+- `XBPS_WORDSIZE` Velikost slova stroje v bitech (32 nebo 64).
 
-- `XBPS_SRCDISTDIR` Full path to where the `source distfiles` are stored, i.e `$XBPS_HOSTDIR/sources`.
+- `XBPS_NO_ATOMIC8` Stroj postrádá nativní 64bitové atomy (potřebuje emulaci libatomic).
 
-- `XBPS_SRCPKGDIR` Full path to the `srcpkgs` directory.
+- `XBPS_SRCDISTDIR` Úplná cesta k místu, kde jsou uloženy `source distfiles` , tj. `$XBPS_HOSTDIR/sources` .
 
-- `XBPS_TARGET_MACHINE` The target machine architecture when cross compiling a package.
+- `XBPS_SRCPKGDIR` Úplná cesta k adresáři `srcpkgs` .
 
-- `XBPS_TARGET_ENDIAN` The target machine's endianness ("le" or "be").
+- `XBPS_TARGET_MACHINE` Architektura cílového počítače při křížové kompilaci balíčku.
 
-- `XBPS_TARGET_LIBC` The target machine's C library ("glibc" or "musl").
+- `XBPS_TARGET_ENDIAN` Endianness cílového počítače ("le" nebo "be").
 
-- `XBPS_TARGET_WORDSIZE` The target machine's word size in bits (32 or 64).
+- `XBPS_TARGET_LIBC` Knihovna C cílového počítače ("glibc" nebo "musl").
 
-- `XBPS_TARGET_NO_ATOMIC8` The target machine lacks native 64-bit atomics (needs libatomic emulation).
+- `XBPS_TARGET_WORDSIZE` Velikost slova cílového počítače v bitech (32 nebo 64).
 
-- `XBPS_FETCH_CMD` The utility to fetch files from `ftp`, `http` of `https` servers.
+- `XBPS_TARGET_NO_ATOMIC8` Cílový počítač postrádá nativní 64bitové atomy (potřebuje emulaci libatomic).
 
-- `XBPS_WRAPPERDIR` Full path to where xbps-src's wrappers for utilities are stored.
+- `XBPS_FETCH_CMD` Nástroj pro načítání souborů z `ftp` , `http` nebo `https` serverů.
 
-- `XBPS_CROSS_BASE` Full path to where cross-compile dependencies are installed, varies according to the target architecture triplet. i.e `aarch64` -> `/usr/aarch64-linux-gnu`.
+- `XBPS_WRAPPERDIR` Úplná cesta k místu, kde jsou uloženy obaly xbps-src pro nástroje.
 
-- `XBPS_RUST_TARGET` The target architecture triplet used by `rustc` and `cargo`.
+- `XBPS_CROSS_BASE` Úplná cesta k místu, kde jsou nainstalovány závislosti mezi kompilací, se liší podle cílového tripletu architektury. tj. `aarch64` -&gt; `/usr/aarch64-linux-gnu` .
 
-- `XBPS_BUILD_ENVIRONMENT` Enables continuous-integration-specific operations. Set to `void-packages-ci` if in continuous integration.
+- `XBPS_RUST_TARGET` Triplet cílové architektury používaný `rustc` a `cargo` .
+
+- `XBPS_BUILD_ENVIRONMENT` Umožňuje operace specifické pro průběžnou integraci. Pokud se jedná o kontinuální integraci, nastavte na `void-packages-ci` .
 
 <a id="available_vars"></a>
-### Available variables
+
+### Dostupné proměnné
 
 <a id="mandatory_vars"></a>
-#### Mandatory variables
 
-The list of mandatory variables for a template:
+#### Povinné proměnné
 
-- `homepage` An URL pointing to the upstream homepage.
+Seznam povinných proměnných pro šablonu:
 
+- `homepage` URL odkazující na upstream domovskou stránku.
 
-- <a id="var_license"></a>
-`license` A string matching the license's [SPDX Short identifier](https://spdx.org/licenses),
-`Public Domain`, or string prefixed with `custom:` for other licenses.
-Multiple licenses should be listed as an
-[SPDX license expression](https://spdx.github.io/spdx-spec/v3.0/annexes/SPDX-license-expressions/)
-(examples: `MIT OR Apache-2.0`, `MIT AND (LGPL-2.1-or-later OR BSD-3-Clause)`).
-Usage of `AND`, `OR`, `WITH`, and `()` are supported by xlint. The legacy
-comma-separated format should be converted when encountered (example:
-`GPL-3.0-or-later, custom:Hugware`).
+- <a id="var_license"></a> `license` A string matching the license's [SPDX Short identifier](https://spdx.org/licenses), `Public Domain`, or string prefixed with `custom:` for other licenses. Multiple licenses should be listed as an [SPDX license expression](https://spdx.github.io/spdx-spec/v3.0/annexes/SPDX-license-expressions/) (examples: `MIT OR Apache-2.0`, `MIT AND (LGPL-2.1-or-later OR BSD-3-Clause)`). Usage of `AND`, `OR`, `WITH`, and `()` are supported by xlint. The legacy comma-separated format should be converted when encountered (example: `GPL-3.0-or-later, custom:Hugware`).
 
-  Empty meta-packages that don't include any files
-  and thus have and require no license should use
-  `Public Domain`.
+    Prázdné metabalíčky, které neobsahují žádné soubory, a proto nemají a nevyžadují žádnou licenci, by měly používat `Public Domain` .
 
-  Note: `AGPL`, `MIT`, `BSD`, `ISC`, `X11`, and custom licenses
-  require the license file to be supplied with the binary package.
+    Poznámka: `AGPL` , `MIT` , `BSD` , `ISC` , `X11` a vlastní licence vyžadují, aby byl licenční soubor dodán s binárním balíčkem.
 
-- `maintainer` A string in the form of `name <user@domain>`.  The email for this field
-must be a valid email that you can be reached at. Packages using
-`users.noreply.github.com` emails will not be accepted.
+- `maintainer` Řetězec ve tvaru `name <user@domain>` . E-mail pro toto pole musí být platný e-mail, na kterém vás lze zastihnout. Balíčky používající e-maily `users.noreply.github.com` nebudou přijímány.
 
-- `pkgname` A string with the package name, matching `srcpkgs/<pkgname>`.
+- `pkgname` Řetězec s názvem balíčku, odpovídající `srcpkgs/<pkgname>` .
 
-- `revision` A number that must be set to 1 when the `source package` is created, or
-updated to a new `upstream version`. This should only be increased when
-the generated `binary packages` have been modified.
+- `revision` Číslo, které musí být nastaveno na 1 při vytváření `source package` nebo aktualizováno na novou `upstream version` . Toto by mělo být zvýšeno pouze tehdy, když byly modifikovány generované `binary packages` .
 
-- `short_desc` A string with a brief description for this package. Max 72 chars.
+- `short_desc` Řetězec se stručným popisem tohoto balíčku. Maximálně 72 znaků.
 
-- `version` A string with the package version. Must not contain dashes or underscore
-and at least one digit is required. Shell's variable substitution usage is not allowed.
+- `version` Řetězec s verzí balíčku. Nesmí obsahovat pomlčky ani podtržítko a je vyžadována alespoň jedna číslice. Použití substituce proměnné Shell není povoleno.
 
-`pkgname` and `version` are forbidden to contain special characters. Hence, they don't
-need to be quoted, and by convention, they shouldn't be.
+`pkgname` a `version` jsou zakázány obsahovat speciální znaky. Proto není nutné je citovat a podle konvence by ani neměly být.
 
 <a id="optional_vars"></a>
-#### Optional variables
 
-- `hostmakedepends` The list of `host` dependencies required to build the package, and
-that will be installed to the master directory. There is no need to specify a version
-because the current version in srcpkgs will always be required.
-Example: `hostmakedepends="foo blah"`.
+#### Nepovinné proměnné
 
-- `makedepends` The list of `target` dependencies required to build the package, and that
-will be installed to the master directory. There is no need to specify a version
-because the current version in srcpkgs will always be required.
-Example: `makedepends="foo blah"`.
+- `hostmakedepends` Seznam `host` závislostí potřebných k sestavení balíčku, který bude nainstalován do hlavního adresáře. Verzi není třeba zadávat, protože vždy bude vyžadována aktuální verze v srcpkgs. Příklad: `hostmakedepends="foo blah"` .
 
-- `checkdepends` The list of dependencies required to run the package checks, i.e.
-the script or make rule specified in the template's `do_check()` function.
-Example: `checkdepends="gtest"`.
+- `makedepends` Seznam `target` závislostí potřebných k sestavení balíčku, který bude nainstalován do hlavního adresáře. Verzi není třeba zadávat, protože vždy bude vyžadována aktuální verze v srcpkgs. Příklad: `makedepends="foo blah"` .
 
-- `depends` The list of dependencies required to run the package. These dependencies
-are not installed to the master directory, rather are only checked if a binary package
-in the local repository exists to satisfy the required version. Dependencies
-can be specified with the following version comparators: `<`, `>`, `<=`, `>=`
-or `foo-1.0_1` to match an exact version. If version comparator is not
-defined (just a package name), the version comparator is automatically set to `>=0`.
-Example: `depends="foo blah>=1.0"`. See the [Runtime dependencies](#deps_runtime) section
-for more information.
+- `checkdepends` Seznam závislostí potřebných ke spuštění kontrol balíčků, tj. skriptu nebo pravidla make specifikovaného ve funkci `do_check()` šablony. Příklad: `checkdepends="gtest"` .
 
-- `bootstrap` If enabled the source package is considered to be part of the `bootstrap`
-process and required to be able to build packages in the chroot. Only a
-small number of packages must set this property.
+- `depends` Seznam závislostí potřebných ke spuštění balíčku. Tyto závislosti se neinstalují do hlavního adresáře, ale kontrolují se pouze v případě, že v místním úložišti existuje binární balíček, který vyhovuje požadované verzi. Závislosti lze specifikovat pomocí následujících komparátorů verzí: `<` , `>` , `<=` , `>=` nebo `foo-1.0_1` aby odpovídaly přesné verzi. Pokud není definován komparátor verzí (pouze název balíčku), je komparátor verzí automaticky nastaven na `>=0` . Příklad: `depends="foo blah>=1.0"` . Další informace naleznete v části [Závislosti běhového prostředí](#deps_runtime) .
 
-- `conflicts` An optional list of packages conflicting with this package.
-Conflicts can be specified with the following version comparators: `<`, `>`, `<=`, `>=`
-or `foo-1.0_1` to match an exact version. If version comparator is not
-defined (just a package name), the version comparator is automatically set to `>=0`.
-Example: `conflicts="foo blah>=0.42.3"`.
+- `bootstrap` Je-li povoleno, je zdrojový balíček považován za součást procesu `bootstrap` a vyžaduje se, aby bylo možné vytvářet balíčky v chrootu. Tuto vlastnost musí nastavit pouze malý počet balíčků.
 
-- `distfiles` The full URL to the `upstream` source distribution files. Multiple files
-can be separated by whitespaces. The files must end in `.tar.lzma`, `.tar.xz`,
-`.txz`, `.tar.bz2`, `.tbz`, `.tar.gz`, `.tgz`, `.gz`, `.bz2`, `.tar` or
-`.zip`. To define a target filename, append `>filename` to the URL.
-Example:
-	distfiles="http://foo.org/foo-1.0.tar.gz http://foo.org/bar-1.0.tar.gz>bar.tar.gz"
+- `conflicts` Volitelný seznam balíčků, které jsou v konfliktu s tímto balíčkem. Konflikty lze zadat pomocí následujících komparátorů verzí: `<` , `>` , `<=` , `>=` nebo `foo-1.0_1` aby odpovídaly přesné verzi. Pokud není definován komparátor verzí (pouze název balíčku), je komparátor verzí automaticky nastaven na `>=0` . Příklad: `conflicts="foo blah>=0.42.3"` .
 
-  To avoid repetition, several variables for common hosting sites
-  exist:
+- `distfiles` Úplná adresa URL pro `upstream` zdrojové distribuční soubory. Více souborů lze oddělit mezerami. Soubory musí končit `.tar.lzma` , `.tar.xz` , `.txz` , `.tar.bz2` , `.tbz` , `.tar.gz` , `.tgz` , `.gz` , `.bz2` , `.tar` nebo `.zip` . Chcete-li definovat cílový název souboru, připojte k adrese URL `>filename` . Příklad: distfiles="http://foo.org/foo-1.0.tar.gz http://foo.org/bar-1.0.tar.gz&gt;bar.tar.gz"
 
-  | Variable         | Value                                           |
-  |------------------|-------------------------------------------------|
-  | CPAN_SITE        | https://cpan.perl.org/modules/by-module          |
-  | DEBIAN_SITE      | http://ftp.debian.org/debian/pool               |
-  | FREEDESKTOP_SITE | https://freedesktop.org/software                 |
-  | GNOME_SITE       | https://ftp.gnome.org/pub/GNOME/sources          |
-  | GNU_SITE         | https://ftp.gnu.org/gnu                          |
-  | KERNEL_SITE      | https://www.kernel.org/pub/linux                 |
-  | MOZILLA_SITE     | https://ftp.mozilla.org/pub                      |
-  | NONGNU_SITE      | https://download.savannah.nongnu.org/releases    |
-  | PYPI_SITE        | https://files.pythonhosted.org/packages/source  |
-  | SOURCEFORGE_SITE | https://downloads.sourceforge.net/sourceforge    |
-  | UBUNTU_SITE      | http://archive.ubuntu.com/ubuntu/pool           |
-  | XORG_SITE        | https://www.x.org/releases/individual            |
-  | KDE_SITE         | https://download.kde.org/stable                 |
-  | VIDEOLAN_SITE    | https://download.videolan.org/pub/videolan      |
+    Aby se předešlo opakování, existuje několik proměnných pro běžné hostitelské weby:
 
-- `checksum` The `sha256` digests matching `${distfiles}`. Multiple files can be
-separated by blanks. Please note that the order must be the same than
-was used in `${distfiles}`. Example: `checksum="kkas00xjkjas"`
+    Variabilní | Hodnota
+    --- | ---
+    CPAN_SITE | https://cpan.perl.org/modules/by-module
+    DEBIAN_SITE | http://ftp.debian.org/debian/pool
+    FREEDESKTOP_SITE | https://freedesktop.org/software
+    GNOME_SITE | https://ftp.gnome.org/pub/GNOME/sources
+    GNU_SITE | https://ftp.gnu.org/gnu
+    KERNEL_SITE | https://www.kernel.org/pub/linux
+    MOZILLA_SITE | https://ftp.mozilla.org/pub
+    NONGNU_SITE | https://download.savannah.nongnu.org/releases
+    PYPI_SITE | https://files.pythonhosted.org/packages/source
+    SOURCEFORGE_SITE | https://downloads.sourceforge.net/sourceforge
+    UBUNTU_SITE | http://archive.ubuntu.com/ubuntu/pool
+    XORG_SITE | https://www.x.org/releases/individual
+    KDE_SITE | https://download.kde.org/stable
+    VIDEOLAN_SITE | https://download.videolan.org/pub/videolan
 
-If a distfile changes its checksum for every download because it is packaged
-on the fly on the server, like e.g. snapshot tarballs from any of the
-`https://*.googlesource.com/` sites, the checksum of the `archive contents`
-can be specified by prepending a commercial at (@).
-For tarballs you can find the contents checksum by using the command
-`tar xf <tarball.ext> --to-stdout | sha256sum`.
+- `checksum` Digesty `sha256` odpovídající `${distfiles}` . Více souborů lze oddělit mezerami. Upozorňujeme, že objednávka musí být stejná, jako byla použita v `${distfiles}` . Příklad: `checksum="kkas00xjkjas"`
 
-- `wrksrc` The directory name where the package sources are extracted, set to `${pkgname}-${version}`.
+Pokud soubor distfile změní svůj kontrolní součet pro každé stažení, protože je zabalen za běhu na serveru, jako např. snapshot tarballs z libovolného z `https://*.googlesource.com/` webů, kontrolní součet `archive contents` lze určit pomocí předřazení reklamy na (@). U tarballů můžete najít kontrolní součet obsahu pomocí příkazu `tar xf <tarball.ext> --to-stdout | sha256sum` .
 
-- `build_wrksrc` A directory relative to `${wrksrc}` that will be used when building the package.
+- `wrksrc` Název adresáře, do kterého jsou extrahovány zdroje balíčků, nastavený na `${pkgname}-${version}` .
 
-- `create_wrksrc` Usually, after extracting, if there're multiple top-level
-  files and/or directories or when there're no directories at all, top-level files,
-  and directories will be wrapped inside one more layer of directory.
-  Set `create_wrksrc` to force this behaviour.
+- `build_wrksrc` Adresář související s `${wrksrc}` , který bude použit při sestavování balíčku.
 
-- `build_style` This specifies the `build method` for a package. Read below to know more
-about the available package `build methods` or effect of leaving this not set.
+- `create_wrksrc` Obvykle, po extrahování, pokud existuje více souborů a/nebo adresářů nejvyšší úrovně nebo pokud neexistují žádné adresáře, soubory a adresáře nejvyšší úrovně budou zabaleny do jedné další vrstvy adresáře. Chcete-li toto chování vynutit, nastavte `create_wrksrc` .
 
-- `build_helper` Whitespace-separated list of files in `common/build-helper` to be
-sourced and its variables be made available on the template. i.e. `build_helper="rust"`.
+- `build_style` Určuje `build method` pro balíček. Přečtěte si níže, abyste se dozvěděli více o dostupných `build methods` balíčků nebo o efektu ponechání tohoto nenastaveného.
 
-- `configure_script` The name of the `configure` script to execute at the `configure` phase if
-`${build_style}` is set to `configure` or `gnu-configure` build methods.
-By default set to `./configure`.
+- `build_helper` mezerami oddělený seznam souborů v `common/build-helper` které mají být získávány a jeho proměnné zpřístupněny v šabloně. tj. `build_helper="rust"` .
 
-- `configure_args` The arguments to be passed in to the `configure` script if `${build_style}`
-is set to `configure` or `gnu-configure` build methods. By default, prefix
-must be set to `/usr`. In `gnu-configure` packages, some options are already
-set by default: `--prefix=/usr --sysconfdir=/etc --infodir=/usr/share/info --mandir=/usr/share/man --localstatedir=/var`.
+- `configure_script` Název `configure` skriptu, který se má spustit ve fázi `configure` , pokud je `${build_style}` nastaveno na metody sestavení `configure` nebo `gnu-configure` . Standardně nastaveno na `./configure` .
 
-- `make_cmd` The executable to run at the `build` phase if `${build_style}` is set to
-`configure`, `gnu-configure` or `gnu-makefile` build methods.
-By default set to `make`.
+- `configure_args` Argumenty, které mají být předány `configure` skriptu, pokud je `${build_style}` nastaveno na metody sestavení `configure` nebo `gnu-configure` . Ve výchozím nastavení musí být předpona nastavena na `/usr` . V balíčcích `gnu-configure` jsou některé volby již standardně nastaveny: `--prefix=/usr --sysconfdir=/etc --infodir=/usr/share/info --mandir=/usr/share/man --localstatedir=/var` .
 
-- `make_build_args` The arguments to be passed in to `${make_cmd}` at the build phase if
-`${build_style}` is set to `configure`, `gnu-configure` or `gnu-makefile`
-build methods. Unset by default.
+- `make_cmd` Spustitelný soubor, který se spustí ve fázi `build` , pokud je `${build_style}` nastaveno na metody sestavení `configure` , `gnu-configure` nebo `gnu-makefile` . Standardně nastaveno na `make` .
 
-- `make_check_args` The arguments to be passed in to `${make_cmd}` at the check phase if
-`${build_style}` is set to `configure`, `gnu-configure` or `gnu-makefile`
-build methods. Unset by default.
+- `make_build_args` Argumenty, které mají být předány do `${make_cmd}` ve fázi sestavování, pokud je `${build_style}` nastaveno na metody sestavení `configure` , `gnu-configure` nebo `gnu-makefile` . Ve výchozím nastavení zrušeno.
 
-- `make_install_args` The arguments to be passed in to `${make_cmd}` at the `install`
-phase if `${build_style}` is set to `configure`, `gnu-configure` or `gnu-makefile` build methods.
+- `make_check_args` Argumenty, které mají být předány do `${make_cmd}` ve fázi kontroly, pokud je `${build_style}` nastaveno na metody sestavení `configure` , `gnu-configure` nebo `gnu-makefile` . Ve výchozím nastavení zrušeno.
 
-- `make_build_target` The build target. If `${build_style}` is set to `configure`, `gnu-configure`
-or `gnu-makefile`, this is the target passed to `${make_cmd}` in the build phase;
-when unset the default target is used.
-If `${build_style}` is `python3-pep517`, this is the path of the package
-directory that should be built as a Python wheel; when unset, defaults to `.` (the current
-directory with respect to the build).
+- `make_install_args` Argumenty, které mají být předány do `${make_cmd}` ve fázi `install` , pokud je `${build_style}` nastaveno na metody sestavení `configure` , `gnu-configure` nebo `gnu-makefile` .
 
-- `make_check_target` The target to be passed in to `${make_cmd}` at the check phase if
-`${build_style}` is set to `configure`, `gnu-configure` or `gnu-makefile`
-build methods. By default set to `check`.
+- `make_build_target` Cíl sestavení. Pokud je `${build_style}` nastaveno na `configure` , `gnu-configure` nebo `gnu-makefile` , toto je cíl předaný `${make_cmd}` ve fázi sestavení; když není nastaveno, použije se výchozí cíl. Pokud `${build_style}` je `python3-pep517` , toto je cesta k adresáři balíčku, který by měl být vytvořen jako Python wheel; pokud není nastaveno, výchozí hodnota je `.` (aktuální adresář s ohledem na sestavení).
 
-- `make_install_target` The installation target. When `${build_style}` is set to `configure`,
-`gnu-configure` or `gnu-makefile`, this is the target passed to `${make_command}` in the install
-phase; when unset, it defaults to `install`. If `${build_style}` is `python3-pep517`, this is the
-path of the Python wheel produced by the build phase that will be installed; when unset, the
-`python3-pep517` build style will look for a wheel matching the package name and version in the
-current directory with respect to the install.
+- `make_check_target` Cíl, který má být předán do `${make_cmd}` ve fázi kontroly, pokud je `${build_style}` nastaveno na metody sestavení `configure` , `gnu-configure` nebo `gnu-makefile` . Ve výchozím nastavení je nastavena `check` .
 
-- `make_check_pre` The expression in front of `${make_cmd}`. This can be used for wrapper commands
-or for setting environment variables for the check command. By default empty.
+- `make_install_target` Cíl instalace. Když je `${build_style}{/code1} nastaven na {code2}configure{/code2}, {code3}gnu-configure{/code3} nebo {code4}gnu-makefile{/code4}, toto je cíl předaný {code5}${make_command}` ve fázi instalace; pokud není nastaveno, ve výchozím nastavení se `install` . Pokud `${build_style}` je `python3-pep517`, jedná se o cestu pythonovského kola vytvořeného fází sestavení, která se nainstaluje; když není nastaveno, styl sestavení `python3-pep517` bude hledat wheel odpovídající názvu a verzi balíčku v aktuálním adresáři s ohledem na instalaci.
 
-- `patch_args` The arguments to be passed in to the `patch(1)` command when applying
-patches to the package sources during `do_patch()`. Patches are stored in
-`srcpkgs/<pkgname>/patches` and must be in `-p1` format. By default set to `-Np1`.
+- `make_check_pre` Výraz před `${make_cmd}` . To lze použít pro příkazy wrapper nebo pro nastavení proměnných prostředí pro příkaz check. Ve výchozím nastavení prázdné.
 
-- `disable_parallel_build` If set the package won't be built in parallel
-and `XBPS_MAKEJOBS` will be set to 1. If a package does not work well with `XBPS_MAKEJOBS`
-but still has a mechanism to build in parallel, set `disable_parallel_build` and
-use `XBPS_ORIG_MAKEJOBS` (which holds the original value of `XBPS_MAKEJOBS`) in the template.
+- `patch_args` Argumenty, které mají být předány příkazu `patch(1)` při aplikaci oprav na zdroje balíčků během `do_patch()` . Opravy jsou uloženy ve `srcpkgs/<pkgname>/patches` a musí být ve formátu `-p1` . Standardně nastaveno na `-Np1` .
 
-- `disable_parallel_check` If set tests for the package won't be built and run in parallel
-and `XBPS_MAKEJOBS` will be set to 1. If a package does not work well with `XBPS_MAKEJOBS`
-but still has a mechanism to run checks in parallel, set `disable_parallel_check` and
-use `XBPS_ORIG_MAKEJOBS` (which holds the original value of `XBPS_MAKEJOBS`) in the template.
+- `disable_parallel_build` Pokud je nastaveno, balíček nebude sestavován paralelně a `XBPS_MAKEJOBS` bude nastaven na 1. Pokud balíček nefunguje správně s `XBPS_MAKEJOBS` , ale stále má mechanismus pro paralelní sestavení, nastavte `disable_parallel_build` a použijte `XBPS_ORIG_MAKEJOBS` (který má původní hodnotu z `XBPS_MAKEJOBS` ) v šabloně.
 
-- `make_check` Sets the cases in which the `check` phase is run.
-This option has to be accompanied by a comment explaining why the tests fail.
-Allowed values:
-  - `yes` (the default) to run if `XBPS_CHECK_PKGS` is set.
-  - `extended` to run if `XBPS_CHECK_PKGS` is `full`.
-  - `ci-skip` to run locally if `XBPS_CHECK_PKGS` is set, but not as part of pull request checks.
-  - `no` to never run.
+- `disable_parallel_check` Pokud sady testů pro balíček nebudou sestaveny a spuštěny paralelně a `XBPS_MAKEJOBS` bude nastaveno na 1. Pokud balíček nefunguje dobře s `XBPS_MAKEJOBS` , ale stále má mechanismus pro paralelní spouštění kontrol, nastavte `disable_parallel_check` a použijte `XBPS_ORIG_MAKEJOBS` ( který má v šabloně původní hodnotu `XBPS_MAKEJOBS` ).
 
+- `make_check` Nastavuje případy, ve kterých se spustí fáze `check` . Tato možnost musí být doplněna komentářem vysvětlujícím, proč testy selhávají. Povolené hodnoty:
 
-- `keep_libtool_archives` If enabled the `GNU Libtool` archives won't be removed. By default those
-files are always removed automatically.
+    - `yes` (výchozí) ke spuštění, pokud je nastaveno `XBPS_CHECK_PKGS` .
+    - `extended` na spuštění, pokud je `XBPS_CHECK_PKGS` `full` .
+    - `ci-skip` se spustí lokálně, pokud je nastaveno `XBPS_CHECK_PKGS` , ale ne jako součást kontrol požadavku na stažení.
+    - `no` nikdy neběhat.
 
-- `skip_extraction` A list of filenames that should not be extracted in the `extract` phase.
-This must match the basename of any url defined in `${distfiles}`.
-Example: `skip_extraction="foo-${version}.tar.gz"`.
+- `keep_libtool_archives` Je-li povoleno, archivy `GNU Libtool` nebudou odstraněny. Ve výchozím nastavení jsou tyto soubory vždy automaticky odstraněny.
 
-- `nodebug` If enabled -dbg packages won't be generated even if `XBPS_DEBUG_PKGS` is set.
+- `skip_extraction` Seznam názvů souborů, které by neměly být extrahovány ve fázi `extract` . Toto musí odpovídat základnímu názvu jakékoli adresy URL definované v `${distfiles}` . Příklad: `skip_extraction="foo-${version}.tar.gz"` .
 
-- `conf_files` A list of configuration files the binary package owns; this expects full
-paths, wildcards will be extended, and multiple entries can be separated by blanks.
-Example: `conf_files="/etc/foo.conf /etc/foo2.conf /etc/foo/*.conf"`.
+- `nodebug` Pokud je povoleno, balíčky -dbg se nevygenerují, i když je nastaveno `XBPS_DEBUG_PKGS` .
 
-- `mutable_files` A list of files the binary package owns, with the expectation
-  that those files will be changed. These act a lot like `conf_files` but
-  without the assumption that a human will edit them.
+- `conf_files` Seznam konfiguračních souborů, které binární balíček vlastní; to předpokládá úplné cesty, zástupné znaky budou rozšířeny a více položek může být odděleno mezerami. Příklad: `conf_files="/etc/foo.conf /etc/foo2.conf /etc/foo/*.conf"` .
 
-- `make_dirs` A list of entries defining directories and permissions to be
-  created at install time. Each entry should be space separated, and will
-  itself contain spaces. `make_dirs="/dir 0750 user group"`. User and group and
-  mode are required on every line, even if they are `755 root root`. By
-  convention, there is only one entry of `dir perms user group` per line.
+- `mutable_files` Seznam souborů, které binární balíček vlastní, s očekáváním, že tyto soubory budou změněny. Ty se chovají hodně jako `conf_files` , ale bez předpokladu, že je bude upravovat člověk.
 
-- `repository` Defines the repository in which the package will be placed. See
-  *Repositories* for a list of valid repositories.
+- `make_dirs` Seznam položek definujících adresáře a oprávnění, která mají být vytvořena při instalaci. Každý záznam by měl být oddělen mezerou a sám bude obsahovat mezery. `make_dirs="/dir 0750 user group"` . Uživatel, skupina a režim jsou vyžadovány na každém řádku, i když jsou `755 root root` . Podle konvence existuje pouze jeden záznam `dir perms user group` na řádek.
 
-- `nostrip` If set, the ELF binaries with debugging symbols won't be stripped. By
-default all binaries are stripped.
+- `repository` Definuje úložiště, do kterého bude balíček umístěn. Seznam platných úložišť naleznete v *části Úložiště* .
 
-- `nostrip_files` White-space separated list of ELF binaries that won't be stripped of
-debugging symbols. Files can be given by full path or by filename.
+- `nostrip` Pokud je nastaveno, binární soubory ELF se symboly ladění nebudou odstraněny. Ve výchozím nastavení jsou všechny binární soubory odstraněny.
 
-- `noshlibprovides` If set, the ELF binaries won't be inspected to collect the provided
-sonames in shared libraries.
+- `nostrip_files` Seznam binárních souborů ELF oddělený mezerami, které nebudou zbaveny ladicích symbolů. Soubory mohou být zadány úplnou cestou nebo názvem souboru.
 
-- `noverifyrdeps` If set, the ELF binaries and shared libraries won't be inspected to collect
-their reverse dependencies. You need to specify all dependencies in the `depends` when you
-need to set this.
+- `noshlibprovides` Je-li nastaveno, nebudou binární soubory ELF kontrolovány za účelem shromažďování poskytnutých sonames ve sdílených knihovnách.
 
-- `skiprdeps` White space separated list of filenames specified by their absolute path in
-the `$DESTDIR` which will not be scanned for runtime dependencies. This may be useful to
-skip files which are not meant to be run or loaded on the host but are to be sent to some
-target device or emulation.
+- `noverifyrdeps` Pokud je nastaveno, binární soubory ELF a sdílené knihovny nebudou kontrolovány za účelem shromažďování jejich reverzních závislostí. Musíte zadat všechny závislosti v `depends` , když to potřebujete nastavit.
 
-- `ignore_elf_files` White space separated list of machine code files
-in /usr/share directory specified by absolute path, which are expected and allowed.
+- `skiprdeps` Seznam názvů souborů oddělených mezerami určenými jejich absolutní cestou v `$DESTDIR` , které nebudou kontrolovány na závislosti za běhu. To může být užitečné pro přeskočení souborů, které nejsou určeny ke spuštění nebo načtení na hostiteli, ale mají být odeslány na nějaké cílové zařízení nebo emulaci.
 
-- `ignore_elf_dirs` White space separated list of directories in /usr/share directory
-specified by absolute path, which are expected and allowed to contain machine code files.
+- `ignore_elf_files` Seznam souborů strojového kódu v adresáři /usr/share zadaných absolutní cestou oddělených mezerami, které jsou očekávané a povolené.
 
-- `nocross` If set, cross compilation won't be allowed and will exit immediately.
-This should be set to a string describing why it fails, or a link to a buildlog (from the official builders, CI buildlogs can vanish) demonstrating the failure.
+- `ignore_elf_dirs` Bílými mezerami oddělený seznam adresářů v adresáři /usr/share specifikovaných absolutní cestou, které jsou očekávány a které mohou obsahovat soubory strojového kódu.
 
-- `restricted` If set, xbps-src will refuse to build the package unless
-`etc/conf` has `XBPS_ALLOW_RESTRICTED=yes`. The primary builders for Void
-Linux do not have this setting, so the primary repositories will not have any
-restricted package. This is useful for packages where the license forbids
-redistribution.
+- `nocross` Je-li nastaveno, křížová kompilace nebude povolena a bude okamžitě ukončena. Toto by mělo být nastaveno na řetězec popisující, proč selže, nebo na odkaz na buildlog (od oficiálních tvůrců, CI buildlogy mohou zmizet) demonstrující selhání.
 
-- `subpackages` A white space separated list of subpackages (matching `foo_package()`)
-to override the guessed list. Only use this if a specific order of subpackages is required,
-otherwise the default would work in most cases.
+- `restricted` Pokud je nastaveno, xbps-src odmítne sestavit balíček, pokud `etc/conf` nemá `XBPS_ALLOW_RESTRICTED=yes` . Primární stavitelé pro Void Linux toto nastavení nemají, takže primární úložiště nebudou mít žádný omezený balíček. To je užitečné pro balíčky, kde licence zakazuje redistribuci.
 
-- `metapackage` If set to `yes`, the package must be an empty meta-package, i.e. a package that
-only depends on other packages.
+- `subpackages` Seznam dílčích balíčků oddělených mezerami (odpovídající `foo_package()` ), aby se přepsal uhodnutý seznam. Toto použijte pouze v případě, že je vyžadováno specifické pořadí dílčích balíčků, jinak by ve většině případů fungovalo výchozí nastavení.
 
-- `broken` If set, building the package won't be allowed because its state is currently broken.
-This should be set to a string describing why it is broken, or a link to a buildlog demonstrating the failure.
+- `metapackage` Pokud je nastaveno na `yes` , balíček musí být prázdný metabalíček, tj. balíček, který závisí pouze na jiných balíčcích.
 
-- `shlib_provides` A white space separated list of additional sonames the package provides on.
-This appends to the generated file rather than replacing it.
+- `broken` Je-li nastaveno, sestavení balíčku nebude povoleno, protože jeho stav je aktuálně poškozen. Toto by mělo být nastaveno na řetězec popisující, proč je poškozený, nebo na odkaz na buildlog demonstrující selhání.
 
-- `shlib_requires` A white space separated list of additional sonames the package requires.
-This appends to the generated file rather than replacing it.
+- `shlib_provides` Seznam dalších soname oddělených mezerami, na kterých balíček poskytuje. To se spíše připojí k vygenerovanému souboru než jej nahradí.
 
-- `nopie` Only needs to be set to something to make active, disables building the package with hardening
-  features (PIE, relro, etc). Not necessary for most packages.
+- `shlib_requires` Seznam dalších sonames, které balíček vyžaduje, oddělených mezerami. To se spíše připojí k vygenerovanému souboru než jej nahradí.
 
-- `nopie_files` White-space separated list of ELF binaries that won't be checked
-for PIE. Files must be given by full path.
+- `nopie` Pouze musí být nastaveno na něco, aby bylo aktivní, zakáže sestavení balíčku s funkcemi zpevnění (PIE, relro, atd.). U většiny balíčků to není nutné.
 
-- `reverts` xbps supports a unique feature which allows to downgrade from broken
-packages automatically. In the `reverts` field one can define a list of broken
-pkgver the resulting package should revert. This field *must* be defined before
-`version` and `revision` fields in order to work as expected. The versions
-defined in `reverts` must be bigger than the one defined in `version`.
-Example:
+- `nopie_files` Seznam binárních souborů ELF oddělených mezerami, které nebudou kontrolovány na PIE. Soubory musí být zadány úplnou cestou.
+
+- `reverts` xbps podporuje unikátní funkci, která umožňuje automatický downgrade z poškozených balíčků. V poli `reverts` lze definovat seznam poškozených pkgver, který by měl výsledný balíček vrátit. Toto pole *musí* být definováno před poli `version` a `revision` , aby fungovalo podle očekávání. Verze definované v `reverts` musí být větší než verze definovaná ve `version` . Příklad:
 
     ```
     reverts="2.0_1 2.0_2"
@@ -722,128 +511,73 @@ Example:
     revision=2
     ```
 
-- `alternatives` A white space separated list of supported alternatives the package provides.
-A list is composed of three components separated by a colon: group, symlink and target.
-Example: `alternatives="vi:/usr/bin/vi:/usr/bin/nvi ex:/usr/bin/ex:/usr/bin/nvi-ex"`.
+- `alternatives` Seznam podporovaných alternativ, které balíček poskytuje, oddělený mezerami. Seznam se skládá ze tří složek oddělených dvojtečkou: skupina, symbolický odkaz a cíl. Příklad: `alternatives="vi:/usr/bin/vi:/usr/bin/nvi ex:/usr/bin/ex:/usr/bin/nvi-ex"` .
 
-- `font_dirs` A white space separated list of directories specified by an absolute path where a
-font package installs its fonts.
-It is used in the `x11-fonts` xbps-trigger to rebuild the font cache during install/removal
-of the package.
-Example: `font_dirs="/usr/share/fonts/TTF /usr/share/fonts/X11/misc"`
+- `font_dirs` Seznam adresářů oddělených mezerami určený absolutní cestou, kam balíček písem instaluje svá písma. Používá se v `x11-fonts` xbps-trigger k opětovnému sestavení mezipaměti písem během instalace/odebírání balíčku. Příklad: `font_dirs="/usr/share/fonts/TTF /usr/share/fonts/X11/misc"`
 
-- `dkms_modules` A white space separated list of Dynamic Kernel Module Support (dkms) modules
-that will be installed and removed by the `dkms` xbps-trigger with the install/removal of the
-package.
-The format is a white space separated pair of strings that represent the name of the module,
-most of the time `pkgname`, and the version of the module, most of the time `version`.
-Example: `dkms_modules="$pkgname $version zfs 4.14"`
+- `dkms_modules` Seznam modulů Dynamic Kernel Module Support (dkms) oddělených mezerami, které budou nainstalovány a odstraněny `dkms` xbps-trigger s instalací/odstraněním balíčku. Formát je mezerou oddělený pár řetězců, které představují název modulu, většinou `pkgname` , a verzi modulu, většinou `version` . Příklad: `dkms_modules="$pkgname $version zfs 4.14"`
 
-- `register_shell` A white space separated list of shells defined by absolute path to be
-registered into the system shells database. It is used by the `register-shell` trigger.
-Example: `register_shell="/bin/tcsh /bin/csh"`
+- `register_shell` Seznam shellů oddělených mezerami definovaný absolutní cestou, které mají být zaregistrovány do databáze systémových shellů. Používá ho spouštěč `register-shell` . Příklad: `register_shell="/bin/tcsh /bin/csh"`
 
-- `tags` A white space separated list of tags (categories) that are registered into the
-package metadata and can be queried with `xbps-query` by users.
-Example for qutebrowser: `tags="browser chromium-based qt5 python3"`
+- `tags` Seznam tagů (kategorií) oddělených mezerami, které jsou registrovány v metadatech balíčku a uživatelé je mohou dotazovat pomocí `xbps-query` . Příklad pro qutebrowser: `tags="browser chromium-based qt5 python3"`
 
-- `perl_configure_dirs` A white space separate list of directories relative to `wrksrc`
-that contain Makefile.PL files that need to be processes for the package to work. It is
-used in the perl-module build_style and has no use outside of it.
-Example: `perl_configure_dirs="blob/bob foo/blah"`
+- `perl_configure_dirs` Seznam oddělených prázdných míst ve vztahu k `wrksrc` , které obsahují soubory Makefile.PL, které musí být procesy, aby balík fungoval. Používá se v modulu build_style perl a mimo něj nemá žádné použití. Příklad: `perl_configure_dirs="blob/bob foo/blah"`
 
-- `preserve` If set, files owned by the package in the system are not removed when
-the package is updated, reinstalled or removed. This is mostly useful for kernel packages
-that shouldn't remove the kernel files when they are removed in case it might break the
-user's booting and module loading. Otherwise in the majority of cases it should not be
-used.
+- `preserve` Je-li nastaveno, soubory vlastněné balíkem v systému nebudou při aktualizaci, přeinstalaci nebo odebrání balíku odstraněny. To je většinou užitečné pro balíčky jádra, které by neměly odstraňovat soubory jádra, když jsou odstraněny, pro případ, že by to mohlo přerušit zavádění uživatele a načítání modulů. Jinak by se ve většině případů neměl používat.
 
-- `fetch_cmd` Executable to be used to fetch URLs in `distfiles` during the `do_fetch` phase.
+- `fetch_cmd` Spustitelný soubor, který se má použít k načtení URL v `distfiles` během fáze `do_fetch` .
 
-- `changelog` An URL pointing to the upstream changelog. Raw text files are preferred.
+- `changelog` URL odkazující na upstream changelog. Preferovány jsou soubory s nezpracovaným textem.
 
-- `archs` Whitespace separated list of architectures that a package can be
-built for, available architectures can be found under `common/cross-profiles`.
-In general, `archs` should only be set if the upstream software explicitly targets
-certain architectures or there is a compelling reason why the software should not be
-available on some supported architectures.
-Prepending a pattern with a tilde means disallowing build on the indicated archs.
-The first matching pattern is taken to allow/deny build. When no pattern matches,
-the package is built if the last pattern includes a tilde.
-Examples:
+- `archs` Bílými znaky oddělený seznam architektur, pro které lze balíček sestavit, dostupné architektury lze nalézt pod `common/cross-profiles` . Obecně platí, že `archs` by měly být nastaveny pouze tehdy, pokud se upstream software výslovně zaměřuje na určité architektury nebo existuje pádný důvod, proč by software neměl být dostupný na některých podporovaných architekturách. Předřazení vzoru vlnovkou znamená zákaz stavět na naznačených obloucích. První odpovídající vzor se použije pro povolení/zakázání sestavení. Pokud neodpovídá žádný vzor, ​​balíček se sestaví, pokud poslední vzor obsahuje vlnovku. Příklady:
 
-	```
-	# Build package only for musl architectures
-	archs="*-musl"
-	# Build package for x86_64-musl and any non-musl architecture
-	archs="x86_64-musl ~*-musl"
-	# Default value (all arches)
-	archs="*"
-	```
-A special value `noarch` used to be available, but has since been removed.
+    ```
+     # Build package only for musl architectures
+     archs="*-musl"
+     # Build package for x86_64-musl and any non-musl architecture
+     archs="x86_64-musl ~*-musl"
+     # Default value (all arches)
+     archs="*"
+    ```
 
-- `nocheckperms` If set, xbps-src will not fail on common permission errors (world writable files, etc.)
+Dříve byla k dispozici speciální hodnota `noarch` , ale od té doby byla odstraněna.
 
-- `nofixperms` If set, xbps-src will not fix common permission errors (executable manpages, etc.)
+- `nocheckperms` Je-li nastaveno, xbps-src neselže při běžných chybách oprávnění (světové zapisovatelné soubory atd.)
 
-- `no_generic_pkgconfig_link` If set, xbps-src will not create a symlink from `$XBPS_CROSS_TRIPLET-pkg-config`
-  to `$XBPS_WRAPPERDIR/pkg-config` before building the template.
+- `nofixperms` Je-li nastaveno, xbps-src neopraví běžné chyby oprávnění (spustitelné manuálové stránky atd.)
+
+- `no_generic_pkgconfig_link` Je-li nastaveno, xbps-src nevytvoří před vytvořením šablony symbolický odkaz z `$XBPS_CROSS_TRIPLET-pkg-config{/code1} na {code2}$XBPS_WRAPPERDIR/pkg-config`.
 
 <a id="explain_depends"></a>
-#### About the many types of `depends` variables
 
-So far, we have listed four types of `depends` variables: `hostmakedepends`,
-`makedepends`, `checkdepends` and `depends`. These different kinds of variables
-are necessary because `xbps-src` supports cross compilation and to avoid
-installing unnecessary packages in the build environment.
+#### O mnoha typech `depends` proměnných
 
-During a build process, there are programs that must be _run_ on the host, such
-as `yacc` or the C compiler. The packages that contain these programs should be
-listed in `hostmakedepends`, and will be installed on the host when building the
-target package. Some of these packages are dependencies of the `base-chroot`
-package and don't need to be listed. It is possible that some of the programs
-necessary to build a project are located in `-devel` packages.
+Doposud jsme uvedli čtyři typy `depends` proměnných: `hostmakedepends` , `makedepends` , `checkdepends` a `depends` . Tyto různé druhy proměnných jsou nezbytné, protože `xbps-src` podporuje křížovou kompilaci a aby se zabránilo instalaci zbytečných balíčků v prostředí sestavení.
 
-The target package can also depend on other packages for libraries to link
-against or header files. These packages should be listed in `makedepends` and
-will match the target architecture, regardless of the architecture of the build
-machine. Typically, `makedepends` will contain mainly `-devel` packages.
+Během procesu sestavení musí být na hostiteli *spuštěny* programy, jako je `yacc` nebo kompilátor C. Balíčky obsahující tyto programy by měly být uvedeny v `hostmakedepends` a budou nainstalovány na hostitele při sestavování cílového balíčku. Některé z těchto balíčků jsou závislé na balíčku `base-chroot` a nemusí být uvedeny. Je možné, že některé programy potřebné k sestavení projektu jsou umístěny v balíčcích `-devel` .
 
-Furthermore, if `XBPS_CHECK_PKGS` is set or the `-Q` option is passed to
-`xbps-src`, the target package might require specific dependencies or libraries
-that are linked into its test binaries to run its test suite. These dependencies
-should be listed in `checkdepends` and will be installed as if they were part of
-`hostmakedepends`. Some dependencies that can be included in `checkdepends` are:
+Cílový balíček může také záviset na jiných balíčcích pro knihovny, které se mají odkazovat na soubory záhlaví nebo na soubory záhlaví. Tyto balíčky by měly být uvedeny v `makedepends` a budou odpovídat cílové architektuře bez ohledu na architekturu sestavovacího stroje. Typicky budou `makedepends` obsahovat hlavně balíčky `-devel` .
 
-- `dejagnu`: used for some GNU projects
-- `cmocka-devel`: linked into test binaries
-- `dbus`: makes it possible to run `dbus-run-session <test-command>` to provide
-  a D-Bus session for applications that need it
-- `git`: some test suites run the `git` command
+Kromě toho, pokud je nastaveno `XBPS_CHECK_PKGS` nebo je předána volba `-Q` do `xbps-src` , může cílový balíček vyžadovat specifické závislosti nebo knihovny, které jsou propojeny s jeho testovacími binárními soubory, aby mohl spustit testovací sadu. Tyto závislosti by měly být uvedeny v `checkdepends` a budou nainstalovány, jako by byly součástí `hostmakedepends` . Některé závislosti, které lze zahrnout do `checkdepends` , jsou:
 
-<a id="deps_runtime"></a>
-Lastly, a package may require certain dependencies at runtime, without which it
-is unusable. These dependencies, when they aren't detected automatically by
-XBPS, should be listed in `depends`.
+- `dejagnu` : používá se pro některé projekty GNU
+- `cmocka-devel` : propojeno do testovacích binárních souborů
+- `dbus` : umožňuje spouštět `dbus-run-session <test-command>` a poskytovat relaci D-Bus pro aplikace, které to potřebují
+- `git` : některé testovací sady spouštějí příkaz `git`
 
-Libraries linked by ELF objects are detected automatically by `xbps-src`, hence they
-must not be specified in templates via `depends`. This variable should list:
+<a id="deps_runtime"></a>A konečně, balíček může vyžadovat určité závislosti za běhu, bez kterých je nepoužitelný. Tyto závislosti, pokud je XBPS nezjistí automaticky, by měly být uvedeny v `depends` .
 
-- executables called as separate processes.
-- ELF objects using dlopen(3).
-- non-object code, e.g. C headers, perl/python/ruby/etc modules.
-- data files.
-- overriding the minimal version specified in the `common/shlibs` file.
+Knihovny propojené objekty ELF jsou detekovány automaticky pomocí `xbps-src` , proto je nelze specifikovat v šablonách pomocí `depends` . Tato proměnná by měla obsahovat:
 
-The runtime dependencies for ELF objects are detected by checking which SONAMEs
-they require and then the SONAMEs are mapped to a binary package name with a minimal
-required version. The `common/shlibs` file
-sets up the `<SONAME> <pkgname>>=<version>` mappings.
+- spustitelné soubory nazývané jako samostatné procesy.
+- ELF objekty pomocí dlopen(3).
+- neobjektový kód, např. hlavičky C, moduly perl/python/ruby/etc.
+- datové soubory.
+- přepíše minimální verzi uvedenou v souboru `common/shlibs` .
 
-For example the `foo-1.0_1` package provides the `libfoo.so.1` SONAME and
-software requiring this library will link to `libfoo.so.1`; the resulting binary
-package will have a run-time dependency on `foo>=1.0_1` package as specified in
-`common/shlibs`:
+Závislosti běhu pro objekty ELF se zjišťují kontrolou, které SONAME vyžadují, a poté jsou SONAME mapovány na binární název balíčku s minimální požadovanou verzí. Soubor `common/shlibs` nastavuje mapování `<SONAME> <pkgname>>=<version>` .
+
+Například balíček `foo-1.0_1` poskytuje `libfoo.so.1` SONAME a software vyžadující tuto knihovnu bude odkazovat na `libfoo.so.1` ; výsledný binární balíček bude mít závislost běhu na balíčku `foo>=1.0_1` jak je uvedeno v `common/shlibs` :
 
 ```
 # common/shlibs
@@ -852,417 +586,276 @@ libfoo.so.1 foo-1.0_1
 ...
 ```
 
-- The first field specifies the SONAME.
-- The second field specified the package name and minimal version required.
-- A third optional field (usually set to `ignore`) can be used to skip checks in soname bumps.
+- První pole určuje SONAME.
+- Ve druhém poli byl uveden název balíčku a minimální požadovaná verze.
+- Třetí volitelné pole (obvykle nastavené na `ignore` ) lze použít k přeskočení kontrol v soname bumps.
 
-Dependencies declared via `depends` are not installed to the master directory, rather they are
-only checked if they exist as binary packages, and are built automatically by `xbps-src` if
-the specified version is not in the local repository.
+Závislosti deklarované přes `depends` se neinstalují do hlavního adresáře, spíše se kontrolují, pokud existují jako binární balíčky, a jsou automaticky sestaveny `xbps-src` pokud zadaná verze není v lokálním úložišti.
 
-As a special case, `virtual` dependencies may be specified as runtime dependencies in the
-`depends` template variable. Several different packages can provide common functionality by
-declaring a virtual name and version in the `provides` template variable (e.g.
-`provides="vpkg-0.1_1"`). Packages that rely on the common functionality without concern for the
-specific provider can declare a dependency on the virtual package name with the prefix `virtual?`
-(e.g., `depends="virtual?vpkg-0.1_1"`). When a package is built by `xbps-src`, providers for any
-virtual packages will be confirmed to exist and will be built if necessary. A map from virtual
-packages to their default providers is defined in `etc/defaults.virtual`. Individual mappings can be
-overridden by local preferences in `etc/virtual`. Comments in `etc/defaults.virtual` provide more
-information on this map.
+Ve speciálním případě mohou být `virtual` závislosti specifikovány jako runtime závislosti v proměnné šablony `depends` . Několik různých balíčků může poskytovat běžnou funkcionalitu deklarováním virtuálního názvu a verze v proměnné šablony `provides` (např `provides="vpkg-0.1_1"` ). Balíčky, které se spoléhají na společnou funkčnost bez ohledu na konkrétního poskytovatele, mohou deklarovat závislost na názvu virtuálního balíčku s předponou `virtual?` (např. `depends="virtual?vpkg-0.1_1"` ). Když je balíček sestaven pomocí `xbps-src` , bude potvrzena existence poskytovatelů virtuálních balíčků a budou sestaveni v případě potřeby. Mapa z virtuálních balíčků na jejich výchozí poskytovatele je definována v `etc/defaults.virtual` . Jednotlivá mapování mohou být přepsána místními preferencemi v `etc/virtual` . Komentáře v `etc/defaults.virtual` poskytují více informací o této mapě.
 
-Finally, as a general rule, if a package is built the exact same way whether or
-not a particular package is present in `makedepends` or `hostmakedepends`, that
-package shouldn't be added as a build time dependency.
+A konečně, obecně platí, že pokud je balíček sestavován přesně stejným způsobem bez ohledu na to, zda je konkrétní balíček přítomen v `makedepends` nebo `hostmakedepends` , neměl by být tento balíček přidán jako závislost na čase sestavení.
 
 <a id="repositories"></a>
-### Repositories
+
+### Úložiště
 
 <a id="repo_by_branch"></a>
-#### Repositories defined by Branch
 
-The global repository takes the name of
-the current branch, except if the name of the branch is master. Then the resulting
-repository will be at the global scope. The usage scenario is that the user can
-update multiple packages in a second branch without polluting their local repository.
+#### Repozitáře definované větví
+
+Globální úložiště převezme název aktuální větve, kromě případů, kdy je název větve hlavní. Potom bude výsledné úložiště v globálním rozsahu. Scénář použití je takový, že uživatel může aktualizovat více balíčků v druhé větvi, aniž by znečišťoval své místní úložiště.
 
 <a id="pkg_defined_repo"></a>
-#### Package defined Repositories
 
-The second way to define a repository is by setting the `repository` variable in
-a template. This way the maintainer can define repositories for a specific
-package or a group of packages. This is currently used to distinguish between
-certain classes of packages.
+#### Repozitáře definované balíčkem
 
-The following repository names are valid:
+Druhým způsobem, jak definovat úložiště, je nastavení proměnné `repository` v šabloně. Tímto způsobem může správce definovat úložiště pro konkrétní balíček nebo skupinu balíčků. To se v současnosti používá k rozlišení mezi určitými třídami balíčků.
 
-* `bootstrap`: Repository for xbps-src-specific packages.
-* `debug`: Repository for packages containing debug symbols. In almost all cases,
-  these packages are generated automatically.
-* `nonfree`: Repository for packages that are closed source or have nonfree licenses.
+Následující názvy úložišť jsou platné:
+
+- `bootstrap` : Úložiště pro balíčky specifické pro xbps-src.
+- `debug` : Úložiště pro balíčky obsahující ladicí symboly. Téměř ve všech případech jsou tyto balíčky generovány automaticky.
+- `nonfree` : Úložiště pro balíčky, které jsou uzavřeným zdrojem nebo mají nesvobodné licence.
 
 <a id="updates"></a>
-### Checking for new upstream releases
 
-New upstream versions can be automatically checked using
-`./xbps-src update-check <pkgname>`. In some cases you need to override
-the sensible defaults by assigning the following variables in a `update`
-file in the same directory as the relevant `template` file:
+### Kontrola nových upstream vydání
 
-- `site` contains the URL where the version number is
-  mentioned.  If unset, defaults to `homepage` and the directories where
-`distfiles` reside.
+Nové upstream verze mohou být automaticky kontrolovány pomocí `./xbps-src update-check <pkgname>` . V některých případech je potřeba přepsat rozumné výchozí hodnoty přiřazením následujících proměnných v `update` souboru ve stejném adresáři jako příslušný soubor `template` :
 
-- `pkgname` is the package name the default pattern checks for.
-If unset, defaults to `pkgname` from the template.
+- `site` obsahuje URL, kde je uvedeno číslo verze. Pokud není nastaveno, jako výchozí se použije `homepage` a adresáře, kde jsou uloženy `distfiles` .
 
-- `pattern` is a perl-compatible regular expression
-matching the version number.  Anchor the version number using `\K`
-and `(?=...)`.  Example: `pattern='<b>\K[\d.]+(?=</b>)'`, this
-matches a version number enclosed in `<b>...</b>` tags.
+- `pkgname` je název balíčku, který výchozí vzor kontroluje. Není-li nastaveno, použije se výchozí `pkgname` ze šablony.
 
-- `ignore` is a space-separated list of shell globs that match
-version numbers which are not taken into account for checking newer
-versions.  Example: `ignore="*b*"`
+- `pattern` je regulární výraz kompatibilní s perl, který odpovídá číslu verze. Ukotvěte číslo verze pomocí `\K` a `(?=...)` . Příklad: `pattern='<b>\K[\d.]+(?=</b>)'` , toto odpovídá číslu verze uzavřenému ve značkách `<b>...</b>` .
 
-- `version` is the version number used to compare against
-upstream versions. Example: `version=${version//./_}`
+- `ignore` je mezerami oddělený seznam shellů, které odpovídají číslům verzí, které nejsou brány v úvahu při kontrole novějších verzí. Příklad: `ignore="*b*"`
 
-- `single_directory` can be set to disable
-detecting directory containing one version of sources in url,
-then searching new version in adjacent directories.
+- `version` je číslo verze používané k porovnání s upstream verzemi. Příklad: `version=${version//./_}`
 
-- `vdprefix` is a perl-compatible regular expression matching
-part that precedes numeric part of version directory
-in url. Defaults to `(|v|$pkgname)[-_.]*`.
+- `single_directory` lze nastavit tak, aby zakázalo zjišťování adresáře obsahujícího jednu verzi zdrojů v url a následné hledání nové verze v sousedních adresářích.
 
-- `vdsuffix` is a perl-compatible regular expression matching
-part that follows numeric part of version directory
-in url. Defaults to `(|\.x)`.
+- `vdprefix` je perl kompatibilní regulární výraz odpovídající část, která předchází číselné části adresáře verze v url. Výchozí hodnota je `(|v|$pkgname)[-_.]*` .
 
-- `disabled` can be set to disable update checking for the package,
-in cases where checking for updates is impossible or does not make sense.
-This should be set to a string describing why it is disabled.
+- `vdsuffix` je perl kompatibilní regulární výraz odpovídající část, která následuje číselnou část adresáře verze v url. Výchozí hodnota je `(|\.x)` .
+
+- `disabled` lze nastavit pro zakázání kontroly aktualizací pro balíček v případech, kdy kontrola aktualizací není možná nebo nedává smysl. Toto by mělo být nastaveno na řetězec popisující, proč je zakázáno.
 
 <a id="patches"></a>
-### Handling patches
 
-Sometimes software needs to be patched, most commonly to fix bugs that have
-been found or to fix compilation with new software.
+### Manipulace s náplastmi
 
-To handle this, xbps-src has patching functionality. It will look for all files
-that match the glob `srcpkgs/$pkgname/patches/*.{diff,patch}` and will
-automatically apply all files it finds using `patch(1)` with `-Np1`. This happens
-during the `do_patch()` phase. The variable `PATCHESDIR` is
-available in the template, pointing to the `patches` directory.
+Někdy je potřeba software opravit, nejčastěji k opravě nalezených chyb nebo k opravě kompilace s novým softwarem.
 
-The patching behaviour can be changed in the following ways:
+Pro řešení tohoto problému má xbps-src funkci záplatování. Vyhledá všechny soubory, které odpovídají globu `srcpkgs/$pkgname/patches/*.{diff,patch}` a automaticky použije všechny soubory, které najde pomocí `patch(1)` s `-Np1` . To se děje během fáze `do_patch()` . Proměnná `PATCHESDIR` je k dispozici v šabloně a ukazuje na adresář `patches` .
 
-- A file called `series` can be created in the `patches` directory with a newline
-separated list of patches to be applied in the order presented. When present
-xbps-src will only apply patches named in the `series` file.
+Chování záplatování lze změnit následujícími způsoby:
 
-- A file with the same name as one of the patches but with `.args` as extension can
-be used to set the args passed to `patch(1)`. As an example, if `foo.patch` requires
-special arguments to be passed to `patch(1)` that can't be used when applying other
-patches, `foo.patch.args` can be created containing those args.
+- V adresáři `patches` lze vytvořit soubor nazvaný `series` se seznamem oprav odděleným novým řádkem, které se mají aplikovat v uvedeném pořadí. Pokud je přítomen xbps-src, použije pouze záplaty uvedené v souboru `series` .
+
+- Soubor se stejným názvem jako jeden z patchů, ale s příponou `.args` lze použít k nastavení arg předávaných `patch(1)` . Pokud například `foo.patch` vyžaduje předání speciálních argumentů do `patch(1)` , které nelze použít při aplikaci jiných patchů, lze vytvořit `foo.patch.args` obsahující tyto argumenty.
 
 <a id="build_scripts"></a>
-### build style scripts
 
-The `build_style` variable specifies the build method to build and install a
-package. It expects the name of any available script in the
-`void-packages/common/build-style` directory. Please note that required packages
-to execute a `build_style` script must be defined via `$hostmakedepends`.
+### vytvářet stylové skripty
 
-The current list of available `build_style` scripts is the following:
+Proměnná `build_style` určuje metodu sestavení pro sestavení a instalaci balíčku. Očekává název libovolného dostupného skriptu v adresáři `void-packages/common/build-style` . Vezměte prosím na vědomí, že požadované balíčky pro spuštění skriptu `build_style` musí být definovány pomocí `$hostmakedepends` .
 
-- If `build_style` is not set, the template must (at least) define
-`do_install()` function and optionally more build phases such as
-`do_configure()`, `do_build()`, etc., and may overwrite default `do_fetch()` and
-`do_extract()` that fetch and extract files defined in `distfiles` variable.
+Aktuální seznam dostupných skriptů `build_style` je následující:
 
-- `cargo` For packages written in rust that use Cargo for building.
-Configuration arguments (such as `--features`) can be defined in the variable
-`configure_args` and are passed to cargo during `do_build`.
+- Pokud `build_style` není nastaven, šablona musí (alespoň) definovat funkci `do_install()` a volitelně více fází sestavení, jako je `do_configure()` , `do_build()` atd., a může přepsat výchozí `do_fetch()` a `do_extract()` , které načítají a extrahovat soubory definované v proměnné `distfiles` .
 
-- `cmake` For packages that use the CMake build system, configuration arguments
-can be passed in via `configure_args`. The `cmake_builddir` variable may be
-defined to specify the directory for building under `build_wrksrc` instead of
-the default `build`.
+- `cargo` Pro balíky napsané v rzi, které používají Cargo pro stavbu. Konfigurační argumenty (jako je `--features` ) lze definovat v proměnné `configure_args` a jsou předány do cargo během `do_build` .
 
-- `configure` For packages that use non-GNU configure scripts, at least `--prefix=/usr`
-should be passed in via `configure_args`.
+- `cmake` U balíčků, které používají systém sestavení CMake, lze konfigurační argumenty předávat pomocí `configure_args` . Proměnná `cmake_builddir` může být definována tak, aby specifikovala adresář pro sestavení pod `build_wrksrc` namísto výchozího `build` .
 
-- `fetch` For packages that only fetch files and are installed as is via `do_install()`.
+- `configure` U balíčků, které používají konfigurační skripty jiné než GNU, by mělo být předáno alespoň `--prefix=/usr` prostřednictvím `configure_args` .
 
-- `gnu-configure` For packages that use GNU autotools-compatible configure scripts,
-additional configuration arguments can be passed in via `configure_args`.
+- `fetch` Pro balíčky, které pouze načítají soubory a instalují se tak, jak jsou, pomocí `do_install()` .
 
-- `gnu-makefile` For packages that use GNU make, build arguments can be passed in via
-`make_build_args` and install arguments via `make_install_args`. The build
-target can be overridden via `make_build_target` and the install target
-via `make_install_target`. This build style tries to compensate for makefiles
-that do not respect environment variables, so well written makefiles, those
-that do such things as append (`+=`) to variables, should have `make_use_env`
-set in the body of the template.
+- `gnu-configure` Pro balíčky, které používají konfigurační skripty kompatibilní s GNU autotools, lze další konfigurační argumenty předat pomocí `configure_args` .
 
-- `go` For programs written in Go that follow the standard package
-structure. The variable `go_import_path` must be set to the package's
-import path, e.g. `github.com/github/hub` for the `hub` program. This
-information can be found in the `go.mod` file for modern Go projects.
-It's expected that the distfile contains the package, but dependencies
-will be downloaded with `go get`.
+- `gnu-makefile` U balíčků, které používají GNU make, lze argumenty buildu předat pomocí `make_build_args` a argumenty instalace pomocí `make_install_args` . Cíl sestavení lze přepsat pomocí `make_build_target` a cíl instalace pomocí `make_install_target` . Tento styl sestavování se snaží kompenzovat makefily, které nerespektují proměnné prostředí, takže dobře napsané makefily, ty, které dělají takové věci, jako je připojení ( `+=` ) k proměnným, by měly mít v těle šablony nastaveno `make_use_env` .
 
-- `R-cran` For packages that are available on The Comprehensive R Archive
-Network (CRAN). The build style requires the `pkgname` to start with
-`R-cran-` and any dashes (`-`) in the CRAN-given version to be replaced
-with the character `r` in the `version` variable. The `distfiles`
-location will automatically be set as well as the package made to depend
-on `R`.
+- `go` Pro programy napsané v Go, které se řídí standardní strukturou balíčků. Proměnná `go_import_path` musí být nastavena na cestu importu balíčku, např. `github.com/github/hub` pro program `hub` . Tyto informace lze nalézt v souboru `go.mod` pro moderní projekty Go. Očekává se, že distfile obsahuje balíček, ale závislosti budou staženy pomocí `go get` .
 
-- `gemspec` For packages that use
-[gemspec](https://guides.rubygems.org/specification-reference/) files for building a ruby
-gem and then installing it. The gem command can be overridden by `gem_cmd`. `configure_args`
-can be used to pass arguments during compilation. If your package does not make use of compiled
-extensions consider using the `gem` build style instead.
+- `R-cran` Pro balíčky, které jsou dostupné v The Comprehensive R Archive Network (CRAN). Styl sestavení vyžaduje, aby `pkgname` začínal `R-cran-` a všechny pomlčky ( `-` ) ve verzi dané CRAN byly nahrazeny znakem `r` v proměnné `version` . Umístění `distfiles` bude automaticky nastaveno a balíček bude závislý na `R` .
 
-- `gem` For packages that are installed using gems from [RubyGems](https://rubygems.org/).
-The gem command can be overridden by `gem_cmd`.
-`distfiles` is set by the build style if the template does not do so. If your gem
-provides extensions which must be compiled consider using the `gemspec` build style instead.
+- `gemspec` Pro balíčky, které používají soubory [gemspec](https://guides.rubygems.org/specification-reference/) pro vytvoření rubínového drahokamu a jeho následnou instalaci. Příkaz gem lze přepsat příkazem `gem_cmd` . `configure_args` lze použít k předání argumentů během kompilace. Pokud váš balíček nepoužívá zkompilovaná rozšíření, zvažte použití stylu sestavení `gem` .
 
-- `ruby-module` For packages that are ruby modules and are installable via `ruby install.rb`.
-Additional install arguments can be specified via `make_install_args`.
+- `gem` Pro balíčky, které se instalují pomocí drahokamů od [RubyGems](https://rubygems.org/) . Příkaz gem lze přepsat příkazem `gem_cmd` . `distfiles` je nastaven stylem sestavení, pokud tak šablona nečiní. Pokud váš drahokam poskytuje rozšíření, která musí být zkompilována, zvažte použití stylu sestavení `gemspec` .
 
-- `perl-ModuleBuild` For packages that use the Perl
-[Module::Build](https://metacpan.org/pod/Module::Build) method.
+- `ruby-module` Pro balíčky, které jsou moduly ruby ​​a lze je nainstalovat přes `ruby install.rb` . Další argumenty instalace lze zadat pomocí `make_install_args` .
 
-- `perl-module` For packages that use the Perl
-[ExtUtils::MakeMaker](http://perldoc.perl.org/ExtUtils/MakeMaker.html) build method.
+- `perl-ModuleBuild` Pro balíčky, které používají metodu Perl [Module::Build](https://metacpan.org/pod/Module::Build) .
 
-- `raku-dist` For packages that use the Raku `raku-install-dist` build method with rakudo.
+- `perl-module` Pro balíčky, které používají metodu sestavení Perl [ExtUtils::MakeMaker](http://perldoc.perl.org/ExtUtils/MakeMaker.html) .
 
-- `waf3` For packages that use the Python3 `waf` build method with python3.
+- `raku-dist` Pro balíčky, které používají metodu sestavení Raku `raku-install-dist` s rakudo.
 
-- `slashpackage` For packages that use the /package hierarchy and package/compile to build,
-such as `daemontools` or any `djb` software.
+- `waf3` Pro balíčky, které používají Python3 metodu sestavení `waf` s python3.
 
-- `qmake` For packages that use Qt5/Qt6 qmake profiles (`*.pro`), qmake arguments
-for the configure phase can be passed in via `configure_args`, make build arguments can
-be passed in via `make_build_args` and install arguments via `make_install_args`. The build
-target can be overridden via `make_build_target` and the install target
-via `make_install_target`.
+- `slashpackage` Pro balíčky, které k sestavení používají hierarchii /package a package/compile, jako je například `daemontools` nebo jakýkoli `djb` software.
 
-- `meson` For packages that use the Meson Build system, configuration options can be passed
-via `configure_args`, the meson command can be overridden by `meson_cmd` and the location of
-the out of source build by `meson_builddir`
+- `qmake` U balíčků, které používají profily Qt5/Qt6 qmake ( `*.pro` ), mohou být argumenty qmake pro fázi configure předány prostřednictvím `configure_args` , argumenty make build mohou být předány pomocí `make_build_args` a argumenty instalace pomocí `make_install_args` . Cíl sestavení lze přepsat pomocí `make_build_target` a cíl instalace pomocí `make_install_target` .
 
-- `void-cross` For cross-toolchain packages used to build Void systems. There are no
-mandatory variables (target triplet is inferred), but you can specify some optional
-ones - `cross_gcc_skip_go` can be specified to skip `gccgo`, individual subproject
-configure arguments can be specified via `cross_*_configure_args` where `*` is `binutils`,
-`gcc_bootstrap` (early gcc), `gcc` (final gcc), `glibc` (or `musl`), `configure_args` is
-additionally passed to both early and final `gcc`. You can also specify custom `CFLAGS`
-and `LDFLAGS` for the libc as `cross_(glibc|musl)_(cflags|ldflags)`.
+- `meson` U balíčků, které používají systém Meson Build, lze konfigurační volby předat přes `configure_args` , příkaz meson lze přepsat pomocí `meson_cmd` a umístění out of source buildu pomocí `meson_builddir`
 
-- `zig-build` For packages using [Zig](https://ziglang.org)'s build
-system. Additional arguments may be passed to the `zig build` invocation using
-`configure_args`.
+- `void-cross` Pro cross-toolchain balíčky používané k budování Void systémů. Neexistují žádné povinné proměnné (cílový triplet je odvozen), ale můžete zadat některé volitelné - `cross_gcc_skip_go` lze zadat pro přeskočení `gccgo` , jednotlivé argumenty konfigurace podprojektu lze zadat pomocí `cross_*_configure_args` kde `*` je `binutils` , `gcc_bootstrap` (předčasné gcc), `gcc` (final gcc), `glibc` (nebo `musl` ), `configure_args` je navíc předán jak ranému, tak konečnému `gcc` . Můžete také zadat vlastní `CFLAGS` a `LDFLAGS` pro knihovnu libc jako `cross_(glibc|musl)_(cflags|ldflags)` .
 
-For packages that use the Python module build method (`setup.py` or
-[PEP 517](https://www.python.org/dev/peps/pep-0517/)), you can choose one of the following:
+- `zig-build` Pro balíčky používající systém sestavení [Zig](https://ziglang.org) . Další argumenty lze předat vyvolání `zig build` pomocí `configure_args` .
 
-- `python3-module` to build Python 3.x modules
+U balíčků, které používají metodu sestavení modulu Python ( `setup.py` nebo [PEP 517](https://www.python.org/dev/peps/pep-0517/) ), si můžete vybrat jednu z následujících možností:
 
-- `python3-pep517` to build Python 3.x modules that provide a PEP 517 build description without
-a `setup.py` script
+- `python3-module` pro sestavení modulů Pythonu 3.x
 
-Environment variables for a specific `build_style` can be declared in a filename
-matching the `build_style` name, Example:
+- `python3-pep517` k sestavení modulů Pythonu 3.x, které poskytují popis sestavení PEP 517 bez skriptu `setup.py`
 
-    `common/environment/build-style/gnu-configure.sh`
+Proměnné prostředí pro konkrétní `build_style` lze deklarovat v názvu souboru, který odpovídá názvu `build_style` , Příklad:
 
-- `texmf` For texmf zip/tarballs that need to go into /usr/share/texmf-dist. Includes
-duplicates handling.
+```
+`common/environment/build-style/gnu-configure.sh`
+```
+
+- `texmf` Pro texmf zip/tarballs, které potřebují jít do /usr/share/texmf-dist. Zahrnuje manipulaci s duplikáty.
 
 <a id="build_helper"></a>
-### build helper scripts
 
-The `build_helper` variable specifies shell snippets to be sourced that will create a
-suitable environment for working with certain sets of packages.
+### vytvářet pomocné skripty
 
-The current list of available `build_helper` scripts is the following:
+Proměnná `build_helper` specifikuje úryvky shellu, které mají být získávány a které vytvoří vhodné prostředí pro práci s určitými sadami balíčků.
 
-- `cmake-wxWidgets-gtk3` sets the `WX_CONFIG` variable which is used by FindwxWidgets.cmake
+Aktuální seznam dostupných skriptů `build_helper` je následující:
 
-- `gir` specifies dependencies for native and cross builds to deal with
-GObject Introspection. The following variables may be set in the template to handle
-cross builds which require additional hinting or exhibit problems. `GIR_EXTRA_LIBS_PATH` defines
-additional paths to be searched when linking target binaries to be introspected.
-`GIR_EXTRA_OPTIONS` defines additional options for the `g-ir-scanner-qemuwrapper` calling
-`qemu-<target_arch>-static` when running the target binary. You can for example specify
-`GIR_EXTRA_OPTIONS="-strace"` to see a trace of what happens when running that binary.
+- `cmake-wxWidgets-gtk3` nastavuje proměnnou `WX_CONFIG` , kterou používá FindwxWidgets.cmake
 
-- `meson` creates a cross file, `${XBPS_WRAPPERDIR}/meson/xbps_meson.cross`, which configures
-meson for cross builds. This is particularly useful for building packages that wrap meson
-invocations (e.g., `python3-pep517` packages that use a meson backend) and is added by default
-for packages that use the `meson` build style.
+- `gir` specifikuje závislosti pro nativní a křížová sestavení pro řešení GObject Introspection. Následující proměnné lze nastavit v šabloně pro zpracování křížových sestavení, která vyžadují další nápovědu nebo vykazují problémy. `GIR_EXTRA_LIBS_PATH` definuje další cesty, které se mají prohledávat při propojování cílových binárních souborů, které mají být introspekovány. `GIR_EXTRA_OPTIONS` definuje další možnosti pro `g-ir-scanner-qemuwrapper` volající `qemu-<target_arch>-static` při spuštění cílového binárního souboru. Můžete například zadat `GIR_EXTRA_OPTIONS="-strace"` abyste viděli stopu toho, co se stane při spuštění této binárky.
 
-- `numpy` configures the environment for cross-compilation of python packages that provide
-compiled extensions linking to NumPy C libraries. If the `meson` build helper is also
-configured, a secondary cross file, `${XBPS_WRAPPERDIR}/meson/xbps_numpy.cross`, will be
-written to inform meson where common NumPy components may be found.
+- `meson` vytvoří křížový soubor `${XBPS_WRAPPERDIR}/meson/xbps_meson.cross` , který nakonfiguruje meson pro křížové sestavení. To je zvláště užitečné pro sestavování balíčků, které zalamují vyvolání mesonu (např. balíčky `python3-pep517` , které používají backend meson) a přidává se standardně pro balíčky, které používají styl sestavení `meson` .
 
-- `python3` configures the cross-build environment to use Python libraries, header files, and
-interpreter configurations in the target root. The `python3` helper is added by default for
-packages that use the `python3-module` or `python3-pep517` build styles.
+- `numpy` konfiguruje prostředí pro křížovou kompilaci pythonových balíčků, které poskytují kompilovaná rozšíření odkazující na knihovny NumPy C. Pokud je také nakonfigurován pomocník sestavení `meson` , zapíše se sekundární křížový soubor `${XBPS_WRAPPERDIR}/meson/xbps_numpy.cross` , aby informoval meson, kde lze nalézt běžné komponenty NumPy.
 
-- `qemu` sets additional variables for the `cmake` and `meson` build styles to allow
-executing cross-compiled binaries inside qemu.
-It sets `CMAKE_CROSSCOMPILING_EMULATOR` for cmake and `exe_wrapper` for meson
-to `qemu-<target_arch>-static` and `QEMU_LD_PREFIX` to `XBPS_CROSS_BASE`.
-It also creates the `vtargetrun` function to wrap commands in a call to
-`qemu-<target_arch>-static` for the target architecture.
+- `python3` konfiguruje prostředí cross-build tak, aby používala knihovny Pythonu, hlavičkové soubory a konfigurace interpretů v cílovém kořenovém adresáři. Pomocník `python3` je standardně přidán pro balíčky, které používají styly sestavení `python3-module` nebo `python3-pep517` .
 
-- `qmake` creates the `qt.conf` configuration file (cf. `qmake` `build_style`)
-needed for cross builds and a qmake-wrapper to make `qmake` use this configuration.
-This aims to fix cross-builds for when the build-style is mixed: e.g. when in a
-`gnu-configure` style the configure script calls `qmake` or a `Makefile` in
-`gnu-makefile` style, respectively. This is for Qt5 packages.
+- `qemu` nastavuje další proměnné pro styly sestavení `cmake` a `meson` , aby bylo možné spouštět křížově kompilované binární soubory uvnitř qemu. Nastaví `CMAKE_CROSSCOMPILING_EMULATOR` pro cmake a `exe_wrapper` pro meson na `qemu-<target_arch>-static` a `QEMU_LD_PREFIX` na `XBPS_CROSS_BASE` . Vytvoří také funkci `vtargetrun` pro zabalení příkazů do volání `qemu-<target_arch>-static` pro cílovou architekturu.
+
+- `qmake` vytvoří konfigurační soubor `qt.conf` (srov. `qmake` `build_style` ) potřebný pro křížová sestavení a qmake-wrapper, aby `qmake` použil tuto konfiguraci. Cílem je opravit křížová sestavení pro případ, že je styl sestavení smíšený: např. když ve stylu `gnu-configure` konfigurační skript volá `qmake` nebo `Makefile` ve stylu `gnu-makefile` . Toto je pro balíčky Qt5.
 
 - `qmake6` is like `qmake` but for Qt6.
 
-- `rust` specifies environment variables required for cross-compiling crates via cargo and
-for compiling cargo -sys crates.
-It also adds a `cargo` wrapper that detects and passes builds through `cargo-auditable`.
-This helper is added by default for packages that use the `cargo` build style.
+- `rust` specifikuje proměnné prostředí požadované pro křížovou kompilaci přepravek přes náklad a pro kompilaci cargo -sys přepravek. Přidává také obalovač `cargo` , který detekuje a prochází sestavami `cargo-auditable` . Tento pomocník je standardně přidán pro balíčky, které používají styl sestavení `cargo` .
 
-- `haskell` specifies environment variables for cabal.
-This helper is added by default for packages that use the `haskell-stack` or
-`cabal` build style.
+- `haskell` specifikuje proměnné prostředí pro cabal. Tato pomocná funkce je standardně přidána pro balíčky, které používají styl sestavení `haskell-stack` nebo `cabal` .
 
 <a id="functions"></a>
-### Functions
 
-The following functions can be defined to change the behavior of how the
-package is downloaded, compiled and installed.
+### Funkce
 
-- `pre_fetch()` Actions to execute before `do_fetch()`.
+Následující funkce mohou být definovány pro změnu chování, jak se balíček stahuje, kompiluje a instaluje.
 
-- `do_fetch()` if defined and `distfiles` is not set, use it to fetch the required sources.
+- `pre_fetch()` Akce, které se mají provést před `do_fetch()` .
 
-- `post_fetch()` Actions to execute after `do_fetch()`.
+- `do_fetch()` pokud je definováno a není nastaveno `distfiles` , použijte jej k načtení požadovaných zdrojů.
 
-- `pre_extract()` Actions to execute after `post_fetch()`.
+- `post_fetch()` Akce, které se mají provést po `do_fetch()` .
 
-- `do_extract()` if defined and `distfiles` is not set, use it to extract the required sources.
+- `pre_extract()` Akce, které se mají provést po `post_fetch()` .
 
-- `post_extract()` Actions to execute after `do_extract()`.
+- `do_extract()` pokud je definováno a není nastaveno `distfiles` , použijte jej k extrahování požadovaných zdrojů.
 
-- `pre_patch()` Actions to execute after `post_extract()`.
+- `post_extract()` Akce, které se mají provést po `do_extract()` .
 
-- `do_patch()` if defined use it to prepare the build environment and run hooks to apply patches.
+- `pre_patch()` Akce, které se mají provést po `post_extract()` .
 
-- `post_patch()` Actions to execute after `do_patch()`.
+- `do_patch()` pokud je definována, použijte ji k přípravě prostředí pro sestavení a spuštění háčků pro aplikaci záplat.
 
-- `pre_configure()` Actions to execute after `post_patch()`.
+- `post_patch()` Akce, které se mají provést po `do_patch()` .
 
-- `do_configure()` Actions to execute to configure the package; `${configure_args}` should
-still be passed in if it's a GNU configure script.
+- `pre_configure()` Akce, které se mají provést po `post_patch()` .
 
-- `post_configure()` Actions to execute after `do_configure()`.
+- `do_configure()` Akce pro provedení konfigurace balíčku; `${configure_args}` by měl být stále předán, pokud se jedná o konfigurační skript GNU.
 
-- `pre_build()` Actions to execute after `post_configure()`.
+- `post_configure()` Akce, které se mají provést po `do_configure()` .
 
-- `do_build()` Actions to execute to build the package.
+- `pre_build()` Akce, které se mají provést po `post_configure()` .
 
-- `post_build()` Actions to execute after `do_build()`.
+- `do_build()` Akce k provedení sestavení balíčku.
 
-- `pre_check()` Actions to execute after `post_build()`.
+- `post_build()` Akce, které se mají provést po `do_build()` .
 
-- `do_check()` Actions to execute to run checks for the package.
+- `pre_check()` Akce, které se mají provést po `post_build()` .
 
-- `post_check()` Actions to execute after `do_check()`.
+- `do_check()` Akce, které se mají provést pro spuštění kontroly balíčku.
 
-- `pre_install()` Actions to execute after `post_check()`.
+- `post_check()` Akce, které se mají provést po `do_check()` .
 
-- `do_install()` Actions to execute to install the package files into the `fake destdir`.
+- `pre_install()` Akce, které se mají provést po `post_check()` .
 
-- `post_install()` Actions to execute after `do_install()`.
+- `do_install()` Akce, které se mají provést k instalaci souborů balíčku do `fake destdir` .
 
-- `do_clean()` Actions to execute to clean up after a successful package phase.
+- `post_install()` Akce, které se mají provést po `do_install()` .
 
-> A function defined in a template has preference over the same function
-defined by a `build_style` script.
+- `do_clean()` Akce, které se mají provést pro vyčištění po úspěšné fázi balíčku.
 
-Current working directory for functions is set as follows:
+> Funkce definovaná v šabloně má přednost před stejnou funkcí definovanou skriptem `build_style` .
 
-- For pre_fetch, pre_extract, do_clean: `<masterdir>`.
+Aktuální pracovní adresář pro funkce je nastaven takto:
 
-- For do_fetch, post_fetch: `XBPS_BUILDDIR`.
+- Pro pre_fetch, pre_extract, do_clean: `<masterdir>` .
 
-- For do_extract through do_patch: `wrksrc`.
+- Pro do_fetch, post_fetch: `XBPS_BUILDDIR` .
 
-- For post_patch through post_install: `build_wrksrc`
-if it is defined, otherwise `wrksrc`.
+- Pro do_extract přes do_patch: `wrksrc` .
+
+- Pro post_patch až post_install: `build_wrksrc` pokud je definován, jinak `wrksrc` .
 
 <a id="build_options"></a>
-### Build options
 
-Some packages might be built with different build options to enable/disable
-additional features; The XBPS source packages collection allows you to do this with some simple tweaks
-to the `template` file.
+### Možnosti sestavení
 
-The following variables may be set to allow package build options:
+Některé balíčky mohou být sestaveny s různými možnostmi sestavení, aby bylo možné povolit/zakázat další funkce; Kolekce zdrojových balíčků XBPS vám to umožňuje pomocí několika jednoduchých úprav souboru `template` .
 
-- `build_options` Sets the build options supported by the source package.
+Následující proměnné mohou být nastaveny tak, aby umožňovaly možnosti sestavení balíčku:
 
-- `build_options_default` Sets the default build options to be used by the source package.
+- `build_options` Nastavuje možnosti sestavení podporované zdrojovým balíčkem.
 
-- `desc_option_<option>` Sets the description for the build option `option`. This must match the
-keyword set in *build_options*. Note that if the build option is generic enough, its description
-should be added to `common/options.description` instead.
+- `build_options_default` Nastavuje výchozí možnosti sestavení, které má použít zdrojový balíček.
 
-After defining those required variables, you can check for the
-`build_option_<option>` variable to know if it has been set and adapt the source
-package accordingly. Additionally, the following functions are available:
+- `desc_option_<option>` Nastaví popis pro `option` volby sestavení . To se musí shodovat s klíčovým slovem nastaveným v *build_options* . Všimněte si, že pokud je možnost sestavení dostatečně obecná, její popis by měl být místo toho přidán do `common/options.description` .
+
+Po definování těchto požadovaných proměnných můžete zkontrolovat proměnnou `build_option_<option>` , abyste věděli, zda byla nastavena, a podle toho upravit zdrojový balíček. Kromě toho jsou k dispozici následující funkce:
 
 - *vopt_if()* `vopt_if <option> <if_true> [<if_false>]`
 
-  Outputs `if_true` if `option` is set, or `if_false` if it isn't set.
+    Výstup `if_true` pokud je nastavena `option` , nebo `if_false` pokud není nastavena.
 
 - *vopt_with()* `vopt_with <option> [<flag>]`
 
-  Outputs `--with-<flag>` if the option is set, or `--without-<flag>`
-  otherwise. If `flag` isn't set, it defaults to `option`.
+    Výstup `--with-<flag>` , pokud je tato možnost nastavena, nebo `--without-<flag>` v opačném případě. Není-li `flag` nastaven, výchozí je `option` .
 
-  Examples:
+    Příklady:
 
-  - `vopt_with dbus`
-  - `vopt_with xml xml2`
+    - `vopt_with dbus`
+    - `vopt_with xml xml2`
 
 - *vopt_enable()* `vopt_enable <option> [<flag>]`
 
-  Same as `vopt_with`, but uses `--enable-<flag>` and
-  `--disable-<flag>` respectively.
+    Stejné jako `vopt_with` , ale používá `--enable-<flag>` a `--disable-<flag>` .
 
 - *vopt_conflict()* `vopt_conflict <option 1> <option 2>`
 
-  Emits an error and exits if both options are set at the same time.
+    Vydá chybu a ukončí se, pokud jsou obě možnosti nastaveny současně.
 
 - *vopt_bool()* `vopt_bool <option> <property>`
 
-  Outputs `-D<property>=true` if the option is set, or
-  `-D<property>=false` otherwise.
+    Výstupy `-D<property>=true` pokud je volba nastavena, nebo `-D<property>=false` v opačném případě.
 
 - *vopt_feature()* `vopt_feature <option> <property>`
 
-  Same as `vopt_bool`, but uses `-D<property>=enabled` and
-	`-D<property>=disabled` respectively.
+    Stejné jako `vopt_bool` , ale používá `-D<property>=enabled` a `-D<property>=disabled` .
 
-The following example shows how to change a source package that uses GNU
-configure to enable a new build option to support PNG images:
+Následující příklad ukazuje, jak změnit zdrojový balíček, který používá konfiguraci GNU, aby povolil novou možnost sestavení pro podporu obrázků PNG:
 
 ```
 # Template file for 'foo'
@@ -1286,52 +879,56 @@ desc_option_png="Enable support for PNG images"
 
 ```
 
-The supported build options for a source package can be shown with `xbps-src`:
+Podporované možnosti sestavení pro zdrojový balíček lze zobrazit pomocí `xbps-src` :
 
-    $ ./xbps-src show-options foo
+```
+$ ./xbps-src show-options foo
+```
 
-Build options can be enabled with the `-o` flag of `xbps-src`:
+Možnosti sestavení lze povolit pomocí parametru `-o` `xbps-src` :
 
-    $ ./xbps-src -o option,option1 <cmd> foo
+```
+$ ./xbps-src -o option,option1 <cmd> foo
+```
 
-Build options can be disabled by prefixing them with `~`:
+Možnosti sestavení lze zakázat jejich přidáním předponu `~` :
 
-    $ ./xbps-src -o ~option,~option1 <cmd> foo
+```
+$ ./xbps-src -o ~option,~option1 <cmd> foo
+```
 
-Both ways can be used together to enable and/or disable multiple options
-at the same time with `xbps-src`:
+Oba způsoby lze použít společně k povolení a/nebo zakázání více možností současně s `xbps-src` :
 
-    $ ./xbps-src -o option,~option1,~option2 <cmd> foo
+```
+$ ./xbps-src -o option,~option1,~option2 <cmd> foo
+```
 
-The build options can also be shown for binary packages via `xbps-query(8)`:
+Možnosti sestavení lze také zobrazit pro binární balíčky pomocí `xbps-query(8)` :
 
-    $ xbps-query -R --property=build-options foo
+```
+$ xbps-query -R --property=build-options foo
+```
 
-Permanent global package build options can be set via `XBPS_PKG_OPTIONS` variable in the
-`etc/conf` configuration file. Per package build options can be set via
-`XBPS_PKG_OPTIONS_<pkgname>`.
+Trvalé globální možnosti sestavení balíčku lze nastavit pomocí proměnné `XBPS_PKG_OPTIONS` v konfiguračním souboru `etc/conf` . Možnosti sestavení pro jednotlivé balíčky lze nastavit pomocí `XBPS_PKG_OPTIONS_<pkgname>` .
 
-> NOTE: if `pkgname` contains `dashes`, those should be replaced by `underscores`
-Example: `XBPS_PKG_OPTIONS_xorg_server=opt`.
+> POZNÁMKA: Pokud `pkgname` obsahuje `dashes` , měly by být nahrazeny `underscores` Příklad: `XBPS_PKG_OPTIONS_xorg_server=opt` .
 
-The list of supported package build options and its description is defined in the
-`common/options.description` file.
+Seznam podporovaných voleb sestavení balíčku a jeho popis je definován v souboru `common/options.description` .
 
 <a id="install_remove_files"></a>
-### INSTALL and REMOVE files
 
-The INSTALL and REMOVE shell snippets can be used to execute certain actions at a specified
-stage when a binary package is installed, updated or removed. There are some variables
-that are always set by `xbps` when the scripts are executed:
+### INSTALOVAT a ODEBRAT soubory
 
-- `$ACTION`: to conditionalize its actions: `pre` or `post`.
-- `$PKGNAME`: the package name.
-- `$VERSION`: the package version.
-- `$UPDATE`: set to `yes` if package is being upgraded, `no` if package is being `installed` or `removed`.
-- `$CONF_FILE`: full path to `xbps.conf`.
-- `$ARCH`: the target architecture it is running on.
+Útržky shellu INSTALL a REMOVE lze použít k provedení určitých akcí v určené fázi, když je binární balíček instalován, aktualizován nebo odstraněn. Existují některé proměnné, které jsou vždy nastaveny `xbps` při provádění skriptů:
 
-An example of how an `INSTALL` or `REMOVE` script shall be created is shown below:
+- `$ACTION` : pro podmínění jeho akcí: `pre` nebo `post` .
+- `$PKGNAME` : název balíčku.
+- `$VERSION` : verze balíčku.
+- `$UPDATE` : nastavte na `yes` pokud se balíček aktualizuje, `no` , pokud se balíček `installed` nebo `removed` .
+- `$CONF_FILE` : úplná cesta k `xbps.conf` .
+- `$ARCH` : cílová architektura, na které běží.
+
+Příklad toho, jak má být vytvořen skript `INSTALL` nebo `REMOVE` , je uveden níže:
 
 ```
 # INSTALL
@@ -1352,71 +949,55 @@ post)
 esac
 ```
 
-subpackages can also have their own `INSTALL` and `REMOVE` files, simply create them
-as `srcpkgs/<pkgname>/<subpkg>.INSTALL` or `srcpkgs/<pkgname>/<subpkg>.REMOVE` respectively.
+dílčí balíčky mohou mít také své vlastní soubory `INSTALL` a `REMOVE` , jednoduše je vytvořte jako `srcpkgs/<pkgname>/<subpkg>.INSTALL` nebo `srcpkgs/<pkgname>/<subpkg>.REMOVE` .
 
-> NOTE: always use paths relative to the current working directory, otherwise if the scripts cannot
-be executed via `chroot(2)` won't work correctly.
+> POZNÁMKA: Vždy používejte cesty relativně k aktuálnímu pracovnímu adresáři, jinak pokud skripty nelze spustit přes `chroot(2)` nebudou správně fungovat.
 
-> NOTE: do not use INSTALL/REMOVE scripts to print messages, see the next section for
-more information.
+> POZNÁMKA: K tisku zpráv nepoužívejte skripty INSTALL/REMOVE, další informace naleznete v další části.
 
 <a id="install_remove_files_msg"></a>
-### INSTALL.msg and REMOVE.msg files
 
-The `INSTALL.msg` and `REMOVE.msg` files can be used to print a message at post-install
-or pre-remove time, respectively.
+### INSTALL.msg a REMOVE.msg soubory
 
-Ideally those files should not exceed 80 chars per line.
+Soubory `INSTALL.msg` a `REMOVE.msg` lze použít k vytištění zprávy v době po instalaci nebo před odstraněním.
 
-subpackages can also have their own `INSTALL.msg` and `REMOVE.msg` files, simply create them
-as `srcpkgs/<pkgname>/<subpkg>.INSTALL.msg` or `srcpkgs/<pkgname>/<subpkg>.REMOVE.msg` respectively.
+V ideálním případě by tyto soubory neměly přesáhnout 80 znaků na řádek.
 
-This should only be used for critical messages, like warning users of breaking changes.
+dílčí balíčky mohou mít také své vlastní soubory `INSTALL.msg` a `REMOVE.msg` , jednoduše je vytvořte jako `srcpkgs/<pkgname>/<subpkg>.INSTALL.msg` nebo `srcpkgs/<pkgname>/<subpkg>.REMOVE.msg` .
+
+Toto by se mělo používat pouze pro kritické zprávy, jako je varování uživatelů o porušení změn.
 
 <a id="runtime_account_creation"></a>
-### Creating system accounts/groups at runtime
 
-There's a trigger along with some variables that are specifically to create
-**system users and groups** when the binary package is being configured.
-The following variables can be used for this purpose:
+### Vytváření systémových účtů/skupin za běhu
 
-- `system_groups` This specifies the names of the new *system groups* to be created, separated
-by blanks. Optionally the **gid** can be specified by delimiting it with a
-colon, i.e `system_groups="_mygroup:78"` or `system_groups="_foo _blah:8000"`.
+Existuje spouštěč spolu s některými proměnnými, které jsou specificky určeny k vytvoření **systémových uživatelů a skupin** při konfiguraci binárního balíčku. K tomuto účelu lze použít následující proměnné:
 
-- `system_accounts` This specifies the names of the new **system users/groups** to be created,
-separated by blanks, i.e `system_accounts="_foo _blah:22"`. Optionally the **uid** and **gid**
-can be specified by delimiting it with a colon, i.e `system_accounts="_foo:48"`.
-Additional variables for the **system accounts** can be specified to change its behavior:
+- `system_groups` Určuje názvy nových *skupin systémů* , které mají být vytvořeny, oddělené mezerami. Volitelně lze zadat **gid** oddělením dvojtečkou, tj. `system_groups="_mygroup:78"` nebo `system_groups="_foo _blah:8000"` .
 
-	- `<account>_homedir` the home directory for the user. If unset defaults to `/var/empty`.
-	- `<account>_shell` the shell for the new user. If unset defaults to `/sbin/nologin`.
-	- `<account>_descr` the description for the new user. If unset defaults to `<account> unprivileged user`.
-	- `<account>_groups` additional groups to be added to for the new user.
-	- `<account>_pgroup` to set the primary group, by default primary group is set to `<account>`.
+- `system_accounts` Určuje jména nových **systémových uživatelů/skupin,** které mají být vytvořeny, oddělená mezerami, tj `system_accounts="_foo _blah:22"` . Volitelně lze **uid** a **gid** specifikovat jejich oddělením dvojtečkou, tj. `system_accounts="_foo:48"` . Pro změnu chování **systémových účtů** lze zadat další proměnné:
 
-The **system user** is created by using a dynamically allocated **uid/gid** in your system
-and it's created as a `system account`, unless the **uid** is set. A new group will be created for the
-specified `system account` and used exclusively for this purpose.
+    - `<account>_homedir` domovský adresář uživatele. Pokud není nastaveno, výchozí je `/var/empty` .
+    - `<account>_shell` shell pro nového uživatele. Pokud není nastaveno, výchozí je `/sbin/nologin` .
+    - `<account>_descr` popis pro nového uživatele. Pokud není nastaveno, výchozí je `<account> unprivileged user` .
+    - `<account>_groups` další skupiny, které mají být přidány pro nového uživatele.
+    - `<account>_pgroup` pro nastavení primární skupiny, ve výchozím nastavení je primární skupina nastavena na `<account>` .
 
-System accounts and groups must be prefixed with an underscore to prevent clashing with names of user
-accounts.
+**Systémový uživatel** je vytvořen pomocí dynamicky přiděleného **uid/gid** ve vašem systému a je vytvořen jako `system account` , pokud není nastaveno **uid** . Pro zadaný `system account` bude vytvořena nová skupina a bude použita výhradně pro tento účel.
 
-> NOTE: The underscore policy does not apply to old packages, due to the inevitable breakage of
-> changing the username only new packages should follow it.
+Systémové účty a skupiny musí mít předponu podtržítka, aby se předešlo střetu s názvy uživatelských účtů.
+
+> POZNÁMKA: Zásady podtržení se nevztahují na staré balíčky, kvůli nevyhnutelnému porušení změny uživatelského jména by se podle něj měly řídit pouze nové balíčky.
 
 <a id="writing_runit_services"></a>
-### Writing runit services
 
-Void Linux uses [runit](http://smarden.org/runit/) for booting and supervision of services.
+### Psaní runitových služeb
 
-Most information about how to write them can be found in their
-[FAQ](http://smarden.org/runit/faq.html#create). The following are guidelines specific to
-Void Linux on how to write services.
+Void Linux používá [runit](http://smarden.org/runit/) pro bootování a dohled nad službami.
 
-If the service daemon supports CLI flags, consider adding support for changing it via the
-`OPTS` variable by reading a file called `conf` in the same directory as the daemon.
+Většinu informací o tom, jak je napsat, najdete v jejich [FAQ](http://smarden.org/runit/faq.html#create) . Následují pokyny specifické pro Void Linux, jak psát služby.
+
+Pokud démon služby podporuje příznaky CLI, zvažte přidání podpory pro jeho změnu prostřednictvím proměnné `OPTS` čtením souboru s názvem `conf` ve stejném adresáři jako démon.
 
 ```sh
 #!/bin/sh
@@ -1424,10 +1005,7 @@ If the service daemon supports CLI flags, consider adding support for changing i
 exec daemon ${OPTS:- --flag-enabled-by-default}
 ```
 
-If the service requires the creation of a directory under `/run` or its link `/var/run`
-for storing runtime information (like Pidfiles) write it into the service file. It
-is advised to use `install` if you need to create it with specific permissions instead
-of `mkdir -p`.
+Pokud služba vyžaduje vytvoření adresáře pod `/run` nebo jeho odkazu `/var/run` pro ukládání runtime informací (jako Pidfiles), zapište jej do souboru služby. Pokud jej potřebujete vytvořit se specifickými oprávněními, doporučujeme použít `install` namísto `mkdir -p` .
 
 ```sh
 #!/bin/sh
@@ -1441,49 +1019,38 @@ install -d -m0700 -o bar -g bar /run/bar
 exec bar
 ```
 
-If the service requires directories in parts of the system that are not generally in
-temporary filesystems. Then use the `make_dirs` variable in the template to create
-those directories when the package is installed.
+Pokud služba vyžaduje adresáře v částech systému, které obecně nejsou v dočasných souborových systémech. Poté použijte proměnnou `make_dirs` v šabloně k vytvoření těchto adresářů, když je balíček nainstalován.
 
-If the package installs a systemd service file or other unit, leave it in place as a
-reference point so long as including it has no negative side effects.
+Pokud balíček nainstaluje servisní soubor systemd nebo jinou jednotku, ponechte jej na místě jako referenční bod, pokud jeho zahrnutí nemá žádné negativní vedlejší účinky.
 
-Examples of when *not* to install systemd units:
+Příklady, kdy *neinstalovat* systémové jednotky:
 
-1. When doing so changes runtime behavior of the packaged software.
-2. When it is done via a compile time flag that also changes build dependencies.
+1. Když tak učiníte, změní se běhové chování přibaleného softwaru.
+2. Když se to provádí pomocí příznaku doby kompilace, který také mění závislosti sestavení.
 
 <a id="32bit_pkgs"></a>
-### 32bit packages
 
-32bit packages are built automatically when the builder is x86 (32bit), but
-there are some variables that can change the behavior:
+### 32bitové balíčky
 
-- `lib32depends` If this variable is set, dependencies listed here will be used rather than
-those detected automatically by `xbps-src` and **depends**. Please note that
-dependencies must be specified with version comparators, Example:
-`lib32depends="foo>=0 blah<2.0"`.
+32bitové balíčky se sestavují automaticky, když je tvůrce x86 (32bit), ale existují některé proměnné, které mohou chování změnit:
 
-- `lib32disabled` If this variable is set, no 32bit package will be built.
+- `lib32depends` Je-li tato proměnná nastavena, budou zde uvedené závislosti použity spíše než závislosti detekované automaticky `xbps-src` a **závisí** . Vezměte prosím na vědomí, že závislosti musí být specifikovány pomocí komparátorů verzí, Příklad: `lib32depends="foo>=0 blah<2.0"` .
 
-- `lib32files` Additional files to be added to the **32bit** package. This expect absolute
-paths separated by blanks, Example: `lib32files="/usr/bin/blah /usr/include/blah."`.
+- `lib32disabled` Pokud je tato proměnná nastavena, nebude sestaven žádný 32bitový balíček.
 
-- `lib32symlinks` Makes a symlink of the target filename stored in the `lib32` directory.
-This expects the basename of the target file, Example: `lib32symlinks="foo"`.
+- `lib32files` Další soubory, které mají být přidány do **32bitového** balíčku. To očekává absolutní cesty oddělené mezerami, Příklad: `lib32files="/usr/bin/blah /usr/include/blah."` .
 
-- `lib32mode` If unset, only shared/static libraries and pkg-config files will be copied to the
-**32bit** package. If set to `full` all files will be copied to the 32bit package, unmodified.
+- `lib32symlinks` Vytvoří symbolický odkaz cílového souboru uloženého v adresáři `lib32` . To očekává základní název cílového souboru, Příklad: `lib32symlinks="foo"` .
+
+- `lib32mode` Pokud není nastaveno, do **32bitového** balíčku budou zkopírovány pouze sdílené/statické knihovny a soubory pkg-config. Pokud je nastaveno na `full` všechny soubory budou zkopírovány do 32bitového balíčku, nezměněné.
 
 <a id="pkgs_sub"></a>
-### Subpackages
 
-In the example shown above just a binary package is generated, but with some
-simple tweaks multiple binary packages can be generated from a single
-template/build, this is called `subpackages`.
+### Dílčí balíčky
 
-To create additional `subpackages` the `template` must define a new function
-with this naming: `<subpkgname>_package()`, Example:
+Ve výše uvedeném příkladu se vygeneruje pouze binární balíček, ale pomocí některých jednoduchých vylepšení lze z jedné šablony/sestavení vygenerovat více binárních balíčků, tomu se říká `subpackages` .
+
+Chcete-li vytvořit další `subpackages` musí `template` definovat novou funkci s tímto názvem: `<subpkgname>_package()` , Příklad:
 
 ```
 # Template file for 'foo'
@@ -1511,8 +1078,7 @@ foo-devel_package() {
 }
 ```
 
-All subpackages need an additional symlink to the `main` pkg, otherwise dependencies
-requiring those packages won't find its `template` Example:
+Všechny dílčí balíčky potřebují další symbolický odkaz na `main` balíček, jinak závislosti vyžadující tyto balíčky nenajdou svou `template` Příklad:
 
 ```
  /srcpkgs
@@ -1521,738 +1087,544 @@ requiring those packages won't find its `template` Example:
   |- foo-devel <- symlink to `foo`
 ```
 
-The main package should specify all required `build dependencies` to be able to build
-all subpackages defined in the template.
+Hlavní balíček by měl specifikovat všechny požadované `build dependencies` , aby bylo možné sestavit všechny dílčí balíčky definované v šabloně.
 
-An important point of `subpackages` is that they are processed after the main
-package has run its `install` phase. The `pkg_install()` function specified on them
-commonly is used to move files from the `main` package destdir to the `subpackage` destdir.
+Důležitým bodem `subpackages` je, že jsou zpracovány poté, co hlavní balíček dokončil svou fázi `install` . Funkce `pkg_install()` na nich specifikovaná se běžně používá k přesunu souborů z `main` balíčku destdir do `subpackage` destdir.
 
-The helper functions `vinstall`, `vmkdir`, `vcopy` and `vmove` are just wrappers that simplify
-the process of creating, copying and moving files/directories between the `main` package
-destdir (`$DESTDIR`) to the `subpackage` destdir (`$PKGDESTDIR`).
+Pomocné funkce `vinstall` , `vmkdir` , `vcopy` a `vmove` jsou jen obaly, které zjednodušují proces vytváření, kopírování a přesouvání souborů/adresářů mezi `main` balíčkem destdir ( `$DESTDIR` ) do `subpackage` destdir ( `$PKGDESTDIR` ).
 
-Subpackages are processed always in alphabetical order; To force a custom order,
-the `subpackages` variable can be declared with the wanted order.
+Dílčí balíčky jsou zpracovávány vždy v abecedním pořadí; Chcete-li vynutit vlastní objednávku, lze proměnnou `subpackages` deklarovat s požadovanou objednávkou.
 
 <a id="pkgs_classes"></a>
-### Some package classes
+
+### Některé třídy balíčků
 
 <a id="pkgs_development"></a>
-#### Development packages
 
-A development package, commonly generated as a subpackage, shall only contain
-files required for development, that is, headers, static libraries, shared
-library symlinks, pkg-config files, API documentation or any other script
-that is only useful when developing for the target software.
+#### Vývojové balíčky
 
-A development package should depend on packages that are required to link
-against the provided shared libraries, i.e if `libfoo` provides the
-`libfoo.so.2` shared library and the linking needs `-lbar`, the package
-providing the `libbar` shared library should be added as a dependency;
-and most likely it shall depend on its development package.
+Vývojový balíček, běžně generovaný jako dílčí balíček, bude obsahovat pouze soubory potřebné pro vývoj, to znamená záhlaví, statické knihovny, symbolické odkazy sdílených knihoven, soubory pkg-config, dokumentaci API nebo jakýkoli jiný skript, který je užitečný pouze při vývoji pro cíl. software.
 
-If a development package provides a `pkg-config` file, you should verify
-what dependencies the package needs for dynamic or static linking, and add
-the appropriate `development` packages as dependencies.
+Vývojový balíček by měl záviset na balíčcích, které se vyžadují k propojení s poskytnutými sdílenými knihovnami, tj. pokud `libfoo` poskytuje sdílenou knihovnu `libfoo.so.2` a propojení potřebuje `-lbar` , balíček poskytující sdílenou knihovnu `libbar` by měl být přidán jako závislost ; a s největší pravděpodobností bude záviset na jeho vývojovém balíčku.
 
-Development packages for the C and C++ languages usually `vmove` the
-following subset of files from the main package:
+Pokud vývojový balíček poskytuje soubor `pkg-config` , měli byste ověřit, jaké závislosti potřebuje balíček pro dynamické nebo statické propojení, a přidat příslušné `development` balíčky jako závislosti.
 
-* Header files `usr/include`
-* Static libraries `usr/lib/*.a`
-* Shared library symbolic links `usr/lib/*.so`
-* Cmake rules `usr/lib/cmake` `usr/share/cmake`
-* Package config files `usr/lib/pkgconfig` `usr/share/pkgconfig`
-* Autoconf macros `usr/share/aclocal`
-* Gobject introspection XML files `usr/share/gir-1.0`
-* Vala bindings `usr/share/vala`
+Vývojové balíčky pro jazyky C a C++ obvykle `vmove` následující podmnožinu souborů z hlavního balíčku:
+
+- Záhlaví souborů `usr/include`
+- Statické knihovny `usr/lib/*.a`
+- Symbolické odkazy sdílené knihovny `usr/lib/*.so`
+- Pravidla Cmake `usr/lib/cmake` `usr/share/cmake`
+- Zabalte konfigurační soubory `usr/lib/pkgconfig` `usr/share/pkgconfig`
+- Autoconf makra `usr/share/aclocal`
+- Soubory XML pro introspekci Gobject `usr/share/gir-1.0`
+- Vala vazby `usr/share/vala`
 
 <a id="pkgs_data"></a>
-#### Data packages
 
-Another common subpackage type is the `-data` subpackage. This subpackage
-type used to split architecture independent, big(ger) or huge amounts
-of data from a package's main and architecture dependent part. It is up
-to you to decide, if a `-data` subpackage makes sense for your package.
-This type is common for games (graphics, sound and music), part libraries (CAD)
-or card material (maps).
-The main package must then have `depends="${pkgname}-data-${version}_${revision}"`,
-possibly in addition to other, non-automatic depends.
+#### Datové balíčky
+
+Dalším běžným typem dílčího balíčku je dílčí balíček `-data` . Tento typ dílčího balíku se používá k rozdělení na architektuře nezávislé, velké (ger) nebo velké množství dat z hlavní části balíku a části závislé na architektuře. Je na vás, abyste se rozhodli, zda má podbalíček `-data` pro váš balíček smysl. Tento typ je běžný pro hry (grafika, zvuk a hudba), knihovny součástí (CAD) nebo materiál karet (mapy). Hlavní balíček pak musí mít `depends="${pkgname}-data-${version}_${revision}"` , možná kromě jiných, neautomatických závislostí.
 
 <a id="pkgs_documentation"></a>
-#### Documentation packages
 
-Packages intended for user interaction do not always unconditionally require
-their documentation part. A user who does not want to e.g. develop
-with Qt5 will not need to install the (huge) qt5-doc package.
-An expert may not need it or opt to use an online version.
+#### Balíčky dokumentace
 
-In general a `-doc` package is useful, if the main package can be used both with
-or without documentation and the size of the documentation isn't really small.
-The base package and the `-devel` subpackage should be kept small so that when
-building packages depending on a specific package there is no need to install large
-amounts of documentation for no reason. Thus the size of the documentation part should
-be your guidance to decide whether or not to split off a `-doc` subpackage.
+Balíčky určené pro interakci uživatele ne vždy bezpodmínečně vyžadují svou dokumentační část. Uživatel, který nechce např. vyvíjet s Qt5, nebude muset instalovat (obrovský) balíček qt5-doc. Odborník to nemusí potřebovat nebo se rozhodne používat online verzi.
+
+Obecně je balíček `-doc` užitečný, pokud lze hlavní balíček použít s dokumentací i bez dokumentace a velikost dokumentace není opravdu malá. Základní balíček a podbalíček `-devel` by měly být malé, aby při sestavování balíčků závislých na konkrétním balíčku nebylo nutné bezdůvodně instalovat velké množství dokumentace. Velikost části dokumentace by tedy měla být vaším vodítkem při rozhodování, zda oddělit podbalíček `-doc` či nikoli.
 
 <a id="pkgs_python"></a>
-#### Python packages
 
-Python packages should be built with the `python3-module` build style, if possible.
-This sets some environment variables required to allow cross compilation. Support to allow
-building a python module for multiple versions from a single template is also possible.
-The `python3-pep517` build style provides means to build python packages that provide a build-system
-definition compliant with [PEP 517](https://www.python.org/dev/peps/pep-0517/) without a traditional
-`setup.py` script. The `python3-pep517` build style does not provide a specific build backend, so
-packages will need to add an appropriate backend provider to `hostmakedepends`.
+#### Python balíčky
 
-Python packages that rely on `python3-setuptools` should generally map `setup_requires`
-dependencies in `setup.py` to `hostmakedepends` in the template and `install_requires`
-dependencies to `depends` in the template; include `python3` in `depends` if there are no other
-python dependencies. If the package includes a compiled extension, the `python3-devel` packages
-should be added to `makedepends`, as should any python packages that also provide native libraries
-against which the extension will be linked (even if that package is also included in
-`hostmakedepends` to satisfy `setuptools`).
+Balíčky Pythonu by měly být sestaveny se stylem sestavení `python3-module` , pokud je to možné. Tím se nastaví některé proměnné prostředí potřebné k umožnění křížové kompilace. Je také možná podpora umožňující sestavení modulu python pro více verzí z jedné šablony. Styl sestavení `python3-pep517` poskytuje prostředky k sestavení pythonových balíčků, které poskytují definici sestavovacího systému v souladu s [PEP 517](https://www.python.org/dev/peps/pep-0517/) bez tradičního skriptu `setup.py` . Styl sestavení `python3-pep517` neposkytuje konkrétní backend sestavení, takže balíčky budou muset přidat vhodného poskytovatele backendu do `hostmakedepends` .
 
-**NB**: Python `setuptools` will attempt to use `pip` or `EasyInstall` to fetch any missing
-dependencies at build time. If you notice warnings about `EasyInstall` deprecation or python eggs
-present in `${wrksrc}/.eggs` after building the package, then those packages should be added to
-`hostmakedepends`.
+Balíčky Pythonu, které se spoléhají na `python3-setuptools` by obecně měly mapovat závislosti `setup_requires` v `setup.py` na `hostmakedepends` v šabloně a `install_requires` závislosti na `depends` v šabloně; include `python3` in `depends` , pokud neexistují žádné další závislosti na pythonu. Pokud balíček obsahuje zkompilované rozšíření, měly by být balíčky `python3-devel` přidány do `makedepends` , stejně jako všechny balíčky python, které také poskytují nativní knihovny, se kterými bude rozšíření propojeno (i když je tento balíček také zahrnut v `hostmakedepends` , aby vyhovoval `setuptools` ) .
 
-The following variables may influence how the python packages are built and configured
-at post-install time:
+**Poznámka** : Python `setuptools` se pokusí použít `pip` nebo `EasyInstall` k načtení chybějících závislostí v době sestavování. Pokud si po sestavení balíčku všimnete varování o ukončení podpory `EasyInstall` nebo vejcích python přítomných v `${wrksrc}/.eggs` , pak by tyto balíčky měly být přidány do `hostmakedepends` .
 
-- `pycompile_module`: By default, files and directories installed into
-`usr/lib/pythonX.Y/site-packages`, excluding `*-info` and `*.so`, are byte-compiled
-at install time as python modules.  This variable expects subset of them that
-should be byte-compiled, if default is wrong.  Multiple python modules may be specified separated
-by blanks, Example: `pycompile_module="foo blah"`. If a python module installs a file into
-`site-packages` rather than a directory, use the name of the file, Example:
-`pycompile_module="fnord.py"`.
+Následující proměnné mohou ovlivnit, jak jsou balíčky python sestavovány a konfigurovány v době po instalaci:
 
-- `pycompile_dirs`: this variable expects the python directories that should be `byte-compiled`
-recursively by the target python version. This differs from `pycompile_module` in that any
-path may be specified, Example: `pycompile_dirs="usr/share/foo"`.
+- `pycompile_module` : Ve výchozím nastavení jsou soubory a adresáře nainstalované do `usr/lib/pythonX.Y/site-packages` , kromě `*-info` a `*.so` , v době instalace kompilovány jako python moduly. Tato proměnná očekává jejich podmnožinu, která by měla být kompilována po bajtech, pokud je výchozí hodnota nesprávná. Více modulů pythonu může být specifikováno oddělených mezerami, Příklad: `pycompile_module="foo blah"` . Pokud modul pythonu nainstaluje soubor do `site-packages` , nikoli do adresáře, použijte název souboru, Příklad: `pycompile_module="fnord.py"` .
 
-- `python_version`: this variable expects the supported Python major version.
-In most cases version is inferred from shebang, install path or build style.
-Only required for some multi-language
-applications (e.g., the application is written in C while the command is
-written in Python) or just single Python file ones that live in `/usr/bin`.
-If `python_version` is set to `ignore`, python-containing shebangs will not be rewritten.
-Use this only if a package should not be using a system version of python.
+- `pycompile_dirs` : tato proměnná očekává adresáře pythonu, které by měly být rekurzivně `byte-compiled` bajty cílovou verzí pythonu. To se liší od `pycompile_module` tím, že lze zadat libovolnou cestu, Příklad: `pycompile_dirs="usr/share/foo"` .
 
-- `python_extras`: Python module extras to consider when verifying Python module dependencies.
-Can be used to ensure additional dependency sets are checked. Example: `python_extras="all"`.
+- `python_version` : tato proměnná očekává podporovanou hlavní verzi Pythonu. Ve většině případů je verze odvozena z shebang, instalační cesty nebo stylu sestavení. Vyžaduje se pouze pro některé vícejazyčné aplikace (např. aplikace je napsána v C, zatímco příkaz je napsán v Pythonu) nebo pouze pro ty, které jsou v jednom souboru Pythonu, které jsou uloženy v `/usr/bin` . Pokud je `python_version` nastaveno na `ignore` , shebangy obsahující python nebudou přepsány. Toto použijte pouze v případě, že by balíček neměl používat systémovou verzi pythonu.
 
-- `nopyprovides`: if set, don't create `provides` entries for Python modules in the package.
+- `python_extras` : Doplňky modulu Python, které je třeba vzít v úvahu při ověřování závislostí modulu Python. Lze použít k zajištění kontroly dalších sad závislostí. Příklad: `python_extras="all"` .
 
-- `noverifypydeps`: if set, don't verify Python module dependencies.
+- `nopyprovides` : pokud je nastaveno, nevytvářet `provides` položky pro moduly Pythonu v balíčku.
 
-Also, a set of useful variables are defined to use in the templates:
+- `noverifypydeps` : pokud je nastaveno, neověřujte závislosti modulu Python.
 
-| Variable    | Value                            |
-|-------------|----------------------------------|
-| py2_ver     | 2.X                              |
-| py2_lib     | usr/lib/python2.X                |
-| py2_sitelib | usr/lib/python2.X/site-packages  |
-| py2_inc     | usr/include/python2.X            |
-| py3_ver     | 3.X                              |
-| py3_lib     | usr/lib/python3.X                |
-| py3_sitelib | usr/lib/python3.X/site-packages  |
-| py3_inc     | usr/include/python3.Xm           |
+V šablonách je také definována sada užitečných proměnných:
 
-> NOTE: it's expected that additional subpkgs must be generated to allow packaging for multiple
-python versions.
+Proměnná | Hodnota
+--- | ---
+py2_ver | 2.X
+py2_lib | usr/lib/python2.X
+py2_sitelib | usr/lib/python2.X/site-packages
+py2_inc | usr/include/python2.X
+py3_ver | 3.X
+py3_lib | usr/lib/python3.X
+py3_sitelib | usr/lib/python3.X/site-packages
+py3_inc | usr/include/python3.Xm
+
+> POZNÁMKA: Očekává se, že musí být vygenerovány další subpkg, aby bylo možné sbalit více verzí pythonu.
 
 <a id="pkgs_go"></a>
-#### Go packages
 
-Go packages should be built with the `go` build style, if possible.
-The `go` build style takes care of downloading Go dependencies and
-setting up cross compilation.
+#### Přejít na balíčky
 
-The following template variables influence how Go packages are built:
+Pokud je to možné, balíčky Go by měly být sestaveny stylem `go` build. Styl sestavení `go` se stará o stahování závislostí Go a nastavení křížové kompilace.
 
-- `go_import_path`: The import path of the package included in the
-  distfile, as it would be used with `go get`. For example, GitHub's
-  `hub` program has the import path `github.com/github/hub`. This
-  variable is required.
-- `go_package`: A space-separated list of import paths of the packages
-  that should be built. Defaults to `go_import_path`.
-- `go_build_tags`: An optional, space-separated list of build tags to
-  pass to Go.
-- `go_mod_mode`: The module download mode to use. May be `off` to ignore
-  any go.mod files, `default` to use Go's default behavior, or anything
-  accepted by `go build -mod MODE`.  Defaults to `vendor` if there's
-  a vendor directory, otherwise `default`.
-- `go_ldflags`: Arguments to pass to the linking steps of go tool.
+Následující proměnné šablony ovlivňují způsob, jakým jsou sestavovány balíčky Go:
 
-The following environment variables influence how Go packages are built:
+- `go_import_path` : Cesta k importu balíčku obsaženého v souboru distfile, jak by byla použita s `go get` . Například program `hub` GitHub má cestu importu `github.com/github/hub` . Tato proměnná je povinná.
+- `go_package` : Mezerou oddělený seznam cest importu balíčků, které by měly být sestaveny. Výchozí hodnota je `go_import_path` .
+- `go_build_tags` : Volitelný, mezerami oddělený seznam značek sestavení, které se mají předat Go.
+- `go_mod_mode` : Režim stahování modulu, který se má použít. Může být `off` , aby se ignorovaly všechny soubory go.mod, `default` se používá výchozí chování Go nebo cokoli, co přijímá `go build -mod MODE` . Výchozí hodnota je `vendor` , pokud existuje adresář dodavatele, jinak `default` .
+- `go_ldflags` : Argumenty, které se mají předat propojovacím krokům nástroje go.
 
-- `XBPS_MAKEJOBS`: Value passed to the `-p` flag of `go install`, to
-  control the parallelism of the Go compiler.
+Následující proměnné prostředí ovlivňují, jak jsou balíčky Go sestaveny:
 
-Occasionally it is necessary to perform operations from within the Go
-source tree.  This is usually needed by programs using go-bindata or
-otherwise preping some assets.  If possible do this in pre_build().
-The path to the package's source inside `$GOPATH` is available as
-`$GOSRCPATH`.
+- `XBPS_MAKEJOBS` : Hodnota předaná do parametru `-p` parametru `go install` pro řízení paralelismu kompilátoru Go.
+
+Občas je nutné provádět operace ze stromu zdroje Go. To obvykle potřebují programy používající go-bindata nebo jinak připravující některá aktiva. Pokud je to možné, proveďte to v pre_build(). Cesta ke zdroji balíčku uvnitř `$GOPATH` je dostupná jako `$GOSRCPATH` .
 
 <a id="pkgs_haskell"></a>
-#### Haskell packages
 
-Haskell packages can be built either with the `cabal` or `haskell-stack`
-build style, use whichever is more convenient or better supported by upstream,
-sometimes only one of the two is possible. For packages that have haskell
-parts but use a different build style like `gnu-makefile`, make sure to use
-the `haskell` build helper.
+#### Haskell balíčky
 
-The following variables influence how packages are built with cabal:
+Haskell balíčky lze sestavit buď stylem `cabal` , nebo `haskell-stack` . Použijte ten, který je pohodlnější nebo lépe podporovaný upstreamem. Někdy je možný pouze jeden z těchto dvou. U balíčků, které obsahují haskellové části, ale používají jiný styl sestavení, jako je `gnu-makefile` , nezapomeňte použít `haskell` build helper.
 
-- `cabal_index_state`: The state of the hackage cabal index to use for
-  fetching dependencies. The source package of a haskell project should
-  come with a freeze file that sets the index state, some also set it in
-  their cabal project file. If it does not, then this has to be set to an ISO
-  timestamp in the package template. For example `2025-07-05T14:01:16Z`.
-- `configure_args`: Arguments passed to `cabal configure`. The configure step
-  generates the `cabal.project.local` file.
-- `make_build_args`: Arguments passed to `cabal build`.
-- `make_build_target`: Target passed to `cabal build`.
-- `make_check_args`: Arguments passed to `cabal test`.
-- `make_check_target`: Test target passed to cabal instead of "test".
-- `make_install_target`: Target passed to `cabal install`.
+Následující proměnné ovlivňují, jak jsou balíčky sestavovány pomocí cabal:
 
-And these variables influence how packages are built with stack:
+- `cabal_index_state` : Stav indexu hackage cabal, který se má použít pro načítání závislostí. Zdrojový balíček projektu Haskell by měl obsahovat soubor freeze, který nastavuje stav indexu, některé jej také nastavují ve svém souboru projektu cabal. Pokud tomu tak není, musí být v šabloně balíčku nastaveno časové razítko ISO. Například `2025-07-05T14:01:16Z` .
+- `configure_args` : Argumenty předávané `cabal configure` . Krok configure generuje soubor `cabal.project.local` .
+- `make_build_args` : Argumenty předávané příkazu `cabal build` .
+- `make_build_target` : Cíl předán `cabal build` .
+- `make_check_args` : Argumenty předané do `cabal test` .
+- `make_check_target` : Cíl testu byl předán cabalu místo "test".
+- `make_install_target` : Cíl předán `cabal install` .
 
-- `stackage`: The Stackage version used to build the package, e.g.
-  `lts-3.5`. Alternatively:
-  - You can prepare a `stack.yaml` configuration for the project and put it
-    into `files/stack.yaml`.
-  - If a `stack.yaml` file is present in the source files, it will be used.
-- `make_build_args`: This is passed as-is to `stack build ...`, so
-  you can add your `--flag ...` parameters there.
+A tyto proměnné ovlivňují, jak jsou balíčky sestavovány pomocí stack:
 
-To patch dependencies of haskell packages they have to be fetched explicitly
-from hackage by adding them to `distfiles` instead of letting cabal or stack
-download them. Once extracted and patched, the path to the patched version
-can be added to `packages` in `cabal.project` or `stack.yaml`.
-Stack will find them automatically if no `stack.yaml` file exists by scanning
-the directory. The build tool will then use the patched version of the
-depencency instead of downloading it from hackage.
+- `stackage` : Verze Stackage použitá k sestavení balíčku, např `lts-3.5` . Alternativně:
+    - Pro projekt můžete připravit konfiguraci `stack.yaml` a vložit ji do `files/stack.yaml` .
+    - Pokud je ve zdrojových souborech přítomen soubor `stack.yaml` , bude použit.
+- `make_build_args` : Toto je předáno tak, jak je, do `stack build ...` , takže tam můžete přidat své parametry `--flag ...`
+
+Pro opravu závislostí balíčků Haskell je nutné je explicitně načíst z Hackage přidáním do `distfiles` místo aby je stahoval Cabal nebo Stack. Po extrahování a opravě lze cestu k opravené verzi přidat k `packages` v souboru `cabal.project` nebo `stack.yaml` . Stack je automaticky vyhledá, pokud soubor `stack.yaml` neexistuje, prohledáním adresáře. Nástroj pro sestavení pak použije opravenou verzi závislosti, místo aby ji stahoval z Hackage.
 
 <a id="pkgs_font"></a>
-#### Font packages
 
-Font packages are very straightforward to write, they are always set with the
-following variables:
+#### Balíčky písem
 
-- `depends="font-util"`: because they are required for regenerating the font
-cache during the install/removal of the package
-- `font_dirs`: which should be set to the directory where the package
-installs its fonts
+Balíčky písem se píší velmi jednoduše, vždy se nastavují pomocí následujících proměnných:
+
+- `depends="font-util"` : protože jsou vyžadovány pro regeneraci mezipaměti písem během instalace/odebírání balíčku
+- `font_dirs` : který by měl být nastaven na adresář, kam balíček instaluje své fonty
 
 <a id="pkg_rename"></a>
-### Renaming a package
 
-- Create empty package of old name, depending on new package. This is
-necessary to provide updates to systems where old package is already
-installed. This should be a subpackage of new one, except when version
-number of new package decreased: then create a separate template using
-old version and increased revision.
-- Edit references to package in other templates and common/shlibs.
-- Don't set `replaces=`, it can result in removing both packages from
-systems by xbps.
+### Přejmenování balíčku
+
+- Vytvořte prázdný balíček se starým názvem v závislosti na novém balíčku. To je nezbytné pro poskytování aktualizací systémů, kde je již nainstalován starý balíček. Toto by měl být podbalíček nového, kromě případů, kdy se číslo verze nového balíčku snížilo: pak vytvořte samostatnou šablonu pomocí staré verze a zvýšené revize.
+- Upravte odkazy na balíček v jiných šablonách a common/shlibs.
+- Nenastavujte `replaces=` , může to mít za následek odstranění obou balíků ze systémů pomocí xbps.
 
 <a id="pkg_remove"></a>
-### Removing a package
 
-Follows a list of things that should be done to help guarantee that a
-package template removal and by extension its binary packages from
-Void Linux's repositories goes smoothly.
+### Odebírání balíčku
 
-Before removing a package template:
+Následuje seznam věcí, které je třeba udělat, aby bylo zaručeno, že odstranění šablony balíčků a potažmo jeho binárních balíčků z repozitářů Void Linuxu proběhne hladce.
 
-- Guarantee that no package depends on it or any of its subpackages.
-For that you can search the templates for references to the package
-with `grep -r '\bpkg\b' srcpkgs/`.
-- Guarantee that no package depends on shlibs provided by it.
+Před odstraněním šablony balíčku:
 
-When removing the package template:
+- Zaručit, že žádný balíček na něm nebo na některém z jeho dílčích balíčků nezávisí. Za tímto účelem můžete v šablonách vyhledat odkazy na balíček pomocí `grep -r '\bpkg\b' srcpkgs/` .
+- Záruka, že žádný balíček nezávisí na shlibs, které poskytuje.
 
-- Remove all symlinks that point to the package.
-`find srcpkgs/ -lname <pkg>` should be enough.
-- If the package provides shlibs make sure to remove them from
-common/shlibs.
-- Some packages use patches and files from other packages using symlinks,
-generally those packages are the same but have been split as to avoid
-cyclic dependencies. Make sure that the package you're removing is not
-the source of those patches/files.
-- Remove package template.
-- Add `pkgname<=version_revision` to `replaces` variable of `removed-packages`
-template.  All removed subpkgs should be added too.
-This will uninstall package from systems where it is installed.
-- Remove the package from the repository index
-or contact a team member that can do so.
+Při odstraňování šablony balíčku:
+
+- Odstraňte všechny symbolické odkazy, které ukazují na balíček. `find srcpkgs/ -lname <pkg>` by mělo stačit.
+- Pokud balíček obsahuje shliby, ujistěte se, že jste je odstranili z common/shlibs.
+- Některé balíčky používají záplaty a soubory z jiných balíčků pomocí symbolických odkazů, obvykle jsou tyto balíčky stejné, ale byly rozděleny, aby se předešlo cyklickým závislostem. Ujistěte se, že balíček, který odstraňujete, není zdrojem těchto záplat/souborů.
+- Odebrat šablonu balíčku.
+- Přidejte `pkgname<=version_revision` do `replaces` proměnné šablony `removed-packages` . Všechny odstraněné dílčí balíčky by měly být přidány také. Tím se balíček odinstaluje ze systémů, kde je nainstalován.
+- Odstraňte balíček z indexu úložiště nebo kontaktujte člena týmu, který tak může učinit.
 
 <a id="xbps_triggers"></a>
-### XBPS Triggers
 
-XBPS triggers are a collection of snippets of code, provided by the `xbps-triggers`
-package, that are added to the INSTALL/REMOVE scripts of packages either manually
-by setting the `triggers` variable in the template, or automatically, when specific
-conditions are met.
+### Spouštěče XBPS
 
-The following is a list of all available triggers, their current status, what each
-of them does and what conditions need to be for it to be included automatically on a
-package.
+Spouštěče XBPS jsou sbírkou úryvků kódu poskytovaných balíčkem `xbps-triggers` , které se přidávají do skriptů INSTALL/REMOVE balíčků buď ručně nastavením proměnné `triggers` v šabloně, nebo automaticky, když jsou splněny specifické podmínky.
 
-This is not a complete overview of the package. It is recommended to read the variables
-referenced and the triggers themselves.
+Následuje seznam všech dostupných spouštěčů, jejich aktuální stav, co každý z nich dělá a jaké podmínky musí splňovat, aby byl automaticky zahrnut do balíčku.
+
+Toto není úplný přehled balíčku. Doporučuje se přečíst odkazované proměnné a samotné spouštěče.
 
 <a id="triggers_appstream_cache"></a>
+
 #### appstream-cache
 
-The appstream-cache trigger is responsible for rebuilding the appstream metadata cache.
+Spouštěč appstream-cache je zodpovědný za opětovné sestavení mezipaměti metadat appstreamu.
 
-During installation it executes `appstreamcli refresh-cache --verbose --force --datapath
-$APPSTREAM_PATHS --cachepath var/cache/app-info/gv`. By default APPSTREAM_PATHS are all the
-paths that appstreamcli will look into for metadata files.
+Během instalace spustí `appstreamcli refresh-cache --verbose --force --datapath $APPSTREAM_PATHS --cachepath var/cache/app-info/gv` . Ve výchozím nastavení jsou APPSTREAM_PATHS všechny cesty, které bude appstreamcli hledat pro soubory metadat.
 
-The directories searched by appstreamcli are:
+Adresáře prohledávané appstreamcli jsou:
 
 - `usr/share/appdata`
 - `usr/share/app-info`
 - `var/lib/app-info`
 - `var/cache/app-info`
 
-During removal of the `AppStream` package it will remove the `var/cache/app-info/gv`
-directory.
+Během odstraňování balíčku `AppStream` dojde k odstranění adresáře `var/cache/app-info/gv` .
 
-It is automatically added to packages that have XML files under one of the directories
-searched by appstreamcli.
+Automaticky se přidá do balíčků, které mají soubory XML v jednom z adresářů prohledaných appstreamcli.
 
 <a id="triggers_binfmts"></a>
+
 #### binfmts
 
-The binfmts trigger is responsible for registration and removal of arbitrary
-executable binary formats, know as binfmts.
+Spouštěč binfmts je zodpovědný za registraci a odstranění libovolných spustitelných binárních formátů, známých jako binfmts.
 
-During installation/removal it uses `update-binfmts` from the `binfmt-support` package
-to register/remove entries from the arbitrary executable binary formats database.
+Během instalace/odstranění používá `update-binfmts` z balíčku `binfmt-support` k registraci/odstranění položek z libovolné databáze spustitelných binárních formátů.
 
-It is automatically added to packages that contain files in `usr/share/binfmts`.
-These files should be `update-binfmts` format files and will be imported with
-`update-binfmts --import`.
+Je automaticky přidán do balíčků, které obsahují soubory v `usr/share/binfmts` . Tyto soubory by měly být ve formátu `update-binfmts` a budou importovány pomocí `update-binfmts --import` .
 
-While it is not preferred, the trigger can also be added by using the `binfmts` variable,
-which should contain lines defining binfmts to register:
+I když to není preferováno, spouštěč lze přidat také pomocí proměnné `binfmts` , která by měla obsahovat řádky definující binfmts pro registraci:
 
 ```
 /path/to/interpreter [update-binfmts binary format specification arguments ...]
 ...
 ```
 
-See [`update-binfmts(8)`](https://man.voidlinux.org/man8/update-binfmts.8) for more details.
+Viz [`update-binfmts(8)`](https://man.voidlinux.org/man8/update-binfmts.8) pro více podrobností.
 
 <a id="triggers_dkms"></a>
+
 #### dkms
 
-The dkms trigger is responsible for compiling and removing dynamic kernel modules of a
-package.
+Spouštěč dkms je zodpovědný za kompilaci a odstranění dynamických modulů jádra balíčku.
 
-During installation the trigger compiles and installs the dynamic module for all `linux`
-packages that have their corresponding linux-headers package installed. During removal
-the corresponding module will be removed
+Během instalace trigger zkompiluje a nainstaluje dynamický modul pro všechny `linux` balíčky, které mají nainstalovaný odpovídající balíček linux-headers. Během odebírání bude odebrán odpovídající modul
 
-To include the trigger use the `dkms_modules` variable, as the trigger won't do anything
-unless it is defined.
+Chcete-li zahrnout spouštěč, použijte proměnnou `dkms_modules` , protože spouštěč nedělá nic, pokud není definován.
 
 <a id="triggers_gconf_schemas"></a>
-#### gconf-schemas
 
-The gconf-schemas trigger is responsible for registering and removing .schemas and
-.entries files into the schemas database directory
+#### schémata gconf
 
-During installation it uses `gconftool-2` to install .schemas and .entries files into
-`usr/share/gconf/schemas`. During removal it uses `gconftool-2` to remove the entries
-and schemas belonging to the package that is being removed from the database.
+Spouštěč gconf-schemas je zodpovědný za registraci a odstranění souborů .schemas a .entries do adresáře databáze schémat.
 
-To include it add `gconf-schemas` to `triggers` and add the appropriate .schemas in
-the `gconf_schemas` variable and .entries in `gconf_entries`.
+Během instalace používá `gconftool-2` k instalaci souborů .schemas a .entries do `usr/share/gconf/schemas` . Během odstraňování používá `gconftool-2` k odstranění položek a schémat patřících k balíčku, který je odstraňován z databáze.
 
-It is automatically added to packages that have `/usr/share/gconf/schemas` present
-as a directory. All files with the schemas file extension under that directory
-are passed to the trigger.
+Chcete-li jej zahrnout, přidejte do `triggers` `gconf-schemas` a přidejte vhodná .schemas do proměnné `gconf_schemas` a .entries do `gconf_entries` .
+
+Automaticky se přidává do balíčků, které mají jako adresář `/usr/share/gconf/schemas` . Všechny soubory s příponou schématu v tomto adresáři jsou předány spouštěči.
 
 <a id="triggers_gdk_pixbuf_loaders"></a>
-#### gdk-pixbuf-loaders
 
-The gdk-pixbuf-loaders trigger is responsible for maintaining the GDK Pixbuf loaders cache.
+#### gdk-pixbuf-loadery
 
-During installation it runs `gdk-pixbuf-query-loaders --update-cache` and also deletes
-the obsolete `etc/gtk-2.0/gdk-pixbuf.loaders` file if present. During removal of the
-gdk-pixbuf package it removes the cache file if present. Normally at
-`usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache`.
+Spouštěč gdk-pixbuf-loaders je zodpovědný za udržování mezipaměti zavaděčů GDK Pixbuf.
 
-It can be added by defining `gdk-pixbuf-loaders` in the `triggers` variable. It is also
-added automatically to any package that has the path `usr/lib/gdk-pixbuf-2.0/2.10.0/loaders`
-available as a directory.
+Během instalace spouští `gdk-pixbuf-query-loaders --update-cache` a také smaže zastaralý soubor `etc/gtk-2.0/gdk-pixbuf.loaders` pokud existuje. Během odstraňování balíčku gdk-pixbuf odstraní soubor mezipaměti, pokud je přítomen. Normálně na `usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache` .
+
+Lze jej přidat definováním `gdk-pixbuf-loaders` v proměnné `triggers` . Je také automaticky přidán do každého balíčku, který má jako adresář k dispozici cestu `usr/lib/gdk-pixbuf-2.0/2.10.0/loaders` .
 
 <a id="triggers_gio_modules"></a>
-#### gio-modules
 
-The gio-modules trigger is responsible for updating the Glib GIO module cache with
-`gio-querymodules` from the `glib` package
+#### gio-moduly
 
-During install and removal it just runs `gio-querymodules` to update the cache file
-present under `usr/lib/gio/modules`.
+Spouštěč gio-modules je zodpovědný za aktualizaci mezipaměti modulu Glib GIO moduly `gio-querymodules` z balíčku `glib`
 
-It is automatically added to packages that have `/usr/lib/gio/modules` present
-as a directory.
+Během instalace a odebrání pouze spustí `gio-querymodules` , aby aktualizoval soubor mezipaměti přítomný pod `usr/lib/gio/modules` .
+
+Automaticky se přidává do balíčků, které mají jako adresář `/usr/lib/gio/modules` .
 
 <a id="triggers_gsettings_schemas"></a>
-#### gsettings-schemas
 
-The gsettings-schemas trigger is responsible for compiling Glib's GSettings XML
-schema files during installation and removing the compiled files during removal.
+#### gsettings-schémata
 
-During installation it uses `glib-compile-schemas` from `glib` to compile the
-schemas into files with the suffix .compiled into `/usr/share/glib-2.0/schemas`.
+Spouštěč gsettings-schemas je zodpovědný za kompilaci souborů schématu Glib Glib GSettings XML během instalace a odstranění zkompilovaných souborů během odstraňování.
 
-During removal of the glib package it deletes all files inside
-`/usr/share/glib-2.0/schemas` that end with .compiled.
+Během instalace používá `glib-compile-schemas` z `glib` ke kompilaci schémat do souborů s příponou .compiled do `/usr/share/glib-2.0/schemas` .
 
-It is automatically added to packages that have `/usr/share/glib-2.0/schemas` present
-as a directory.
+Během odstraňování balíčku glib smaže všechny soubory v `/usr/share/glib-2.0/schemas` , které končí příponou .compiled.
+
+Je automaticky přidán do balíčků, které mají jako adresář `/usr/share/glib-2.0/schemas` .
 
 <a id="triggers_gtk_icon_cache"></a>
-#### gtk-icon-cache
 
-The gtk-icon-cache trigger is responsible for updating the gtk+ icon cache.
+#### gtk-ikona-mezipaměť
 
-During installation it uses `gtk-update-icon-cache` to update the icon cache.
+Spouštěč gtk-icon-cache je zodpovědný za aktualizaci mezipaměti ikon gtk+.
 
-During removal of the gtk+ package it deletes the `icon-theme.cache` file
-in the directories defined by the variable `gtk_iconcache_dirs`.
+Během instalace používá `gtk-update-icon-cache` k aktualizaci mezipaměti ikon.
 
-It is automatically added on packages that have `/usr/share/icons` available
-as a directory, all directories under that directory have their absolute path
-passed to the trigger.
+Při odstraňování balíčku gtk+ smaže soubor `icon-theme.cache` v adresářích definovaných proměnnou `gtk_iconcache_dirs` .
+
+Automaticky se přidává do balíčků, které mají jako adresář k dispozici `/usr/share/icons` , všechny adresáře v tomto adresáři mají svou absolutní cestu předán spouštěči.
 
 <a id="triggers_gtk_immodules"></a>
+
 #### gtk-immodules
 
-The gtk-immodules trigger is responsible for updating the IM (Input Method) modules
-file for gtk+.
+Spouštěč gtk-immodules je zodpovědný za aktualizaci souboru modulů IM (Input Method) pro gtk+.
 
-During installation it uses `gtk-query-immodules-2.0 --update-cache` to update the
-cache file. It also removes the obsolete configuration file  `etc/gtk-2.0/gtk.immodules`
-if present.
+Během instalace používá `gtk-query-immodules-2.0 --update-cache` k aktualizaci souboru mezipaměti. Odstraní také zastaralý konfigurační soubor `etc/gtk-2.0/gtk.immodules` pokud existuje.
 
-During removal of the `gtk+` package it removes the cache file which is located at
-`usr/lib/gtk-2.0/2.10.0/immodules.cache`.
+Během odstraňování balíčku `gtk+` odstraní soubor mezipaměti, který se nachází na `usr/lib/gtk-2.0/2.10.0/immodules.cache` .
 
-It is automatically added to packages that have `/usr/lib/gtk-2.0/2.10.0/immodules`
-present as a directory.
+Automaticky se přidává do balíčků, které mají jako adresář `/usr/lib/gtk-2.0/2.10.0/immodules` .
 
 <a id="triggers_gtk_pixbuf_loaders"></a>
-#### gtk-pixbuf-loaders
 
-gtk-pixbuf-loaders is the old name for the current `gdk-pixbuf-loaders` trigger and is
-in the process of being removed. It currently re-execs into `gdk-pixbuf-loaders` as a
-compatibility measure.
+#### gtk-pixbuf-loadery
 
-For information about how it works refer to [gdk-pixbuf-loaders](#triggers_gdk_pixbuf_loaders).
+gtk-pixbuf-loaders je starý název pro aktuální spouštěč `gdk-pixbuf-loaders` a je v procesu odstraňování. V současné době se znovu spouští do `gdk-pixbuf-loaders` jako opatření kompatibility.
+
+Informace o tom, jak to funguje, najdete v [gdk-pixbuf-loaders](#triggers_gdk_pixbuf_loaders) .
 
 <a id="triggers_gtk3_immodules"></a>
+
 #### gtk3-immodules
 
-The gtk3-immodules trigger is responsible for updating the IM (Input Method) modules
-file for gtk+3.
+Spouštěč gtk3-immodules je zodpovědný za aktualizaci souboru modulů IM (Input Method) pro gtk+3.
 
-During installation it executes `gtk-query-immodules-3.0 --update-cache` to update the
-cache file. It also removes the obsolete configuration file  `etc/gtk-3.0/gtk.immodules`
-if present.
+Během instalace spustí `gtk-query-immodules-3.0 --update-cache` pro aktualizaci souboru mezipaměti. Také odstraní zastaralý konfigurační soubor `etc/gtk-3.0/gtk.immodules` pokud existuje.
 
-During removal of the `gtk+3` package it removes the cache file which is located at
-`usr/lib/gtk-3.0/3.0.0/immodules.cache`.
+Během odstraňování balíčku `gtk+3` odstraní soubor mezipaměti, který se nachází na `usr/lib/gtk-3.0/3.0.0/immodules.cache` .
 
-It is automatically added to packages that have `/usr/lib/gtk-3.0/3.0.0/immodules`
-present as a directory.
+Automaticky se přidává do balíčků, které mají jako adresář `/usr/lib/gtk-3.0/3.0.0/immodules` .
 
 <a id="triggers_hwdb.d_dir"></a>
+
 #### hwdb.d-dir
 
-The hwdb.d-dir trigger is responsible for updating the hardware database.
+Spouštěč hwdb.d-dir je zodpovědný za aktualizaci hardwarové databáze.
 
-During installation and removal it runs `usr/bin/udevadm hwdb --root=. --update`.
+Během instalace a odebrání spouští `usr/bin/udevadm hwdb --root=. --update` .
 
-It is automatically added to packages that have `/usr/lib/udev/hwdb.d` present
-as a directory.
+Je automaticky přidán do balíčků, které mají jako adresář `/usr/lib/udev/hwdb.d` .
 
 <a id="triggers_info_files"></a>
-#### info-files
 
-The info-files trigger is responsible for registering and unregistering the GNU info
-files of a package.
+#### info-soubory
 
-It checks the existence of the info files presented to it and if it is running under
-another architecture.
+Spouštěč info-files je zodpovědný za registraci a odregistrování GNU informačních souborů balíčku.
 
-During installation it uses `install-info` to register info files into
-`usr/share/info`.
+Kontroluje existenci informačních souborů, které jsou mu předkládány, a zda běží pod jinou architekturou.
 
-During removal it uses `install-info --delete` to remove the info files from the
-registry located at `usr/share/info`.
+Během instalace používá `install-info` k registraci informačních souborů do `usr/share/info` .
 
-If it is running under another architecture it tries to use the host's `install-info`
-utility.
+Během odstraňování používá `install-info --delete` k odstranění informačních souborů z registru umístěného na `usr/share/info` .
+
+Pokud běží pod jinou architekturou, pokusí se použít utilitu `install-info` hostitele.
 
 <a id="triggers_initramfs_regenerate"></a>
+
 #### initramfs-regenerate
 
-The initramfs-regenerate trigger will trigger the regeneration of all kernel
-initramfs images after package installation or removal. The trigger must be
-manually requested.
+Spouštěč initramfs-regenerate spustí regeneraci všech obrazů initramfs jádra po instalaci nebo odstranění balíčku. O spoušť je třeba požádat ručně.
 
-This hook is probably most useful for DKMS packages because it will provide a
-means to include newly compiled kernel modules in initramfs images for all
-currently available kernels. When used in a DKMS package, it is recommended to
-manually include the `dkms` trigger *before* the `initramfs-regenerate` trigger
-using, for example,
+Tento háček je pravděpodobně nejužitečnější pro balíčky DKMS, protože poskytuje prostředek pro zahrnutí nově zkompilovaných modulů jádra do obrazů initramfs pro všechna aktuálně dostupná jádra. Při použití v balíčku DKMS se doporučuje ručně zahrnout spouštěč `dkms` *před* spouštěč `initramfs-regenerate` pomocí např.
 
-    ```
-    triggers="dkms initramfs-regenerate"
-    ```
+```
+```
+triggers="dkms initramfs-regenerate"
+```
+```
 
-Although `xbps-src` will automatically include the `dkms` trigger whenever
-`dkms_modules` is installed, the automatic addition will come *after*
-`initramfs-regenerate`, which will cause initramfs images to be recreated
-before the modules are compiled.
+Ačkoli `xbps-src` automaticky zahrne spouštěč `dkms` kdykoli je nainstalován `dkms_modules` , automatické přidání přijde *po* `initramfs-regenerate` , což způsobí, že obrazy initramfs budou znovu vytvořeny před kompilací modulů.
 
-By default, the trigger uses `dracut --regenerate-all` to recreate initramfs
-images. If `/etc/default/initramfs-regenerate` exists and defines
-`INITRAMFS_GENERATOR=mkinitcpio`, the trigger will instead use `mkinitcpio` and
-loop over all kernel versions for which modules appear to be installed.
-Alternatively, setting `INITRAMFS_GENERATOR=none` will disable image
-regeneration entirely.
+Ve výchozím nastavení spouštěč používá `dracut --regenerate-all` k opětovnému vytvoření obrázků initramfs. Pokud `/etc/default/initramfs-regenerate` existuje a definuje `INITRAMFS_GENERATOR=mkinitcpio` , spouštěč místo toho použije `mkinitcpio` a zacyklí všechny verze jádra, pro které se zdá, že jsou nainstalovány moduly. Případně nastavení `INITRAMFS_GENERATOR=none` zcela zakáže regeneraci obrazu.
 
 <a id="triggers_kernel_hooks"></a>
-#### kernel-hooks
 
-The kernel-hooks trigger is responsible for running scripts during installation/removal
-of kernel packages.
+#### kernel-háky
 
-The available targets are pre-install, pre-remove, post-install and post-remove.
+Spouštěč kernel-hooks je zodpovědný za spouštění skriptů během instalace/odebírání balíčků jádra.
 
-When run it will try to run all executables found under `etc/kernel.d/$TARGET`. The
-`TARGET` variable is one of the 4 targets available for the trigger. It will also
-create the directory if it isn't present.
+Dostupné cíle jsou před instalací, před odstraněním, po instalaci a po odstranění.
 
-During updates it won't try to run any executables when running with the pre-remove
-target.
+Při spuštění se pokusí spustit všechny spustitelné soubory nalezené pod `etc/kernel.d/$TARGET` . Proměnná `TARGET` je jedním ze 4 cílů dostupných pro spouštěč. Vytvoří také adresář, pokud není přítomen.
 
-It is automatically added if the helper variable `kernel_hooks_version` is defined.
-However it is not obligatory to have it defined.
+Během aktualizací se nebude pokoušet spustit žádné spustitelné soubory, když běží s cílem před odstraněním.
+
+Je přidána automaticky, pokud je definována pomocná proměnná `kernel_hooks_version` . Není však povinné jej mít definované.
 
 <a id="triggers_mimedb"></a>
+
 #### mimedb
 
-The mimedb trigger is responsible for updating the shared-mime-info database.
+Spouštěč mimedb je zodpovědný za aktualizaci databáze shared-mime-info.
 
-In all runs it will just execute `update-mime-database -n usr/share/mime`.
+Ve všech spuštěních se pouze spustí `update-mime-database -n usr/share/mime` .
 
-It is automatically added to packages that have `/usr/share/mime` available as
-a directory.
+Je automaticky přidán do balíčků, které mají jako adresář k dispozici `/usr/share/mime` .
 
 <a id="triggers_mkdirs"></a>
+
 #### mkdirs
 
-The mkdirs trigger is responsible for creating and removing directories dictated
-by the `make_dirs` variable.
+Spouštěč mkdirs je zodpovědný za vytváření a odstraňování adresářů diktovaných proměnnou `make_dirs` .
 
-During installation it takes the `make_dirs` variable and splits it into groups of
-4 variables.
+Během instalace vezme proměnnou `make_dirs` a rozdělí ji do skupin po 4 proměnných.
 
-- dir = full path to the directory
-- mode = Unix permissions for the directory
-- uid = name of the owning user
-- gid = name of the owning group
+- dir = úplná cesta k adresáři
+- režim = Unixová oprávnění pro adresář
+- uid = jméno vlastnícího uživatele
+- gid = název vlastnící skupiny
 
-It will continue to split the values of `make_dirs` into groups of 4 until the values
-end.
+Bude pokračovat v rozdělování hodnot `make_dirs` do skupin po 4, dokud hodnoty neskončí.
 
-During installation it will create a directory with `dir` then set mode with `mode`
-and permission with `uid:gid`.
+Během instalace vytvoří adresář s `dir` a poté nastaví režim s `mode` a oprávněním pomocí `uid:gid` .
 
-During removal it will delete the directory using `rmdir`.
+Během odstraňování smaže adresář pomocí `rmdir` .
 
-To include this trigger use the `make_dirs` variable, as the trigger won't do anything
-unless it is defined.
+Chcete-li zahrnout tento spouštěč, použijte proměnnou `make_dirs` , protože spouštěč nedělá nic, pokud není definován.
 
 <a id="triggers_pango_module"></a>
-#### pango-modules
 
-The pango-modules trigger is currently being removed since upstream has removed the
-code responsible for it.
+#### pango-moduly
 
-It used to update the pango modules file with `pango-modulesquery` during installation
-of any package.
+Spouštěč pango-modules se aktuálně odstraňuje, protože upstream odstranil kód, který je za něj zodpovědný.
 
-Currently it removes `etc/pango/pango.modules` file during removal of the pango package.
+Slouží k aktualizaci souboru pango modules pomocí `pango-modulesquery` během instalace libovolného balíčku.
 
-It can be added by defining `pango-modules` in the `triggers` variable and has no way to get
-added automatically to a package.
+V současné době odstraňuje soubor `etc/pango/pango.modules` během odstraňování balíčku pango.
+
+Může být přidán definováním `pango-modules` v proměnné `triggers` a nemá žádný způsob, jak se automaticky přidat do balíčku.
 
 <a id="triggers_pycompile"></a>
+
 #### pycompile
 
-The pycompile trigger is responsible for compiling python code into native
-bytecode and removing generated bytecode.
+Spouštěč pycompile je zodpovědný za kompilaci kódu pythonu do nativního bajtkódu a odstranění generovaného bajtkódu.
 
-During installation it will compile all python code under the paths it is given by
-`pycompile_dirs` and all modules described in `pycompile_module` into native bytecode and
-update the ldconfig(8) cache.
+Během instalace zkompiluje veškerý kód pythonu pod cestami, které jsou uvedeny v `pycompile_dirs` a všechny moduly popsané v `pycompile_module` do nativního bytecode a aktualizuje mezipaměť ldconfig(8).
 
-During removal it will remove all the native bytecode and update the ldconfig(8) cache.
+Během odstraňování odstraní veškerý nativní bytecode a aktualizuje mezipaměť ldconfig(8).
 
-To include this trigger use the variables `pycompile_dirs` and `pycompile_module`. The
-trigger won't do anything unless at least one of those variables is defined.
+K zahrnutí tohoto spouštěče použijte proměnné `pycompile_dirs` a `pycompile_module` . Spouštěč neprovede nic, pokud není definována alespoň jedna z těchto proměnných.
 
-A `python_version` variable can be set to direct behaviour of the trigger.
+Proměnnou `python_version` lze nastavit tak, aby řídila chování spouštěče.
 
 <a id="triggers_register_shell"></a>
-#### register-shell
 
-The register-shell trigger is responsible for registering and removing shell entries
-into `etc/shells`.
+#### registr-shell
 
-During installation it will append the `etc/shells` file with the new shell and also
-change the permissions to `644` on the file.
+Spouštěč registry-shell je zodpovědný za registraci a odstraňování položek shellu do `etc/shells` .
 
-During removal it will use `sed` to delete the shell from the file.
+Během instalace připojí soubor `etc/shells` s novým shellem a také změní oprávnění k souboru na `644` .
 
-To include this trigger use the `register_shell` variable, as the trigger won't do
-anything unless it is defined.
+Během odstraňování použije `sed` k odstranění shellu ze souboru.
+
+Chcete-li zahrnout tento spouštěč, použijte proměnnou `register_shell` , protože spouštěč nedělá nic, pokud není definován.
 
 <a id="triggers_system_accounts"></a>
-#### system-accounts
 
-The system-accounts trigger is responsible for creating and disabling system accounts
-and groups.
+#### systémové účty
 
-During removal it will disable the account by setting the Shell to /bin/false,
-Home to /var/empty, and appending ' - for uninstalled package $pkgname' to the
-Description.
-Example: `transmission unprivileged user - for uninstalled package transmission`
+Spouštěč systémových účtů je zodpovědný za vytváření a deaktivaci systémových účtů a skupin.
 
-This trigger can only be used by using the `system_accounts` variable.
+Během odstraňování deaktivuje účet nastavením Shell na /bin/false, Home na /var/empty a připojením '- pro odinstalovaný balíček $pkgname' do Popisu. Příklad: `transmission unprivileged user - for uninstalled package transmission`
+
+Tento spouštěč lze použít pouze pomocí proměnné `system_accounts` .
 
 <a id="triggers_texmf_dist"></a>
+
 #### texmf-dist
 
-The texmf-dist trigger is responsible for regenerating TeXLive's texmf databases.
+Spouštěč texmf-dist je zodpovědný za regeneraci texmf databází TeXLive.
 
-During both installation and removal, it regenerates both the texhash and format
-databases using `texhash` and `fmtutil-sys`, to add or remove any new hashes or
-formats.
+Během instalace i odebrání regeneruje databáze texhash i formátování pomocí `texhash` a `fmtutil-sys` a přidává nebo odstraňuje jakékoli nové hashe nebo formáty.
 
-It runs on every package that changes /usr/share/texmf-dist. This is likely overkill,
-but it is much cleaner rather than checking each format directory and each directory
-that is hashed. In addition, it is very likely any package touching /usr/share/texmf-dist
-requires one of these triggers anyway.
+Běží na každém balíčku, který změní /usr/share/texmf-dist. To je pravděpodobně přehnané, ale je to mnohem čistší než kontrola každého adresáře formátu a každého adresáře, který je hašován. Navíc je velmi pravděpodobné, že jakýkoli balíček dotýkající se /usr/share/texmf-dist stejně vyžaduje jeden z těchto spouštěčů.
 
 <a id="triggers_update_desktopdb"></a>
+
 #### update-desktopdb
 
-The update-desktopdb trigger is responsible for updating the system's MIME database.
+Spouštěč update-desktopdb je zodpovědný za aktualizaci systémové databáze MIME.
 
-During installation it will execute `update-desktop-database usr/share/applications`
-which will result in a cache file being created at `usr/share/applications/mimeinfo.cache`.
+Během instalace se spustí `update-desktop-database usr/share/applications` což povede k vytvoření souboru mezipaměti na `usr/share/applications/mimeinfo.cache` .
 
-During removal of the `desktop-file-utils` package it will remove the cache file that
-was created during installation.
+Během odebírání balíčku `desktop-file-utils` se odstraní soubor mezipaměti, který byl vytvořen během instalace.
 
-It is automatically added to packages that have `/usr/share/applications` available as
-a directory.
+Je automaticky přidán do balíčků, které mají `/usr/share/applications` k dispozici jako adresář.
 
 <a id="triggers_x11_fonts"></a>
-#### x11-fonts
 
-The x11-fonts trigger is responsible for rebuilding the fonts.dir and fonts.scale files
-for packages that install X11 fonts, and update fontconfig's cache for these fonts.
+#### x11-fonty
 
-During installation and removal it executes `mkfontdir`, `mkfontscale` and `fc-cache` for
-all font directories it was given via the `font_dirs` variable.
+Spouštěč x11-fonts je zodpovědný za opětovné sestavení souborů fonts.dir a fonts.scale pro balíčky, které instalují fonty X11, a aktualizuje mezipaměť fontconfig pro tyto fonty.
 
-To include this trigger use the `font_dirs` variable, as the trigger won't do anything
-unless it is defined.
+Během instalace a odstranění spouští `mkfontdir` , `mkfontscale` a `fc-cache` pro všechny adresáře písem, které byly zadány přes proměnnou `font_dirs` .
+
+Chcete-li zahrnout tento spouštěč, použijte proměnnou `font_dirs` , protože spouštěč nedělá nic, pokud není definován.
 
 <a id="triggers_xml_catalog"></a>
-#### xml-catalog
 
-The xml-catalog trigger is responsible for registering and removing SGML/XML catalog entries.
+#### xml-katalog
 
-During installation it uses `xmlcatmgr` to register all catalogs, passed to it by the
-`sgml_entries` and `xml_entries` variables, in `usr/share/sgml/catalog` and
-`usr/share/xml/catalog` respectively.
+Spouštěč xml-catalog je zodpovědný za registraci a odstraňování položek katalogu SGML/XML.
 
-During removal it uses `xmlcatmgr` to remove all catalogs passed to it by the
-`sgml_entries` and `xml_entries` variables, in `usr/share/sgml/catalog` and
-`usr/share/xml/catalog` respectively.
+Během instalace používá `xmlcatmgr` k registraci všech katalogů, které mu předávají proměnné `sgml_entries` a `xml_entries` v `usr/share/sgml/catalog` a `usr/share/xml/catalog` .
 
-To include this trigger use the `sgml_entries` variable or/and the `xml_entries` variable,
-as the trigger won't do anything unless either of them are defined.
+Během odstraňování používá `xmlcatmgr` k odstranění všech katalogů, které mu byly předány proměnnými `sgml_entries` a `xml_entries` v `usr/share/sgml/catalog` a `usr/share/xml/catalog` .
+
+Chcete-li zahrnout tento spouštěč, použijte proměnnou `sgml_entries` nebo/a proměnnou `xml_entries` , protože spouštěč nebude dělat nic, pokud nebude žádná z nich definována.
 
 <a id="documentation"></a>
-### Void specific documentation
 
-When you want document details of package's configuration and usage specific to Void Linux,
-not covered by upstream documentation, put notes into
-`srcpkgs/<pkgname>/files/README.voidlinux` and install with
-`vdoc "${FILESDIR}/README.voidlinux"`.
+### Zrušte konkrétní dokumentaci
+
+Chcete-li zdokumentovat podrobnosti o konfiguraci a použití balíčku specifické pro Void Linux, které nepokrývá upstream dokumentace, vložte poznámky do `srcpkgs/<pkgname>/files/README.voidlinux` a nainstalujte pomocí `vdoc "${FILESDIR}/README.voidlinux"` .
 
 <a id="notes"></a>
-### Notes
 
-- Make sure that all software is configured to use the `/usr` prefix.
+### Poznámky
 
-- Binaries should always be installed at `/usr/bin`.
+- Ujistěte se, že veškerý software je nakonfigurován tak, aby používal předponu `/usr` .
 
-- Manual pages should always be installed at `/usr/share/man`.
+- Binární soubory by měly být vždy nainstalovány v `/usr/bin` .
 
-- If a software provides **shared libraries** and headers, probably you should
-create a `development package` that contains `headers`, `static libraries`
-and other files required for development (not required at runtime).
+- Manuálové stránky by měly být vždy instalovány v `/usr/share/man` .
 
-- If you are updating a package please be careful with SONAME bumps, check
-the installed files (`./xbps-src show-files pkg`) before pushing new updates.
+- Pokud software poskytuje **sdílené knihovny** a hlavičky, pravděpodobně byste měli vytvořit `development package` , který obsahuje `headers` , `static libraries` a další soubory potřebné pro vývoj (není vyžadováno za běhu).
 
-- Make sure that binaries are not stripped by the software, let xbps-src do this;
-otherwise the `debug` packages won't have debugging symbols.
+- Pokud aktualizujete balíček, buďte opatrní s nárazy SONAME, před odesláním nových aktualizací zkontrolujte nainstalované soubory ( `./xbps-src show-files pkg` ).
+
+- Ujistěte se, že binární soubory nejsou odstraněny softwarem, nechejte to udělat xbps-src; jinak `debug` balíčky nebudou mít ladicí symboly.
 
 <a id="contributing"></a>
-### Contributing via git
 
-To get started, [fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo) the void-linux `void-packages` git repository on GitHub and clone it:
+### Přispívání přes git
 
-    $ git clone git@github.com:<user>/void-packages.git
+Pro začátek si na GitHubu [vytvořte fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo) void-linux repozitáře `void-packages` a naklonujte ho:
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for information on how to format your
-commits and other tips for contributing.
+```
+$ git clone git@github.com:<user>/void-packages.git
+```
 
-Once you've made changes to your `forked` repository, submit
-a github pull request.
+Viz [CONTRIBUTING.md](./CONTRIBUTING.md) pro informace o tom, jak formátovat vaše odevzdání a další tipy pro přispívání.
 
-To keep your forked repository always up to date, setup the `upstream` remote
-to pull in new changes:
+Jakmile provedete změny ve vašem `forked` úložišti, odešlete žádost o stažení githubu.
 
-    $ git remote add upstream https://github.com/void-linux/void-packages.git
-    $ git pull --rebase upstream master
+Chcete-li, aby byl váš rozvětvený repozitář vždy aktuální, nastavte `upstream` dálkové ovládání tak, aby načítalo nové změny:
+
+```
+$ git remote add upstream https://github.com/void-linux/void-packages.git
+$ git pull --rebase upstream master
+```
 
 <a id="help"></a>
-### Help
 
-If after reading this `manual` you still need some kind of help, please join
-us at `#xbps` via IRC at `irc.libera.chat`.
+### Pomoc
+
+Pokud po přečtení této `manual` stále potřebujete nějakou pomoc, připojte se k nám na `#xbps` přes IRC na `irc.libera.chat` .
