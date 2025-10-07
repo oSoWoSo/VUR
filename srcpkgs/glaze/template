@@ -1,23 +1,17 @@
 # Template file for 'glaze'
 pkgname=glaze
-version=5.7.1
+version=5.7.2
 revision=1
 build_style=cmake
-configure_args+=" -DBUILD_TESTING:BOOL=OFF"
-configure_args+=" -DCMAKE_BUILD_TYPE:STRING=Release"
-configure_args+=" -Dglaze_ENABLE_FUZZING:BOOL=OFF"
-hostmakedepends="
-  cmake
-  git
-  pkgconf
-"
+configure_args="-DBUILD_TESTING:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release -Dglaze_ENABLE_FUZZING:BOOL=OFF"
+hostmakedepends="pkg-config"
 short_desc="Extremely fast, in memory, JSON and interface library for modern C++"
 maintainer="Encoded14 <linusken@tuta.io>"
 license="MIT"
 homepage="https://github.com/stephenberry/glaze"
 distfiles="https://github.com/stephenberry/glaze/archive/refs/tags/v${version}.tar.gz"
-checksum=c896ec90927a93ea43d33113ca2fd7b62961b870cb7fc12586cc865f335992f7
+checksum=ab585fbf4d488cd5a322faa53328384d2d03aa8fa80bc79c7f7ea5d4dacd71d3
 
 post_install() {
-  vlicense LICENSE
+	vlicense LICENSE
 }
