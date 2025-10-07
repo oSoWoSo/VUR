@@ -3,22 +3,23 @@ pkgname=satty
 version=0.19.0
 revision=1
 build_style=cargo
-hostmakedepends="pkg-config"
-makedepends="fontconfig-devel libepoxy-devel libglib-devel gtk4-devel libadwaita-devel"
+hostmakedepends="glib-devel pkg-config libadwaita-devel gtk4-devel gdk-pixbuf-devel libepoxy-devel fontconfig"
+makedepends="glib libadwaita gtk4 gdk-pixbuf fontconfig libepoxy"
 short_desc="Modern Screenshot Annotation"
-maintainer="Fabien JUIF <fabien.juif@gmail.com>"
+maintainer="RotaryBoot58 <petersoncraft20@proton.me>"
 license="MPL-2.0"
 homepage="https://github.com/gabm/Satty"
 distfiles="https://github.com/gabm/Satty/archive/refs/tags/v${version}.tar.gz"
 checksum=03244dd0d181dfccb6b88c199ae1eef9f1197af5cc421c4ead955f80493c4491
 
-post_install() {
-	vlicense LICENSE
+post_install()
+{
+    vlicense LICENSE
 
-	vcompletion completions/_satty zsh
-	vcompletion completions/satty.bash bash
-	vcompletion completions/satty.fish fish
+    vcompletion completions/_satty zsh
+    vcompletion completions/satty.bash bash
+    vcompletion completions/satty.fish fish
 
-	vinstall satty.desktop 644 /usr/share/applications
-	vinstall assets/satty.svg 644 /usr/share/icons/hicolor/scalable/apps
+    vinstall assets/satty.svg 644 /usr/share/icons/hicolor/scalable/apps/satty.svg
+    vinstall satty.desktop 644 /usr/share/applications
 }

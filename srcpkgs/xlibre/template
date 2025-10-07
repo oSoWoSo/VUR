@@ -1,0 +1,10 @@
+# Template file for 'xlibre'
+pkgname=xlibre
+version=1
+revision=1
+metapackage=yes
+depends="xorg-fonts xlibre-server"
+short_desc="XLibre meta-package containing all essential packages for a easy to use installation"
+maintainer="RotaryBoot58 <petersoncraft20@proton.me>"
+license="Public Domain"
+homepage="https://github.com/X11Libre/xserver/wiki"
