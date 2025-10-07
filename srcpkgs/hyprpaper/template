@@ -1,31 +1,13 @@
 # Template file for 'hyprpaper'
 pkgname=hyprpaper
 version=0.7.5
-revision=2
+revision=3
 build_style=cmake
-configure_args+=" --no-warn-unused-cli"
-configure_args+=" -DCMAKE_BUILD_TYPE:STRING=Release"
-configure_args+=" -DCMAKE_INSTALL_PREFIX:PATH=/usr"
-hostmakedepends="
-  pkgconf
-  wayland-devel
-  hyprutils
-  hyprwayland-scanner
-"
-makedepends="
-  cairo-devel
-  file-devel
-  libjpeg-turbo-devel
-  libwebp-devel
-  hyprgraphics
-  hyprland-protocols
-  hyprlang
-  hyprwayland-scanner
-  pango-devel
-  wayland-devel
-  wayland-protocols
-  wlroots-devel
-"
+configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr"
+hostmakedepends="pkg-config hyprutils hyprwayland-scanner hyprgraphics hyprlang
+ hyprland-protocols wayland-protocols"
+makedepends="cairo-devel file-devel libjpeg-turbo-devel libwebp-devel pango-devel
+ wayland-devel wlroots-devel"
 short_desc="Fast wallpaper utility for wlroots compositors with IPC controls"
 maintainer="Encoded14 <linusken@tuta.io>"
 license="BSD-3-Clause"
@@ -34,6 +16,5 @@ distfiles="${homepage}/archive/refs/tags/v${version}.tar.gz"
 checksum="93efc089c7051e6727ac5eac402ebd254199e93ac3efd6fe7dd37a52ddc1cc33"
 
 post_install() {
-  vlicense LICENSE
+	vlicense LICENSE
 }
-
