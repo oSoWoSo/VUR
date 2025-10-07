@@ -1,30 +1,13 @@
 # Template file for 'hyprland-qtutils'
 pkgname=hyprland-qtutils
 version=0.1.5
-revision=2
+revision=3
 build_style=cmake
-configure_args+=" --no-warn-unused-cli"
-configure_args+=" -DCMAKE_BUILD_TYPE:STRING=Release"
-configure_args+=" -DCMAKE_INSTALL_PREFIX:PATH=/usr"
-hostmakedepends="
-  cmake
-  pkgconf
-"
-makedepends="
-  hyprutils
-  hyprland-qt-support
-"
-qtmakedepends="
-  qt6-base-devel
-  qt6-base-private-devel
-  qt6-declarative-private-devel
-  qt6-declarative-devel
-  qt6-tools-devel
-  qt6-wayland-devel
-  qt6-wayland-private-devel
-"
-hostmakedepends+=" ${qtmakedepends}"
-makedepends+=" ${qtmakedepends}"
+configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr"
+hostmakedepends="pkg-config hyprutils"
+makedepends="hyprland-qt-support qt6-base-devel qt6-base-private-devel
+ qt6-declarative-private-devel qt6-declarative-devel qt6-tools-devel
+ qt6-wayland-devel qt6-wayland-private-devel"
 short_desc="Qt/QML utility apps for Hyprland"
 maintainer="Encoded14 <linusken@tuta.io>"
 license="BSD-3-Clause"
@@ -33,5 +16,5 @@ distfiles="https://github.com/hyprwm/hyprland-qtutils/archive/refs/tags/v${versi
 checksum=c02e47c9f720c20a5adca1baebbcfee0db5d3d36ce9595779563a2e5d27bafca
 
 post_install() {
-  vlicense LICENSE
+	vlicense LICENSE
 }
