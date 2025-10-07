@@ -1,0 +1,15 @@
+# Template file for 'zuki-themes'
+pkgname=zuki-themes
+version=4.0
+revision=1
+#wrksrc="${pkgname}-${_upstr_version}"
+build_style=meson
+hostmakedepends="sassc"
+makedepends="gdk-pixbuf-devel"
+depends="gtk-engine-murrine gtk2-engines"
+short_desc="Zukitre and Zukitwo themes for GNOME and XFCE4"
+maintainer="mobinmob <mobinmob@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/lassekongo83/zuki-themes"
+distfiles="https://github.com/lassekongo83/zuki-themes/archive/refs/tags/v${version}.tar.gz"
+checksum=262be2169a82f437262b044567e135527c247406950c4806ba50d85f01ebb460

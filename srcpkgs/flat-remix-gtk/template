@@ -1,0 +1,12 @@
+# Template file for 'flat-remix-gtk'
+pkgname=flat-remix-gtk
+version=20220627
+revision=1
+build_style=gnu-makefile
+depends="gnome-themes-extra"
+short_desc="Flat Remix is a GTK application theme inspired by material design"
+maintainer="mobinmob <mobinmob@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://drasite.com/flat-remix-gtk"
+distfiles="https://github.com/daniruiz/flat-remix-gtk/archive/${version}.tar.gz"
+checksum=4ae34b326c8ec5b5d2f134f0d8cf5d5238bd13cfc5b52048f193010915dbb1d6

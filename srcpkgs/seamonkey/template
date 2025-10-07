@@ -1,0 +1,24 @@
+# Template file for 'seamonkey'
+pkgname=seamonkey
+version=2.53.21
+revision=1
+archs="x86_64"
+create_wrksrc=yes
+short_desc="All-in-one internet application suite"
+maintainer="mobinmob <mobinmob@disroot.org>"
+license="MPL-2.0, GPL-2.0-or-later, LGPL-2.1-or-later"
+homepage="https://www.seamonkey-project.org/"
+changelog="https://www.seamonkey-project.org/releases/seamonkey${version}/"
+distfiles="https://archive.seamonkey-project.org/releases/${version}/linux-x86_64/en-US/seamonkey-${version}.en-US.linux-x86_64.tar.bz2"
+checksum=19e819428dbec28e63ca197444d80e8456f106a462254521009f7ae85dae5c16
+nopie=yes
+
+do_install() {
+	vmkdir opt
+	vcopy * opt/
+	vmkdir usr/share/applications
+	vinstall ${FILESDIR}/seamonkey.desktop 644 usr/share/applications/
+	# Create a symlink in /usr/bin/
+	vmkdir usr/bin
+	ln -s /opt/seamonkey/seamonkey ${DESTDIR}/usr/bin/seamonkey
+}

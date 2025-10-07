@@ -1,0 +1,23 @@
+# Template file for 'fopnu'
+pkgname=fopnu
+version=1.67
+revision=1
+_upstrrev=1
+archs="x86_64"
+short_desc="New and Powerful P2P File Sharing System"
+maintainer="mobinmob <mobinmob@disroot.org>"
+license="custom:Proprietary" #no licence file for vlicense
+homepage="https://www.fopnu.com/"
+changelog="https://www.fopnu.com/news/"
+distfiles="https://download2.fopnu.com/download/fopnu-${version}-${_upstrrev}.x86_64.manualinstall.tar.gz"
+checksum=3bcc267fefe6a08665c597eaa337ed584001411d2a3dbc38d5eac2c5f995dcc7
+nopie=yes
+
+do_install() {
+	vbin fopnu
+	vdoc README.txt
+	vmkdir usr/share/applications
+	vinstall fopnu.desktop 644 usr/share/applications/
+	vmkdir usr/share/icons/hicolor/48x48/apps
+	vinstall fopnu.png 644 usr/share/icons/hicolor/48x48/apps/
+}

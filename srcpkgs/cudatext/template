@@ -1,0 +1,19 @@
+# Template file for 'cudatext'
+pkgname=cudatext
+version=1.207.0.0
+revision=1
+archs="x86_64"
+create_wrksrc=yes
+depends="qt5pas"
+short_desc="Cross-platform text editor, written in Object Pascal"
+maintainer="mobinmob <mobinmob@disroot.org>"
+license="MPL-2.0"
+homepage="https://cudatext.github.io/"
+distfiles="https://sourceforge.net/projects/cudatext/files/release/${version}/cudatext_${version}-1_qt5_amd64.deb"
+checksum=6f55ae0d2128c6a8ec8286d120ca3ead6b4ca7dc66784da8f51c2e1700c944ef
+nopie=yes
+python_version=3
+
+do_install() {
+	vcopy usr /
+}

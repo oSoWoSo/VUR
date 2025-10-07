@@ -1,0 +1,46 @@
+# Template file for 'Webex'
+# Repackages the official rpm package.
+pkgname=Webex
+# There are no versioned downloads for the sw.
+# You must rebuild the package for updates # **and** remove the
+# old package from hostdir/binpkgs/<branchname> before building.
+# To install the new version use xi -f Webex.
+version=latest.0
+revision=1
+archs="x86_64"
+create_wrksrc=yes
+hostmakedepends="rpmextract"
+short_desc="Video conference and colaboration sw"
+maintainer="mobinmob <mobinmob@disroot.org>"
+license="custom:proprietary" # no vlicense
+homepage="https://www.webex.com/"
+changelog="https://help.webex.com/en-us/mqkve8/Webex-Release-Notes"
+nopie=yes # /opt/Webex/bin/CiscoCollabHost is nopie
+nostrip=yes
+
+do_fetch() {
+	# Create the worksrc
+	mkdir -p "${wrksrc}"
+	# Fetch the distfile
+	xbps-fetch https://binaries.webex.com/WebexDesktop-CentOS-Official-Package/Webex.rpm
+	# Move the rpm
+	mv Webex.rpm "${wrksrc}"
+}
+
+do_install() {
+	# Extract the distfile
+	rpmextract Webex.rpm
+	# Remove the distfile
+	rm -f Webex.rpm
+	# Copy the files
+	vcopy "./*" /
+}
+
+post_install() {
+	# Symlink the main binary to the path.
+	vmkdir usr/bin
+	ln -s /opt/Webex/bin/CiscoCollabHost "${DESTDIR}"/usr/bin/webex
+	# Copy the .desktop file to the proper dir.
+	vmkdir /usr/share/applications/
+	cp opt/Webex/bin/webex.desktop "${DESTDIR}"/usr/share/applications/
+}
