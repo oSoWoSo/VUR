@@ -4504,3 +4504,10 @@ libkgraphviewer.so.0 kgraphviewer-2.5.0_1
 libwcs.so.8 wcslib-8.4_1
 libstellarsolver6.so.2 stellarsolver-2.7_1
 libXISF.so.0 libxisf-0.2.9_1
+libaquamarine.so.8 aquamarine-0.9.2_2
+libhyprcursor.so.0 hyprcursor-0.1.12_1
+libhyprlang.so.2 hyprlang-0.6.3_1
+libhyprgraphics.so.0 hyprgraphics-0.1.3_2
+libsdbus-c++.so.2 sdbus-cpp-2.1.0_1
+libspng.so.0 libspng-0.7.4_1
+libtomlplusplus.so.3 tomlplusplus-3.4.0_1
