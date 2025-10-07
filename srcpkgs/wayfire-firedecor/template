@@ -1,0 +1,15 @@
+# Template file for 'wayfire-firedecor'
+pkgname=wayfire-firedecor
+version=2023.10.23
+revision=3
+build_style=meson
+hostmakedepends="pkg-config"
+makedepends="wayfire-devel librsvg-devel boost-devel"
+short_desc="Advanced window decoration plugin for the Wayfire window manager"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+# meson.build lists MIT as license but no license file is provided
+license="MIT" # Suppress xlint warning: vlicense
+homepage="https://github.com/mntmn/firedecor"
+distfiles="${homepage}/archive/refs/tags/${version//./-}.tar.gz"
+checksum=f08c5e32c28160b40adaa5ff1c58f00c51ca719d710de27657c67c52e3137021
+repository=cereus-extra

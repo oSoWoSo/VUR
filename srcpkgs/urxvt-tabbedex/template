@@ -1,0 +1,14 @@
+# Template file for 'urxvt-tabbedex'
+pkgname=urxvt-tabbedex
+version=22.32
+revision=2
+build_style="gnu-makefile"
+hostmakedepends="perl"
+depends="rxvt-unicode"
+short_desc="Tabbed plugin for rxvt-unicode with many enhancements"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/mina86/urxvt-tabbedex"
+distfiles="${homepage}/archive/refs/tags/v${version}.tar.gz"
+checksum=4d12cab30a9f77285213afb50d12b11dbdae0768f19c27a606ed18926770efd9
+repository=cereus-extra

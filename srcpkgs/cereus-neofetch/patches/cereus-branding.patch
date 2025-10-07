@@ -1,0 +1,72 @@
+diff --git a/neofetch b/neofetch
+index 1e4b5646..5611f6b5 100755
+--- a/neofetch
++++ b/neofetch
+@@ -3,6 +3,8 @@
+ # shellcheck source=/dev/null
+ # shellcheck disable=2009
+ #
++# Cereus Neofetch logo by ItzSelenux
++#
+ # Neofetch: A command-line system information tool written in bash 3.2+.
+ # https://github.com/dylanaraps/neofetch
+ #
+@@ -776,7 +778,7 @@ image_source="auto"
+ #       "AOSC OS/Retro", Apricity, ArcoLinux, ArchBox, ARCHlabs,
+ #       ArchStrike, XFerience, ArchMerge, Arch, Artix, Arya, Bedrock,
+ #       Bitrig, BlackArch, BLAG, BlankOn, BlueLight, bonsai, BSD,
+-#       BunsenLabs, Calculate, Carbs, CentOS, Chakra, ChaletOS,
++#       BunsenLabs, Calculate, Carbs, CentOS, Cereus, Chakra, ChaletOS,
+ #       Chapeau, Chrom*, Cleanjaro, ClearOS, Clear_Linux, Clover,
+ #       Condres, Container_Linux, CRUX, Cucumber, Debian, Deepin,
+ #       DesaOS, Devuan, DracOS, DarkOs, DragonFly, Drauger, Elementary,
+@@ -4919,7 +4921,7 @@ ASCII:
+                                 \"AOSC OS\", \"AOSC OS/Retro\", Apricity, ArcoLinux, ArchBox,
+                                 ARCHlabs, ArchStrike, XFerience, ArchMerge, Arch, Artix, Arya,
+                                 Bedrock, Bitrig, BlackArch, BLAG, BlankOn, BlueLight, bonsai, BSD,
+-                                BunsenLabs, Calculate, Carbs, CentOS, Chakra, ChaletOS, Chapeau,
++                                BunsenLabs, Calculate, Carbs, CentOS, Cereus, Chakra, ChaletOS, Chapeau,
+                                 Chrom, Cleanjaro, ClearOS, Clear_Linux, Clover, Condres,
+                                 Container_Linux, CRUX, Cucumber, Debian, Deepin, DesaOS, Devuan,
+                                 DracOS, DarkOs, DragonFly, Drauger, Elementary, EndeavourOS, Endless,
+@@ -6203,6 +6205,40 @@ ${c4}   ' ${c3}VKKKKK'. .4 ${c2}LJ ${c1}K. .'KKKKKV ${c3}'
+ ${c2}              <><><><>
+                'MKKM'
+                  ''
++EOF
++        ;;
++
++        "Cereus"*)      #R  #RR #BR #LR #DR
++            set_colors 173 108 71 151 72 ##~ItzSelenux
++            read -rd '' ascii_data <<'EOF' 
++${c1}                         ..
++                        '::,.....
++                        .,;:llll;. ${c4}     ...
++                     ${c2}...... ${c1}''''.${c4}       ':::;.
++                ${c2} ..,::lll::;,..${c4}            ::::;.
++               ${c2} ':llllllllllll:' ${c4}           ;:::;
++             ${c2} .;llllllllllllllll'  ${c4}          ;::;.
++${c3}    .... ${c2}    .;lllllllllllllllll:. ${c4}            ;::;.
++${c3}  .;::::,  ${c2}  ,lllllllllllllllllll.  ${c4}             .
++${c3}  .::::::.${c2}  .lllllllllllllllllll:.
++${c3}  .::::::. ${c2} ,lllllllllllllllllll:.${c3}        ......
++${c3}  .;:::::'${c2} .;lllllllllllllllllll,${c3}       .,::::::,.
++${c3}   .;::::;.${c2}.:lllllllllllllllllll.${c3}      .,::::::::;.
++${c3}     .,;::;${c2};lllllllllllllllllll;${c3}       .:::::::::;.
++${c3}        ...${c2},lllllllllllllllllll.${c3}       ':::::::::,.
++${c2}           .:lllllllllllllllll, ${c3}      .;::::::::;.
++${c2}           .:llllllllllllllll:.${c3}      .;::::::::,.
++${c2}            ,llllllllllllllll'${c3}     .';:::::::;.
++${c5} ...      ${c2}  .llllllllllllllll;${c3},,,,;:::::::;,.
++${c5}.:l:.    ${c2}    ,llllllllllllll;${c3},,:::::::;,'..
++${c5}.;::,    ${c2}    .;lllllllllllll,${c3} '''''''''''
++${c5} .:::.     ${c2}    ':lllllllllll:.
++${c5}  .;::'        ${c2} .,:llllllllll,
++${c5}   .,::;.      ${c2}   .';lllllllll'
++${c5}     .,::;'..   ${c2}     .';lllllll,.
++${c5}       ..,;::;,.  ${c2}      ...,;lll:.
++${c5}          ...''.  ${c2}           ..',;'.
++                                      
+ EOF
+         ;;
+ 

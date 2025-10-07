@@ -1,0 +1,15 @@
+# Template file for 'rip2'
+pkgname=rip2
+version=0.9.4
+revision=1
+build_style=cargo
+short_desc="Safe and ergonomic alternative to rm"
+maintainer="RotaryBoot58 <petersoncraft20@proton.me>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/MilesCranmer/rip2"
+distfiles="${homepage}/archive/refs/tags/v${version}.tar.gz"
+checksum=e6d3143958b838ebbf421fb933d8e46ecc28c8298f435bdf09f647b4def452f6
+
+post_install() {
+	vlicense LICENSE
+}

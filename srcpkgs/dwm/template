@@ -1,13 +1,24 @@
-# Template file for 'dwm'
+# Template file for 'dwm_icon'
 pkgname=dwm
 version=6.6
-revision=1
+revision=77
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style="gnu-makefile"
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="libXinerama-devel libXft-devel freetype-devel"
 makedepends="libXinerama-devel libXft-devel freetype-devel"
-short_desc="Dynamic window manager for X"
-maintainer="Orphaned <orphan@voidlinux.org>"
+depends="libXinerama-devel libXft-devel freetype-devel"
+short_desc="dwm patched"
+maintainer="Daniel Azevedo <daniazevedo77@posteo.net>"
 license="MIT"
-homepage="https://dwm.suckless.org"
-distfiles="https://dl.suckless.org/dwm/dwm-${version}.tar.gz"
+homepage="https://suckless.org"
+#changelog="https://github.com/dani-77/dwm/releases/tag/dwm-${version}"
+distfiles="https://dl.suckless.org/$pkgname/$pkgname-$version.tar.gz"
 checksum=7cfc2c6d9386c07c49e2c906f209c18ba3364ce0b4872eae39f56efdb7fc00a3
 
 do_build() {

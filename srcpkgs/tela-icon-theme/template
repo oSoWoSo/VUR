@@ -1,0 +1,256 @@
+# Template file for 'tela-icon-theme'
+pkgname=tela-icon-theme
+version=2025.02.10
+revision=1
+metapackage=yes
+_date="${version//./-}"
+_icondir=usr/share/icons
+depends="
+ tela-icon-theme-black
+ tela-icon-theme-blue
+ tela-icon-theme-brown
+ tela-icon-theme-green
+ tela-icon-theme-grey
+ tela-icon-theme-orange
+ tela-icon-theme-pink
+ tela-icon-theme-purple
+ tela-icon-theme-red
+ tela-icon-theme-yellow
+ tela-icon-theme-manjaro
+ tela-icon-theme-ubuntu
+ tela-icon-theme-dracula
+ tela-icon-theme-nord
+ tela-icon-theme-standard"
+short_desc="Flat colorful design icon theme"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/vinceliuice/Tela-icon-theme"
+distfiles="${homepage}/archive/refs/tags/${_date}.tar.gz"
+checksum=b1f3e76e307bd48b17f0bf55d2f5a7ce9f445b127f427e11f79a632a79e3cf4f
+nostrip=yes
+repository=cereus-extra
+
+post_patch() {
+	# xbps-triggers already takes care of this
+	vsed -i 's|gtk-update-icon-cache "${THEME_DIR}"||g' install.sh
+}
+
+do_install() {
+	vmkdir ${_icondir}
+	_VARIANTS="black blue brown green grey orange pink purple red yellow manjaro ubuntu dracula nord"
+	./install.sh ${_VARIANTS} -d "${DESTDIR}/${_icondir}"
+	# Only the standard variant should follow KDE Plasma colorscheme
+	./install.sh standard -d "${DESTDIR}/${_icondir}" -c
+}
+
+tela-icon-theme-standard_package() {
+	short_desc+=" - standard variant"
+	nostrip=yes
+	pkg_install() {
+		for bright in Tela{,-light,-dark}; do vmove ${_icondir}/${bright}; done
+	}
+}
+
+tela-icon-theme-black_package() {
+	short_desc+=" - black variant"
+	nostrip=yes
+	pkg_install() {
+		vmove ${_icondir}/Tela-black"*"
+	}
+}
+
+tela-icon-theme-blue_package() {
+	short_desc+=" - blue variant"
+	nostrip=yes
+	pkg_install() {
+		vmove ${_icondir}/Tela-blue"*"
+	}
+}
+
+tela-icon-theme-brown_package() {
+	short_desc+=" - brown variant"
+	nostrip=yes
+	pkg_install() {
+		vmove ${_icondir}/Tela-brown"*"
+	}
+}
+
+tela-icon-theme-green_package() {
+	short_desc+=" - green variant"
+	nostrip=yes
+	pkg_install() {
+		vmove ${_icondir}/Tela-green"*"
+	}
+}
+
+tela-icon-theme-grey_package() {
+	short_desc+=" - grey variant"
+	nostrip=yes
+	pkg_install() {
+		vmove ${_icondir}/Tela-grey"*"
+	}
+}
+
+tela-icon-theme-orange_package() {
+	short_desc+=" - orange variant"
+	nostrip=yes
+	pkg_install() {
+		vmove ${_icondir}/Tela-orange"*"
+	}
+}
+
+tela-icon-theme-pink_package() {
+	short_desc+=" - pink variant"
+	nostrip=yes
+	pkg_install() {
+		vmove ${_icondir}/Tela-pink"*"
+	}
+}
+
+tela-icon-theme-purple_package() {
+	short_desc+=" - purple variant"
+	nostrip=yes
+	pkg_install() {
+		vmove ${_icondir}/Tela-purple"*"
+	}
+}
+
+tela-icon-theme-red_package() {
+	short_desc+=" - red variant"
+	nostrip=yes
+	pkg_install() {
+		vmove ${_icondir}/Tela-red"*"
+	}
+}
+
+tela-icon-theme-yellow_package() {
+	short_desc+=" - yellow variant"
+	nostrip=yes
+	pkg_install() {
+		vmove ${_icondir}/Tela-yellow"*"
+	}
+}
+
+tela-icon-theme-manjaro_package() {
+	short_desc+=" - manjaro variant"
+	nostrip=yes
+	pkg_install() {
+		vmove ${_icondir}/Tela-manjaro"*"
+	}
+}
+
+tela-icon-theme-ubuntu_package() {
+	short_desc+=" - ubuntu variant"
+	nostrip=yes
+	pkg_install() {
+		vmove ${_icondir}/Tela-ubuntu"*"
+	}
+}
+
+tela-icon-theme-dracula_package() {
+	short_desc+=" - dracula variant"
+	nostrip=yes
+	pkg_install() {
+		vmove ${_icondir}/Tela-dracula"*"
+	}
+}
+
+tela-icon-theme-nord_package() {
+	short_desc+=" - nord variant"
+	nostrip=yes
+	pkg_install() {
+		vmove ${_icondir}/Tela-nord"*"
+	}
+}
+
+# Transitional dummy packages. These will be removed in a future update.
+
+Tela-icon-theme-standard_package() {
+	short_desc+=" - standard variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-standard>=${version}_${revision}"
+}
+
+Tela-icon-theme-black_package() {
+	short_desc+=" - black variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-black>=${version}_${revision}"
+}
+
+Tela-icon-theme-blue_package() {
+	short_desc+=" - blue variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-blue>=${version}_${revision}"
+}
+
+Tela-icon-theme-brown_package() {
+	short_desc+=" - brown variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-brown>=${version}_${revision}"
+}
+
+Tela-icon-theme-green_package() {
+	short_desc+=" - green variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-green>=${version}_${revision}"
+}
+
+Tela-icon-theme-grey_package() {
+	short_desc+=" - grey variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-grey>=${version}_${revision}"
+}
+
+Tela-icon-theme-orange_package() {
+	short_desc+=" - orange variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-orange>=${version}_${revision}"
+}
+
+Tela-icon-theme-pink_package() {
+	short_desc+=" - pink variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-pink>=${version}_${revision}"
+}
+
+Tela-icon-theme-purple_package() {
+	short_desc+=" - purple variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-purple>=${version}_${revision}"
+}
+
+Tela-icon-theme-red_package() {
+	short_desc+=" - red variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-red>=${version}_${revision}"
+}
+
+Tela-icon-theme-yellow_package() {
+	short_desc+=" - yellow variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-yellow>=${version}_${revision}"
+}
+
+Tela-icon-theme-manjaro_package() {
+	short_desc+=" - manjaro variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-manjaro>=${version}_${revision}"
+}
+
+Tela-icon-theme-ubuntu_package() {
+	short_desc+=" - ubuntu variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-ubuntu>=${version}_${revision}"
+}
+
+Tela-icon-theme-dracula_package() {
+	short_desc+=" - dracula variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-dracula>=${version}_${revision}"
+}
+
+Tela-icon-theme-nord_package() {
+	short_desc+=" - nord variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-nord>=${version}_${revision}"
+}

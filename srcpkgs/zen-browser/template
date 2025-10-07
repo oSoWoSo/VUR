@@ -14,23 +14,23 @@ distfiles="https://github.com/zen-browser/desktop/releases/download/${version}/z
 checksum=df871f0e3d1d86db28195b153b7748a3a7d40f89dec0c384afad5468afa2fbe5
 
 do_install() {
-  vmkdir usr/lib/zen-browser
-  vcopy "*" "usr/lib/zen-browser"
+    vmkdir usr/lib/zen-browser
+    vcopy "*" "usr/lib/zen-browser"
 
-  vmkdir usr/bin/
-  ln -s /usr/lib/zen-browser/zen ${DESTDIR}/usr/bin/
+    vmkdir usr/bin/
+    ln -s /usr/lib/zen-browser/zen ${DESTDIR}/usr/bin/
 
-  vinstall "${FILESDIR}/zen.desktop" 0644 "usr/share/applications/"
+    vinstall "${FILESDIR}/zen.desktop" 0644 "usr/share/applications/"
 
-  # Install the icons
-  for size in 16x16 32x32 48x48 64x64 128x128; do
-    mkdir -p ${DESTDIR}/usr/share/icons/hicolor/${size}/apps
-    vinstall browser/chrome/icons/default/default${size%x*}.png 0644 usr/share/icons/hicolor/${size}/apps zen-browser.png
-  done
+    # Install the icons
+    for size in 16x16 32x32 48x48 64x64 128x128; do
+        mkdir -p ${DESTDIR}/usr/share/icons/hicolor/${size}/apps
+        vinstall browser/chrome/icons/default/default${size%x*}.png 0644 usr/share/icons/hicolor/${size}/apps zen-browser.png 
+    done
 }
 
 post_install() {
-  curl --fail -sOL https://raw.githubusercontent.com/zen-browser/desktop/refs/heads/dev/LICENSE
-  vlicense LICENSE
+    curl --fail -sOL https://raw.githubusercontent.com/zen-browser/desktop/refs/heads/dev/LICENSE
+    vlicense LICENSE
 }
 

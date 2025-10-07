@@ -1,0 +1,21 @@
+# Template file for 'flat-remix-icewm-theme'
+pkgname=flat-remix-icewm-theme
+reverts="20222602_1"
+# Since version is not provided at upstream, we'll use its release date.
+version=2022.02.27
+revision=1
+build_style=fetch
+hostmakedepends="detox"
+short_desc="Flat-Remix based theme for IceWM"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/IamTheMasterRoy/IceWM-Themes"
+distfiles="${homepage}/releases/download/FlatRemixIceWMThemes/Flat-Remix.Ice.All.Variants.tar.gz"
+checksum=4787403096166b1936a57242c136047e79876bb574cee16166cc01358f9864f7
+repository=cereus-extra
+
+do_install() {
+	vmkdir usr/share/icewm/themes
+	vextract --no-strip-components -C "${DESTDIR}/usr/share/icewm/themes" Flat-Remix.Ice.All.Variants.tar.gz
+	detox -r "${DESTDIR}/usr/share/icewm/themes"
+}

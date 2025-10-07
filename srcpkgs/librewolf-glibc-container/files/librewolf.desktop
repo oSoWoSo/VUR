@@ -1,0 +1,30 @@
+[Desktop Entry]
+Type=Application
+Name=LibreWolf
+GenericName=Web Browser
+# Gnome and KDE 3 uses Comment.
+Comment=Web Browser
+StartupNotify=true
+Terminal=false
+Type=Application
+MimeType=application/json;application/pdf;application/rdf+xml;application/rss+xml;application/xhtml+xml;application/xhtml_xml;application/xml;image/gif;image/jpeg;image/png;image/webp;text/html;text/xml;x-scheme-handler/http;x-scheme-handler/https;
+Comment=LibreWolf Browser
+Categories=Network;WebBrowser;Security;
+StartupWMClass=librewolf-default
+Exec=voidnsrun -r /glibc /glibc/usr/lib/librewolf/librewolf %u
+Icon=librewolf
+
+Actions=new-window;new-private-window;safe-mode;preferences;
+
+[Desktop Action new-window]
+Name=New Window
+Exec=voidnsrun -r /glibc /glibc/usr/lib/librewolf/librewolf
+[Desktop Action new-private-window]
+Name=New Private Window
+Exec=voidnsrun -r /glibc /glibc/usr/lib/librewolf/librewolf --private-window %u
+[Desktop Action safe-mode]
+Name=Start in Safe Mode
+Exec=voidnsrun -r /glibc /glibc/usr/lib/librewolf/librewolf --safe-mode
+[Desktop Action preferences]
+Name=Show Preferences
+Exec=voidnsrun -r /glibc /glibc/usr/lib/librewolf/librewolf --preferences

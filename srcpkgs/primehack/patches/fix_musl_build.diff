@@ -1,0 +1,12 @@
+diff --git a/Source/Core/UICommon/DiscordPresence.h b/Source/Core/UICommon/DiscordPresence.h
+index 4e62833..4ff9d50 100644
+--- a/Source/Core/UICommon/DiscordPresence.h
++++ b/Source/Core/UICommon/DiscordPresence.h
+@@ -5,6 +5,7 @@
+ 
+ #include <functional>
+ #include <string>
++#include <cstdint>
+ 
+ namespace Discord
+ {

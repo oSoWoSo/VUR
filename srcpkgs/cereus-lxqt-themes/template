@@ -1,0 +1,18 @@
+# Template file for 'cereus-lxqt-themes'
+pkgname=cereus-lxqt-themes
+reverts="2023.01.30_1"
+version=0.1.0
+revision=1
+_theme_dir="usr/share/lxqt/themes"
+short_desc="Cereus Linux custom themes for LXQt desktop"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://codeberg.org/cereus-linux/cereus-lxqt-themes"
+distfiles="${homepage}/archive/${version}.tar.gz"
+checksum=8aeb9a6babbb77bd37ff3891d0db87071d6badf6cc08c97ee4c6c4cdcdbc3bb4
+repository=cereus-extra
+
+do_install() {
+	vmkdir ${_theme_dir}
+	vcopy Cereus"*" ${_theme_dir}/
+}

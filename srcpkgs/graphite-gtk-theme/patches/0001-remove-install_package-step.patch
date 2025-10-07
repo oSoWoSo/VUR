@@ -1,0 +1,26 @@
+From 91f78a835bd98f376451e8457d116b91eb325f87 Mon Sep 17 00:00:00 2001
+From: Kevin Figueroa <kfdevart@disroot.org>
+Date: Wed, 23 Jul 2025 12:59:17 -0400
+Subject: [PATCH] remove install_package step
+
+This step is not required for XBPS packaging since sassc is already in makedepends.
+---
+ install.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/install.sh b/install.sh
+index 9156613..3950013 100755
+--- a/install.sh
++++ b/install.sh
+@@ -1000,7 +1000,7 @@ else
+       echo -e "\nNeed root permission !"
+     fi
+   else
+-    install_package && sass_temp && gnome_shell_version && install_theme
++    sass_temp && gnome_shell_version && install_theme
+ 
+     if [[ "$libadwaita" == 'true' ]]; then
+       uninstall_link && link_theme
+-- 
+2.50.1
+

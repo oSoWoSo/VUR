@@ -1,0 +1,28 @@
+# Template file for 'mauikit'
+pkgname=mauikit
+version=4.0.2
+revision=1
+build_style=cmake
+hostmakedepends="extra-cmake-modules qt6-base-devel gettext"
+makedepends="kf6-kcoreaddons-devel kf6-ki18n-devel kf6-kirigami-devel
+ kf6-knotifications-devel kf6-knotifications-devel kf6-kwindowsystem-devel
+ mauiman-devel kf6-purpose-devel qt6-declarative-devel qt6-multimedia-devel
+ qt6-svg-devel"
+short_desc="Templated convergent controls and multi-platform utilities for Maui apps"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="LGPL-3.0-only"
+homepage="https://mauikit.org/"
+distfiles="${KDE_SITE}/maui/${pkgname}/${version}/${pkgname}-${version}.tar.xz"
+checksum=054dc0e15242ffa6bb9b8b25515cebfc9a02347b679f3907dcb80673ca93dd40
+repository=cereus-extra
+
+mauikit-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/cmake
+		vmove usr/include
+		vmove "usr/lib/*.so"
+	}
+}
+

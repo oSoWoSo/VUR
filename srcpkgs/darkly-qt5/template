@@ -1,0 +1,39 @@
+# Template file for 'darkly-qt5'
+pkgname=darkly-qt5
+version=0.5.23
+revision=1
+build_style=cmake
+configure_args="-DBUILD_QT6=OFF
+ -DWITH_DECORATIONS=OFF
+ -DBUILD_TESTING=OFF
+ -Wno-dev"
+hostmakedepends="extra-cmake-modules"
+makedepends="qt5-declarative-devel qt5-x11extras-devel kguiaddons-devel
+ kconfigwidgets-devel kwindowsystem-devel gettext-devel kiconthemes-devel
+ kcmutils-devel kirigami2-devel frameworkintegration-devel"
+depends="darkly-qt6"
+short_desc="Modern style for Qt5 applications"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Bali10050/Darkly"
+distfiles="${homepage}/archive/refs/tags/v${version}.tar.gz"
+checksum=a897784e4e43fe7947afe65fd91e796f98f8eec6beec7f94a04f3c102c5d5577
+repository=cereus-extra
+
+post_install() {
+	rm -rf ${DESTDIR}/usr/share
+}
+
+# Transitional dummy packages. These are going to be removed in a future update.
+lightly-qt5_package() {
+	metapackage=yes
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - transitional dummy package"
+}
+
+lightly-git_package() {
+	metapackage=yes
+	reverts="2023.12.29_4"
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - transitional dummy package"
+}

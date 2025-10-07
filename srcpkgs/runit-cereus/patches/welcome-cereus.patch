@@ -1,0 +1,13 @@
+diff --git a/1 b/1
+index 0bdba54..e8a8114 100755
+--- a/1
++++ b/1
+@@ -5,7 +5,7 @@ PATH=/usr/bin:/usr/sbin
+ 
+ . /etc/runit/functions
+ 
+-msg "Welcome to Void!"
++msg "Welcome to Cereus!"
+ 
+ [ -r /etc/rc.conf ] && . /etc/rc.conf
+ 

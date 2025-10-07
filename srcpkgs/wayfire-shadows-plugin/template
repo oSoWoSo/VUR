@@ -1,0 +1,19 @@
+# Template file for 'wayfire-shadows-plugin'
+pkgname=wayfire-shadows-plugin
+reverts=2025.03.04
+version=0.9.0
+revision=1
+build_style=meson
+hostmakedepends="pkg-config cmake"
+makedepends="wayfire-devel wf-config-devel"
+short_desc="Wayfire plugin that adds window shadows"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT"
+homepage="https://github.com/timgott/wayfire-shadows"
+distfiles="${homepage}/archive/refs/tags/v${version}.tar.gz"
+checksum=e339d61bd88b89fffcf320695de4935b5c06477bb6a81ed603cb845cad70f47e
+repository=cereus-extra
+
+post_install() {
+	vlicense LICENSE
+}

@@ -1,0 +1,14 @@
+# Template file for 'markdownpart'
+pkgname=markdownpart
+version=25.08.0
+revision=1
+build_style=cmake
+hostmakedepends="extra-cmake-modules gettext"
+makedepends="qt6-widgets kf6-ki18n-devel kf6-kparts-devel"
+short_desc="KPart for rendering Markdown content"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="LGPL-2.1-or-later"
+homepage="https://apps.kde.org/es/markdownpart/"
+distfiles="${KDE_SITE}/release-service/${version}/src/${pkgname}-${version}.tar.xz"
+checksum=b110d069a71bab5e54018b1c951963985609b979445f68f4d4818fdd0f6af6fd
+repository=cereus-extra

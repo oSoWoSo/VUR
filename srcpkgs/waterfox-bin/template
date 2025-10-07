@@ -1,0 +1,51 @@
+# Template file for 'waterfox-bin'
+# Reference was taken from https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=waterfox-bin
+pkgname=waterfox-bin
+_pkgname=${pkgname%-bin}
+version=6.6.4
+revision=1
+archs="x86_64"
+build_style=fetch
+depends="ffmpeg hicolor-icon-theme startup-notification libnotify libXt
+ mime-types"
+short_desc="Customizable privacy-conscious web browser (precompiled binaries)"
+maintainer="Kevin <kevin@disroot.org> Kevin Figueroa <kfdevart@disroot.org>"
+license="MPL-2.0"
+homepage="https://www.waterfox.net"
+changelog="${homepage}/docs/releases/${version}/"
+distfiles="https://cdn1.waterfox.net/${_pkgname}/releases/${version}/Linux_x86_64/${_pkgname}-${version}.tar.bz2"
+checksum=00504b044140ee25d8f65af650871c55486c34d7977f1d4ad1432c46e0d94f87
+replaces="waterfox-g4-bin>=0 waterfox-g5-bin>=0"
+repository=cereus-extra
+
+do_install() {
+	# Extract distfile to destdir
+	vmkdir "opt/${_pkgname}"
+	vextract -C "${DESTDIR}/opt/${_pkgname}" "${_pkgname}-${version}.tar.bz2"
+
+	# Install a symlink at /usr/bin
+	vmkdir usr/bin
+	ln -rfs "${DESTDIR}/opt/${_pkgname}/${_pkgname}" "${DESTDIR}/usr/bin/"
+
+    # Copy launcher
+	vinstall "${FILESDIR}/${_pkgname}.desktop" 0644 "usr/share/applications"
+
+	# Install the icons
+	for res in 16 32 48 64 128; do
+		vmkdir usr/share/icons/hicolor/${res}x${res}/apps
+		ln -rfs "${DESTDIR}/opt/${_pkgname}/browser/chrome/icons/default/default${res}.png" \
+			"${DESTDIR}/usr/share/icons/hicolor/${res}x${res}/apps/${_pkgname}.png"
+	done
+
+	# Add additional useful settings
+	vinstall "${FILESDIR}/vendor.js" 644 "opt/${_pkgname}/browser/defaults/preferences/"
+
+	# Disable automatic updates and update notifications
+	vinstall "${FILESDIR}/policies.json" 644 "opt/${_pkgname}/distribution/"
+}
+
+waterfox-g6-bin_package() {
+	metapackage=yes
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - transitional dummy package"
+}

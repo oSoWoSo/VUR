@@ -1,0 +1,20 @@
+# Template file for 'qelectrotech'
+pkgname=qelectrotech
+version=0.9
+revision=3
+build_style="qmake"
+hostmakedepends="pkg-config"
+makedepends="sqlite-devel kwidgetsaddons-devel kcoreaddons-devel qt5-svg-devel"
+depends="hicolor-icon-theme desktop-file-utils"
+short_desc="Electric diagram editor"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later"
+homepage="https://qelectrotech.org/"
+changelog="https://raw.githubusercontent.com/qelectrotech/qelectrotech-source-mirror/refs/heads/${version}/ChangeLog"
+distfiles="https://github.com/qelectrotech/qelectrotech-source-mirror/archive/refs/tags/${version}.tar.gz"
+checksum=4bfaa114b7b75cbacdd7e32612d07ff48776d5dc3c2543b850c79627c3710a7a
+repository=cereus-extra
+
+post_extract() {
+	vsed -i 's/gzip \-9n/gzip -9nf/' "man/compress_man_pages.sh"
+}

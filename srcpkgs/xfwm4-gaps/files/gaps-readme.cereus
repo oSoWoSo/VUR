@@ -1,0 +1,11 @@
+This package is patched to include window gaps support.
+
+Those patches will expose 3 new variables in the xfce4-settings-editor application. In the xfwm4 section, you’ll find tile_ratio, gaps_inner and gaps_outer.
+
+tile_ratio sets the percentage of screen width that the left tiled window(s) will use. The default value of 50 sets the width to 50% of the screen width ; that’s what Xfwm4 does by default.
+
+gaps_outer sets the gap space between desktop edges and window(s).
+
+gaps_inner sets the gap space between windows.
+
+For more information, see: https://www.tumfatig.net/2023/adding-variable-tiling-width-ratio-and-gaps-to-xfce-xfwm4/

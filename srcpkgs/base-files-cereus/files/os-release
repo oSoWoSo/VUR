@@ -1,0 +1,9 @@
+NAME="Cereus"
+ID="cereus"
+PRETTY_NAME="Cereus Linux"
+HOME_URL="https://cereus-linux.codeberg.page/"
+DOCUMENTATION_URL="https://codeberg.org/cereus-linux"
+LOGO="cereus-logo"
+ANSI_COLOR="0;38;2;71;128;97"
+
+DISTRIB_ID="cereus"

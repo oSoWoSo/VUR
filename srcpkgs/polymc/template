@@ -1,0 +1,29 @@
+# Template file for 'polymc'
+pkgname=polymc
+version=7.0
+revision=1
+build_style=cmake
+configure_args="-DLauncher_BUILD_PLATFORM=Void -DQT_MAJOR_VERSION=6 -DBUILD_TESTING=OFF -DUSE_QT6=ON"
+hostmakedepends="pkg-config extra-cmake-modules openjdk17 scdoc"
+makedepends="qt6-base-devel qt6-qt5compat-devel"
+depends="virtual?java-runtime qt6-svg qt6-imageformats"
+short_desc="Custom launcher for Minecraft that allows you to easily manage multiple installations of Minecraft at once"
+maintainer="RotaryBoot58 <petersoncraft20@proton.me>"
+license="GPL-3.0-or-later"
+homepage="https://polymc.org/"
+distfiles="https://github.com/PolyMC/PolyMC/releases/download/${version}/PolyMC-${version}.tar.gz"
+checksum=e08e9a25f87db7da422351d044b330e4b1a568f3adabc04c388dc9e4f60c4701
+
+case "$XBPS_TARGET_MACHINE" in
+	armv*) broken="https://github.com/MultiMC/MultiMC5/issues/2895";;
+esac
+
+pre_configure() {
+	. /etc/profile.d/jdk.sh
+}
+
+post_patch() {
+	vsed -i buildconfig/BuildConfig.cpp.in \
+		-e 's/+build\./_/'
+	rm -rf .git
+}

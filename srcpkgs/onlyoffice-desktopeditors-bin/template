@@ -1,0 +1,33 @@
+# Template file for 'onlyoffice-desktopeditors-bin'
+# Reference was taken from AUR: https://aur.archlinux.org/packages/onlyoffice-bin
+pkgname=onlyoffice-desktopeditors-bin
+_pkgname=${pkgname%-bin}
+version=9.1.0
+revision=1
+archs="x86_64"
+depends="curl xdg-utils dejavu-fonts-ttf liberation-fonts-ttf
+ gst-plugins-ugly1 desktop-file-utils hicolor-icon-theme"
+short_desc="Office suite with text, spreadsheet & presentation editors (precompiled)"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="AGPL-3.0-only"
+homepage="https://www.onlyoffice.com"
+changelog="https://github.com/ONLYOFFICE/DesktopEditors/blob/master/CHANGELOG.md"
+distfiles="https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/${_pkgname}_amd64.deb>${_pkgname}-${version}_amd64.deb"
+checksum=0f7e84ee16024c9f4bc3d5e707c9f13063090c946133e2be6ef8ae33dbaece19
+repository=cereus-extra
+nopie=yes
+
+skip_extraction="${_pkgname}-${version}_amd64.deb"
+
+do_install() {
+	vsrcextract -C "${DESTDIR}/" "${_pkgname}-${version}_amd64.deb"
+    # Fix document opening in desktop entry
+	vsed -i "s|${_pkgname} %U|${_pkgname} %F|g" "${DESTDIR}/usr/share/applications/${_pkgname}.desktop"
+    # vlicense's not required since deb package already ships license file in expected path
+}
+
+onlyoffice-desktopeditors_package() {
+	metapackage=yes
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - transitional dummy package"
+}

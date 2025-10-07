@@ -1,0 +1,18 @@
+# Template file for 'qterminal-cereus-colorscheme'
+pkgname=qterminal-cereus-colorscheme
+reverts="2022.09.23_1"
+version=0.1.0
+revision=1
+short_desc="QTerminal Cereus Linux custom color scheme"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://codeberg.org/cereus-linux/qterminal-colorschemes"
+distfiles="${homepage}/archive/${version}.tar.gz"
+checksum=f411af7ae7724b2db0fcd734407d2b2875b45ad7a7835d8ca0e9586329793696
+_themedir="usr/share/qtermwidget6/color-schemes"
+repository=cereus-extra
+
+do_install() {
+	vmkdir ${_themedir}
+	vinstall CereusDark.colorscheme 644 ${_themedir}/
+}

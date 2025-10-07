@@ -1,0 +1,23 @@
+# Template file for 'compfy'
+pkgname=compfy
+version=1.7.2
+revision=4
+build_style=meson
+configure_args="-Dwith_docs=true"
+hostmakedepends="pkg-config asciidoc"
+makedepends="MesaLib-devel dbus-devel libconfig-devel libev-devel pcre2-devel
+ pixman-devel xcb-util-image-devel xcb-util-renderutil-devel
+ libxdg-basedir-devel uthash libglvnd-devel"
+depends="desktop-file-utils xbps-triggers"
+short_desc="Picom-based compositor for X11 which provides animations and more"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT, MPL-2.0"
+homepage="https://github.com/allusive-dev/compfy"
+distfiles="${homepage}/archive/refs/tags/${version}.tar.gz"
+checksum=423a1aba7fedb85c38746b8e238ef4749c6598d676db939be0c1b05b53094e2b
+repository=cereus-extra
+
+post_install() {
+	for license in MIT MPL-2.0; do vlicense LICENSES/$license; done
+	vsconf compfy.sample.conf
+}

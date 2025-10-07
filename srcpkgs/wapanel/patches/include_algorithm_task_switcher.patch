@@ -1,0 +1,19 @@
+diff --git a/src/applets/task-switcher/task_switcher.cc b/src/applets/task-switcher/task_switcher.cc
+index efe633e..3c7f60a 100644
+--- a/src/applets/task-switcher/task_switcher.cc
++++ b/src/applets/task-switcher/task_switcher.cc
+@@ -9,6 +9,7 @@
+ #include <filesystem>
+ #include <gio/gdesktopappinfo.h>
+ #include <stdexcept>
++#include <algorithm>
+ 
+ namespace wapanel::applet {
+ 
+@@ -391,4 +392,4 @@ auto window_button::search_for_icon(std::string app_id) -> std::string {
+ 
+ 	return icon_name;
+ }
+-}
+\ No newline at end of file
++}

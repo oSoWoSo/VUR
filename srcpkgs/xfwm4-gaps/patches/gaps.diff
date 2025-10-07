@@ -1,0 +1,177 @@
+diff --git a/defaults/defaults b/defaults/defaults
+index 83e873ff6..b44afac5d 100644
+--- a/defaults/defaults
++++ b/defaults/defaults
+@@ -25,6 +25,8 @@ focus_new=true
+ frame_border_top=0
+ frame_opacity=100
+ full_width_title=true
++gaps_inner=0
++gaps_outer=0
+ horiz_scroll_opacity=false
+ inactive_opacity=100
+ maximized_offset=0
+@@ -58,6 +60,7 @@ snap_width=10
+ sync_to_vblank=false
+ theme=Default
+ tile_on_move=true
++tile_ratio=50
+ title_alignment=center
+ title_font=Sans Bold 9
+ title_horizontal_offset=0
+diff --git a/src/client.c b/src/client.c
+index 2b8506626..04a338d00 100644
+--- a/src/client.c
++++ b/src/client.c
+@@ -3292,56 +3292,63 @@ static gboolean
+ clientNewTileSize (Client *c, XWindowChanges *wc, GdkRectangle rect, tilePositionType tile)
+ {
+     GdkRectangle full = clientMaxSpaceForGeometry (c, rect);
++    ScreenInfo *screen_info;
++    int gi, go, tr;
++
++    screen_info = c->screen_info;
++    gi = screen_info->params->gaps_inner; /* Gaps between windows */
++    go = screen_info->params->gaps_outer; /* Gaps between screen border and windows */
++    tr = screen_info->params->tile_ratio; /* Left windows width percentage */
+ 
+     switch (tile)
+     {
+         case TILE_UP:
+-            wc->x = full.x + frameExtentLeft (c);
+-            wc->y = full.y + frameExtentTop (c);
+-            wc->width = full.width - frameExtentLeft (c) - frameExtentRight (c);
+-            wc->height = full.height / 2 - frameExtentTop (c) - frameExtentBottom (c);
++            wc->x = full.x + frameExtentLeft (c) + go;
++            wc->y = full.y + frameExtentTop (c) + go;
++            wc->width = full.width - frameExtentLeft (c) - frameExtentRight (c) - go * 2;
++            wc->height = full.height / 2 - frameExtentTop (c) - frameExtentBottom (c) - go - gi;
+             break;
+         case TILE_DOWN:
+-            wc->x = full.x + frameExtentLeft (c);
+-            wc->y = full.y + full.height / 2 + frameExtentTop (c);
+-            wc->width = full.width - frameExtentLeft (c) - frameExtentRight (c);
+-            wc->height = full.height - full.height / 2 - frameExtentTop (c) - frameExtentBottom (c);
++            wc->x = full.x + frameExtentLeft (c) + go;
++            wc->y = full.y + full.height / 2 + frameExtentTop (c) + gi;
++            wc->width = full.width - frameExtentLeft (c) - frameExtentRight (c) - go * 2;
++            wc->height = full.height - full.height / 2 - frameExtentTop (c) - frameExtentBottom (c) - go - gi;
+             break;
+         case TILE_LEFT:
+-            wc->x = full.x + frameExtentLeft (c);
+-            wc->y = full.y + frameExtentTop (c);
+-            wc->width = full.width / 2 - frameExtentLeft (c) - frameExtentRight (c);
+-            wc->height = full.height - frameExtentTop (c) - frameExtentBottom (c);
++            wc->x = full.x + frameExtentLeft (c) + go;
++            wc->y = full.y + frameExtentTop (c) + go;
++            wc->width = full.width * tr / 100 - frameExtentLeft (c) - frameExtentRight (c) - go - gi;
++            wc->height = full.height - frameExtentTop (c) - frameExtentBottom (c) - go * 2;
+             break;
+         case TILE_RIGHT:
+-            wc->x = full.x + full.width / 2 + frameExtentLeft (c);
+-            wc->y = full.y + frameExtentTop (c);
+-            wc->width = full.width - full.width / 2 - frameExtentLeft (c) - frameExtentRight (c);
+-            wc->height = full.height - frameExtentTop (c) - frameExtentBottom (c);
++            wc->x = full.x + full.width * tr / 100 + frameExtentLeft (c) + gi;
++            wc->y = full.y + frameExtentTop (c) + go;
++            wc->width = full.width - full.width * tr / 100 - frameExtentLeft (c) - frameExtentRight (c)  - go - gi;
++            wc->height = full.height - frameExtentTop (c) - frameExtentBottom (c) - go * 2;
+             break;
+         case TILE_DOWN_LEFT:
+-            wc->x = full.x + frameExtentLeft (c);
+-            wc->y = full.y + full.height / 2 + frameExtentTop (c);
+-            wc->width = full.width / 2 - frameExtentLeft (c) - frameExtentRight (c);
+-            wc->height = full.height - full.height / 2 - frameExtentTop (c) - frameExtentBottom (c);
++            wc->x = full.x + frameExtentLeft (c) + go;
++            wc->y = full.y + full.height / 2 + frameExtentTop (c) + gi;
++            wc->width = full.width * tr / 100 - frameExtentLeft (c) - frameExtentRight (c) - go - gi;
++            wc->height = full.height - full.height / 2 - frameExtentTop (c) - frameExtentBottom (c) - go - gi;
+             break;
+         case TILE_DOWN_RIGHT:
+-            wc->x = full.x + full.width /2 + frameExtentLeft (c);
+-            wc->y = full.y + full.height / 2 + frameExtentTop (c);
+-            wc->width = full.width - full.width / 2 - frameExtentLeft (c) - frameExtentRight (c);
+-            wc->height = full.height - full.height / 2 - frameExtentTop (c) - frameExtentBottom (c);
++            wc->x = full.x + full.width * tr / 100 + frameExtentLeft (c) + gi;
++            wc->y = full.y + full.height / 2 + frameExtentTop (c) + gi;
++            wc->width = full.width - full.width * tr / 100 - frameExtentLeft (c) - frameExtentRight (c) - go - gi;
++            wc->height = full.height - full.height / 2 - frameExtentTop (c) - frameExtentBottom (c) - go - gi;
+             break;
+         case TILE_UP_LEFT:
+-            wc->x = full.x + frameExtentLeft (c);
+-            wc->y = full.y + frameExtentTop (c);
+-            wc->width = full.width / 2 - frameExtentLeft (c) - frameExtentRight (c);
+-            wc->height = full.height / 2 - frameExtentTop (c) - frameExtentBottom (c);
++            wc->x = full.x + frameExtentLeft (c) + go;
++            wc->y = full.y + frameExtentTop (c) + go;
++            wc->width = full.width * tr / 100 - frameExtentLeft (c) - frameExtentRight (c) - go - gi;
++            wc->height = full.height / 2 - frameExtentTop (c) - frameExtentBottom (c) - go - gi;
+             break;
+         case TILE_UP_RIGHT:
+-            wc->x = full.x + full.width /2 + frameExtentLeft (c);
+-            wc->y = full.y + frameExtentTop (c);
+-            wc->width = full.width - full.width / 2 - frameExtentLeft (c) - frameExtentRight (c);
+-            wc->height = full.height / 2 - frameExtentTop (c) - frameExtentBottom (c);
++            wc->x = full.x + full.width * tr / 100 + frameExtentLeft (c) + gi;
++            wc->y = full.y + frameExtentTop (c) + go;
++            wc->width = full.width - full.width * tr / 100 - frameExtentLeft (c) - frameExtentRight (c) - go - gi;
++            wc->height = full.height / 2 - frameExtentTop (c) - frameExtentBottom (c) - go - gi;
+             break;
+         default:
+             return FALSE;
+diff --git a/src/settings.c b/src/settings.c
+index 8fa35cde5..728a91a2a 100644
+--- a/src/settings.c
++++ b/src/settings.c
+@@ -549,6 +549,13 @@ loadTheme (ScreenInfo *screen_info, Settings *rc)
+     screen_info->params->title_horizontal_offset =
+         getIntValue ("title_horizontal_offset", rc);
+ 
++    screen_info->params->gaps_inner =
++        getIntValue ("gaps_inner", rc);
++    screen_info->params->gaps_outer =
++        getIntValue ("gaps_outer", rc);
++    screen_info->params->tile_ratio =
++        getIntValue ("tile_ratio", rc);
++
+     g_free (theme);
+ }
+ 
+@@ -693,6 +700,8 @@ loadSettings (ScreenInfo *screen_info)
+         {"frame_opacity", NULL, G_TYPE_INT, TRUE},
+         {"frame_border_top", NULL, G_TYPE_INT, TRUE},
+         {"full_width_title", NULL, G_TYPE_BOOLEAN, TRUE},
++	{"gaps_inner", NULL, G_TYPE_INT, TRUE},
++	{"gaps_outer", NULL, G_TYPE_INT, TRUE},
+         {"horiz_scroll_opacity", NULL, G_TYPE_BOOLEAN, FALSE},
+         {"inactive_opacity", NULL, G_TYPE_INT, TRUE},
+         {"margin_bottom", NULL, G_TYPE_INT, FALSE},
+@@ -729,6 +738,7 @@ loadSettings (ScreenInfo *screen_info)
+         {"vblank_mode", NULL, G_TYPE_STRING, FALSE},
+         {"theme", NULL, G_TYPE_STRING, TRUE},
+         {"tile_on_move", NULL, G_TYPE_BOOLEAN, TRUE},
++	{"tile_ratio", NULL, G_TYPE_INT, TRUE},
+         {"title_alignment", NULL, G_TYPE_STRING, TRUE},
+         {"title_font", NULL, G_TYPE_STRING, FALSE},
+         {"title_horizontal_offset", NULL, G_TYPE_INT, TRUE},
+diff --git a/src/settings.h b/src/settings.h
+index 612ee2e8a..e313730dd 100644
+--- a/src/settings.h
++++ b/src/settings.h
+@@ -190,6 +190,8 @@ struct _XfwmParams
+     int focus_delay;
+     int frame_opacity;
+     int frame_border_top;
++    int gaps_inner;
++    int gaps_outer;
+     int inactive_opacity;
+     int maximized_offset;
+     int move_opacity;
+@@ -204,6 +206,7 @@ struct _XfwmParams
+     int shadow_delta_y;
+     int shadow_opacity;
+     int snap_width;
++    int tile_ratio;
+     int title_alignment;
+     int title_horizontal_offset;
+     int title_shadow[2];

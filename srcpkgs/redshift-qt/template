@@ -1,0 +1,22 @@
+# Template file for 'redshift-qt'
+pkgname=redshift-qt
+version=0.6
+revision=3
+build_style="qmake"
+build_helper="qmake6"
+hostmakedepends="qt6-base-devel"
+makedepends="qt6-gui qt6-widgets"
+depends="redshift"
+short_desc="Rewrite of redshift-gtk with C++/Qt"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT"
+homepage="https://github.com/Chemrat/redshift-qt"
+distfiles="${homepage}/archive/v${version}.tar.gz"
+checksum=6867460fe4e3de0883623e469c5324b3311e9c3dff1f669a34be7d3cb1b7702c
+repository=cereus-extra
+
+do_install() {
+	vbin ${pkgname}
+	vinstall data/${pkgname}.desktop 644 usr/share/applications
+	vlicense COPYING
+}

@@ -1,0 +1,30 @@
+# Template file for 'lxqt-minimal'
+pkgname=lxqt-minimal
+version=2.2.0
+revision=1
+metapackage=yes
+depends="
+	lxqt-about>=${version}
+	lxqt-admin>=${version}
+	lxqt-config>=${version}
+	lxqt-globalkeys>=${version}
+	lxqt-openssh-askpass>=${version}
+	lxqt-panel>=${version}
+	lxqt-policykit>=${version}
+	lxqt-powermanagement>=${version}
+	lxqt-qtplugin>=${version}
+	lxqt-qtplugin-legacy
+	lxqt-runner>=${version}
+	lxqt-session>=${version}
+	lxqt-sudo>=${version}
+	lxqt-themes>=${version}
+	xdg-desktop-portal-lxqt
+	xdg-utils
+	elogind
+	upower"
+short_desc="LXQt minimal meta-package"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="BSD-2-Clause" # Suppress xlint warning: vlicense
+homepage="https://lxqt-project.org"
+replaces="lxqt-cereus>=0 lxqt>=0"
+repository=cereus-extra

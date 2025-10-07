@@ -1,0 +1,15 @@
+# Template file for 'void-unofficial-repo-66'
+pkgname=void-unofficial-repo-66
+version=4
+revision=1
+build_style=meta
+short_desc="Void Linux drop-in file for the **unofficial** 66 repository"
+maintainer="mobinmob <mobinmob@disroot.org>"
+license="Public Domain"
+homepage="https://codeberg.org/mobinmob/66-voidlinux"
+
+do_install() {
+	vmkdir usr/share/xbps.d
+	echo "repository=https://www.avyssos.eu/repos/voidlinux/66" > \
+	"${DESTDIR}"/usr/share/xbps.d/49-unofficial-repository-66.conf
+}

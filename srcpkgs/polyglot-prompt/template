@@ -1,0 +1,18 @@
+# Template file for 'polyglot-prompt'
+pkgname=polyglot-prompt
+version=1.14.0
+revision=2
+short_desc="Color, ASCII-only Git prompt for many shells"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT"
+homepage="https://github.com/agkozak/polyglot"
+distfiles="${homepage}/archive/refs/tags/v${version}.tar.gz"
+checksum=c13db840ffd8b462d29f0241750c5e22b27ba6c97c8d54be195c4eddc9fe702a
+repository=cereus-extra
+
+do_install() {
+	vinstall polyglot.sh 644 "usr/share/polyglot-prompt"
+	vdoc README.md
+	vcopy img "usr/share/doc/${pkgname}/"
+	vlicense LICENSE
+}

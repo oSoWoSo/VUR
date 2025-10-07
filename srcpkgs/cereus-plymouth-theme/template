@@ -1,0 +1,19 @@
+# Template file for 'cereus-plymouth-theme'
+pkgname=cereus-plymouth-theme
+reverts="2023.01.29_2"
+version=0.1.0
+revision=1
+depends="plymouth"
+_themedir="usr/share/plymouth/themes/cereus_simply"
+short_desc="Simple Plymouth theme for Cereus Linux"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://codeberg.org/cereus-linux/plymouth-theme"
+distfiles="${homepage}/archive/${version}.tar.gz"
+checksum=861c3b43b21045390d26a6b6b8333464d2830e6f4a0a5b3d0a411e84d250a9cb
+repository=cereus-core
+
+do_install() {
+	vmkdir ${_themedir}
+	vcopy * ${_themedir}
+}

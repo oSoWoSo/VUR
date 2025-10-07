@@ -1,0 +1,13 @@
+diff --git a/data/pasystray.desktop b/data/pasystray.desktop
+index c48e124..61d3afb 100644
+--- a/data/pasystray.desktop
++++ b/data/pasystray.desktop
+@@ -3,7 +3,7 @@ Version=1.0
+ Name=PulseAudio System Tray
+ GenericName=
+ Comment=An Applet for PulseAudio
+-Exec=pasystray
++Exec=sh -c 'pasystray --notify=source --notify=sink'
+ Icon=pasystray
+ StartupNotify=true
+ Type=Application

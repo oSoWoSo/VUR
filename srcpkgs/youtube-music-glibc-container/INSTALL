@@ -1,0 +1,25 @@
+# INSTALL
+# youtube-music-bin setup script for Cereus/Void Musl
+
+case "$ACTION" in
+post)
+    if [ "$UPDATE" = "yes" ]; then
+        xchroot /glibc xbps-install -Syu youtube-music-bin
+
+	# Ensure that xchroot has unmounted all binds
+        umount -R "glibc/dev" "glibc/etc/resolv.conf" "glibc/proc" "glibc/sys"
+
+    else
+        # Enter via chroot to container and install the package
+        # This is necessary, because through voidnsrun it will not install automatically its dependencies, as the host already has them.
+        xchroot /glibc xbps-install -Syf youtube-music-bin
+
+        # Install fonts and dependencies
+        xchroot /glibc xbps-install -y freetype fontconfig libXft xorg-fonts fonts-roboto-ttf Graphite-gtk-theme-black
+
+        # Ensure that xchroot has unmounted all binds
+        umount -R "glibc/dev" "glibc/etc/resolv.conf" "glibc/proc" "glibc/sys"
+    fi
+    ;;
+
+esac

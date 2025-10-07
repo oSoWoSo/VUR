@@ -1,0 +1,31 @@
+# Template file for 'freetube-bin'
+pkgname=freetube-bin
+version=0.23.12
+revision=1
+archs="x86_64"
+build_style=fetch
+depends="liberation-fonts-ttf"
+short_desc="Open Source YouTube app for privacy (precompiled binaries)"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="AGPL-3.0-or-later"
+homepage="https://freetubeapp.io"
+changelog="https://github.com/FreeTubeApp/FreeTube/releases/tag/v${version}"
+#https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/${pkgname%-bin}_0.23.6_beta_amd64.deb
+distfiles="https://github.com/FreeTubeApp/Freetube/releases/download/v${version}-beta/${pkgname%-bin}_${version}_beta_amd64.deb
+ https://github.com/FreeTubeApp/FreeTube/blob/v${version}-beta/LICENSE"
+checksum="a330ec57bf96822fd4bd8a2675a00e919c932adefe04a09eda1ba8b9d79e3046
+ 4d72b225ea1d033236b1cac8ede7cc3337924406a54256aa3129fff1b9f7a436"
+nopie=yes
+repository=cereus-extra
+
+do_install() {
+	vextract -C "${DESTDIR}" "${pkgname%-bin}_${version}_beta_amd64.deb"
+	vbin ${FILESDIR}/freetube.sh freetube
+	vlicense LICENSE
+}
+
+freetube_package() {
+	metapackage=yes
+	depends="freetube-bin"
+	short_desc+=" - transitional dummy package"
+}

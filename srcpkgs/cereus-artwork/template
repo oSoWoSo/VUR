@@ -1,0 +1,62 @@
+# Template file for 'cereus-artwork'
+pkgname=cereus-artwork
+reverts="2023.01.31_2 2023.01.31_1"
+version=0.1.0
+revision=1
+_wallpaperdir="usr/share/backgrounds"
+_calamaresdir="etc/calamares/branding/cereus"
+_icondir="usr/share/icons/hicolor"
+short_desc="Cereus Linux artwork"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="CC-BY-SA-4.0"
+homepage="https://codeberg.org/cereus-linux/artwork"
+distfiles="${homepage}/archive/${version}.tar.gz"
+checksum=e6921e00c3da02b653f568aaecb4d0179a484368dac2ffe127abeecce2873ae4
+repository=cereus-core
+
+do_install() {
+	# Install wallpapers
+	for wall in wallpapers/*.{jpg,png,svg}; do
+		case ${wall} in
+			*.jpg|*.png) _destpath="${_wallpaperdir}" ;;
+			*.svg) _destpath="${_wallpaperdir}/svg" ;;
+		esac
+		vinstall "${wall}" 0644 "${_destpath}"
+	done
+
+	# Install icons
+	for logo in cereus-logo{,-dark,-light}; do
+		vinstall Branding/${logo}-512x512.svg 0644 \
+			"${_icondir}/scalable/apps" ${logo}.svg
+	done
+
+	for res in 16 22 32 48 64 128 256 512; do
+		for logo in cereus-logo{,-dark,-light}; do
+			vinstall Branding/${logo}-${res}x${res}.png 0644 \
+				"${_icondir}/${res}x${res}/apps" ${logo}.png
+		done
+	done
+
+	# Install logos
+	for f in Branding/*.{svg,png}; do
+		vinstall "${f}" 0644 "usr/share/cereus-artwork"
+	done
+
+	# Calamares branding
+	vinstall calamares-branding/show.qml 0644 ${_calamaresdir}
+	vcopy calamares-branding/"*".png ${_calamaresdir}
+	vinstall Branding/cereus-logo-512x512.png 0644 ${_calamaresdir} logo.png
+	vinstall calamares-branding/branding.desc 0644 ${_calamaresdir}
+
+	# Install license
+	vlicense LICENSE
+}
+
+calamares-branding_package() {
+	short_desc="Calamares branding for Cereus Linux"
+	reverts="2023.01.30_2 2023.01.31_1"
+	pkg_install() {
+		vmove ${_calamaresdir}
+		vlicense LICENSE
+	}
+}

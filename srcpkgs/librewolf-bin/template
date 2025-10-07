@@ -1,0 +1,31 @@
+# Template file for 'librewolf-bin'
+pkgname=librewolf-bin
+_pkgname=${pkgname%-bin}
+version=143.0.4
+revision=1
+_pkgrel=1
+archs="x86_64 i686"
+build_style="fetch"
+short_desc="Firefox fork focused on privacy, security and freedom (precompiled)"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MPL-2.0"
+homepage="https://codeberg.org/librewolf"
+distfiles="https://gitlab.com/api/v4/projects/44042130/packages/generic/${_pkgname}/${version}-${_pkgrel}/${_pkgname}-${version}-${_pkgrel}-linux-${XBPS_TARGET_MACHINE}-deb.deb"
+conflicts="librewolf"
+repository=cereus-extra
+
+if [ "$XBPS_TARGET_MACHINE" = "x86_64" ]; then
+	checksum=5592b9d039be858a1521872ab68ab14a2852ca077c5e3d283fe9723449b0d73e
+elif [ "$XBPS_TARGET_MACHINE" = "i686" ]; then
+	checksum=6fed441417882dbd60160e6325decc302bb51c716e1bef8def8e6231aace39ee
+fi
+
+do_install() {
+	vextract -C ${DESTDIR} ${_pkgname}-${version}-${_pkgrel}-linux-${XBPS_TARGET_MACHINE}-deb.deb
+	# xbps-src doesn't allow ELF files in /usr/share
+	mv ${DESTDIR}/usr/share/${_pkgname} ${DESTDIR}/usr/lib
+	# recreate symlink
+	ln -frs ${DESTDIR}/usr/lib/${_pkgname}/${_pkgname} ${DESTDIR}/usr/bin
+	# correct path in launcher
+	vsed -i 's|usr/share|usr/lib|g' ${DESTDIR}/usr/share/applications/${_pkgname}.desktop
+}

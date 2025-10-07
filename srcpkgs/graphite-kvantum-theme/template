@@ -1,0 +1,98 @@
+# Template file for 'graphite-kvantum-theme'
+pkgname=graphite-kvantum-theme
+version=1.1.1
+revision=2
+metapackage=yes
+depends="
+ graphite-kvantum-theme-black
+ graphite-kvantum-theme-dark
+ graphite-kvantum-theme-light
+ graphite-kvantum-theme-nord-dark
+ graphite-kvantum-theme-nord-light"
+short_desc="Material design inspired Kvantum theme"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://codeberg.org/kf_art/graphite-kvantum-colors/"
+distfiles="${homepage}/archive/refs/tags/${version}.tar.gz"
+checksum=357a5f655e7eb4bbecedd1956594457b36cbf8672530c8d170c09a8ffc90bd12
+_kvantumdir="usr/share/Kvantum"
+_colors="blue green orange pink purple red teal yellow"
+repository=cereus-extra
+
+_install_variant() {
+	_variant="$1"
+	vmkdir "${_kvantumdir}"
+	cp -a ${_variant}/* ${PKGDESTDIR}/${_kvantumdir}
+}
+
+graphite-kvantum-theme-black_package() {
+	short_desc+=" - black variant"
+	pkg_install() {
+		_install_variant black
+	}
+}
+
+graphite-kvantum-theme-dark_package() {
+	short_desc+=" - dark variant"
+	pkg_install() {
+		_install_variant dark
+	}
+}
+
+graphite-kvantum-theme-light_package() {
+	short_desc+=" - light variant"
+	pkg_install() {
+		_install_variant light
+	}
+}
+
+graphite-kvantum-theme-nord-dark_package() {
+	short_desc+=" - nord dark variant"
+	pkg_install() {
+		_install_variant Nord-dark
+	}
+}
+
+graphite-kvantum-theme-nord-light_package() {
+	short_desc+=" - nord light variant"
+	pkg_install() {
+		_install_variant Nord-light
+	}
+}
+
+# Transitional dummy packages. These will be removed in a future update.
+Graphite-kvantum-theme_package() {
+	short_desc+=" - (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-${version}_${revision}"
+}
+
+Graphite-kvantum-theme-black_package() {
+	short_desc+=" - black variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-black-${version}_${revision}"
+}
+
+Graphite-kvantum-theme-dark_package() {
+	short_desc+=" - dark variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-dark-${version}_${revision}"
+}
+
+Graphite-kvantum-theme-light_package() {
+	short_desc+=" - light variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-light-${version}_${revision}"
+}
+
+Graphite-kvantum-theme-Nord-dark_package() {
+	short_desc+=" - nord dark variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-nord-dark-${version}_${revision}"
+}
+
+Graphite-kvantum-theme-Nord-light_package() {
+	short_desc+=" - nord light variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-nord-light-${version}_${revision}"
+}

@@ -1,0 +1,24 @@
+# Template file for 'heroic-bin'
+pkgname=heroic-bin
+version=2.18.1
+revision=1
+archs="x86_64"
+depends="fuse gawk zstd vulkan-loader"
+short_desc="Native launcher for GOG, Amazon and Epic Games (precompiled binaries)"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-only"
+homepage="https://heroicgameslauncher.com"
+changelog="https://github.com/releases/tag/v${version}"
+distfiles="https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v${version}/Heroic-${version}-linux-amd64.deb"
+checksum=4f696b7593107a90ed3ff947a4b1e0dbf1734ba41cbcb8f366559fe963c43fad
+repository=cereus-extra
+nopie=yes
+
+skiprdeps="/opt/Heroic/resources/app.asar.unpacked/build/bin/arm64/linux/comet
+ /opt/Heroic/resources/app.asar.unpacked/build/bin/arm64/linux/vulkan-helper"
+skip_extraction="Heroic-${version}-linux-amd64.deb"
+
+do_install() {
+	vsrcextract -C "${DESTDIR}/" Heroic-${version}-linux-amd64.deb
+	vbin "${FILESDIR}/heroic.sh" heroic
+}

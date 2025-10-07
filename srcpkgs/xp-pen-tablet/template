@@ -1,0 +1,27 @@
+# Template file for 'xp-pen-tablet'
+pkgname=xp-pen-tablet
+version=4.0.7.250117
+revision=1
+archs="x86_64"
+short_desc="XP-Pen Official Linux utility"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+conf_files="/usr/lib/pentablet/conf/xppen/config.xml"
+license="custom:Proprietary"
+homepage="https://www.xp-pen.com/download/index.html"
+distfiles="https://www.xp-pen.com/download/file.html?id=3665&pid=1211&ext=deb>XPPenLinux${version}.deb"
+checksum=3d6434f23f9c9dcad0c35bab3cf123175163a2b82556c5b552387ae671669283
+repository=nonfree
+nopie=yes
+
+do_install() {
+	vsrcextract -C "${DESTDIR}" XPPenLinux${version}.deb
+	mv "${DESTDIR}/lib/udev" "${DESTDIR}/usr/"
+
+	# Use an alternative launch script for PATH
+	vbin ${FILESDIR}/pentablet
+
+	# Install license.
+	for license in EULA ThirdPartyLibraries.html; do
+		vlicense ${DESTDIR}/usr/lib/pentablet/doc/$license
+	done
+}

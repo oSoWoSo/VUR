@@ -1,0 +1,19 @@
+diff --git a/voidnsundo.c b/voidnsundo.c
+index 9639d51..0731cd3 100644
+--- a/voidnsundo.c
++++ b/voidnsundo.c
+@@ -12,6 +12,7 @@
+ #include <sys/socket.h>
+ #include <sys/un.h>
+ #include <linux/limits.h>
++#include <sys/stat.h>
+ 
+ #include "config.h"
+ #include "utils.h"
+@@ -124,4 +125,4 @@ end:
+         close(sock_fd);
+ 
+     return exit_code;
+-}
+\ No newline at end of file
++}

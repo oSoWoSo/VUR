@@ -1,0 +1,73 @@
+From 7c69f54de40fa8bd6e699a1e70161bcc2e60bb84 Mon Sep 17 00:00:00 2001
+From: Simon Quigley <simon@tsimonq2.net>
+Date: Sat, 19 Oct 2024 14:02:07 -0500
+Subject: [PATCH] Port to Qt 6
+
+---
+ README.md       | 2 +-
+ redshift-qt.1   | 2 +-
+ redshift-qt.pro | 2 +-
+ systemtray.cpp  | 4 ++--
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/README.md b/README.md
+index a68aae4..e47e45c 100644
+--- a/README.md
++++ b/README.md
+@@ -13,7 +13,7 @@ redshift icons are from redshift project: https://github.com/jonls/redshift
+ 
+ * POSIX signals
+ * Redshift in $PATH
+-* Qt5
++* Qt 6
+ 
+ ## Installation
+ ### Gentoo
+diff --git a/redshift-qt.1 b/redshift-qt.1
+index 6f0a932..fe287a6 100644
+--- a/redshift-qt.1
++++ b/redshift-qt.1
+@@ -2,7 +2,7 @@
+ .\" Contact valeriy.malov@example.com to correct errors or typos.
+ .TH man 8 "8 Jun 2020" "0.6" "redshift-qt man page"
+ .SH NAME
+-redshift-qt \- Adjusts the color temperature of your screen with Qt5 integration
++redshift-qt \- Adjusts the color temperature of your screen with Qt 6 integration
+ .SH SYNOPSIS
+ redshift-qt [OPTIONS]
+ .SH DESCRIPTION
+diff --git a/redshift-qt.pro b/redshift-qt.pro
+index 3562449..12ae98e 100644
+--- a/redshift-qt.pro
++++ b/redshift-qt.pro
+@@ -6,7 +6,7 @@
+ 
+ QT       += core gui widgets
+ 
+-QMAKE_CXXFLAGS += -std=c++11
++QMAKE_CXXFLAGS += -std=c++17
+ 
+ TARGET = redshift-qt
+ TEMPLATE = app
+diff --git a/systemtray.cpp b/systemtray.cpp
+index af74673..37e792a 100644
+--- a/systemtray.cpp
++++ b/systemtray.cpp
+@@ -169,12 +169,12 @@ void SystemTray::ToggleRedshift(bool enable)
+     _suspendMenu->setChecked(!enable);
+     setIcon(enable ? _iconEnabled : _iconDisabled);
+     qInfo() << "Redshift status change: " << (enable ? "enabled" : "disabled");
+-    kill(static_cast<pid_t>(_redshiftProcess->pid()), SIGUSR1);
++    kill(static_cast<pid_t>(_redshiftProcess->processId()), SIGUSR1);
+ }
+ 
+ void SystemTray::StopRedshift()
+ {
+-    if (_redshiftProcess && _redshiftProcess->pid())
++    if (_redshiftProcess && _redshiftProcess->processId())
+     {
+         _warnOnRedshiftQuit = false;
+         _redshiftProcess->terminate();
+-- 
+2.49.0
+

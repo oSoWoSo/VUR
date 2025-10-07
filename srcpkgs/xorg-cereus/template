@@ -1,0 +1,11 @@
+# Template file for 'xorg-cereus'
+pkgname=xorg-cereus
+version=7.6
+revision=6
+metapackage=yes
+depends="xorg-fonts xorg-server xorg-apps xorg-input-drivers xorg-video-drivers-cereus"
+short_desc="X.org meta-package"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="Public Domain"
+homepage="https://www.x.org/wiki/"
+repository="cereus-core"

@@ -1,0 +1,149 @@
+# Template file for 'reversal-icon-theme'
+pkgname=reversal-icon-theme
+version=2025.06.04
+revision=1
+_commit="d1ea985578ead2e44027a10a09a2be3b37dcd19e"
+metapackage=yes
+depends="
+ reversal-icon-theme-yellow
+ reversal-icon-theme-blue
+ reversal-icon-theme-lightblue
+ reversal-icon-theme-green
+ reversal-icon-theme-purple
+ reversal-icon-theme-brown
+ reversal-icon-theme-grey
+ reversal-icon-theme-red
+ reversal-icon-theme-black
+ reversal-icon-theme-orange
+ reversal-icon-theme-pink
+ reversal-icon-theme-cyan"
+short_desc="Colorful Design Rectangle icon theme for Linux desktops"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/yeyushengfan258/Reversal-icon-theme"
+distfiles="${homepage}/archive/${_commit}.tar.gz"
+checksum=402965cfb71915f5e3f6e6959ac7acde3f752cb670e85e054fa06275a9f0fa8d
+_icondir="usr/share/icons"
+repository=cereus-extra
+
+post_patch() {
+	# There is already a xbps trigger for this
+	sed -i 's/gtk-update-icon-cache.*//g' install.sh
+}
+
+do_install() {
+	vmkdir "${_icondir}"
+	./install.sh -t all -d "${DESTDIR}/${_icondir}"
+}
+
+reversal-icon-theme-yellow_package() {
+	short_desc+=" - yellow variant"
+	depends="hicolor-icon-theme breeze-icons adwaita-icon-theme"
+	nostrip=yes
+	pkg_install() {
+		for bright in "" -dark; do
+			vmove usr/share/icons/Reversal${bright}
+			vsed -i 's|Name=.*|Name=Reversal-yellow'"${bright}"'|g' "${PKGDESTDIR}/${_icondir}/Reversal${bright}/index.theme"
+			rename Reversal Reversal-yellow "${PKGDESTDIR}/${_icondir}/Reversal${bright}"
+		done
+	}
+}
+
+reversal-icon-theme-blue_package() {
+	short_desc+=" - blue variant"
+	depends="hicolor-icon-theme breeze-icons adwaita-icon-theme"
+	nostrip=yes
+	pkg_install() {
+		vmove usr/share/icons/Reversal-blue"*"
+	}
+}
+
+reversal-icon-theme-green_package() {
+	short_desc+=" - green variant"
+	depends="hicolor-icon-theme breeze-icons adwaita-icon-theme"
+	nostrip=yes
+	pkg_install() {
+		vmove usr/share/icons/Reversal-green"*"
+	}
+}
+
+reversal-icon-theme-purple_package() {
+	short_desc+=" - purple variant"
+	depends="hicolor-icon-theme breeze-icons adwaita-icon-theme"
+	nostrip=yes
+	pkg_install() {
+		vmove usr/share/icons/Reversal-purple"*"
+	}
+}
+
+reversal-icon-theme-brown_package() {
+	short_desc+=" - brown variant"
+	depends="hicolor-icon-theme breeze-icons adwaita-icon-theme"
+	nostrip=yes
+	pkg_install() {
+		vmove usr/share/icons/Reversal-brown"*"
+	}
+}
+
+reversal-icon-theme-grey_package() {
+	short_desc+=" - grey variant"
+	depends="hicolor-icon-theme breeze-icons adwaita-icon-theme"
+	nostrip=yes
+	pkg_install() {
+		vmove usr/share/icons/Reversal-grey"*"
+	}
+}
+
+reversal-icon-theme-red_package() {
+	short_desc+=" - red variant"
+	depends="hicolor-icon-theme breeze-icons adwaita-icon-theme"
+	nostrip=yes
+	pkg_install() {
+		vmove usr/share/icons/Reversal-red"*"
+	}
+}
+
+reversal-icon-theme-black_package() {
+	short_desc+=" - black variant"
+	depends="hicolor-icon-theme breeze-icons adwaita-icon-theme"
+	nostrip=yes
+	pkg_install() {
+		vmove usr/share/icons/Reversal-black"*"
+	}
+}
+
+reversal-icon-theme-orange_package() {
+	short_desc+=" - orange variant"
+	depends="hicolor-icon-theme breeze-icons adwaita-icon-theme"
+	nostrip=yes
+	pkg_install() {
+		vmove usr/share/icons/Reversal-orange"*"
+	}
+}
+
+reversal-icon-theme-pink_package() {
+	short_desc+=" - pink variant"
+	depends="hicolor-icon-theme breeze-icons adwaita-icon-theme"
+	nostrip=yes
+	pkg_install() {
+		vmove usr/share/icons/Reversal-pink"*"
+	}
+}
+
+reversal-icon-theme-cyan_package() {
+	short_desc+=" - cyan variant"
+	depends="hicolor-icon-theme breeze-icons adwaita-icon-theme"
+	nostrip=yes
+	pkg_install() {
+		vmove usr/share/icons/Reversal-cyan"*"
+	}
+}
+
+reversal-icon-theme-lightblue_package() {
+	short_desc+=" - cyan variant"
+	depends="hicolor-icon-theme breeze-icons adwaita-icon-theme"
+	nostrip=yes
+	pkg_install() {
+		vmove usr/share/icons/Reversal-lightblue"*"
+	}
+}

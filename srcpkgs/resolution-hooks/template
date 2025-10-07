@@ -1,0 +1,22 @@
+# Template file for 'resolution-hooks'
+pkgname=resolution-hooks
+reverts="2024.04.12"
+version=0.1.0
+revision=1
+depends="xeventbind"
+short_desc="Custom hooks when monitor resolution changes"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://codeberg.org/cereus-linux/resolution-hooks"
+distfiles="${homepage}/archive/${version}.tar.gz"
+checksum=54ee674daf1cf287895c9e267d83d693e9b94c2956be28b8063910f6fe06a40d
+repository=cereus-extra
+
+do_install() {
+	for f in resolution-{hooks,monitor}; do
+		vbin ${f}
+		vinstall ${f}.desktop 0644 etc/xdg/autostart/
+	done
+
+	vdoc README.md
+}

@@ -1,0 +1,60 @@
+# Template file for 'octoxbps-git'
+# Based on Void Linux's official octoxbps template:
+# https://github.com/void-linux/void-packages/blob/master/srcpkgs/octoxbps/template
+pkgname=octoxbps-git
+version=2025.07.19
+revision=1
+_commit="3476828b0b5f64fba237e124aef14ccba07e89a4"
+build_style=qmake
+build_helper=qmake6
+hostmakedepends="pkg-config qt6-tools qt6-base"
+makedepends="qt6-declarative-devel qtermwidget-qt6-devel qt6-qt5compat-devel"
+depends="curl qt-sudo"
+short_desc="Qt-based XBPS front-end (git development version)"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later"
+homepage="https://tintaescura.com/projects/octoxbps/"
+changelog="https://raw.githubusercontent.com/aarnt/octoxbps/${_commit}/CHANGELOG"
+distfiles="https://github.com/aarnt/octoxbps/archive/${_commit}.tar.gz"
+checksum=91af81eb326f550e691b0c4191f86f72e590663e70bf52ce6339c4204a2101be
+conflicts="octoxbps"
+replaces="octoxbps>=0"
+repository=cereus-extra
+
+post_extract() {
+	# Experimental Spanish translation
+	cp ${FILESDIR}/octoxbps_es.ts "${wrksrc}/translations"
+
+    # Correct qt-sudo path
+	vsed -i 's/usr\/local/usr/g' src/constants.h
+}
+
+
+post_configure() {
+	local qmake_args
+	if [ "$CROSS_BUILD" ]; then
+		qmake_args="-qtconf ${wrksrc}/qt.conf"
+	fi
+	cd ${wrksrc}/notifier && qmake-qt6 ${configure_args} \
+		QMAKE_CC=$CC QMAKE_CXX=$CXX QMAKE_LINK=$CXX QMAKE_LINK_C=$CC \
+		QMAKE_CFLAGS="${CFLAGS}" \
+		QMAKE_CXXFLAGS="${CXXFLAGS}" \
+		QMAKE_LFLAGS="${LDFLAGS}" \
+		${qmake_args}
+}
+
+do_build() {
+	for _dir in ${wrksrc} ${wrksrc}/notifier; do
+		cd $_dir && make ${makejobs} ${make_build_args} ${make_build_target} CC="$CC" CXX="$CXX" LINK="$CXX"
+	done
+}
+
+do_install() {
+	for _dir in ${wrksrc} ${wrksrc}/notifier ; do
+		cd $_dir && make INSTALL_ROOT=${DESTDIR} install
+	done
+}
+
+post_install() {
+	vdoc "${FILESDIR}/README.cereus"
+}

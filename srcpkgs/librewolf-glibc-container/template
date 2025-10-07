@@ -1,0 +1,40 @@
+# Template file for 'librewolf-glibc-container'
+# This package is deprecated in favor of index-0's librewolf build for musl
+pkgname=librewolf-glibc-container
+_pkgname=${pkgname%-glibc-container}
+_version=139.0.4-1
+version=139.0.4
+revision=1
+archs="x86_64-musl"
+depends="voidnsrun-setup"
+short_desc="LibreWolf web browser - glibc containerized package (deprecated)"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MPL-2.0"
+homepage="https://gitlab.com/librewolf-community"
+repository=cereus-extra
+
+do_install() {
+	# Copy launcher
+	vinstall ${FILESDIR}/${_pkgname}.desktop 644 usr/share/applications
+
+	# Install the icons
+	for res in 16 32 48 64 128; do
+		vmkdir usr/share/icons/hicolor/${res}x${res}/apps
+			vcopy ${FILESDIR}/default${res}.png \
+				usr/share/icons/hicolor/${res}x${res}/apps/${_pkgname}.png
+	done
+
+	vinstall ${FILESDIR}/${_pkgname}.svg 0644 \
+		usr/share/icons/hicolor/scalable/apps/
+}
+
+post_install() {
+	# add a notice about package deprecation and future removal
+	vdoc ${FILESDIR}/deprecated.txt
+}
+
+librewolf-musl_package() {
+	metapackage=yes
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - transitional dummy package"
+}

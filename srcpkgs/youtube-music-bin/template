@@ -1,0 +1,33 @@
+# Template file for 'youtube-music-bin'
+# This AUR PKGBUILD was used as reference: https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=youtube-music-bin
+
+pkgname=youtube-music-bin
+_pkgname=${pkgname%-bin}
+version=3.11.0
+revision=1
+archs="x86_64"
+build_style=fetch
+hostmakedepends="setconf"
+depends="libsecret libnotify"
+short_desc="YouTube Music Desktop App bundled with custom plugins"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT"
+homepage="https://th-ch.github.io/youtube-music"
+changelog="https://raw.githubusercontent.com/th-ch/youtube-music/refs/heads/master/changelog.md"
+# License is missing in deb package
+distfiles="https://github.com/th-ch/youtube-music/releases/download/v${version}/${_pkgname}_${version}_amd64.deb
+ https://github.com/th-ch/youtube-music/raw/v${version}/license"
+checksum="db20c40bdcc558aaa85d6d5c20a3ec1e32795fcd6ffaa7e4f99757004736face
+ e7e14b3b771ecadb23f6ee0b6f99d1553e385e35cdb44fc8e36ee7c878dacd08"
+repository="cereus-extra"
+
+do_install() {
+	vextract -C "${DESTDIR}" ${_pkgname}_${version}_amd64.deb
+	setconf "${DESTDIR}/usr/share/applications/${_pkgname}.desktop" \
+		Exec "${_pkgname} %U"
+	vbin ${FILESDIR}/${_pkgname}.sh ${_pkgname}
+}
+
+post_install() {
+	vlicense license
+}

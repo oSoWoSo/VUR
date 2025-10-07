@@ -1,0 +1,17 @@
+# Template file for 'linux-default-cereus'
+pkgname=linux-default-cereus
+version=6.12
+revision=1
+metapackage=yes
+depends="linux${version} linux-base"
+short_desc="Cereus Linux default kernel meta-package"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="Public Domain"
+homepage="http://cereus-linux.codeberg.page/"
+repository=cereus-core
+
+linux-default-cereus-headers_package() {
+	short_desc="Cereus Linux default kernel headers meta-package"
+	depends="linux${version}-headers"
+	metapackage=yes
+}

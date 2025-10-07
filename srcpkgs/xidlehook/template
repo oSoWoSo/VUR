@@ -1,0 +1,26 @@
+# Template file for 'xidlehook'
+# Based on https://github.com/void-linux/void-packages/pull/44225
+pkgname=xidlehook
+version=0.10.0
+revision=2
+build_style=cargo
+configure_args="$(vopt_if audio '--features pulse' '--no-default-features')"
+make_install_args="--path xidlehook-daemon"
+hostmakedepends="pkg-config python3"
+makedepends="libxcb-devel libXScrnSaver-devel $(vopt_if audio pulseaudio-devel)"
+
+build_options="audio"
+desc_option_audio="Don't invoke the timer when any audio is playing (Only works with Pulseaudio)"
+build_options_default="audio"
+
+short_desc="xautolock rewrite in Rust, with a few extra features"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT"
+homepage="https://gitlab.com/jD91mZM2/xidlehook"
+distfiles="${homepage}/-/archive/${version}/${pkgname}-${version}.tar.gz"
+checksum=66751b78c5174c0e430d9becd749771d593f388db348514d8c3256670dc77cd8
+repository="cereus-extra"
+
+post_install() {
+	vlicense LICENSE
+}

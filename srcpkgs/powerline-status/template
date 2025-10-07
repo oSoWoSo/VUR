@@ -1,0 +1,18 @@
+# Template file for 'powerline-status'
+pkgname=powerline-status
+version=2.8.4
+revision=2
+build_style=python3-pep517
+makedepends="python3-setuptools python3-Sphinx"
+short_desc="Statusline and prompt plugin for vim and several other applications"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT"
+homepage="https://github.com/powerline/powerline"
+changelog="${homepage}/releases/tag/${version}"
+distfiles="${homepage}/archive/refs/tags/${version}.tar.gz"
+checksum=9e846af9379b57e410efe264cff3a6b98eb78dd9526e83016776ae5ffc5798f4
+repository=cereus-extra
+
+post_install() {
+	vlicense LICENSE
+}

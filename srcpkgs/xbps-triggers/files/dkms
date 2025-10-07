@@ -18,6 +18,8 @@ PKGNAME="$3"
 VERSION="$4"
 UPDATE="$5"
 
+export PATH="usr/bin:usr/sbin:/usr/sbin:/usr/bin:/sbin:/bin"
+
 remove_modules() {
 	# Remove the specified modules from all kernels.
 	set -- ${dkms_modules}
@@ -118,10 +120,15 @@ targets)
 	echo "post-install pre-remove"
 	;;
 run)
-	[ -z "${dkms_modules}" ] && exit 0
+	if [ -x /usr/bin/dkms ]; then
+		DKMS=/usr/bin/dkms
+	elif [ -x /usr/sbin/dkms ]; then
+		DKMS=/usr/sbin/dkms
+	else
+		exit 0
+	fi
 
-	DKMS=usr/bin/dkms
-	[ -x "${DKMS}" ] || exit 0
+	[ ! -x $DKMS -o -z "$dkms_modules" ] && exit 0
 
 	case "$TARGET" in
 	post-install)

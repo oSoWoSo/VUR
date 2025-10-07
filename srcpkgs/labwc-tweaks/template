@@ -1,0 +1,15 @@
+# Template file for 'labwc-tweaks'
+pkgname=labwc-tweaks
+version=2025.07.08
+revision=1
+_commit="7d67ed21d5352ae4ef8637534eec303b710a27df"
+build_style=cmake
+hostmakedepends="qt6-base-devel qt6-tools-devel pkg-config perl"
+makedepends="libxml2-devel qt6-widgets"
+short_desc="A Qt configuration tool for labwc"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/labwc/labwc-tweaks"
+distfiles="${homepage}/archive/${_commit}.tar.gz"
+checksum=db38f64da2e14a850047a643fcfe37f54c27b3366e6abc3285766038b9c1fd33
+repository=cereus-extra

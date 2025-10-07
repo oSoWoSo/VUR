@@ -1,0 +1,17 @@
+# Template file for 'linux-legacy-cereus'
+pkgname=linux-legacy-cereus
+version=5.4
+revision=1
+metapackage=yes
+depends="linux${version} linux-base"
+short_desc="Cereus Linux legacy kernel meta-package"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="Public Domain"
+homepage="http://cereus-linux.codeberg.page/"
+repository=cereus-core
+
+linux-legacy-cereus-headers_package() {
+	short_desc="Cereus Linux legacy kernel headers meta-package"
+	depends="linux${version}-headers"
+	metapackage="yes"
+}

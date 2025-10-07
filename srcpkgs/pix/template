@@ -1,0 +1,66 @@
+# Template file for 'pix'
+pkgname=pix
+version=3.4.5
+revision=1
+build_style=meson
+configure_args="$(vopt_bool exiv2) $(vopt_bool clutter) $(vopt_bool gstreamer)
+ $(vopt_bool libchamplain) $(vopt_bool lcms2) $(vopt_bool colord)
+ $(vopt_bool libtiff) $(vopt_bool libwebp) $(vopt_bool libjxl)
+ $(vopt_bool libheif) $(vopt_bool libraw) $(vopt_bool librsvg)
+ $(vopt_bool libsecret) $(vopt_bool webservices) $(vopt_bool libbrasero)"
+hostmakedepends="intltool itstool gettext libtool bison flex"
+makedepends="glib-devel pkg-config gsettings-desktop-schemas-devel
+ libjpeg-turbo-devel xapps-devel zlib-devel
+ libxkbfile-devel gtk+3-devel $(vopt_if exiv2 exiv2-devel)
+ $(vopt_if clutter clutter-gtk-devel)
+ $(vopt_if clutter clutter-devel) $(vopt_if gstreamer gstreamer1-devel)
+ $(vopt_if gstreamer gst-plugins-base1-devel)
+ $(vopt_if libchamplain libchamplain-devel) $(vopt_if lcms2 lcms2-devel)
+ $(vopt_if colord colord-devel) $(vopt_if libtiff tiff-devel)
+ $(vopt_if libwebp libwebp-devel) $(vopt_if libjxl libjxl-devel)
+ $(vopt_if libheif libheif-devel) $(vopt_if libraw libraw-devel)
+ $(vopt_if librsvg librsvg-devel) $(vopt_if libsecret libsecret-devel)
+ $(vopt_if webservices libsoup-devel) $(vopt_if webservices json-glib-devel)
+ $(vopt_if webservices libwebkit2gtk41-devel)
+ $(vopt_if libbrasero brasero-devel)"
+
+build_options="exiv2 clutter gstreamer libchamplain lcms2 colord libtiff
+ libwebp libjxl libheif libraw librsvg libsecret webservices libbrasero"
+
+desc_option_exiv2="Use exiv2 to read and write metadata"
+desc_option_clutter="Use clutter to make animated slideshows"
+desc_option_gstreamer="Use gstreamer to play multimedia files and to view the metadata"
+desc_option_libchamplain="Use libchamplain to show the position the image refers to"
+desc_option_lcms="Use lcms2 to get color management support"
+desc_option_colord="Use colord to read the monitor color profile"
+desc_option_libtiff="Use libtiff to load Tiff images"
+desc_option_libwebp="Use libwebp to load WebP images"
+desc_option_libjxl="Use libjxl to load JPEG XL images"
+desc_option_libheif="Use libheif to load HEIF and AVIF images"
+desc_option_libraw="Use libraw to load RAW images"
+desc_option_librsvg="Enable SVG support"
+desc_option_libsecret="Use libsecret to save web service account data"
+desc_option_webservices="Compile extensions that import/export images from web services"
+desc_option_libbrasero="Use libbrasero to save images and metadata to discs"
+
+build_options_default="exiv2 clutter gstreamer libchamplain lcms2 colord libtiff
+ libwebp libjxl libheif libraw librsvg"
+
+depends="desktop-file-utils"
+short_desc="Image viewer and browser based on gthumb (X-Apps Project)"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/linuxmint/pix"
+distfiles="${homepage}/archive/refs/tags/${version}.tar.gz"
+checksum=d0fc194e404a199518ca3f507468788041162ce31286aa45dff56df15635d44d
+repository=cereus-extra
+
+pix-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} xapps-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/pkgconfig
+		vmove usr/share/aclocal
+	}
+}

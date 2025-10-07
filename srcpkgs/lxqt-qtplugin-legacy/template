@@ -1,0 +1,17 @@
+# Template file for 'lxqt-qtplugin-legacy'
+pkgname=lxqt-qtplugin-legacy
+version=1.4.1
+revision=3
+build_style=cmake
+hostmakedepends="lxqt-build-tools-legacy qt5-qmake qt5-host-tools libfm-qt-legacy-devel"
+makedepends="liblxqt-devel libdbusmenu-qt5-devel libfm-qt-legacy-devel libqtxdg-legacy-devel
+ qt5-devel qt5-tools-devel"
+short_desc="LXQt Qt theme plugin (Qt5 legacy compatibility)"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="LGPL-2.1-or-later"
+homepage="https://lxqt-project.org"
+distfiles="https://github.com/lxqt/lxqt-qtplugin/archive/${version}.tar.gz"
+checksum=20768f00a35f0540d69ad47e6ed829a248bd01056ef9c7da3d931a9f5b2afc6c
+conflicts="lxqt-qt5plugin"
+replaces="lxqt-qt5plugin>=0"
+repository=cereus-extra

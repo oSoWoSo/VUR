@@ -1,0 +1,40 @@
+# Template file for 'microsoft-edge'
+pkgname=microsoft-edge
+_pkgname="${pkgname}-stable"
+version=139.0.3405.119
+revision=1
+archs="x86_64"
+build_style="fetch"
+depends="xdg-utils"
+short_desc="Browser that combines a minimal design with sophisticated technology"
+maintainer="Luis F. Rosales Rangel <Lfssjquantum@murena.io>, Kevin Figueroa <kfdevart@disroot.org>"
+license="custom:Proprietary"
+homepage="https://microsoft.com/edge"
+distfiles="https://packages.microsoft.com/repos/edge/pool/main/m/${_pkgname}/${_pkgname}_${version}-1_amd64.deb"
+checksum=e51e4e36cde5e7be2031fd9145ac9bf26444f734a88ff43858e05c7782e60c7b
+repository=nonfree
+restricted=yes
+
+do_install() {
+	vextract -C "${DESTDIR}" "${_pkgname}_${version}-1_amd64.deb"
+
+	# suid sandbox, reference taken from AUR
+	chmod 4755 "${DESTDIR}/opt/microsoft/msedge/msedge-sandbox"
+
+  # Install icons
+	for size in 16 24 32 48 64 128 256; do
+		vmkdir "usr/share/icons/hicolor/${size}x${size}/apps"
+		ln -frs "${DESTDIR}/opt/microsoft/msedge/product_logo_${size}.png" \
+		"${DESTDIR}/usr/share/icons/hicolor/${size}x${size}/apps/microsoft-edge.png"
+	done
+
+	# Remove unused icon
+	rm "${DESTDIR}/opt/microsoft/msedge/product_logo_32.xpm"
+
+	# Remove the Debian/Ubuntu crontab
+	rm -rf ${DESTDIR}/etc
+	rm -rf ${DESTDIR}/opt/microsoft/msedge/cron
+
+	# Extracted from edge://terms
+	vlicense ${FILESDIR}/TERMS.txt
+}

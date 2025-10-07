@@ -1,0 +1,102 @@
+diff --git a/install.sh b/install.sh
+index 6b3db71..e36c4ad 100755
+--- a/install.sh
++++ b/install.sh
+@@ -1,27 +1,13 @@
+ #!/bin/bash
+ # Written by: SwallowYourDreams
+-name="video-wallpaper"
++name="gpu-video-wallpaper"
+ installdir="/home/$USER/.local/bin"
+-xwinwrap_dl="https://github.com/mmhobi7/xwinwrap/releases/download/v0.9/xwinwrap"
+ dependencies=("mpv" "pcregrep" "xrandr" "python3-pyqt5")
+ missingDependencies=""
+ #installdir="/usr/local/share/$name"
+ files=("$name.sh" "$name.py" "gui.ui" "xwinwrap")
+ 
+ check_dependencies() {
+-	# Downloading xwinwrap
+-	if [ ! -f "$installdir/xwinwrap" ] ; then
+-		echo "$name depends on xwinwrap to run. Do you wish to download it? [y/n]"
+-		read input
+-		if [ "$input" == "y" ] ; then 
+-			wget "$xwinwrap_dl" -O "$installdir/xwinwrap"
+-			chmod +x "$installdir/xwinwrap"
+-		else
+-			echo "Dependencies unfulfilled, aborting."
+-			exit 1
+-		fi
+-	fi
+-	
+ 	# Distro-agnostic mode
+ 	if [ "$1" == "--distro-agnostic" ] ; then
+ 		echo "You're running the installer in distro-agnostic mode. The automated dependency check and install will be skipped."
+@@ -56,19 +42,15 @@ check_dependencies() {
+ 
+ install() {
+ 	mkdir -p $installdir
+-	for file in ${files[@]} ; do
+-		if [ "$file" != "xwinwrap" ] ; then
+-			cp "./$file" $installdir
+-		fi
+-	done
+-	if [ ! -f "/.local/share/applications/$name.desktop" ] ; then
++
++	if [ ! -f "/usr/share/applications/$name.desktop" ] ; then
+ 		echo "Do you wish to create a start menu entry? [y/n]"
+ 		read input
+ 		if [ "$input" == "y" ] ; then
+-			desktopFile=~/.local/share/applications/"$name".desktop
++			desktopFile=/usr/share/applications/"$name".desktop
+ 			#sudo cp "./$name.desktop" ~/.local/share/applications
+-			desktopEntry="[Desktop Entry]\nType=Application\nName=Video Wallpaper\nExec=$name.py\nIcon=wallpaper\nComment=Set video files as your desktop wallpaper.\nCategories=Utility\nTerminal=false\n"
+-			sudo printf "$desktopEntry" > "$desktopFile"
++			desktopEntry="[Desktop Entry]\nType=Application\nName=Video Wallpaper\nExec=$name-gui\nIcon=wallpaper\nComment=Set video files as your desktop wallpaper.\nCategories=Utility\nTerminal=false\n"
++			printf "$desktopEntry" > "$desktopFile"
+ 		fi
+ 	fi
+ }
+diff --git a/video-wallpaper.py b/video-wallpaper.py
+index 9cd3918..3c968bb 100755
+--- a/video-wallpaper.py
++++ b/video-wallpaper.py
+@@ -115,7 +115,7 @@ class MainWindow(QtWidgets.QMainWindow):
+ 			if missing:
+ 				missingDependencies.append(d)
+ 		print ("./xwinwrap")
+-		if not os.path.isfile(self.scriptDir + "/xwinwrap"):
++		if not os.path.isfile("/usr/bin/xwinwrap"):
+ 			missingDependencies.append("xwinwrap")
+ 		return missingDependencies
+ 
+diff --git a/video-wallpaper.sh b/video-wallpaper.sh
+index 8b95f00..1b4ffd0 100755
+--- a/video-wallpaper.sh
++++ b/video-wallpaper.sh
+@@ -3,7 +3,7 @@
+ # contributor: SwallowYourDreams | https://github.com/SwallowYourDreams
+ 
+ # Global variables
+-name="video-wallpaper"
++name="gpu-video-wallpaper"
+ scriptdir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+ confdir="$HOME/.config/video-wallpaper"
+ conf="$confdir/settings.conf"
+@@ -49,7 +49,7 @@ start() {
+ 	SCREENS=`xrandr | grep " connected\|\*" | pcregrep -o1 '([0-9]{1,}[x]{1,1}[0-9+]{1,}) \('`
+ 	for item in $SCREENS
+ 	do
+-		"$scriptdir"/xwinwrap -g $item -fdt -ni -b -nf -un -o 1.0 -- mpv -wid %WID --loop --no-audio "$VIDEO_PATH" & disown
++		xwinwrap -g $item -fdt -ni -b -nf -un -o 1.0 -- mpv -wid WID --loop --no-audio "$VIDEO_PATH" & disown
+ 	done
+ 	update_config $! "\"$VIDEO_PATH\""
+ }
+@@ -80,7 +80,7 @@ startup() {
+ 		echo "Illegal startup parameter."
+ 		exit 1
+ 	fi
+-	LAUNCH_SCRIPT="bash -c '\"$scriptdir/$name.sh\" --start \"$videofile\"'"
++	LAUNCH_SCRIPT="bash -c '\"$name\" --start \"$videofile\"'"
+ 	printf "[Desktop Entry]\nType=Application\nExec=$LAUNCH_SCRIPT\nHidden=false\nNoDisplay=false\nX-GNOME-Autostart-enabled=$startup\nName=$name" > "$HOME/.config/autostart/$name.desktop"
+ }
+ 

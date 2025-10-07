@@ -1,0 +1,22 @@
+# Template file for 'voidnsrun-setup'
+pkgname=voidnsrun-setup
+version=2022.10.21
+revision=1
+wrksrc=voidnsrun-setup-main
+archs="x86_64-musl x86_64"
+hostmakedepends="git"
+repository="cereus-extra"
+depends="voidnsrun voidnsundo xtools"
+short_desc="voidnsrun setup script"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0"
+homepage="https://github.com/CereusLinuxProject/voidnsrun-setup"
+_commit="9c7c4aa72949cf8ae042f6be0ec3a9667ef0bddf"
+distfiles="${homepage}/archive/${_commit}.tar.gz"
+checksum=bc3c791355f57e929dcaecb1534527afc8c721269c919cc8bff92ed82f2f3c19
+
+
+do_install() {
+    vbin voidnsrun-setup
+    vlicense LICENSE
+}

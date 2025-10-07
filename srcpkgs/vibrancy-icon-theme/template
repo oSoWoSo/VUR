@@ -1,0 +1,83 @@
+# Template file for 'vibrancy-icon-theme'
+pkgname=vibrancy-icon-theme
+version=2.7
+revision=2
+_commit="1d53ae16e24faec4e529dec255f2880e37e5503b"
+metapackage=yes
+depends="
+ ${pkgname}-nonmono-light ${pkgname}-nonmono-dark ${pkgname}-colors
+ ${pkgname}-dark ${pkgname}-full-dark ${pkgname}-light"
+_theme_dir="usr/share/icons/"
+short_desc="Modern, clean and customizable icon suite"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="CC-BY-SA-3.0-US OR (GPL-2.0-only AND GPL-3.0-only)"
+homepage="https://www.ravefinity.com/p/vibrancy-colors-gtk-icon-theme.html"
+distfiles="https://github.com/CereusLinuxProject/vibrancy-icon-theme/archive/${_commit}.tar.gz"
+checksum=34fed97a2ab2a061e946d41191535ac0df10004fb5c3ac7f0405ae97146abd0c
+repository=cereus-extra
+
+vibrancy-icon-theme-nonmono-light_package() {
+	variant=NonMono-Light
+	short_desc+=" - ${variant} variant"
+	pkg_install() {
+		vmkdir ${_theme_dir}
+		vcopy Vibrancy-${variant}-* ${_theme_dir}/
+		vlicense "${FILESDIR}/LICENSE-CC-BY-SA-3.0-US"
+		vlicense "Copyrights&Licenses.txt"
+	}
+}
+
+vibrancy-icon-theme-nonmono-dark_package() {
+	variant=NonMono-Dark
+	short_desc+=" - ${variant} variant"
+	pkg_install() {
+		vmkdir ${_theme_dir}
+		vcopy Vibrancy-${variant}-* ${_theme_dir}/
+		vlicense "${FILESDIR}/LICENSE-CC-BY-SA-3.0-US"
+		vlicense "Copyrights&Licenses.txt"
+	}
+}
+
+vibrancy-icon-theme-colors_package() {
+	variant=Colors
+	short_desc+=" - ${variant} variant"
+	pkg_install() {
+		vmkdir ${_theme_dir}
+		vcopy Vibrancy-${variant}-* ${_theme_dir}/
+		vlicense "${FILESDIR}/LICENSE-CC-BY-SA-3.0-US"
+		vlicense "Copyrights&Licenses.txt"
+	}
+}
+
+vibrancy-icon-theme-dark_package() {
+	variant=Dark
+	short_desc+=" - ${variant} variant"
+	pkg_install() {
+		vmkdir ${_theme_dir}
+		vcopy Vibrancy-${variant}-* ${_theme_dir}/
+		vlicense "${FILESDIR}/LICENSE-CC-BY-SA-3.0-US"
+		vlicense "Copyrights&Licenses.txt"
+	}
+}
+
+vibrancy-icon-theme-full-dark_package() {
+	variant=Full-Dark
+	short_desc+=" - ${variant} variant"
+	pkg_install() {
+		vmkdir ${_theme_dir}
+		vcopy Vibrancy-${variant}-* ${_theme_dir}/
+		vlicense "${FILESDIR}/LICENSE-CC-BY-SA-3.0-US"
+		vlicense "Copyrights&Licenses.txt"
+	}
+}
+
+vibrancy-icon-theme-light_package() {
+	variant=Light
+	short_desc+=" - ${variant} variant"
+	pkg_install() {
+	vmkdir ${_theme_dir}
+		vcopy Vibrancy-${variant}-* ${_theme_dir}/
+		vlicense "${FILESDIR}/LICENSE-CC-BY-SA-3.0-US"
+		vlicense "Copyrights&Licenses.txt"
+	}
+}

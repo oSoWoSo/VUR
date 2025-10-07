@@ -1,0 +1,13 @@
+# INSTALL
+
+case "$ACTION" in
+post)
+    if [ "$UPDATE" = "yes" ]; then
+    # Update the container
+    	xchroot /glibc xbps-install -Syu
+    fi
+
+    voidnsrun-setup
+    ;;
+
+esac

@@ -1,0 +1,13 @@
+# REMOVE
+case "$ACTION" in
+
+post)
+
+#
+# After removing opt/microsoft/edge, xbps removes opt if empty!
+# This script restores opt
+#
+        mkdir -p opt
+        ;;
+esac
+

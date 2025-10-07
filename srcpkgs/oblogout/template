@@ -1,0 +1,25 @@
+# Template file for 'oblogout'
+pkgname=oblogout
+version=2024.04.28
+revision=2
+conf_files="/etc/oblogout.conf"
+build_style=python3-pep517
+hostmakedepends="python3-distutils-extra intltool"
+depends="python3-cairo python3-gobject"
+_commit="ff2b0595ac7f3f07f7f67bd3210b0e7a2027953a"
+short_desc="Openbox Logout Menu, ported to Python 3"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/trizen/oblogout-py3"
+distfiles="${homepage}/archive/${_commit}.tar.gz"
+checksum=edb7ed4c815198314a2e36af745a65b02427592bfaeea6fe19950c979b1256d8
+repository=cereus-extra
+
+post_patch() {
+	# Fix from https://forums.gentoo.org/viewtopic-p-8860838.html
+	vsed -i 's:po-dir:po_dir:' setup.cfg
+}
+
+post_install() {
+	vinstall data/oblogout.conf 644 etc/
+}

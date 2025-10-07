@@ -1,0 +1,27 @@
+# Template file for 'pixelitos-icon-theme'
+pkgname=pixelitos-icon-theme
+version=20250515
+revision=1
+hostmakedepends="ImageMagick"
+depends="hicolor-icon-theme breeze-icons"
+short_desc="Pixel art icon theme"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT"
+homepage="https://github.com/ItzSelenux/pixelitos-icon-theme"
+distfiles="${homepage}/archive/refs/tags/${version}.tar.gz"
+checksum=bfbaa700365819cf8639cc3dc49facfaa7381f37e608b2d6bb452aa98038db6b
+_themedir="usr/share/icons/pixelitos"
+repository=cereus-extra
+
+do_install() {
+	mkdir -p 128
+	for variant in blue green linuxmint red purple; do
+		cp -rf folder-colors/${variant}/16/places/* 16/places/
+		vsed -i 's|Name=.*|Name=Pixelitos-'"${variant}"'|g' index.theme
+		cp -r 16/* 128
+		find 128 -type f -name "*.png" -mmin -1 -exec mogrify -resize 128x128! -filter point -verbose {} \;
+		vinstall index.theme 644 ${_themedir}-${variant}
+		for size in 16 128; do vcopy ${size} ${_themedir}-${variant}; done
+	done
+	vlicense LICENSE
+}

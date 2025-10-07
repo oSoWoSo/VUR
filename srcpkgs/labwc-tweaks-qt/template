@@ -1,0 +1,19 @@
+# Template file for 'labwc-tweaks-qt'
+pkgname=labwc-tweaks-qt
+version=20250704
+revision=1
+build_style=cmake
+configure_args="
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_INSTALL_PREFIX=/usr
+"
+hostmakedepends="cmake pkg-config qt6-base-devel qt6-tools-devel qt6-widgets  git"
+makedepends="cmake pkg-config qt6-base-devel qt6-tools-devel qt6-widgets git"
+depends="qt6-base qt6-widgets libxml2 glib"
+short_desc="A tweak tool to labwc"
+maintainer="Daniel Azevedo <daniazevedo77@posteo.net>"
+license="GPL-3.0-or-later"
+homepage="https://labwc.github.io"
+changelog="https://github.com/dani-77/labwc-tweaks/releases/tag/${version}"
+distfiles="https://github.com/dani-77/labwc-tweaks/archive/refs/tags/${version}.tar.gz"
+checksum=060954456afe2716213948f46792a7b205ce72c143ce98cf1ed337508abfd938

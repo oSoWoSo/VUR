@@ -1,0 +1,26 @@
+# Template file for 'mauikit-filebrowsing'
+pkgname=mauikit-filebrowsing
+version=4.0.2
+revision=1
+build_style=cmake
+hostmakedepends="extra-cmake-modules gettext"
+makedepends="kf6-kconfig-devel kf6-kcoreaddons-devel kf6-ki18n-devel
+ kf6-kio-devel kf6-kservice-devel mauikit-devel qt6-declarative-devel
+ qt6-declarative-private-devel kf6-solid-devel"
+short_desc="MauiKit File Browsing utilities and controls"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="LGPL-3.0-only"
+homepage="https://mauikit.org/"
+distfiles="${KDE_SITE}/maui/${pkgname}/${version}/${pkgname}-${version}.tar.xz"
+checksum=cc6f522c6dd9b9ee7cef7adbae56a1a8a9e26cc31dfe2201a117601a10f58d21
+repository=cereus-extra
+
+mauikit-filebrowsing-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/cmake
+		vmove usr/include
+		vmove "usr/lib/*.so"
+	}
+}

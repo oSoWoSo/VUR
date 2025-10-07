@@ -1,0 +1,21 @@
+# Template file for 'sglauncher'
+pkgname=sglauncher
+version=1.0
+revision=1
+build_style=gnu-makefile
+make_use_env=1
+build_wrksrc="src"
+hostmakedepends="pkg-config gettext"
+makedepends="gtk+3-devel"
+short_desc="Simple GTK3 Application Launcher"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://codeberg.org/ItsZariep/sglauncher"
+distfiles="${homepage}/archive/${version}.tar.gz"
+checksum=96514bb3fca22fcc713e39623ca70e6f17468b03933630c5e00220febe4496b6
+repository=cereus-extra
+make_check=no # directly runs the binary
+
+post_build() {
+	${make_cmd} compile-locales
+}

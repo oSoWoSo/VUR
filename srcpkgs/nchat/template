@@ -1,0 +1,20 @@
+# Template file for 'nchat'
+pkgname=nchat
+version=5.10.15
+revision=1
+build_style=cmake
+hostmakedepends="gperf help2man go pkg-config"
+makedepends="libmagick-devel readline-devel sqlite-devel file-devel
+ openssl-devel ncurses-devel"
+short_desc="Terminal-based Telegram / WhatsApp client for Linux and macOS"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT"
+homepage="https://github.com/d99kris/nchat"
+distfiles="${homepage}/archive/refs/tags/v${version}.tar.gz"
+checksum=62ac4c75750f4f8fbbac8691dbc5114efba548a586dbe5d85d13182c9732b465
+repository=cereus-extra
+
+post_install() {
+	vlicense LICENSE
+	mv "${DESTDIR}/usr/man" "${DESTDIR}/usr/share/"
+}

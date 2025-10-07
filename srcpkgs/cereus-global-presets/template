@@ -1,0 +1,107 @@
+# Template file for 'cereus-global-presets'
+pkgname=cereus-global-presets
+reverts="2024.10.20_1"
+version=0.1.0
+revision=1
+conf_files="
+	/etc/skel/.profile
+	/etc/bash/bashrc.d/*.sh"
+depends="bluez gst-libav libva-utils gst-plugins-base1 gst-plugins-good1
+ libcups-filters python3-cups python3-cupshelpers system-config-printer
+ system-config-printer-udev vpm vsv numlockx xdg-user-dirs octoxbps-git
+ touchegg plymouth cereus-plymouth-theme sof-firmware libspa-bluetooth
+ NetworkManager chrony elogind alsa-pipewire pipewire gstreamer1-pipewire
+ wireplumber pulseaudio-utils polyglot-prompt"
+short_desc="Cereus Linux global default configurations"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://codeberg.org/cereus-linux/presets"
+distfiles="${homepage}/archive/${version}.tar.gz"
+checksum=c96baeefb66c8fee1993d89a35c2e474a522a567ed9e7f8c973b87ea95c28501
+repository=cereus-core
+
+do_install() {
+	cd global/etc
+	vinstall skel/.profile 0644 etc/skel/
+	vinstall fastfetch/config.jsonc 0644 etc/fastfetch
+	vinstall gtk-3.0/settings.ini 0644 etc/gtk-3.0/
+	vinstall Kvantum/kvantum.kvconfig 0644 etc/Kvantum/
+	vinstall skel/.gtkrc-2.0 0644 etc/skel/
+	vinstall qt5ct/qt5ct.conf 0644 etc/qt5ct/
+	vinstall bash/bashrc.d/10-polyglot-prompt.sh 0644 etc/bash/bashrc.d/
+	vinstall lightdm/lightdm.conf.d/10-numlock.conf 0644 etc/lightdm/lightdm.conf.d/
+	vinstall skel/.config/lockscreen-bg.conf 0644 etc/skel/.config/
+}
+
+cereus-lightdm-presets_package() {
+	reverts="2023.01.20_1"
+	conf_files="/etc/lightdm/lightdm.conf.d/*.conf"
+	short_desc="Cereus Linux default configurations for LightDM"
+	pkg_install() {
+		vmove etc/lightdm
+	}
+}
+
+cereus-themes-presets_package() {
+	reverts="2023.01.20_1 2024.02.20_1"
+	conf_files="
+		/etc/gtk-3.0/settings.ini
+		/etc/Kvantum/kvantum.kvconfig
+		/etc/skel/.gtkrc-2.0"
+	depends="kvantum graphite-kvantum-theme-black graphite-gtk-theme-black
+	 tela-icon-theme-green graphite-color-schemes-black graphite-cursors
+	 jetbrains-mono-font fonts-roboto-ttf"
+	short_desc="Cereus Linux default theme configurations"
+	pkg_install() {
+		vmove etc/gtk-3.0
+		vmove etc/Kvantum
+		vmove etc/skel/.gtkrc-2.0
+	}
+}
+
+cereus-lxqt-presets_package() {
+	reverts="2023.01.20_1 2024.10.20_1"
+	conf_files="
+		/etc/lxqt/*.conf
+		/etc/pcmanfm-qt/*/*.conf
+		/etc/qterminal.org/qterminal.ini
+		/etc/xdg/featherpad/*.conf
+		/etc/skel/.config/kdeglobals
+		/etc/skel/.config/lockscreen-bg.conf
+		/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/*.xml
+		/etc/skel/.config/featherpad/*.conf
+		/etc/xdg/autostart/ksuperkey.desktop"
+	depends="cereus-global-presets cereus-lightdm-presets udisks2
+		gvfs-afc gvfs-mtp gvfs-smb blueman flameshot pasystray-git ksuperkey
+		network-manager-applet pavucontrol-qt"
+	short_desc="Cereus Linux default configurations for LXQt edition"
+	pkg_install() {
+		vcopy lxqt/"*" ./
+		vmove etc/skel/.config/lockscreen-bg.conf
+	}
+}
+
+cereus-xfce-presets_package() {
+	reverts="2024.02.20"
+	conf_files="
+		/etc/skel/.config/Thunar/*
+		/etc/skel/.config/xfce4/helpers.rc
+		/etc/skel/.config/xfce4/panel/*.rc
+		/etc/skel/.config/xfce4/panel/launcher-*/*.desktop
+		/etc/skel/.config/xfce4/terminal/terminalrc
+		/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/*.xml
+		/etc/skel/.local/share/xfce4/helpers/custom-WebBrowser.desktop
+		/etc/xdg/autostart/ksuperkey.desktop"
+	depends="cereus-global-presets cereus-themes-presets xfce4 gnome-keyring
+		gvfs-afc gvfs-mtp gvfs-smb udisks2 xfce4-whiskermenu-plugin
+		xfce4-pulseaudio-plugin xfce4-clipman-plugin thunar-archive-plugin
+		thunar-archive-plugin blueman rhythmbox xfce4-screenshooter xfce4-plugins
+		material-black-cereus-xfwm qt5ct xfce4-docklike-plugin mugshot qt5ct
+		qt6ct pavucontrol network-manager-applet"
+	short_desc="Cereus Linux default configurations for XFCE edition"
+	pkg_install() {
+		vcopy xfce/"*" ./
+		# TO-DO: Implement qt6ct config
+		vmove etc/qt5ct
+	}
+}

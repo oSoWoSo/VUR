@@ -1,0 +1,43 @@
+# Template file for 'touche'
+pkgname=touche
+version=2.0.14
+revision=3
+build_style=meson
+build_helper="gir"
+hostmakedepends="cmake pkg-config gettext-devel desktop-file-utils"
+makedepends="appstream-glib-devel nodejs gjs-devel libadwaita-devel"
+depends="touchegg gjs"
+short_desc="Desktop application to configure Touchégg"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/JoseExposito/touche"
+changelog="${homepage}/releases/tag/${version}"
+distfiles="${homepage}/archive/${version}.tar.gz"
+checksum=1342ac70d60c21e4dbacd63f6fcd45cbe8206bb92f4bfb8185f71136fe22d63e
+repository=cereus-extra
+
+pre_build() {
+	npm install
+}
+
+post_install() {
+	ln -rfs ${DESTDIR}/usr/bin/com.github.joseexposito.${pkgname} \
+		${DESTDIR}/usr/bin/${pkgname}
+}
+
+libtouche_package() {
+	short_desc+=" - runtime library"
+	pkg_install() {
+		vmove usr/lib/libtouche.so.0
+	}
+}
+
+touche-devel_package() {
+	depends="libtouche>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/"*.so"
+		vmove usr/share/gir-1.0
+	}
+}

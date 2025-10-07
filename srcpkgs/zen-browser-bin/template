@@ -1,0 +1,42 @@
+# Template file for 'zen-browser-bin'
+pkgname=zen-browser-bin
+version=1.16.4b
+revision=1
+archs="x86_64"
+build_style=fetch
+short_desc="Performance oriented Firefox-based web browser (precompiled version)"
+maintainer="kevin <kevin@disroot.org>"
+license="MPL-2.0"
+homepage="https://github.com/zen-browser/desktop"
+distfiles="https://github.com/zen-browser/desktop/releases/download/${version}/zen.linux-x86_64.tar.xz>zen.linux-${version}-x86_64.tar.xz"
+checksum=1fe3081479c73327c70a4b74c44781b42c796be9214bf2a5831fad5e6792c41b
+repository=cereus-extra
+
+do_install() {
+	# directories
+	install -dm755 "${DESTDIR}/opt/zen-browser-bin" "${DESTDIR}/opt/zen-browser/distribution" "${DESTDIR}/usr/bin" "${DESTDIR}/usr/share/applications" "${DESTDIR}/usr/share/pixmaps"
+
+	# extracting binary package
+	vextract --strip-components=1 -C ${DESTDIR}/opt/${pkgname} zen.linux-${version}-x86_64.tar.xz
+
+	# symbolic link
+	ln -sf /opt/zen-browser-bin/zen ${DESTDIR}/usr/bin/zen
+
+	# icons
+	for size in 16 32 48 64 128; do
+		install -d "${DESTDIR}/usr/share/icons/hicolor/${size}x${size}/apps"
+		ln -sf "/opt/${pkgname}/browser/chrome/icons/default/default${size}.png" \
+			"${DESTDIR}/usr/share/icons/hicolor/${size}x${size}/apps/${pkgname}.png"
+	done
+
+    # install .desktop file
+	vinstall "${FILESDIR}/zen.desktop" 644 usr/share/applications
+
+    # using system dictionary
+	ln -Ts /usr/share/hunspell ${DESTDIR}/opt/$pkgname/dictionaries
+	ln -Ts /usr/share/hyphen ${DESTDIR}/opt/$pkgname/hyphenation
+	ln -sf /usr/lib/libnssckbi.so ${DESTDIR}/opt/$pkgname/libnssckbi.so
+
+	# install policies files
+	vinstall ${FILESDIR}/policies.json 644 opt/$pkgname/distribution/
+}

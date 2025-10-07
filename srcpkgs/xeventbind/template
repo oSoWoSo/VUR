@@ -1,0 +1,19 @@
+# Template file for 'xeventbind'
+pkgname=xeventbind
+version=2022.05.23
+revision=3
+_commit="9f67cb72691e5743acca78930856ba04c6c5790b"
+build_style=gnu-makefile
+makedepends="libX11-devel"
+short_desc="Small utillity that runs your script on X11 events"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT"
+homepage="https://github.com/ritave/xeventbind"
+distfiles="${homepage}/archive/${_commit}.tar.gz>${version}.tar.gz"
+checksum=186bd624b06aeb69a32bac331a03bace82d5b5fb2bc78d756b8fdbfa17f31ccb
+repository=cereus-extra
+
+do_install() {
+	vbin xeventbind
+	vlicense LICENSE
+}

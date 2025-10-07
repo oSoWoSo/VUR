@@ -1,15 +1,22 @@
 # Template file for 'lxqt-wayland-session'
 pkgname=lxqt-wayland-session
-version=0.2.0
+version=0.2.1
 revision=1
 build_style=cmake
-hostmakedepends="qt6-base lxqt-build-tools qt6-tools pkg-config xdg-user-dirs perl"
-makedepends="liblxqt-devel"
-depends="qtxdg-tools lxqt-session layer-shell-qt"
+hostmakedepends="pkg-config lxqt-build-tools qt6-tools perl"
+makedepends="liblxqt-devel xdg-user-dirs"
+depends="lxqt-session qtxdg-tools layer-shell-qt"
 short_desc="Files needed for the LXQt Wayland Session"
-maintainer="Rose <rose@pinkro.se>"
-license="LGPL-2.1-only, GPL-2.0-only, GPL-3.0-only, GPL-3.0-or-later,
- BSD-3-Clause, CC-BY-SA-4.0, MIT"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="LGPL-2.1-only AND MIT AND GPL-3.0-or-later AND GPL-3.0-only AND GPL-2.0-only AND GPL-3.0-or-later AND BSD-3-Clause AND CC-BY-SA-4.0"
 homepage="https://github.com/lxqt/lxqt-wayland-session"
-distfiles="https://github.com/lxqt/lxqt-wayland-session/archive/${version}.tar.gz"
-checksum=3c9819f7c93d09faa873f53b9fc7556b6d02ad772503c9e57eecb5b69535d3bd
+changelog="https://raw.githubusercontent.com/lxqt/lxqt-wayland-session/refs/heads/master/CHANGELOG"
+distfiles="${homepage}/archive/refs/tags/${version}.tar.gz"
+checksum=fed8ea83d34726ebc872783036a3f4b0de45f95df51d56757126efcd5f00b091
+repository=cereus-extra
+
+post_install() {
+	vlicense LICENSE
+	vlicense LICENSE.BSD
+	vlicense LICENSE.MIT
+}

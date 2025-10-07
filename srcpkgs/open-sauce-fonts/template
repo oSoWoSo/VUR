@@ -1,0 +1,24 @@
+# Template file for 'open-sauce-fonts'
+pkgname=open-sauce-fonts
+version=2021.07.09
+revision=2
+_commit="6eea53f921275d4b99cf4b398b745702866d95f0"
+hostmakedepends="detox"
+short_desc="Super family compact font optimised for better viewing small text"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="OFL-1.1"
+homepage="https://github.com/marcologous/Open-Sauce-Fonts"
+distfiles="${homepage}/archive/${_commit}.tar.gz"
+checksum=cee5a14de079f0a9457ea541e3f0efb7c6e4a8df04a5206d90b66cae052097c9
+font_dirs="/usr/share/fonts/TTF/"
+repository=cereus-extra
+
+do_install() {
+	vmkdir ${font_dirs}
+	vcopy fonts/"*" ${font_dirs}
+
+	for font in One Sans Two; do
+		detox "Open Sauce ${font} OFL.txt"
+		vlicense "Open_Sauce_${font}_OFL.txt"
+	done
+}

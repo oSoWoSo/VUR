@@ -1,0 +1,24 @@
+# Template file for 'mauiman'
+pkgname=mauiman
+version=4.0.2
+revision=1
+build_style=cmake
+hostmakedepends="qt6-base-devel extra-cmake-modules"
+makedepends="qt6-base"
+short_desc="Maui Manager Library (Server and public library API)"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="LGPL-3.0-only"
+homepage="https://mauikit.org/"
+distfiles="${KDE_SITE}/maui/${pkgname}/${version}/${pkgname}-${version}.tar.xz"
+checksum=81f9f25fbc959040b7efcca1d9d127c5894c6a6baf2ffe53ccba42d682258f00
+repository=cereus-extra
+
+mauiman-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/cmake
+		vmove usr/include
+		vmove "usr/lib/*.so"
+	}
+}

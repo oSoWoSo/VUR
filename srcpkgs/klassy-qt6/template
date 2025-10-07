@@ -1,0 +1,32 @@
+# Template file for 'klassy-qt6'
+pkgname=klassy-qt6
+version=6.4.breeze6.4.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_QT5=OFF
+ -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="extra-cmake-modules gettext qt6-base qt6-tools
+ kf6-kcmutils-devel"
+makedepends="kf6-kcoreaddons-devel kf6-kcolorscheme-devel
+ kf6-kconfig-devel kf6-kguiaddons-devel kf6-ki18n-devel
+ kf6-kiconthemes-devel kf6-kwindowsystem-devel kf6-kcmutils-devel
+ kf6-kirigami-devel kf6-frameworkintegration-devel fftw-devel
+ kf6-kdecoration-devel"
+depends="breeze-icons kf6-frameworkintegration"
+short_desc="Customizable binary window decoration and theme plugin for KDE Plasma"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/paulmcauley/klassy"
+changelog="${homepage}/releases/tag/${version}"
+distfiles="${homepage}/archive/refs/tags/${version}.tar.gz"
+checksum=77c757b5edef9808a84fe50f9277369ecafc38fba8d7cda11eb448c0c170a3ff
+repository=cereus-extra
+
+klassy-qt6-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/cmake
+	}
+}

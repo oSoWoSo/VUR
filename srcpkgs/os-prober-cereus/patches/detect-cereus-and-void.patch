@@ -1,0 +1,24 @@
+diff -ruN a/os-probes/mounted/common/90linux-distro b/os-probes/mounted/common/90linux-distro
+--- a/os-probes/mounted/common/90linux-distro	2024-08-28 04:16:14.000000000 -0600
++++ b/os-probes/mounted/common/90linux-distro	2024-11-22 00:01:38.115802390 -0600
+@@ -119,6 +119,20 @@
+ 	elif [ -e "$dir/sbin/pkgtool" ]; then
+ 		short="Slackware"
+ 		long="Slackware Linux"
++	elif grep -qs Void "$dir/etc/os-release" && [ -e "$dir/sbin/xbps-install" ]; then
++		short="Void"
++		if file "$dir/sbin/xbps-install" | grep -q 32-bit; then
++			long="Void Linux 32"
++		else
++			long="Void Linux 64"
++	fi
++	elif grep -qs Cereus "$dir/etc/os-release" && [ -e "$dir/sbin/xbps-install" ]; then
++		short="Cereus"
++		if file "$dir/sbin/xbps-install" | grep -q 32-bit; then
++			long="Cereus Linux 32"
++		else
++			long="Cereus Linux 64"
++	fi
+ 	elif grep -qs OpenLinux "$dir/etc/issue"; then
+ 		short="Caldera"
+ 		long="Caldera OpenLinux"

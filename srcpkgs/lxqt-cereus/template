@@ -1,0 +1,43 @@
+# Template file for 'lxqt-cereus'
+pkgname=lxqt-cereus
+version=2.2.0
+revision=1
+metapackage=yes
+depends="
+	lxqt-about>=${version}
+	lxqt-admin>=${version}
+	lxqt-config>=${version}
+	lxqt-globalkeys>=${version}
+	lxqt-notificationd>=${version}
+	lxqt-openssh-askpass>=${version}
+	lxqt-panel>=${version}
+	lxqt-policykit>=${version}
+	lxqt-powermanagement>=${version}
+	lxqt-qtplugin>=${version}
+	lxqt-qtplugin-legacy
+	lxqt-runner>=${version}
+	lxqt-session>=${version}
+	lxqt-sudo>=${version}
+	lxqt-themes>=${version}
+	pcmanfm-qt>=${version}
+	lximage-qt>=${version}
+	lxqt-archiver
+	qterminal>=${version}
+	cereus-lxqt-themes
+	qterminal-cereus-colorscheme
+	qps
+	betterlockscreen-gui
+	xfwm4-lxqt
+	material-black-cereus-xfwm
+	cereus-themes-presets
+	cereus-lxqt-presets
+	xdg-desktop-portal-lxqt
+	xdg-utils
+	elogind
+	upower"
+short_desc="LXQt meta-package for Cereus Linux"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="BSD-2-Clause" # Suppress xlint warning: vlicense
+homepage="https://lxqt-project.org"
+replaces="lxqt-minimal>=0"
+repository=cereus-core

@@ -1,0 +1,13 @@
+diff --git a/xed/xed-metadata-manager.c b/xed/xed-metadata-manager.c
+index d92ff87..5b40fec 100644
+--- a/xed/xed-metadata-manager.c
++++ b/xed/xed-metadata-manager.c
+@@ -533,8 +533,6 @@ xed_metadata_manager_save (gpointer data)
+ 
+     resize_items ();
+ 
+-    xmlIndentTreeOutput = TRUE;
+-
+     doc = xmlNewDoc ((const xmlChar *)"1.0");
+     if (doc == NULL)
+         return TRUE;

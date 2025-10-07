@@ -1,0 +1,51 @@
+From 217288d44bbe6233c3835df0810bcb188a65131d Mon Sep 17 00:00:00 2001
+From: Kevin Figueroa <kfdevart@disroot.org>
+Date: Wed, 27 Aug 2025 11:56:45 -0400
+Subject: [PATCH] src/Makefile: Implement DESTDIR
+
+The original behaviour is to make PREFIX work as both DESTDIR and PREFIX,
+but that's troublesome when it comes to xbps-src packaging, since it always sets PREFIX as /usr,
+resulting in the program being installed into the masterdir and not the destdir. This fixes it.
+---
+ src/Makefile | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/src/Makefile b/src/Makefile
+index 5984dd7..e5b3158 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -24,10 +24,11 @@ SRC = events.c fmanip.c img.c settings.c cfgmgr.c editor.c mainwindow.c sgnotes.
+ OBJ = $(SRC:.c=.o)
+ EXE = sgnotes
+ 
+-PREFIX = /usr
+-BIN_DIR = $(PREFIX)/bin
+-APP_DIR = $(PREFIX)/share/applications
+-ICON_DIR = $(PREFIX)/share/icons/hicolor/64x64/apps/
++DESTDIR = /
++_PREFIX = $(DESTDIR)/$(PREFIX)
++BIN_DIR = $(_PREFIX)/bin
++APP_DIR = $(_PREFIX)/share/applications
++ICON_DIR = $(_PREFIX)/share/icons/hicolor/64x64/apps/
+ 
+ all: $(EXE)
+ 
+@@ -50,13 +51,13 @@ install:
+ 	install -Dm755 $(EXE) $(BIN_DIR)/$(EXE)
+ 	install -Dm644 $(EXE).desktop $(APP_DIR)/$(EXE).desktop
+ 	install -Dm644 share/icons/hicolor/scalable/apps/$(EXE).svg $(ICON_DIR)/$(EXE).svg
+-	install -Dm644 share/gtksourceview-4/styles/zarium.xml $(PREFIX)/share/gtksourceview-4/styles/zarium.xml
++	install -Dm644 share/gtksourceview-4/styles/zarium.xml $(_PREFIX)/share/gtksourceview-4/styles/zarium.xml
+ 
+ uninstall:
+ 	rm -f $(BIN_DIR)/$(EXE)
+ 	rm -f $(APP_DIR)/$(EXE).desktop
+ 	rm -f $(ICON_DIR)/$(EXE).svg
+-	rm -f $(PREFIX)/share/gtksourceview-4/styles/zarium.xml
++	rm -f $(_PREFIX)/share/gtksourceview-4/styles/zarium.xml
+ 
+ clean:
+ 	rm -f $(OBJ) $(EXE) debug
+-- 
+2.51.0
+

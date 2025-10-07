@@ -1,0 +1,41 @@
+# Template file for 'darkly-qt6'
+pkgname=darkly-qt6
+version=0.5.23
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF
+ -DBUILD_QT5=OFF
+ -Wno-dev"
+hostmakedepends="extra-cmake-modules"
+makedepends="kf6-kdecoration-devel qt6-declarative-devel kf6-kguiaddons-devel
+ kf6-kconfigwidgets-devel kf6-kwindowsystem-devel gettext-devel
+ kf6-kiconthemes-devel kf6-kirigami-devel kf6-kcmutils-devel
+ kf6-frameworkintegration-devel"
+short_desc="Modern style for Qt6 applications"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Bali10050/Darkly"
+distfiles="${homepage}/archive/refs/tags/v${version}.tar.gz"
+checksum=a897784e4e43fe7947afe65fd91e796f98f8eec6beec7f94a04f3c102c5d5577
+repository=cereus-extra
+
+darkly-qt6-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/cmake
+	}
+}
+
+# Transitional dummy packages. These are going to be removed in a future update.
+lightly-qt6_package() {
+	metapackage=yes
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - transitional dummy package"
+}
+
+lightly-qt6-devel_package() {
+	metapackage=yes
+	depends="darkly-qt6-devel>=${version}_${revision}"
+	short_desc+=" - transitional dummy package"
+}

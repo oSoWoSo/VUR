@@ -1,0 +1,21 @@
+# Template file for 'jetbrains-mono-font'
+pkgname=jetbrains-mono-font
+version=2.304
+revision=2
+depends="font-util"
+short_desc="Free and open-source typeface for developers"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="OFL-1.1"
+homepage="https://github.com/JetBrains/JetBrainsMono"
+changelog="https://raw.githubusercontent.com/JetBrains/JetBrainsMono/refs/heads/master/Changelog.md"
+distfiles="${homepage}/releases/download/v${version}/JetBrainsMono-${version}.zip"
+checksum=6f6376c6ed2960ea8a963cd7387ec9d76e3f629125bc33d1fdcd7eb7012f7bbf
+font_dirs="/usr/share/fonts/ttf /usr/share/fonts/variable /usr/share/fonts/webfonts"
+repository=cereus-extra
+
+do_install() {
+	vmkdir usr/share/fonts
+	vcopy "fonts/*" usr/share/fonts
+	vlicense AUTHORS.txt
+	vlicense OFL.txt
+}

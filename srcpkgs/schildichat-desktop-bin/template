@@ -1,0 +1,22 @@
+# Template file for 'schildichat-desktop-bin'
+pkgname=schildichat-desktop-bin
+_pkgname=${pkgname%-bin}
+_version=1.11.36-sc.3
+version=1.11.36.sc.3
+revision=1
+archs="x86_64"
+build_style="fetch"
+depends="sqlcipher libcrypto1.1"
+short_desc="Element-based Matrix client with a traditional experience - precompiled"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="Apache-2.0"
+homepage="https://schildi.chat"
+changelog="https://github.com/SchildiChat/schildichat-desktop/releases/tag/v${_version}"
+distfiles="https://github.com/SchildiChat/schildichat-desktop/releases/download/v${_version}/${_pkgname}_${_version}_amd64.deb"
+checksum=2e540d0bf8ce979bac05c2a8e0e994464a48f0646a38bc5fcc54232ffdedf2ff
+repository=cereus-extra
+
+do_install() {
+	vextract -C "${DESTDIR}" ${_pkgname}_${_version}_amd64.deb
+	vbin "${FILESDIR}/${_pkgname}.sh" ${_pkgname}
+}

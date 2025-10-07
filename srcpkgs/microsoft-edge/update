@@ -1,0 +1,3 @@
+site='https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable'
+vdsuffix="-1"
+pattern="microsoft-edge-stable_\K\d+\.\d+\.\d+\.\d+(-\d+)?(?=_amd64\.deb)"

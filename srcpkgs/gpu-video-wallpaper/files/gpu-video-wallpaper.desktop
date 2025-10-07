@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Video Wallpaper
+Exec=gpu-video-wallpaper-gui
+Icon=wallpaper
+Comment=Set video files as your desktop wallpaper.
+Categories=Utility
+Terminal=false

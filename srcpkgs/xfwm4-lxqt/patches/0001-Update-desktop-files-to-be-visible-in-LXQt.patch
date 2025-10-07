@@ -1,0 +1,62 @@
+From 46bdeafc65058062ff7e1ee95f021df2e09f23e6 Mon Sep 17 00:00:00 2001
+From: Kevin Figueroa <kfdevart@disroot.org>
+Date: Mon, 31 Mar 2025 15:31:59 -0400
+Subject: [PATCH] Update desktop files to be visible in LXQt
+
+---
+ settings-dialogs/xfce-wm-settings.desktop.in         | 4 ++--
+ settings-dialogs/xfce-wmtweaks-settings.desktop.in   | 4 ++--
+ settings-dialogs/xfce-workspaces-settings.desktop.in | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/settings-dialogs/xfce-wm-settings.desktop.in b/settings-dialogs/xfce-wm-settings.desktop.in
+index 098e375b9..99d5f08a4 100644
+--- a/settings-dialogs/xfce-wm-settings.desktop.in
++++ b/settings-dialogs/xfce-wm-settings.desktop.in
+@@ -7,9 +7,9 @@ Exec=xfwm4-settings
+ Icon=org.xfce.xfwm4
+ Terminal=false
+ Type=Application
+-Categories=XFCE;GTK;Settings;DesktopSettings;X-XFCE-SettingsDialog;X-XFCE-PersonalSettings;
++Categories=LXQt;XFCE;GTK;Settings;DesktopSettings;X-XFCE-SettingsDialog;X-XFCE-PersonalSettings;
+ StartupNotify=true
+-OnlyShowIn=XFCE;
++OnlyShowIn=LXQt;XFCE;
+ X-XfcePluggable=true
+ X-XfceHelpComponent=xfwm4
+ X-XfceHelpPage=preferences
+diff --git a/settings-dialogs/xfce-wmtweaks-settings.desktop.in b/settings-dialogs/xfce-wmtweaks-settings.desktop.in
+index c8486144f..46ee67b40 100644
+--- a/settings-dialogs/xfce-wmtweaks-settings.desktop.in
++++ b/settings-dialogs/xfce-wmtweaks-settings.desktop.in
+@@ -7,9 +7,9 @@ Exec=xfwm4-tweaks-settings
+ Icon=org.xfce.xfwm4-tweaks
+ Terminal=false
+ Type=Application
+-Categories=XFCE;GTK;Settings;DesktopSettings;X-XFCE-SettingsDialog;X-XFCE-PersonalSettings;
++Categories=LXQt;XFCE;GTK;Settings;DesktopSettings;X-XFCE-SettingsDialog;X-XFCE-PersonalSettings;
+ StartupNotify=true
+-OnlyShowIn=XFCE;
++OnlyShowIn=LXQt;XFCE;
+ X-XfcePluggable=true
+ X-XfceHelpComponent=xfwm4
+ X-XfceHelpPage=wmtweaks
+diff --git a/settings-dialogs/xfce-workspaces-settings.desktop.in b/settings-dialogs/xfce-workspaces-settings.desktop.in
+index abfde3c80..058edf629 100644
+--- a/settings-dialogs/xfce-workspaces-settings.desktop.in
++++ b/settings-dialogs/xfce-workspaces-settings.desktop.in
+@@ -7,9 +7,9 @@ Exec=xfwm4-workspace-settings
+ Icon=org.xfce.workspaces
+ Terminal=false
+ Type=Application
+-Categories=XFCE;GTK;Settings;DesktopSettings;X-XFCE-SettingsDialog;X-XFCE-PersonalSettings;
++Categories=LXQt;XFCE;GTK;Settings;DesktopSettings;X-XFCE-SettingsDialog;X-XFCE-PersonalSettings;
+ StartupNotify=true
+-OnlyShowIn=XFCE;
++OnlyShowIn=LXQt;XFCE;
+ X-XfcePluggable=true
+ X-XfceHelpComponent=xfwm4
+ X-XfceHelpPage=workspaces
+-- 
+2.49.0
+

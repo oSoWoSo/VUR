@@ -1,0 +1,20 @@
+# Template file for 'sgnotes'
+pkgname=sgnotes
+reverts="2024.09.29_2 2024.11.23_1"
+version=1.1
+revision=1
+build_style=gnu-makefile
+make_use_env=1
+build_wrksrc="src"
+make_build_args="WITHSOURCEVIEW=1"
+hostmakedepends="pkg-config"
+makedepends="gtk+3-devel gtksourceview4-devel"
+short_desc="Simple GTK Notes App"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://codeberg.org/ItsZariep/SGNotes"
+distfiles="${homepage}/archive/${version}.tar.gz"
+checksum=3311c42e512a55d5adf0d665cefae0a71c496f27e8ee867a05b9d287e885b4bc
+repository=cereus-extra
+
+make_check=no # directly runs the binary

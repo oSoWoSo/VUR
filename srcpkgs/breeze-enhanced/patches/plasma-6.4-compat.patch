@@ -1,0 +1,32 @@
+From 2133d637c02fc76266d28d073afebe5027c7eaf1 Mon Sep 17 00:00:00 2001
+From: DiabeticCrab <62806574+DiabeticCrab@users.noreply.github.com>
+Date: Thu, 19 Jun 2025 19:43:09 +0200
+Subject: [PATCH] Plasma 6.4 compat
+
+Based on https://github.com/KDE/breeze/commit/6e644cdc0142cc03c4ded6b066da468ec7263d78
+---
+ breezedecoration.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/breezedecoration.cpp b/breezedecoration.cpp
+index daf4ef4..8be10d1 100644
+--- a/breezedecoration.cpp
++++ b/breezedecoration.cpp
+@@ -387,7 +387,7 @@ namespace Breeze
+         setBorders(bordersFor(w->nextScale()));
+ 
+         // extended sizes
+-        const qreal extSize = w->snapToPixelGrid(s->largeSpacing());
++        const qreal extSize = KDecoration3::snapToPixelGrid(s->largeSpacing(), w->nextScale());
+         qreal extSides = 0;
+         qreal extBottom = 0;
+         if (hasNoBorders())
+@@ -933,7 +933,7 @@ namespace Breeze
+         // On X11, the smallSpacing value is used for scaling.
+         // On Wayland, this value has constant factor of 2.
+         // Removing it will break radius scaling on X11.
+-        m_scaledCornerRadius = window()->snapToPixelGrid(Metrics::Frame_FrameRadius * settings()->smallSpacing());
++        m_scaledCornerRadius = KDecoration3::snapToPixelGrid(Metrics::Frame_FrameRadius * settings()->smallSpacing(), window()->nextScale());
+     }
+ 
+     //________________________________________________________________

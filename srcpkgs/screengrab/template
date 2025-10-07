@@ -1,0 +1,17 @@
+# Template file for 'screengrab'
+pkgname=screengrab
+version=3.0.0
+revision=1
+build_style=cmake
+hostmakedepends="qt6-base-devel lxqt-build-tools perl"
+makedepends="kf6-kwindowsystem-devel qt6-wayland-devel
+ layer-shell-qt-devel libqtxdg-devel qt6-tools-devel
+ qt6-wayland-private-devel"
+short_desc="Crossplatform tool for creating screenshots"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-only"
+homepage="https://github.com/lxqt/screengrab"
+changelog="https://raw.githubusercontent.com/lxqt/screengrab/refs/heads/master/CHANGELOG"
+distfiles="${homepage}/releases/download/${version}/${pkgname}-${version}.tar.xz"
+checksum=30ad0428688595eb09ca684133c1bb1b02c4affae302791c4d2eb7990f6ccee7
+repository=cereus-extra

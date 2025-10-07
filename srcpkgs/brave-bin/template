@@ -1,0 +1,35 @@
+# Template file for 'brave-bin'
+pkgname=brave-bin
+version=1.81.136
+revision=1
+archs="x86_64"
+build_style="fetch"
+short_desc="Secure, fast and private web browser with ad blocker"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MPL-2.0"
+homepage="https://brave.com"
+distfiles="https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb"
+checksum=cfa9cc83cb70914bf50ad6e8c73b8e630c9f814920115ed700aa01136e95298e
+repository=cereus-extra
+
+do_install() {
+	# Extract directly into DESTDIR
+	vextract -C "${DESTDIR}" brave-browser_${version}_amd64.deb
+
+	# Install the icons
+	for size in 24 32 48 64 128 256; do
+		# Create the brave browser xdg directory
+		vmkdir usr/share/icons/hicolor/${size}x${size}/apps
+
+		# Copy the brave browser icon
+		mv ${DESTDIR}/opt/brave.com/brave/product_logo_${size}.png \
+		${DESTDIR}/usr/share/icons/hicolor/${size}x${size}/apps/brave-browser.png
+	done
+
+	# Remove unused icon
+	rm "${DESTDIR}/opt/brave.com/brave/product_logo_32.xpm"
+
+	# Remove the Debian/Ubuntu crontab
+	rm -rf ${DESTDIR}/etc
+	rm -rf ${DESTDIR}/opt/brave.com/brave/cron
+}

@@ -1,17 +1,31 @@
 # Template file for 'qownnotes'
 pkgname=qownnotes
-version=25.3.3
+version=25.10.3
 revision=1
-build_style=qmake
-configure_args="USE_SYSTEM_BOTAN=1"
-hostmakedepends="pkg-config qt6-base"
-makedepends="botan-devel qt6-base-devel qt6-declarative-devel
- qt6-qt5compat-devel qt6-svg-devel qt6-websockets-devel"
-depends="qt6-plugin-sqlite qt6-svg"
-short_desc="Plain-text file notepad and todo-list manager with markdown support"
-maintainer="travankor <travankor@tuta.io>"
-license="GPL-2.0-only"
-homepage="https://www.qownnotes.org"
-changelog="https://raw.githubusercontent.com/pbek/QOwnNotes/main/CHANGELOG.md"
-distfiles="https://github.com/pbek/QOwnNotes/releases/download/v${version}/qownnotes-${version}.tar.xz"
-checksum=c1a58538f5f12a009bd61d5d552cd70d543070ac8504a5ee030617bbade87cfa
+build_style=cmake
+configure_args="-DBUILD_WITH_SYSTEM_BOTAN=ON
+	-DQON_QT6_BUILD=ON
+	-DBUILD_WITH_LIBGIT2=$(vopt_if libgit2 ON OFF)
+	-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+hostmakedepends="pkg-config qt6-base qt6-tools"
+makedepends="botan3-devel qt6-base-devel qt6-declarative-devel
+ aspell-devel qt6-qt5compat-devel qt6-svg-devel qt6-websockets-devel
+ $(vopt_if libgit2 libgit2-devel)"
+depends="qt6-plugin-sqlite"
+short_desc="Plain-text file markdown note taking with Nextcloud/ownCloud integration"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/pbek/QOwnNotes"
+changelog="https://raw.githubusercontent.com/pbek/QOwnNotes/refs/tags/v${version}/CHANGELOG.md"
+distfiles="${homepage}/releases/download/v${version}/qownnotes-${version}.tar.xz"
+checksum=857a9fa3eebb9b5c84afcabb510f84afe06e26b201dd9f0cfb1dfd3e99947710
+repository=cereus-extra
+
+build_options="libgit2"
+desc_option_libgit2="Enable libgit2 support"
+
+post_install() {
+	rename QOwnNotes qownnotes "${DESTDIR}/usr/bin/QOwnNotes"
+	vsed -i 's|Exec=QOwnNotes|Exec=qownnotes|g' PBE.QOwnNotes.desktop
+	ln -frs ${DESTDIR}/usr/bin/qownnotes ${DESTDIR}/usr/bin/QOwnNotes
+}

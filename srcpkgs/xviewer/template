@@ -1,0 +1,50 @@
+# Template file for 'xviewer'
+pkgname=xviewer
+version=3.4.12
+revision=1
+build_style=meson
+build_helper=gir
+configure_args="$(vopt_feature exempi) $(vopt_feature exif) $(vopt_feature jpeg)
+ $(vopt_feature lcms) $(vopt_feature rsvg)"
+hostmakedepends="itstool gtk-doc cmake pkg-config gettext-devel"
+makedepends="libglib-devel gtk+3-devel libpeas-devel cinnamon-desktop-devel
+ xapps-devel glib-devel $(vopt_if exempi exempi-devel)
+ $(vopt_if exif libexif-devel) $(vopt_if jpeg libjpeg-turbo-devel)
+ $(vopt_if lcms lcms2-devel) $(vopt_if rsvg librsvg-devel)"
+
+build_options="exempi exif jpeg lcms rsvg"
+desc_option_exempi="Enable XMP support"
+desc_option_exif="Enable EXIF support"
+desc_option_jpeg="Enable JPEG support"
+desc_option_lcms="Enable LittleCMS 2 support"
+desc_option_rsvg="Enable SVG support"
+
+build_options_default="exempi exif jpeg lcms rsvg"
+
+depends="webp-pixbuf-loader yelp libheif libavif"
+short_desc="Simple and easy to use image viewer"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later AND LGPL-2.1-or-later"
+homepage="https://github.com/linuxmint/xviewer"
+distfiles="${homepage}/archive/refs/tags/${version}.tar.gz"
+checksum=323b7e9799a1f0e57501a6c1b0886a2a5a899ea3ccb0993ca0d7fbcfb987cc0e
+repository=cereus-extra
+
+libxviewer_package() {
+	short_desc+=" - runtime library"
+	shlib_provides="libxviewer.so"
+	pkg_install() {
+		vmove usr/lib/xviewer/libxviewer.so
+	}
+}
+
+xviewer-devel_package() {
+	depends="libglib-devel gtk+3-devel libxviewer>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/pkgconfig
+		vmove usr/share/gtk-doc
+		vmove usr/share/xviewer/gir-1.0
+	}
+}

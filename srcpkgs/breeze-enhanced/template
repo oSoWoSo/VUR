@@ -1,0 +1,15 @@
+# Template file for 'breeze-enhanced'
+pkgname=breeze-enhanced
+version=6.3
+revision=2
+build_style=cmake
+hostmakedepends="qt6-base-devel extra-cmake-modules gettext"
+makedepends="kf6-kdecoration-devel kf6-kcmutils-devel kf6-kguiaddons-devel
+ kf6-kwindowsystem-devel kf6-ki18n-devel"
+short_desc="Fork of KDE Breeze decoration with additional options"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/tsujan/BreezeEnhanced"
+distfiles="${homepage}/archive/refs/tags/V${version}.tar.gz"
+checksum=f3bcdafd77cf5b59954e7dd52daba465384a1664cba106fc7afaaa8b77e990ce
+repository=cereus-extra

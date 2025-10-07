@@ -1,0 +1,31 @@
+# Template file for 'gpu-video-wallpaper'
+pkgname=gpu-video-wallpaper
+version=2023.07.11
+revision=2
+_commit="fa96188475fbc7abfa539f90d2930ea93615062f"
+depends="python3 python3-PyQt5 xrandr pcre mpv xwinwrap"
+short_desc="Use your GPU for rendering low cpu using/usage video animated wallpaper"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT"
+homepage="https://github.com/ghostlexly/gpu-video-wallpaper"
+distfiles="${homepage}/archive/${_commit}.tar.gz"
+checksum=95530fbd49837abda52b241120185f5dd8c118b80bbc122105cbba4dfae99a12
+repository=cereus-extra
+
+do_install() {
+	vinstall gui.ui 644 usr/share/${pkgname}
+	vinstall ${FILESDIR}/${pkgname}.desktop 644 usr/share/applications
+
+	vmkdir usr/bin
+	for file in video-wallpaper.{py,sh}; do
+		vinstall ${file} 755 usr/share/${pkgname}
+		case ${file} in
+			video-wallpaper.py) filename="${pkgname}-gui" ;;
+			video-wallpaper.sh) filename="${pkgname}" ;;
+		esac
+		ln -sfr ${DESTDIR}/usr/share/${pkgname}/${file} ${DESTDIR}/usr/bin/${filename}
+	done
+
+	vdoc readme.md
+	vlicense LICENSE
+}

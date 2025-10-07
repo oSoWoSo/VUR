@@ -1,0 +1,28 @@
+# Template file for 'libfm-qt-legacy'
+pkgname=libfm-qt-legacy
+version=1.4.0
+revision=3
+build_style=cmake
+hostmakedepends="pkg-config lxqt-build-tools-legacy qt5-qmake qt5-host-tools perl"
+makedepends="qt5-tools-devel qt5-x11extras-devel libexif-devel
+ menu-cache-devel lxqt-menu-data-devel"
+short_desc="Core library of PCManFM-Qt (Qt5 legacy compatibility)"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="LGPL-2.1-or-later"
+homepage="https://lxqt-project.org"
+distfiles="https://github.com/lxqt/libfm-qt/archive/${version}.tar.gz"
+checksum=fbca95a2d3dab9ac21e685cf15534bb832973442046965bea0ef806cc770e7bf
+conflicts="libfm-qt5"
+replaces="libfm-qt5>=0"
+repository=cereus-extra
+
+libfm-qt-legacy-devel_package() {
+	short_desc+=" - development files"
+	depends="${makedepends} ${sourcepkg}>=${version}_${revision}"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/pkgconfig
+		vmove usr/lib/*.so
+		vmove usr/share/cmake
+	}
+}

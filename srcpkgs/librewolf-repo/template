@@ -1,0 +1,16 @@
+# Template file for 'librewolf-repo'
+pkgname=librewolf-repo
+version=1
+revision=1
+archs="x86_64 x86_64-musl"
+short_desc="Drop-in file for index-0's librewolf-void repository"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="Public Domain"
+homepage="https://github.com/index-0/librewolf-void"
+repository=cereus-extra
+
+do_install() {
+	vmkdir usr/share/xbps.d
+	echo "repository=${homepage}/releases/latest/download" > \
+		${DESTDIR}/usr/share/xbps.d/20-librewolf.conf
+}

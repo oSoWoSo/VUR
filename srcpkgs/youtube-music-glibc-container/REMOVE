@@ -1,0 +1,14 @@
+# REMOVE
+# youtube-music-bin remove script for Cereus/Void Musl
+
+case "$ACTION" in
+post)
+	if [ "$UPDATE" = "no" ]; then
+        	# Enter via chroot to container and remove youtube-music-bin
+        	xchroot /glibc xbps-remove -Ryfv youtube-music-bin
+
+        	# Ensure that xchroot has unmounted all binds
+        	umount -R "/glibc/dev" "/glibc/etc/resolv.conf" "/glibc/proc" "/glibc/sys"
+	fi
+    ;;
+esac

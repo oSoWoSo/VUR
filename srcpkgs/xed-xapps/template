@@ -1,0 +1,40 @@
+# Template file for 'xed-xapps'
+pkgname=xed-xapps
+version=3.8.4
+revision=1
+build_style=meson
+build_helper=gir
+hostmakedepends="meson xapps-devel intltool itstool cmake pkg-config gtk-doc"
+makedepends="xapps-devel libxml2-devel gtksourceview4-devel gspell-devel
+ libpeas-devel libxkbfile-devel glib-devel"
+depends="yelp"
+short_desc="Small, cross-DE and lightweight text editor with traditional UI"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/linuxmint/xed"
+distfiles="${homepage}/archive/${version}.tar.gz"
+checksum=1660fd85506ff1c12ff09953f70abcd67e425d5a7a0c3f6ba7f49a0a38458c4f
+# both provide xed bin and man at the same path
+conflicts="xed"
+# needs dogtail which is not packaged and it doesn't seems to work inside a chroot
+make_check=no
+repository=cereus-extra
+
+libxed_package() {
+	short_desc+=" - runtime library"
+	shlib_provides="libxed.so"
+	pkg_install() {
+		vmove usr/lib/xed/libxed.so
+	}
+}
+
+xed-xapps-devel_package() {
+	depends="libxed>=${version}_${revision} xapps-devel libglib-devel
+	 gtk+3-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/pkgconfig
+		vmove usr/share/xed/gir-1.0
+	}
+}

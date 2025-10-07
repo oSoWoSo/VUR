@@ -1,0 +1,19 @@
+# Template file for 'mint-ice-y-dark-theme'
+pkgname=mint-ice-y-dark-theme
+reverts="2022.06.02_1"
+version=2022.02.07
+revision=1
+_commit="4bdbcfff0d31873431ca029af05c05b320ef5754"
+_theme_dir="usr/share/icewm/themes/Mint-Ice-Y-Dark"
+short_desc="Mint-Y-like dark theme for IceWM"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/IamTheMasterRoy/IceWM-Themes"
+distfiles="${homepage}/archive/${_commit}.tar.gz"
+checksum=d7ff6f77bc2260e33dd16866e34da5f20345eb5ee8009107e09b7fda646b497c
+repository=cereus-extra
+
+do_install() {
+	vmkdir "${_theme_dir}"
+	vextract -C "${DESTDIR}/${_theme_dir}" Mint-Ice-Y-Dark-Variants.tar.gz
+}

@@ -1,0 +1,40 @@
+# Template file for 'youtube-music-glibc-container'
+pkgname=youtube-music-glibc-container
+_pkgname=${pkgname%-glibc-container}
+version=3.6.2
+revision=2
+archs="x86_64-musl"
+build_style="fetch"
+depends="voidnsrun-setup"
+short_desc="YouTube Music Desktop App bundled with custom plugins"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT"
+homepage="https://th-ch.github.io/youtube-music"
+changelog="https://raw.githubusercontent.com/th-ch/youtube-music/refs/heads/master/changelog.md"
+distfiles="https://github.com/th-ch/youtube-music/raw/v${version}/license"
+checksum="e7e14b3b771ecadb23f6ee0b6f99d1553e385e35cdb44fc8e36ee7c878dacd08"
+repository="cereus-extra"
+
+do_install() {
+    # Install the script
+	vbin ${FILESDIR}/${_pkgname}.sh ${_pkgname}
+
+    # Copy launcher
+	vinstall ${FILESDIR}/${_pkgname}.desktop 644 \
+		usr/share/applications/
+
+    # Install the icons
+	for res in 16 24 32 48 64 128 256 512 1024; do
+		vinstall ${FILESDIR}/icon-${res}x${res}.png 0644 \
+			usr/share/icons/hicolor/${res}x${res}/apps/${_pkgname/}.png
+	done
+
+    # Install the license
+	vlicense license
+}
+
+youtube-music-bin-musl_package() {
+	metapackage=yes
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - transitional dummy package"
+}

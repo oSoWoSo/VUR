@@ -1,0 +1,2 @@
+site='https://github.com/meganz/MEGAsync/tags'
+pattern='/archive/refs/tags/(v?|megasync_)?\K[\d.]+(?:_[\w]+)?(?=_Linux\.tar\.gz)'

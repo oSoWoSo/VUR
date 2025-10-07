@@ -1,0 +1,17 @@
+# Template file for 'xviewer-plugins'
+pkgname=xviewer-plugins
+version=3.4.1
+revision=1
+build_style=meson
+build_helper=gir
+hostmakedepends="pkg-config which intltool gettext"
+makedepends="glib-devel gtk+3-devel libpeas-devel xviewer-devel
+ cinnamon-desktop-devel xapps-devel librsvg-devel libexif-devel
+ libchamplain-devel libgdata-devel exempi-devel"
+short_desc="Collection of plugins for XViewer"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/linuxmint/xviewer-plugins"
+distfiles="${homepage}/archive/refs/tags/${version}.tar.gz"
+checksum=2f683324091deb66959693941eccc0f3a2d4e64ae790e781fe4eeb5f5b2d0264
+repository=cereus-extra

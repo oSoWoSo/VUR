@@ -1,0 +1,17 @@
+# Template file for 'linux-mainline-cereus'
+pkgname=linux-mainline-cereus
+version=6.17
+revision=1
+metapackage=yes
+depends="linux${version} linux-base"
+short_desc="Cereus Linux mainline kernel meta-package (for experts only)"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="Public Domain"
+homepage="http://cereus-linux.codeberg.page/"
+repository=cereus-core
+
+linux-mainline-cereus-headers_package() {
+	short_desc="Cereus Linux mainline kernel headers meta-package"
+	depends="linux${version}-headers"
+	metapackage=yes
+}

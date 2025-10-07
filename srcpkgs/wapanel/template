@@ -1,0 +1,42 @@
+# Template file for 'wapanel'
+pkgname=wapanel
+version=1.1.0
+revision=3
+_toml11_commit=9132abc5c403bfeaf12a8ff940a9fbdc45220843
+build_style=meson
+hostmakedepends="clang pkg-config"
+makedepends="gtk-layer-shell-devel gtk+3-devel wayland-scanner++ pulseaudio-devel"
+short_desc="Desktop-dedicated Wayland bar"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT"
+homepage="https://github.com/Firstbober/wapanel"
+changelog="${homepage}/releases/tag/${version}"
+distfiles="${homepage}/archive/refs/tags/${version}.tar.gz
+ https://github.com/ToruNiina/toml11/archive/${_toml11_commit}.tar.gz"
+checksum="4f2f11f0d001b4507b5b1dc6622df68a9e786f590cabf603bc5a3b296039f0a5
+ 943f1746a7c687ce230ce2f1a7bdabc1e3373518ce251df622fbe0c6d746b02e"
+repository=cereus-extra
+
+skip_extraction="${_toml11_commit}.tar.gz"
+
+post_extract() {
+	vsrcextract -C thirdparty/toml11 "${_toml11_commit}.tar.gz"
+}
+
+post_patch() {
+	vsed -i 's|G_APPLICATION_FLAGS_NONE|G_APPLICATION_DEFAULT_FLAGS|g' src/main.cc
+}
+
+post_install() {
+	vlicense LICENSE
+}
+
+wapanel-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/pkgconfig
+		vmove usr/lib/*.a
+	}
+}

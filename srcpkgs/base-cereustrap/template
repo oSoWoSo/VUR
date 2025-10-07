@@ -1,0 +1,23 @@
+# Template file for 'base-cereustrap'
+pkgname=base-cereustrap
+version=0.11
+revision=4
+metapackage=yes
+short_desc="Cereus Linux base system meta package for containers/chroots"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="Public Domain"
+homepage="https://cereus-linux.codeberg.page"
+repository=cereus-core
+
+depends="
+ base-files-cereus>=2022.07.03 ncurses coreutils findutils diffutils
+ dash bash grep gzip file sed gawk less util-linux which tar man-pages
+ mdocml>=1.13.3 shadow e2fsprogs btrfs-progs xfsprogs f2fs-tools dosfstools kbd
+ procps-ng tzdata pciutils iana-etc eudev runit-cereus openssh dhcpcd
+ iproute2 iputils iw xbps nvi traceroute kmod removed-packages cereus-repo-core
+ cereus-repo-extra"
+
+case "$XBPS_TARGET_MACHINE" in
+	*-musl) depends+=" musl musl-locales";;
+	*) depends+=" glibc-locales";;
+esac

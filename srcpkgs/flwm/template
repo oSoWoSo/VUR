@@ -1,0 +1,21 @@
+# Template file for 'flwm'
+pkgname=flwm
+version=1.16
+revision=4
+build_style=gnu-configure
+makedepends="fltk-devel"
+short_desc="Fast Light Window Manager"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-2.0-or-later"
+homepage="http://flwm.sourceforge.net/"
+changelog="https://github.com/bbidulock/flwm/releases/tag/${version}"
+distfiles="https://github.com/bbidulock/${pkgname}/releases/download/${version}/${pkgname}-${version}.tgz"
+checksum=332de98cc4fe97c27e7b05375fbb70ff88aeadb2ac351f2aabaf5e799ea4768a
+repository=cereus-extra
+
+do_install() {
+	vbin flwm
+	vman flwm.1
+	vinstall flwm.desktop 644 "usr/share/xsessions/"
+	vinstall logo.png 644 "usr/share/pixmaps/" flwm.png
+}

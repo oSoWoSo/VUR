@@ -1,0 +1,17 @@
+# Template file for 'komorebi'
+pkgname=komorebi
+version=3.0.0
+revision=1
+build_style=meson
+hostmakedepends="cmake pkg-config gettext"
+makedepends="libgee08-devel vala-devel glib-devel gtk+3-devel
+ libwebkit2gtk41-devel clutter-gtk-devel clutter-gst3-devel"
+depends="gst-libav gstreamer-vaapi"
+short_desc="Beautiful and customizable wallpaper manager for Linux"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Komorebi-Fork/komorebi"
+changelog="${homepage}/releases/tag/v${version}"
+distfiles="${homepage}/archive/refs/tags/v${version}.tar.gz"
+checksum=fe2685ee291e1697c9c4cbb5900880cb6d898ac6393b50052c7e5805bc409775
+repository=cereus-extra

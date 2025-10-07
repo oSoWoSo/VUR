@@ -1,0 +1,19 @@
+# Template file for 'cereus-neofetch'
+pkgname=cereus-neofetch
+version=7.1.0
+revision=9
+build_style=gnu-makefile
+depends="bash nerd-fonts-symbols-ttf"
+short_desc="Simple system information script"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT"
+homepage="https://github.com/dylanaraps/neofetch"
+changelog="https://github.com/dylanaraps/neofetch/releases/tag/${version}"
+distfiles="${homepage}/archive/${version}/${pkgname}-${version}.tar.gz"
+checksum=58a95e6b714e41efc804eca389a223309169b2def35e57fa934482a6b47c27e7
+replaces="neofetch>=7.1.0"
+repository=cereus-core
+
+post_install() {
+	vlicense LICENSE.md
+}

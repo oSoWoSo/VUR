@@ -1,0 +1,1 @@
+The komorebi binary was renamed to komorebi-desktop

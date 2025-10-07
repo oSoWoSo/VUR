@@ -1,0 +1,30 @@
+# Template file for 'picom-git'
+pkgname=picom-git
+version=2025.06.22
+revision=1
+_commit="9b8b0e956514779de15898475091de01d59b4394"
+build_style=meson
+configure_args="-Dwith_docs=true"
+hostmakedepends="pkg-config asciidoc ruby-asciidoctor"
+makedepends="dbus-devel libconfig-devel libepoxy-devel libev-devel pcre2-devel
+ pixman-devel uthash xcb-util-image-devel xcb-util-renderutil-devel"
+depends="desktop-file-utils"
+short_desc="Lightweight compositor for X11 - git development version"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MPL-2.0 AND MIT"
+homepage="https://github.com/yshui/picom/"
+distfiles="${homepage}/archive/${_commit}.tar.gz"
+checksum=55deeda41e026ade725574adb2b4fe8ece107af6e959754abc58b10fe51b7192
+conflicts="picom picom-jonaburg picom-jonaburg-fix picom-ibhagwan picom-arian8j2
+ picom-dccsillag picom-ftlabs"
+replaces="picom>=0 picom-jonaburg>=0 picom-jonaburg-fix>=0 picom-ibhagwan>=0
+ picom-arian8j2>=0 picom-dccsillag>=0 picom-ftlabs>=0"
+repository=cereus-extra
+
+post_install() {
+	vlicense LICENSES/MIT
+	vlicense COPYING
+	vsconf picom.sample.conf
+	vsconf compton-default-fshader-win.glsl
+	vsconf compton-fake-transparency-fshader-win.glsl
+}

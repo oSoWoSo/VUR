@@ -1,0 +1,25 @@
+# Template file for 'mauikit-accounts'
+pkgname=mauikit-accounts
+version=4.0.2
+revision=1
+build_style=cmake
+hostmakedepends="extra-cmake-modules qt6-base-devel gettext"
+makedepends="kf6-kcoreaddons-devel mauikit-devel qt6-declarative-devel
+ qt6-declarative-private-devel qt6-base-private-devel kf6-ki18n-devel"
+short_desc="MauiKit utilities to handle user accounts"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="LGPL-3.0-only"
+homepage="https://mauikit.org"
+distfiles="${KDE_SITE}/maui/${pkgname}/${version}/${pkgname}-${version}.tar.xz"
+checksum=ba3616e9151d4838a1083765e3cf5241bd97e4c6796ead22493f4de91f286427
+repository=cereus-extra
+
+mauikit-accounts-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/cmake
+		vmove usr/include
+		vmove "usr/lib/*.so"
+	}
+}

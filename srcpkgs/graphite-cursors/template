@@ -1,0 +1,26 @@
+# Template file for 'graphite-cursors'
+pkgname=graphite-cursors
+version=2024.12.13
+revision=1
+_commit="0249b10b36d30746f08fcb925d456fedb3c54b9d"
+_cursordir="usr/share/icons"
+short_desc="Graphite cursors theme for Linux desktops"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/vinceliuice/Graphite-cursors"
+distfiles="${homepage}/archive/${_commit}.tar.gz"
+checksum=f99dc6c590bf6a8879f6c583bc89289c3a0b0382d9f02e07abc8060d7470ac38
+repository=cereus-extra
+
+do_install() {
+	vmkdir ${_cursordir}
+	for variant in light{,-nord} dark{,-nord}
+		do vcopy dist-${variant} ${_cursordir}/Graphite-${variant}-cursors
+	done
+}
+
+Graphite-cursors_package() {
+	metapackage=yes
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - transitional dummy package"
+}

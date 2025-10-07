@@ -1,11 +1,11 @@
 # Template file for 'hyprsunset'
 pkgname=hyprsunset
 version=0.3.3
-revision=3
+revision=2
 build_style=cmake
 configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr"
-hostmakedepends="pkg-config hyprwayland-scanner hyprwayland-scanner
- hyprland-protocols hyprland hyprutils wayland-protocols"
+hostmakedepends="pkg-config hyprwayland-scanner hyprwayland-scanner hyprland
+ hyprland-protocols hyprutils wayland-protocols"
 makedepends="wayland-devel"
 short_desc="Application to enable a blue-light filter on Hyprland"
 maintainer="Encoded14 <linusken@tuta.io>"

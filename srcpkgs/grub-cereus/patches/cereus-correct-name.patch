@@ -1,0 +1,15 @@
+diff -ruN a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
+--- a/util/grub.d/10_linux.in	2020-12-22 17:24:17.000000000 -0600
++++ b/util/grub.d/10_linux.in	2023-01-18 13:20:46.609566912 -0600
+@@ -30,6 +30,11 @@
+ 
+ if [ "x${GRUB_DISTRIBUTOR}" = "x" ] ; then
+   OS=GNU/Linux
++# We're 'Cereus Linux' not 'Cereus GNU/Linux'
++elif [ "$(echo "$GRUB_DISTRIBUTOR" | sed 's|cereus.*|Cereus|i')" = "Cereus" ]; then
++  OS="Cereus Linux"
++  GRUB_DISTRIBUTOR="Cereus Linux"
++  CLASS="--class $(echo ${GRUB_DISTRIBUTOR} | tr 'A-Z' 'a-z' | cut -d' ' -f1|LC_ALL=C sed 's,[^[:alnum:]_],_,g') ${CLASS}"
+ else
+   OS="${GRUB_DISTRIBUTOR} GNU/Linux"
+   CLASS="--class $(echo ${GRUB_DISTRIBUTOR} | tr 'A-Z' 'a-z' | cut -d' ' -f1|LC_ALL=C sed 's,[^[:alnum:]_],_,g') ${CLASS}"

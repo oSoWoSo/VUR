@@ -1,0 +1,21 @@
+# Template file for 'voidnsundo'
+pkgname=voidnsundo
+version=2021.07.30
+revision=3
+_commit="6375cdde63ccbbe7b01f650822d4f441093e2afd"
+build_style="gnu-makefile"
+make_build_args="undo"
+make_check_target="test"
+short_desc="Run binaries in the parent mount namespace from voidnsrun's namespace"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="BSD-2-Clause"
+homepage="https://github.com/gch1p/voidnsrun"
+distfiles="${homepage}/archive/${_commit}.tar.gz"
+checksum=cbe4493ffa29b50eb79f8a40075f53392029feb9904d146dd6e709789a03a77b
+repository=cereus-extra
+
+# make install-undo does not respect $DESTDIR
+do_install() {
+	vinstall voidnsundo 4755 usr/bin/
+	vlicense LICENSE
+}

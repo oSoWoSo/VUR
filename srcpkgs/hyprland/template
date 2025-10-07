@@ -15,7 +15,7 @@ hostmakedepends="pkg-config cpio glslang hyprwayland-scanner jq make meson ninja
 makedepends="cairo-devel libdisplay-info-devel libdrm-devel libgbm-devel
  libglvnd-devel libinput-devel libliftoff-devel libseat-devel libxcb-devel
  libXcursor-devel libxkbcommon-devel pango-devel re2-devel wayland-devel
- xcb-util-errors-devel xcb-util-renderutil-devel xcb-util-wm-devel"
+ xcb-util-errors-devel xcb-util-renderutil-devel xcb-util-wm-devel glibc-devel"
 short_desc="Dynamic tiling Wayland compositor that doesn't sacrifice on its looks"
 maintainer="Encoded14 <linusken@tuta.io>"
 license="BSD-3-Clause"

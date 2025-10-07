@@ -1,0 +1,58 @@
+# Template file for 'libadwaita-without-adwaita'
+pkgname=libadwaita-without-adwaita
+version=1.5.1
+revision=2
+repository="cereus-extra"
+build_style=meson
+build_helper="gir"
+configure_args="-Dexamples=true -Dtests=true $(vopt_bool gtk_doc)
+ $(vopt_bool gir vapi) $(vopt_feature gir introspection)"
+hostmakedepends="glib-devel pkg-config $(vopt_if gtk_doc gi-docgen)
+ $(vopt_if gir vala-devel) gettext sassc"
+makedepends="gtk4-devel libglib-devel harfbuzz-devel AppStream-devel"
+checkdepends="xvfb-run cantarell-fonts dbus"
+short_desc="libadwaita; Includes a patch to not overwrite the system theme"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="LGPL-2.0-or-later"
+homepage="https://gitlab.gnome.org/GNOME/libadwaita/"
+changelog="https://gitlab.gnome.org/GNOME/libadwaita/-/raw/libadwaita-1-4/NEWS"
+distfiles="${GNOME_SITE}/libadwaita/${version%.*}/libadwaita-${version}.tar.xz"
+checksum=7f144c5887d6dd2d99517c00fd42395ee20abc13ce55958a4fda64e6d7e473f8
+make_check_pre="dbus-run-session xvfb-run"
+replaces="libadwaita"
+provides="libadwaita"
+
+build_options="gir gtk_doc"
+build_options_default="gir gtk_doc"
+
+pre_build() {
+	# help gi-docgen find gi files on cross
+	if [ -n "$CROSS_BUILD" ]; then
+		export XDG_DATA_DIRS=/usr/$XBPS_CROSS_TRIPLET/usr/share/
+	fi
+}
+
+libadwaita-without-adwaita-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} gtk4-devel AppStream-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove "usr/lib/*.so"
+		vmove usr/include
+		vmove usr/lib/pkgconfig
+		if [ "$build_option_gir" ]; then
+			vmove usr/share/gir-1.0
+			vmove usr/share/vala
+		fi
+		if [ "$build_option_gtk_doc" ]; then
+			vmove usr/share/doc/libadwaita-1
+		fi
+	}
+}
+
+libadwaita-without-adwaita-demo_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - demonstration application"
+	pkg_install() {
+		vmove usr/bin/adwaita-1-demo
+	}
+}

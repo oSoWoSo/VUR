@@ -1,0 +1,29 @@
+diff -ruN a/data/lightdm-gtk-greeter.conf b/data/lightdm-gtk-greeter.conf
+--- a/data/lightdm-gtk-greeter.conf	2023-12-10 16:07:34.418676701 -0600
++++ b/data/lightdm-gtk-greeter.conf	2023-12-10 16:20:17.554580155 -0600
+@@ -48,11 +48,12 @@
+ #  transition-duration = overrides default value
+ #
+ [greeter]
+-#background=
+-#user-background=
+-#theme-name=
+-#icon-theme-name=
+-#font-name=
++background = /usr/share/backgrounds/wallpaper1.png
++user-background = false
++theme-name = Graphite-black-green-Dark
++icon-theme-name = Tela-green-dark
++font-name = Roboto 10
++cursor-theme-name = Graphite-light-cursors
+ #xft-antialias=
+ #xft-dpi=
+ #xft-hintstyle=
+@@ -61,5 +62,6 @@
+ #clock-format=
+ #keyboard=
+ #reader=
+-#position=
++position =  35%,end 50%,center
+ #screensaver-timeout=
++indicators = ~host;~spacer;~clock;~spacer;~layout;~session;~a11y;~power

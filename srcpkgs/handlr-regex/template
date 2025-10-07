@@ -1,0 +1,22 @@
+# Template file for 'handlr-regex'
+pkgname=handlr-regex
+version=0.13.0
+revision=1
+build_style=cargo
+depends="shared-mime-info"
+checkdepends="shared-mime-info"
+short_desc="Alternative to xdg-utils for ease of use with support for regex"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MIT"
+homepage="https://github.com/Anomalocaridid/handlr-regex"
+distfiles="${homepage}/archive/v${version}.tar.gz"
+checksum=963126a7aa8277b7cc7886c518528473ce5117a5999c949b809e14beffdbad0d
+conflicts="handlr"
+repository=cereus-extra
+
+post_install() {
+	vcompletion ${FILESDIR}/completions/_handlr zsh
+	vcompletion ${FILESDIR}/completions/handlr bash
+	vcompletion ${FILESDIR}/completions/handlr.fish fish
+	vlicense LICENSE
+}

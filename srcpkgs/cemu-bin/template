@@ -1,0 +1,39 @@
+# Template file for 'cemu-bin'
+pkgname=cemu-bin
+version=2.6
+revision=1
+archs="x86_64"
+build_style=fetch
+depends="at-spi2-core harfbuzz hicolor-icon-theme"
+short_desc="Nintendo Wii U Emulator - precompiled binaries"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="MPL-2.0"
+homepage="https://cemu.info"
+changelog="https://github.com/cemu-project/Cemu/compare/v2.0-85...v${version}"
+distfiles="https://github.com/cemu-project/Cemu/releases/download/v${version}/cemu-${version}-ubuntu-22.04-x64.zip
+ https://raw.githubusercontent.com/cemu-project/Cemu/refs/tags/v${version}/dist/linux/info.cemu.Cemu.desktop
+ https://raw.githubusercontent.com/cemu-project/Cemu/refs/tags/v${version}/dist/linux/info.cemu.Cemu.png
+ https://raw.githubusercontent.com/cemu-project/Cemu/refs/tags/v${version}/dist/linux/info.cemu.Cemu.metainfo.xml"
+checksum="5e4592d0dae394fa0614cb8c875eff3f81b23170b349511de318d9caf7215e1b
+ 3e9380eb47646fede56c0de59ddab872627c00629820ef5f974be0d07e4f3490
+ 6458a99b8bd54e44857efa0f82bfd6035e7e072e7e080e3330e4e2cfe89cbd33
+ 7929debd69baa2b0365eb6b6142b3d0c527348170b67964c8cb8d1e3072058af"
+repository=cereus-extra
+
+do_install() {
+	# Extract to DESTDIR
+	vmkdir opt/cemu
+	vextract --strip-components=1 -C "${DESTDIR}/opt/cemu" cemu-${version}-ubuntu-22.04-x64.zip
+	# Make Cemu binary filename to be lowercase
+	rename Cemu cemu "${DESTDIR}/opt/cemu/Cemu"
+	# Make it executable
+	chmod 755 "${DESTDIR}/opt/cemu/cemu"
+	# Install launch script
+	vbin ${FILESDIR}/cemu.sh cemu
+	# Correct Exec on desktop file
+	vsed -i -e '/^Exec=Cemu/cExec=/opt/cemu/cemu' info.cemu.Cemu.desktop
+	# Install icons and metainfo
+	vinstall info.cemu.Cemu.desktop 644 usr/share/applications
+	vinstall info.cemu.Cemu.png 644 usr/share/icons/hicolor/128x128/apps
+	vinstall info.cemu.Cemu.metainfo.xml 644 usr/share/metainfo
+}

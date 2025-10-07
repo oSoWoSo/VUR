@@ -1,0 +1,2 @@
+site='https://brave.com/latest/desktop/index.xml'
+pattern='(?<=v)(\d+\.\d+\.\d+)'

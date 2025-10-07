@@ -1,0 +1,26 @@
+# Template file for 'lightdm-gtk-greeter-cereus'
+pkgname=lightdm-gtk-greeter-cereus
+version=2.0.9
+revision=2
+build_style=gnu-configure
+configure_args="--disable-static --disable-maintainer-mode"
+hostmakedepends="pkg-config gettext"
+makedepends="gtk+3-devel lightdm-devel libayatana-appindicator-devel
+ ayatana-ido-devel"
+depends="hicolor-icon-theme"
+conf_files="/etc/lightdm/lightdm-gtk-greeter.conf"
+short_desc="Light Display Manager GTK+ Greeter"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Xubuntu/lightdm-gtk-greeter"
+distfiles="https://github.com/Xubuntu/lightdm-gtk-greeter/releases/download/lightdm-gtk-greeter-$version/lightdm-gtk-greeter-$version.tar.gz"
+checksum=c8fdf198aa9a3f9d0dad0b48dfe23c2277b79107e8fcfc62965290f1081f645d
+conflicts="lightdm-gtk-greeter"
+provides="lightdm-greeter-1_0"
+repository=cereus-core
+
+lightdm-gtk3-greeter-cereus_package() {
+	metapackage=yes
+	depends="lightdm-gtk-greeter-cereus>=2"
+	short_desc+=" - transition"
+}

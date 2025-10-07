@@ -1,0 +1,14 @@
+# Template file for 'bt-dualboot'
+pkgname=bt-dualboot
+version=1.0.1
+revision=3
+build_style=python3-pep517
+makedepends="python3-poetry-core"
+depends="chntpw"
+short_desc="Sync bluetooth for dualboot Linux and Windows"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/x2es/bt-dualboot"
+distfiles="${PYPI_SITE}/b/${pkgname}/${pkgname}-${version}.tar.gz"
+checksum=a63cc6bcb928b50965cf2ae7c6a0c88c696904ebd43e45a9bf47a8a0252b82ff
+repository=cereus-extra

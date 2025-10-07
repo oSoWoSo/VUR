@@ -1,0 +1,102 @@
+# Template file for 'graphite-color-schemes'
+pkgname=graphite-color-schemes
+version=2023.01.17
+revision=1
+short_desc="Custom additional color schemes of Graphite theme for KDE Plasma desktop"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://codeberg.org/kf_art/graphite-color-schemes"
+distfiles="${homepage}/archive/${version}.tar.gz"
+checksum=af66e71a6a5fd0e523148d8121e04011c51116675f845e285fe79b53cb3979be
+nostrip=yes
+_colors="blue green orange pink purple red teal yellow"
+_schemesdir="usr/share/color-schemes"
+repository=cereus-extra
+
+do_install() {
+	vmkdir ${_schemesdir}
+	for variant in light black dark nord-{light,dark}; do
+		vcopy ${variant}/"*" ${_schemesdir}
+	done
+}
+
+graphite-color-schemes-light_package() {
+	short_desc+=" - light variant"
+	pkg_install() {
+		for color in ${_colors}; do
+			vmove ${_schemesdir}/Graphite-${color}-light.colors
+		done
+	}
+}
+
+graphite-color-schemes-black_package() {
+	short_desc+=" - black variant"
+	pkg_install() {
+		vmove ${_schemesdir}/Graphite-"*"-black.colors
+	}
+}
+
+graphite-color-schemes-dark_package() {
+	short_desc+=" - dark variant"
+	pkg_install() {
+		for color in ${_colors}; do
+			vmove ${_schemesdir}/Graphite-${color}-dark.colors
+		done
+	}
+}
+
+graphite-color-schemes-nord-light_package() {
+	short_desc+=" - nord light variant"
+	pkg_install() {
+		for color in ${_colors}; do
+			vmove ${_schemesdir}/Graphite-${color}-Nord-light.colors
+		done
+	}
+}
+
+graphite-color-schemes-nord-dark_package() {
+	short_desc+=" - nord dark variant"
+	pkg_install() {
+		for color in ${_colors}; do
+			vmove ${_schemesdir}/Graphite-${color}-Nord-dark.colors
+		done
+	}
+}
+
+graphite-color-schemes-all_package() {
+	short_desc+=" - all variants"
+	depends="${sourcepkg}-light ${sourcepkg}-dark ${sourcepkg}-black
+		${sourcepkg}-nord-light ${sourcepkg}-nord-dark ${sourcepkg}"
+	metapackage=yes
+}
+
+# Transitional dummy packages. These will be removed in a future update.
+Graphite-color-schemes-light_package() {
+	short_desc+=" - light variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-light>=${version}_${revision}"
+}
+
+Graphite-color-schemes-black_package() {
+	short_desc+=" - black variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-black>=${version}_${revision}"
+}
+
+Graphite-color-schemes-dark_package() {
+	short_desc+=" - dark variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-dark>=${version}_${revision}"
+}
+
+Graphite-color-schemes-nord-light_package() {
+	short_desc+=" - nord light variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-nord-light>=${version}_${revision}"
+}
+
+Graphite-color-schemes-nord-dark_package() {
+	short_desc+=" - nord dark variant (transitional dummy package)"
+	metapackage=yes
+	depends="${sourcepkg}-nord-dark>=${version}_${revision}"
+}

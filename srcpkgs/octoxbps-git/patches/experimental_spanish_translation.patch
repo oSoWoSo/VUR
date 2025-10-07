@@ -1,0 +1,14 @@
+diff --git a/octoxbps.pro b/octoxbps.pro
+index 67eae97..8de8666 100644
+--- a/octoxbps.pro
++++ b/octoxbps.pro
+@@ -80,7 +80,8 @@ RESOURCES += resources.qrc
+ TRANSLATIONS += translations/octoxbps_de.ts \
+              translations/octoxbps_nl.ts \
+              translations/octoxbps_ru.ts \
+-             translations/octoxbps_tr.ts
++             translations/octoxbps_tr.ts \
++             translations/octoxbps_es.ts
+ 
+ # install
+ isEmpty(PREFIX) {

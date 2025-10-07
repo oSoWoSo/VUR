@@ -1,0 +1,33 @@
+# Template file for 'libqtxdg-legacy'
+pkgname=libqtxdg-legacy
+version=3.12.0
+revision=3
+build_style=cmake
+hostmakedepends="pkg-config qt5-qmake qt5-host-tools lxqt-build-tools-legacy"
+makedepends="qt5-svg-devel libglib-devel"
+depends="libqtxdg>=4"
+short_desc="Qt5 implementation of freedesktop.org XDG specifications"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="LGPL-2.1-or-later"
+homepage="https://lxqt-project.org"
+distfiles="https://github.com/lxqt/libqtxdg/archive/${version}.tar.gz"
+checksum=084e5fe7b4087d95657be7b5be3668e98bf14c2ba3b150205ebd819508774d45
+conflicts="libqt5xdg"
+replaces="libqt5xdg>=0"
+repository=cereus-extra
+
+post_install() {
+	# remove config files to prevent conflicts with main libqtxdg package.
+	rm -rv ${DESTDIR}/etc
+}
+
+libqtxdg-legacy-devel_package() {
+	short_desc+=" - development files"
+	depends="${makedepends} ${sourcepkg}>=${version}_${revision}"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/pkgconfig
+		vmove usr/lib/*.so
+		vmove usr/share/cmake
+	}
+}

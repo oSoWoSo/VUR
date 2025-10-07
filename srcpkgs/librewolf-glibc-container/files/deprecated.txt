@@ -1,0 +1,5 @@
+libreWolf glibc containerized package is deprecated and will be removed in a future update.
+You should use index-0's binary repository by installing librewolf-repo:
+
+	# xbps-install -S librewolf-repo
+	# xbps-install -S librewolf
