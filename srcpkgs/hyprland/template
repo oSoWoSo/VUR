@@ -1,13 +1,17 @@
 # Template file for 'hyprland'
 pkgname=hyprland
 version=0.51.1
-revision=2
+revision=3
 build_style=cmake
 configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release
  -DCMAKE_INSTALL_PREFIX:PATH=/usr -DNO_SYSTEMD:BOOL=true"
 hostmakedepends="pkg-config cpio glslang hyprwayland-scanner jq make meson ninja
  xxd aquamarine glaze hwids hyprcursor hyprgraphics hyprlang hyprutils
- tomlplusplus wayland-protocols xorg-server-xwayland"
+ tomlplusplus wayland-protocols xorg-server-xwayland hyprland-protocols"
+
+# No package 'udis86' found
+# Added udis86 or udis86-devel but still not found! Why??
+
 makedepends="cairo-devel libdisplay-info-devel libdrm-devel libgbm-devel
  libglvnd-devel libinput-devel libliftoff-devel libseat-devel libxcb-devel
  libXcursor-devel libxkbcommon-devel pango-devel re2-devel wayland-devel
@@ -23,7 +27,7 @@ checksum=f562b8d1efc9934abd9678e3a4d7bb5a56adc6ef89c4679aba269de470e66131
 if [ "$XBPS_TARGET_LIBC" = "musl" ]; then
 	configure_args+=" -DCMAKE_CXX_FLAGS=\"-lexecinfo\""
 	makedepends+=" libexecinfo-devel"
-	depends+=" libexecinfo"
+	#depends+=" libexecinfo"
 fi
 
 pre_configure() {
