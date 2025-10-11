@@ -1,6 +1,6 @@
 # Template file for 'dotbot'
 pkgname=dotbot
-version=1.23.1
+version=1.24.0
 revision=1
 build_style=python3-pep517
 hostmakedepends="hatchling"
@@ -12,7 +12,7 @@ license="MIT"
 homepage="https://github.com/anishathalye/dotbot"
 changelog="https://raw.githubusercontent.com/anishathalye/dotbot/refs/heads/master/CHANGELOG.md"
 distfiles="https://github.com/anishathalye/dotbot/archive/refs/tags/v${version}.tar.gz"
-checksum=1a091dfc9db39e2b6c53abd338a9069698cd9ca618ea7629f3259634a6b117b0
+checksum=bade5777687342ea6388486282371a91cfd077773d70639f472abdf7d3c7b416
 
 post_install() {
 	vlicense LICENSE.md
