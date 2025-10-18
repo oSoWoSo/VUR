@@ -1,0 +1,22 @@
+# Template file for 'helium'
+pkgname=helium
+version=0.5.7
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=gnu-configure
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="acme.sh"
+makedepends=""
+depends=""
+short_desc="Private, fast, and honest web browser"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/imputnet/helium"
+#changelog=""
+distfiles="https://github.com/imputnet/helium/archive/refs/tags/${version}.tar.gz"
+checksum=38ca50b3efd27c64f11b2210035868de1b750b1c9f16a7139872a36126bf649c
