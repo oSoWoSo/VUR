@@ -1,0 +1,73 @@
+# Template file for 'forgejo'
+pkgname=forgejo
+version=13.0.1
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=go
+go_import_path="forgejo.org
+ github.com/mattn/go-sqlite3"
+go_ldflags=" -X main.Version=${version}"
+# This could be done with build options, but these are built in with the
+# following justification.
+#   * bindata: running with things not all in the binary is not a
+#     supported distribution format by the gitea upstream developers.
+#     That mode is only supported for development of gitea within the
+#     source tree
+#   * sqlite: this is likely the database that everyone will use.  Only
+#     particularly large installations will want to go through the
+#     effort of setting up a real database server.
+#   * pam: PAM allows for authentication to varied external sources.
+#     Internal authentication supports the local database, OpenID, and
+#     LDAP, but basic other auth sources such as Kerberos and more
+#     exotic authenticators require PAM support to be useable.
+#   * tidb: This is an alternate database engine for users who would
+#     rather not use SQLite3 for some reason.  It is also potentially
+#     more resiliant to corrupted writes.
+go_build_tags="bindata sqlite sqlite_unlock_notify pam tidb"
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="go-bindata make nodejs pnpm"
+makedepends="sqlite-devel pam-devel"
+#depends="git bash"
+checkdepends="git openssh"
+short_desc="Lightweight software forge"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://forgejo.org/"
+#changelog=""
+distfiles="https://codeberg.org/forgejo/forgejo/archive/v${version}.tar.gz"
+checksum=de44be7c701db431f83201ccbfa677aa8a9d31ef8c3b74026b2365d978136c06
+
+system_accounts="_gitea"
+_gitea_homedir="/var/lib/gitea"
+_gitea_shell="/bin/bash" # Proper shell needed for ssh support
+make_dirs="/var/lib/gitea 0755 _gitea _gitea
+ /var/log/gitea 0755 _gitea root"
+conf_files="/etc/gitea.conf"
+export GITEA_CONF="/etc/gitea.conf"
+
+pre_configure() {
+	make deps-frontend deps-backend deps-tools
+}
+
+pre_check() {
+	cp _build-gitea-xbps/bin/gitea ./
+}
+
+do_build() {
+	export EXTRA_GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
+	export LDFLAGS="-X 'code.gitea.io/gitea/modules/setting.AppWorkPath=/var/lib/forgejo/' -X 'code.gitea.io/gitea/modules/setting.CustomConf=/etc/forgejo/app.ini'"
+	export TAGS="bindata sqlite sqlite_unlock_notify pam"
+
+
+	make build
+}
+
+post_install() {
+	vsv gitea
+	vinstall custom/conf/app.example.ini 0640 /etc gitea.conf
+}
