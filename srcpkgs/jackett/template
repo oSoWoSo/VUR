@@ -1,0 +1,22 @@
+# Template file for 'jackett'
+pkgname=jackett
+version=0.24.153
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=gnu-configure
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends=""
+makedepends=""
+depends=""
+short_desc="API Support for your favorite torrent trackers"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Jackett/Jackett"
+#changelog=""
+distfiles="https://github.com/Jackett/Jackett/archive/refs/tags/v${version}.tar.gz"
+checksum=19e9772447c03de7e8014ee2e569eb31f0a5001f942af9231f284d28d2425462
