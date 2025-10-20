@@ -1,0 +1,20 @@
+# Template file for 'ftxui'
+pkgname=ftxui
+version=6.1.9
+revision=1
+build_style=cmake
+configure_args="-DFTXUI_BUILD_DOCS=ON"
+hostmakedepends="pkg-config"
+makedepends=""
+checkdepends="python3-mypy"
+short_desc="C++ Functional Terminal User Interface"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/ArthurSonzogni/FTXUI"
+#changelog=""
+distfiles="https://github.com/ArthurSonzogni/FTXUI/archive/refs/tags/v${version}.tar.gz"
+checksum=45819c1e54914783d4a1ca5633885035d74146778a1f74e1213cdb7b76340e71
+
+post_install() {
+	vlicense LICENSE
+}
