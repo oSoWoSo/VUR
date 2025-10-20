@@ -1,0 +1,61 @@
+# Template file for 'sourcegit'
+pkgname=sourcegit
+version=2025.35
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+#build_style=gnu-configure
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="nodejs pkg-config dotnet"
+makedepends=""
+depends=""
+short_desc="GUI client for GIT users"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/sourcegit-scm/sourcegit"
+#changelog=""
+distfiles="https://github.com/sourcegit-scm/sourcegit/archive/refs/tags/v${version}.tar.gz"
+checksum=a1ae6825d57b2e45ca73ef05a048f62bededa6b72b852c01d2aa7c88befbb253
+
+do_configure() {
+	#cd "$pkgname-$pkgver"
+
+	desktop-file-edit build/resources/_common/applications/sourcegit.desktop \
+ --set-icon=sourcegit --set-key=Exec --set-value=sourcegit
+}
+
+do_build() {
+	export DOTNET_CLI_TELEMETRY_OPTOUT=1
+	export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
+	export DOTNET_NOLOGO=true
+
+	#cd "$pkgname-$version"
+
+	dotnet publish src/SourceGit.csproj -c Release -r linux-x64 -o publish \
+		-p:DisableAot=true \
+		-p:DisableUpdateDetection=true
+	rm -f publish/SourceGit.pdb
+	mv publish/SourceGit "publish/$pkgname"
+}
+
+do_install() {
+	#cd "$pkgname-${version}"
+
+	install -d "$pkgdir/opt/$pkgname/"
+	install -d "$pkgdir/usr/bin/"
+
+	cp -Pr "publish/"* "$pkgdir/opt/$pkgname/"
+	ln -s "/opt/$pkgname/$pkgname" "$pkgdir/usr/bin/$pkgname"
+
+	install -Dm644 "build/resources/_common/applications/sourcegit.desktop" "$pkgdir/usr/share/applications/$pkgname.desktop"
+	install -Dm644 "build/resources/_common/icons/sourcegit.png" "$pkgdir/usr/share/icons/hicolor/256x256/apps/$pkgname.png"
+	install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+
+post_install() {
+	vlicense LICENSE
+}
