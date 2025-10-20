@@ -1,0 +1,19 @@
+# Template file for 'vbm'
+pkgname=vbm
+version=1.0.1
+revision=1
+short_desc="XBPS package management helper for VoidLinux"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://codeberg.org/oSoWoSo/vbm"
+distfiles="https://codeberg.org/oSoWoSo/vbm/archive/${version}.tar.gz"
+checksum=7841021dc8fdb4523c0e3d71ea8bd276e5941f90745e9322e0879abf93c8e337
+
+pre_install() {
+	mv vbm.sh vbm
+}
+
+do_install() {
+	vbin vbm
+	vcompletion bash-completion/completions/vbm bash
+}
