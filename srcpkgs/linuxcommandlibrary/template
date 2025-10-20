@@ -1,0 +1,41 @@
+# Template file for 'linuxcommandlibrary'
+pkgname=linuxcommandlibrary
+version=3.3.1
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+#build_style=gnu-configure
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="openjdk17"
+makedepends=""
+depends=""
+short_desc="1M+ downloads Linux reference app with basics, tips and formatted man pages"
+maintainer="zenobit <zenobit@disroot.org>"
+license="Apache-2.0"
+homepage="http://linuxcommandlibrary.com/"
+#changelog=""
+distfiles="https://github.com/SimonSchubert/LinuxCommandLibrary/archive/refs/tags/v${version}.tar.gz"
+checksum=88c747fec119aba5775d3fce895f3a19adfc4dd5597062ff2837b5947e385578
+
+export JAVA_HOME=/usr/lib/jvm/openjdk17
+
+do_build() {
+	chmod +x gradlew
+	#./gradlew --jvm-args="-Xmx4g" --info build
+	./gradlew :cli:createJar
+}
+
+do_install() {
+	echo todo
+	cp cli/build/libs/linuxcommandlibrary.jar /usr/bin/cli.jar
+}
+
+
+post_install() {
+	vinstall cli/build/libs/linuxcommandlibrary.jar 644 /usr/bin/cli.jar
+}
+
