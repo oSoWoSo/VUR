@@ -1,8 +1,8 @@
 # Template file for 'megatools'
 pkgname=megatools
-version=1.11.1
-revision=2
-_release_date=20230212
+version=1.11.4
+revision=1
+_release_date=20250411
 build_style=meson
 hostmakedepends="pkg-config asciidoc docbook2x"
 makedepends="glib-networking gobject-introspection openssl-devel libcurl-devel fuse-devel libsodium-devel glib-devel"
@@ -11,8 +11,8 @@ maintainer="RunningDroid <runningdroid@zoho.com>"
 license="GPL-2.0-or-later"
 homepage="https://megatools.megous.com/"
 changelog="https://megatools.megous.com/builds/NEWS"
-distfiles="https://megatools.megous.com/builds/megatools-${version}.${_release_date}.tar.gz"
-checksum=ecfa2ee4b277c601ebae648287311030aa4ca73ea61ee730bc66bef24ef19a34
+distfiles="https://xff.cz/megatools/builds/megatools-${version}.${_release_date}.tar.gz"
+checksum=f404ea598c9c5a67a966a007421945dc212460d673fa66bea44544fd82f8e7c9
 
 post_install() {
 	vinstall contrib/bash-completion/megatools 644 usr/share/bash-completion/completions
