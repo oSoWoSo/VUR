@@ -1,0 +1,22 @@
+# Template file for 'github-desktop'
+pkgname=github-desktop
+version=3.4.13
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=gnu-configure
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends=""
+makedepends=""
+depends=""
+short_desc="Fork of GitHub Desktop to support various Linux distributions"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/shiftkey/desktop"
+#changelog="https://github.com/shiftkey/desktop/releases"
+distfiles="https://github.com/shiftkey/desktop/archive/refs/tags/release-${version}-linux1.tar.gz"
+checksum=badbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadb

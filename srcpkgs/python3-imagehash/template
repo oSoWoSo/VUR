@@ -1,0 +1,26 @@
+# Template file for 'python3-imagehash'
+pkgname=python3-imagehash
+version=4.1.0
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=python3-pep517
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="python3-setuptools"
+makedepends="python3-pytest python3-Pillow"
+depends="python3-Pillow python3-numpy python3-pywt python3-scipy python3-six"
+short_desc="Python Perceptual Image Hashing Module"
+maintainer="zenobit <zenobit@disroot.org>"
+license="BSD-2-Clause"
+homepage="https://github.com/JohannesBuchner/imagehash"
+#changelog=""
+distfiles="https://github.com/JohannesBuchner/imagehash/archive/refs/tags/v${version}.tar.gz"
+checksum=cfa208909a4bf388006fa34e5360e829bc01f4bdf849f5f6765499fd832cb35a
+
+post_install() {
+    vlicense LICENSE
+}

@@ -9,9 +9,9 @@ short_desc="Hyprland C++ implementation of wayland-scanner"
 maintainer="Encoded14 <linusken@tuta.io>"
 license="BSD-3-Clause"
 homepage="https://github.com/hyprwm/hyprwayland-scanner"
-distfiles="${homepage}/archive/refs/tags/v${version}.tar.gz"
+distfiles="https://github.com/hyprwm/hyprwayland-scanner/archive/refs/tags/v${version}.tar.gz"
 checksum=2125d279eea106e3e6c8dc9fa15181c75d67467b5352d24e2a07903b10abad62
 
 post_install() {
-  vlicense LICENSE
+	vlicense LICENSE
 }

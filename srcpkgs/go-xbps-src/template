@@ -1,0 +1,22 @@
+# Template file for 'go-xbps-src'
+pkgname=go-xbps-src
+version=
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=gnu-configure
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends=""
+makedepends=""
+depends=""
+short_desc=""
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage=""
+#changelog=""
+distfiles=""
+checksum=badbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadb

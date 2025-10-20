@@ -1,0 +1,42 @@
+# Template file for 'opentyrian2000'
+pkgname=opentyrian2000
+version=2000.20250408
+revision=1
+build_wrksrc="$pkgname-$version"
+build_style=gnu-makefile
+hostmakedepends="pkg-config unzip"
+makedepends="SDL2-devel SDL2_net-devel"
+short_desc="Open-source port of the DOS shoot-em-up Tyrian"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-2.0-only"
+homepage="https://github.com/KScl/opentyrian2000"
+changelog="https://github.com/KScl/opentyrian2000/releases"
+distfiles="https://github.com/KScl/opentyrian2000/archive/refs/tags/v${version}.tar.gz
+ https://www.camanis.net/tyrian/tyrian2000.zip"
+checksum="c39b2e0231f15b90bc7b30e9ce0b3e117e883bf40416eb5720832bb1f1d25d6e
+ 348bc76e73514e452279b8730cf217daf0f70a282f07b6b94af653d87e921667"
+replaces="opentyrian2000-data>=0"
+
+post_install() {
+	local _dir="${wrksrc}/tyrian2000"
+
+	# data files
+	vmkdir usr/share/games/tyrian2000
+	vcopy ${_dir}/*.dat usr/share/games/tyrian2000
+	vcopy ${_dir}/*.lvl usr/share/games/tyrian2000
+	vcopy ${_dir}/*.shp usr/share/games/tyrian2000
+	vcopy ${_dir}/*.snd usr/share/games/tyrian2000
+	vcopy ${_dir}/demo.* usr/share/games/tyrian2000
+	vcopy ${_dir}/music.mus usr/share/games/tyrian2000
+	vcopy ${_dir}/tyrend.anm usr/share/games/tyrian2000
+	vcopy ${_dir}/tshp2.pcx usr/share/games/tyrian2000
+	vcopy ${_dir}/tyrian.cdt usr/share/games/tyrian2000
+	vcopy ${_dir}/tyrian.hdt usr/share/games/tyrian2000
+	vcopy ${_dir}/tyrian.pic usr/share/games/tyrian2000
+
+	vman linux/man/opentyrian2000.6
+	vdoc README
+
+	# Set data dir in .desktop file
+	#sed -i 's|Exec=opentyrian2000|Exec=opentyrian2000 -t /usr/share/games/tyrian2000|' ${destdir}/tyrian2000-${version}/usr/share/applications/opentyrian2000.desktop
+}

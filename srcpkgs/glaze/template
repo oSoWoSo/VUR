@@ -3,15 +3,16 @@ pkgname=glaze
 version=5.7.2
 revision=1
 build_style=cmake
-configure_args="-DBUILD_TESTING:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release -Dglaze_ENABLE_FUZZING:BOOL=OFF"
-hostmakedepends="pkg-config"
-short_desc="Extremely fast, in memory, JSON and interface library for modern C++"
-maintainer="Encoded14 <linusken@tuta.io>"
+hostmakedepends="pkg-config git"
+makedepends="openssl-devel libsanitizer-devel"
+short_desc="Extremely fast, in memory, JSON and reflection library for modern C++"
+maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
-homepage="https://github.com/stephenberry/glaze"
+homepage="https://stephenberry.github.io/glaze/"
+changelog="https://github.com/stephenberry/glaze/releases"
 distfiles="https://github.com/stephenberry/glaze/archive/refs/tags/v${version}.tar.gz"
 checksum=ab585fbf4d488cd5a322faa53328384d2d03aa8fa80bc79c7f7ea5d4dacd71d3
 
 post_install() {
-	vlicense LICENSE
+    vlicense LICENSE
 }

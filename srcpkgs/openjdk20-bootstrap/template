@@ -2,7 +2,7 @@
 pkgname=openjdk20-bootstrap
 version=20.0.2+9
 revision=1
-_gtest_ver=1.8.1
+_gtest_ver=1.17.0
 _java_ver="${version%%.*}"
 _jdk_update="${version#*+}"
 _base_version="${version%+*}"
@@ -43,9 +43,9 @@ maintainer="classabbyamp <void@placeviolette.net>"
 license="GPL-2.0-only WITH Classpath-exception-2.0"
 homepage="http://openjdk.java.net/"
 distfiles="https://github.com/openjdk/jdk${_java_ver}u/archive/jdk-${version}.tar.gz
- https://github.com/google/googletest/archive/refs/tags/release-${_gtest_ver}.tar.gz"
+ https://github.com/google/googletest/archive/refs/tags/v${_gtest_ver}.tar.gz"
 checksum="4d6f176075d5f2ce62fd16ebd5cc4c27a3e551ce4d3d3bc0e9946454e52fc88d
- 9bf1fe5182a604b4135edc1a425ae356c9ad15e9b23f9f12a02e80184c3a249c"
+ 65fab701d9829d38cb77c14acdc431d2108bfdbf8979e40eb8ae567edf10b27c"
 nocross=yes
 repository=bootstrap
 patch_args="-Np1 --directory=$build_wrksrc"

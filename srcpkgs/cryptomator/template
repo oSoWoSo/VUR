@@ -1,0 +1,28 @@
+# Template file for 'cryptomator'
+pkgname=cryptomator
+version=1.17.1
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+#build_style=
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="apache-maven" # openjdk17"
+makedepends=""
+depends=""
+short_desc="Secure client-side encryption for your cloud storage"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/cryptomator/cryptomator"
+#changelog=""
+distfiles="https://github.com/cryptomator/cryptomator/archive/refs/tags/${version}.tar.gz"
+checksum=bd95fb4f5342f9fa770f74f14edeebf878d28587c25417bb1f052768408f95c7
+export JAVA_HOME=/usr/lib/jvm/openjdk17
+export APP_VERSION=${version}
+
+do_install() {
+	mvn -B clean package -Djavafx.platform=linux -DskipTests -Plinux
+}

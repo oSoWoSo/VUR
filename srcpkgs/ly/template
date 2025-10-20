@@ -1,27 +1,29 @@
 # Template file for 'ly'
 pkgname=ly
-version=1.0.3
+version=1.1.2
 revision=1
-archs="i686 x86_64"
 build_style=zig-build
+configure_args="installrunit"
 conf_files="/etc/ly/config.ini"
-hostmakedepends="pkg-config"
 makedepends="pam-devel libxcb-devel"
-#depends="pam util-linux"
 short_desc="Lightweight TUI (ncurses-like) display manager for Linux and BSD"
-maintainer="Encoded14 <linusken@tuta.io>"
+maintainer="zenobit <zenobit@disroot.org>"
 license="WTFPL"
-homepage="https://github.com/fairyglade/ly"
-distfiles="https://github.com/fairyglade/ly/archive/refs/tags/v${version}.tar.gz"
-checksum=269cc070905bd3a064b458dacb25787e409dad5930f2fbb98640f8e4f57b0bf6
-nopie_files=/usr/bin/ly
+homepage="https://codeberg.org/fairyglade/ly"
+changelog="https://codeberg.org/fairyglade/ly/releases/"
+distfiles="https://codeberg.org/fairyglade/ly/archive/v${version}.tar.gz"
+checksum=8f491d09045bb680680b553556f9db7af89c6644a257352839f98c4e98028fd0
+nopie_files="/usr/bin/ly"
+
+do_build() {
+	zig build -Ddest_directory="${DESTDIR}" -Dname="ly-dm" -Dcpu=baseline -Doptimize=ReleaseSafe
+}
 
 do_install() {
-vbin zig-out/usr/bin/ly
+	vbin zig-out/bin/ly
 	vmkdir etc/ly/lang
 	vcopy res/config.ini etc/ly
-	vcopy res/wsetup.sh etc/ly
-	vcopy res/xsetup.sh etc/ly
+	vcopy res/setup.sh etc/ly
 	vcopy res/lang etc/ly
 	vmkdir etc/pam.d
 	vinstall res/pam.d/ly 0644 etc/pam.d

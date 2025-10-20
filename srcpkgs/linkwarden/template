@@ -1,0 +1,31 @@
+# Template file for 'linkwarden'
+pkgname=linkwarden
+version=2.12.2
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=fetch
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="git nodejs yarn postgresql nano monolith"
+#makedepends=""
+#depends=""
+short_desc="Self-hosted collaborative bookmark manager to preserve what matters"
+maintainer="zenobit <zenobit@disroot.org>"
+license="AGPL-3.0-only"
+homepage="https://linkwarden.app/"
+changelog="https://github.com/linkwarden/linkwarden/releases"
+distfiles="https://github.com/linkwarden/linkwarden/archive/refs/tags/v${version}.tar.gz"
+checksum=fc36e1ab85165d30ba12548d8094668d062580b9d56622561b694b58e2b4cdf1
+
+do_build() {
+	yarn
+}
+
+post_install() {
+	cp .env.sample .env
+	#vlicense LICENSE.md
+}

@@ -1,7 +1,7 @@
 # Template file for 'podman-tui'
 pkgname=podman-tui
-version=1.6.1
-revision=2
+version=1.8.0
+revision=1
 build_style=go
 go_import_path="github.com/containers/podman-tui"
 hostmakedepends="pkg-config"
@@ -12,7 +12,7 @@ license="Apache-2.0"
 homepage="https://github.com/containers/podman-tui"
 changelog="https://github.com/containers/podman-tui/releases"
 distfiles="https://github.com/containers/podman-tui/archive/refs/tags/v${version}.tar.gz"
-checksum=a241119e1099711f889bae6fa7061130869317b711a96e3e9df2fed45e6fc979
+checksum=56ac081ec9b920443646bd3735277837cb10db783c52f1e8dc7c140dcd6d0526
 
 post_install() {
 	vdoc docs/README.md

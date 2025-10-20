@@ -1,0 +1,20 @@
+# Template file for 'nwg-dock-hyprland'
+pkgname=nwg-dock-hyprland
+version=0.4.4
+revision=1
+build_style=go
+hostmakedepends="pkg-config"
+makedepends="gtk+3-devel gtk-layer-shell-devel"
+depends="nwg-drawer glibc gtk+3 zlib pango libharfbuzz atk cairo gdk-pixbuf glib gtk-layer-shell fontconfig freetype"
+go_import_path="github.com/nwg-piotr/nwg-dock-hyprland"
+short_desc="GTK3-based dock for Hyprland"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://nwg-piotr.github.io/nwg-shell/nwg-dock-hyprland"
+#changelog=""
+distfiles="https://github.com/nwg-piotr/nwg-dock-hyprland/archive/refs/tags/v${version}.tar.gz"
+checksum=dff16c36aad83fa3a197a095b5e324c1be628a7af578095e11b7349c0f894008
+
+post_install() {
+	vlicense LICENSE
+}
