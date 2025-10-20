@@ -1,0 +1,11 @@
+# Template file for 'easybashgui'
+pkgname=easybashgui
+version=15.0.1
+revision=1
+build_style=gnu-makefile
+short_desc="Bash functions library that aims to give simple GUI functions"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/BashGui/easybashgui"
+distfiles="https://github.com/BashGui/easybashgui/archive/refs/tags/${version}.tar.gz"
+checksum=c5aa38f80c526f579827e43578d73001f2662716f761fc3fbaf017602fa8f0e5
