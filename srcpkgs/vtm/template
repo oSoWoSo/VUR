@@ -1,0 +1,28 @@
+# Template file for 'vtm'
+pkgname=vtm
+version=2025.09.12
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=cmake
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends=""
+makedepends="lua54"
+depends=""
+short_desc="Text-based desktop environment"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/directvt/vtm"
+#changelog=""
+distfiles="https://github.com/directvt/vtm/archive/refs/tags/v${version}.tar.gz"
+checksum=6ce2128b1c73895458ffb2dbe8881d93d7c24c66088b52ee0a3ae209f133f85a
+
+do_build() {
+	cd "$pkgname"
+	cmake -B build -DCMAKE_INSTALL_PREFIX="/usr"
+	cmake --build build
+}
