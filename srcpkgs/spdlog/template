@@ -3,7 +3,7 @@ pkgname=spdlog
 version=1.16.0
 revision=1
 build_style=cmake
-configure_args="-DSPDLOG_BUILD_EXAMPLE=OFF -DSPDLOG_FMT_EXTERNAL=ON
+configure_args="-DSPDLOG_BUILD_EXAMPLE=OFF -DSPDLOG_FMT_EXTERNAL=OFF
  -DSPDLOG_BUILD_SHARED=ON"
 hostmakedepends="pkg-config git"
 makedepends="fmt-devel"
