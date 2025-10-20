@@ -1,0 +1,20 @@
+# Template file for 'regex-tui'
+pkgname=regex-tui
+version=0.1.0
+revision=1
+build_style=go
+go_import_path=github.com/vitor-mariano/regex-tui
+short_desc="Simple TUI to visualize regular expressions"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/vitor-mariano/regex-tui"
+#changelog=""
+#distfiles="https://github.com/vitor-mariano/regex-tui/archive/refs/tags/v${version}.tar.gz"
+distfiles="https://github.com/vitor-mariano/regex-tui/archive/refs/heads/master.zip"
+checksum=81c54b1ffe46387f1cf18953ed6c23790d2a75561ef3aff89567ba2e23624da0
+make_check=no # No tests provided
+
+post_install() {
+	#vinstall bin/regex-tui 6440 /usr/bin/
+	vlicense license.txt
+}
