@@ -1,0 +1,48 @@
+# Template file for 'monero-cli'
+pkgname=monero-cli
+version=0.18.4.3
+revision=1
+_googletest_version=1.17.0
+_miniupnpc_version=2_3_3
+_randomx_version=1.2.1
+_rapidjson_version=1.1.0
+build_style=gnu-makefile
+configure_args="-Wno-dev"
+hostmakedepends="cmake pkg-config python3 ccache doxygen graphviz qt5-tools"
+makedepends="base-devel boost-devel openssl-devel zeromq-devel unbound-devel libsodium-devel libunwind-devel liblzma-devel readline-devel expat-devel gtest-devel hidapi-devel libusb-devel protobuf-devel eudev-libudev-devel"
+depends=""
+short_desc="Monero: the secure, private, untraceable cryptocurrency"
+maintainer="zenobit <zenobit@disroot.org>"
+license="custom"
+homepage="https://github.com/monero-project/monero"
+#changelog=""
+distfiles="https://github.com/monero-project/monero/archive/refs/tags/v${version}.tar.gz
+ https://github.com/google/googletest/archive/refs/tags/v${_googletest_version}.tar.gz
+ https://github.com/miniupnp/miniupnp/archive/refs/tags/miniupnpc_${_miniupnpc_version}.tar.gz
+ https://github.com/tevador/RandomX/archive/refs/tags/v${_randomx_version}.tar.gz
+ https://github.com/Tencent/rapidjson/archive/refs/tags/v${_rapidjson_version}.tar.gz
+ https://github.com/monero-project/supercop/archive/refs/heads/monero.zip"
+checksum="fdec15d2b5c40f70aa4115aae8839ea9a247e3186c73f2d854432c7badafc939
+ 65fab701d9829d38cb77c14acdc431d2108bfdbf8979e40eb8ae567edf10b27c
+ 8cf2c833b3e76fc4893ff29c2a376e3394962449e5970e373c0a91421724d222
+ 2e6dd3bed96479332c4c8e4cab2505699ade418a07797f64ee0d4fa394555032
+ bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd4039d0787f8bed98e
+ 5014390f37075928b3bde90ee4cb8c6d76e2d679872499c7e70ea3f29c148691"
+
+pre_configure() {
+	mkdir monero-${version}/external/gtest
+	mv googletest-${_googletest_version}/* monero-${version}/external/gtest/
+	mv miniupnp-miniupnpc_${_miniupnpc_version}/* monero-${version}/external/miniupnp/
+	mv RandomX-${_randomx_version}/* monero-${version}/external/randomx/
+	mv rapidjson-${_rapidjson_version}/* monero-${version}/external/rapidjson/
+	mv supercop-monero/* monero-${version}/external/supercop/
+}
+
+do_build() {
+	cd monero-${version}
+	make -j16 release-test
+}
+
+post_install() {
+	vlicense LICENSE
+}
