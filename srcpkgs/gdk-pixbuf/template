@@ -9,7 +9,7 @@ configure_args="$(vopt_feature gir introspection) -Dpng=enabled
  -Dinstalled_tests=false"
 hostmakedepends="gettext-devel glib-devel pkg-config python3-docutils"
 makedepends="libglib-devel libpng-devel tiff-devel libjpeg-turbo-devel
- shared-mime-info"
+ freeimage-devel shared-mime-info"
 depends="shared-mime-info"
 short_desc="Image loading library for The GTK+ toolkit (v2)"
 maintainer="Orphaned <orphan@voidlinux.org>"
