@@ -1,0 +1,18 @@
+# Template file for 'distrobox'
+pkgname=distrobox
+version=1.8.1.2
+revision=1
+depends="curl"
+short_desc="Podman/Docker wrapper to use any linux distribution in your terminal"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://distrobox.it/"
+distfiles="https://github.com/89luca89/distrobox/archive/${version}.tar.gz"
+checksum=3ecbce9b8c5b5df941f986798ffa6ea7fdf742223d42204207974c4323d5b9fc
+
+
+do_install() {
+	./install --prefix /usr
+	find docs -name "*.md" -exec \
+		install -Dm 644 -t "${DESTDIR}/usr/share/doc/distrobox" {} +
+}
