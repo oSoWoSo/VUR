@@ -1,0 +1,22 @@
+# Template file for 'godot-manager'
+pkgname=godot-manager
+version=0.2.9
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=gnu-configure
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends=""
+makedepends=""
+depends="godot"
+short_desc="Project, Version and Addons/Plugins manager for Godot Game Engine"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/eumarion/godot-manager"
+#changelog=""
+distfiles="https://github.com/eumario/godot-manager/archive/refs/tags/v0.2.9.tar.gz"
+checksum=badbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadb
