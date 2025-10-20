@@ -1,8 +1,8 @@
 # Template file for 'openjdk21'
 pkgname=openjdk21
-version=21.0.8+9
+version=21.0.9+9
 revision=1
-_gtest_ver=1.13.0
+_gtest_ver=1.17.0
 _java_ver="${version%%.*}"
 _jdk_update="${version#*+}"
 _base_version="${version%+*}"
@@ -43,8 +43,8 @@ license="GPL-2.0-only WITH Classpath-exception-2.0"
 homepage="http://openjdk.java.net/"
 distfiles="https://github.com/openjdk/jdk${_java_ver}u/archive/jdk-${version}.tar.gz
  https://github.com/google/googletest/archive/refs/tags/v${_gtest_ver}.tar.gz"
-checksum="7042900bbbf9c603516c9cd7d2efdbecc13e75e00ce2eb99a5af04ae894e7656
- ad7fdba11ea011c1d925b3289cf4af2c66a352e18d4c7264392fead75e919363"
+checksum="bbe70a2d60fd52ba34593786c44f7127fe0ed02ec14365dca90c3da187b22f7f
+ 65fab701d9829d38cb77c14acdc431d2108bfdbf8979e40eb8ae567edf10b27c"
 alternatives="jdk:/usr/lib/jvm/default-jdk:/${_jdk_home}"
 provides="java-environment-${version}_1"
 
