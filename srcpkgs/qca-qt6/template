@@ -6,7 +6,7 @@ build_style=cmake
 configure_args="-DQT6=ON -DUSE_RELATIVE_PATHS=true"
 hostmakedepends="pkg-config ca-certificates qt6-tools qt6-base"
 makedepends="nss-devel libgcrypt-devel ca-certificates openssl-devel
- qt6-base-devel qt6-qt5compat-devel botan-devel"
+ qt6-base-devel qt6-qt5compat-devel botan-devel pkcs11-helper-devel"
 depends="ca-certificates"
 short_desc="Qt6 Cryptographic Architecture"
 maintainer="John <me@johnnynator.dev>"
