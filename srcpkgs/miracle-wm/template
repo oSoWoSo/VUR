@@ -1,0 +1,22 @@
+# Template file for 'miracle-wm'
+pkgname=miracle-wm
+version=0.7.1
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=cmake
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="pkg-config"
+makedepends=""
+depends=""
+short_desc="Wayland tiling window manager built on Mir"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-only"
+homepage="https://miracle-wm.org/"
+#changelog="https://github.com/miracle-wm-org/miracle-wm/releases"
+distfiles="https://github.com/miracle-wm-org/miracle-wm/archive/refs/tags/v0.7.1.tar.gz"
+checksum=6ed205691c2c01e71d38242986e79434e0ba278e1a700530199def43d311ccc6
