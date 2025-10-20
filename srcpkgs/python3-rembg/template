@@ -1,0 +1,27 @@
+# Template file for 'python3-rembg'
+pkgname=python3-rembg
+version=2.0.67
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=python3-pep517
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="python3-setuptools python3-wheel"
+checkdepends="python3-pytest"
+depends="python3-Pillow python3-jsonschema python3-numpy python3-pooch
+ python3-scikit-image python3-scipy python3-tqdm"
+short_desc="Tool to remove images background"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/danielgatis/rembg"
+changelog="https://github.com/danielgatis/rembg/releases"
+distfiles="https://github.com/danielgatis/rembg/archive/refs/tags/v${version}.tar.gz"
+checksum=eff32b41b667f648bb0543a41aa836f3119b167700e836f3ddb3483b6252170b
+
+post_install() {
+    vlicense LICENSE.txt
+}
