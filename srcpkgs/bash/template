@@ -14,7 +14,7 @@ maintainer="Enno Boland <gottox@voidlinux.org>"
 license="GPL-3.0-or-later"
 homepage="https://www.gnu.org/software/bash/bash.html"
 distfiles="${GNU_SITE}/bash/bash-${version}.tar.gz"
-checksum=0d5cd86965f869a26cf64f4b71be7b96f90a3ba8b3d74e27e8e9d9d5550f31ba
+checksum=62dd49c44c399ed1b3f7f731e87a782334d834f08e098a35f2c87547d5dbb269
 
 make_dirs="/etc/bash/bashrc.d 755 root root"
 conflicts="chroot-bash>=0"
