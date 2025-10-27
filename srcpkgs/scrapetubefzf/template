@@ -1,0 +1,22 @@
+# Template file for 'scrapetubefzf'
+pkgname=scrapetubefzf
+version=999
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=gnu-makefile
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="python"
+makedepends=""
+depends=""
+short_desc="Terminal-based portal to Youtube"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/gmou3/scrapetubefzf"
+#changelog=""
+distfiles="https://github.com/gmou3/scrapetubefzf/archive/refs/heads/master.zip"
+checksum=dbd63d3bddc1100981a6a632c7966529d610595626b000a71d398ae41efc3648
