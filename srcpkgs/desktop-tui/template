@@ -1,0 +1,18 @@
+# Template file for 'desktop-tui'
+pkgname=desktop-tui
+version=0.3.1
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config"
+makedepends="ncurses-devel"
+short_desc="Desktop environment without graphics"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/Julien-cpsn/desktop-tui"
+changelog="https://github.com/Julien-cpsn/desktop-tui/releases"
+distfiles="https://github.com/Julien-cpsn/desktop-tui/archive/refs/tags/v${version}.tar.gz"
+checksum=9b6700528063576047cd4ce6db49ae791bb4a631c298f741ae06af8307e4f7b2
+
+post_install() {
+	vlicense LICENSE
+}
