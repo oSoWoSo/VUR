@@ -1,0 +1,27 @@
+# Template file for 'linutil'
+pkgname=linutil
+version=2025.09.29
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=cargo
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="pkg-config"
+makedepends=""
+depends=""
+short_desc="Toolbox designed to simplify everyday Linux tasks"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/ChrisTitusTech/linutil"
+#changelog=""
+distfiles="https://github.com/ChrisTitusTech/linutil/archive/refs/tags/${version}.tar.gz"
+checksum=950053431e925f41f42b669c8bd6d05e6da4825af1a954622c749fc8f0fa4039
+make_check=no # No tests provided
+
+post_install() {
+	vlicense LICENSE
+}
