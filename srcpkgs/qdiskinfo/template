@@ -1,0 +1,22 @@
+# Template file for 'qdiskinfo'
+pkgname=qdiskinfo
+version=0.4
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=cmake
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="pkg-config" # qt6-base" #qt6-widgets"
+makedepends="qt6-base-devel"
+depends=""
+short_desc="Frontend for smartctl. Shows SMART data of modern hard disk drives"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/edisionnano/QDiskInfo"
+#changelog=""
+distfiles="https://github.com/edisionnano/QDiskInfo/archive/refs/tags/${version}.tar.gz"
+checksum=33762f494f2da4b59e770207ad5bacca4394774c76509c15d3e3fa23fbf76d33
