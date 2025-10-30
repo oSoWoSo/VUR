@@ -1,6 +1,6 @@
 # Template file for 'kando'
 pkgname=kando
-version=2.0.0
+version=2.1.0
 revision=1
 archs="x86_64 aarch64"
 build_style=cmake
@@ -14,7 +14,7 @@ license="MIT"
 homepage="https://kando.menu"
 changelog="https://raw.githubusercontent.com/kando-menu/kando/refs/heads/main/docs/changelog.md"
 distfiles="https://github.com/kando-menu/kando/archive/refs/tags/v${version}.tar.gz"
-checksum=7f195d4dcee538dddb6773acd47aac64f73ba4b16d7a617e60734622efe862e5
+checksum=17aa9f868c6b0cda4374b8c73988bd50e2a670323527264b37eab542df721098
 
 pre_configure() {
 	npm install
