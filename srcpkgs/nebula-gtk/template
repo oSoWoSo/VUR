@@ -1,0 +1,17 @@
+# Template file for 'nebula-gtk'
+pkgname=nebula-gtk
+version=0.9.0
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config"
+makedepends="gtk4-devel libadwaita-devel"
+short_desc="GUI frontend for Void Linux's XBPS software tooling"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/Letdown2491/nebula-gtk"
+distfiles="https://github.com/Letdown2491/nebula-gtk/archive/refs/heads/main.zip"
+checksum=7d5551d094e6fa9f22b60fddbbe4d1bf7fab750f88703cbdb1af81f20023cd75
+
+post_install() {
+	vlicense LICENSE
+}
