@@ -1,0 +1,23 @@
+# Template file for 'runkit'
+pkgname=runkit
+version=999
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config rustup"
+makedepends="gtk4-devel libadwaita-devel glib-devel"
+#depends=""
+short_desc="Graphical manager for runit services"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/Letdown2491/runkit"
+#changelog=""
+distfiles="https://github.com/Letdown2491/runkit/archive/refs/heads/main.zip"
+checksum=e7bc28e79750f322130de7706a429bf118f85bed5bfe9b9f5b691c6549eba078
+
+do_build() {
+	cargo build --release
+}
+
+post_install() {
+	vlicense LICENSE
+}
