@@ -1,0 +1,25 @@
+# Template file for 'quickemu-rs'
+pkgname=quickemu-rs
+version=2.0.1
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config"
+makedepends="libzstd-devel xcb-util-devel"
+depends="qemu spice-gtk swtpm bzip2 xz" #edk2-ovmf
+short_desc="Create and manage virtual machines with intuitive configuration"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/lj3954/quickemu-rs"
+#changelog=""
+distfiles="https://github.com/lj3954/quickemu-rs/archive/refs/tags/v${version}.tar.gz"
+checksum=9848df97c515de8a37511c10b18990a91c6517865f892542bb8d38f7ba38a43c
+
+do_install() {
+	mv target/x86_64-unknown-linux-gnu/release/quickemu-rs target/release/
+	mv target/x86_64-unknown-linux-gnu/release/quickget-rs target/release/
+}
+
+post_install() {
+	vbin target/release/quickemu-rs
+	vbin target/release/quickget-rs
+}
