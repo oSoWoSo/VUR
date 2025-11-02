@@ -1,0 +1,15 @@
+# Template file for 'dissent'
+pkgname=dissent
+version=0.0.37
+revision=1
+build_style=go
+go_import_path="libdb.so/dissent"
+hostmakedepends="pkg-config gobject-introspection"
+makedepends="libglib-devel graphene-devel cairo-devel pango-devel gdk-pixbuf-devel
+ gtk4-devel gtksourceview5-devel libadwaita-devel libspelling-devel"
+short_desc="Tiny native Discord app"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/diamondburned/dissent"
+distfiles="https://github.com/diamondburned/dissent/archive/refs/tags/v${version}.tar.gz"
+checksum=b08ae331e5c69759eb7b9511908007fc3e9c7a28208bfa66ffbd84b6f335364a
