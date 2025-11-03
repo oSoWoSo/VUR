@@ -1,0 +1,16 @@
+# Template file for 'cereus-repo-extra'
+pkgname=cereus-repo-extra
+version=0.2
+revision=2
+archs="x86_64 x86_64-musl i686"
+short_desc="Cereus Linux Extra repository"
+maintainer="Kevin Figueroa <kfdevart@disroot.org>"
+license="Public Domain"
+homepage="https://sourceforge.net/projects/cereus-linux/files/repos/cereus-extra"
+#repository=cereus-extra
+
+do_install() {
+	vmkdir usr/share/xbps.d
+	echo "repository=${homepage}/${XBPS_TARGET_MACHINE}" > \
+		${DESTDIR}/usr/share/xbps.d/10-cereus-extra.conf
+}
