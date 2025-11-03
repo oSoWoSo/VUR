@@ -1,0 +1,23 @@
+# Template file for 'musl-locales'
+pkgname=musl-locales
+version=0.1.1
+revision=1
+archs="*-musl"
+#build_wrksrc=
+build_style=cmake
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="pkgconf gettext-tiny"
+#makedepends="gettext-devel"
+depends=""
+short_desc="Locale program for musl libc"
+maintainer="zenobit <zenobit@disroot.org>"
+license="LGPL-3.0-only"
+homepage="https://git.adelielinux.org/adelie/musl-locales"
+#changelog=""
+#distfiles="https://git.adelielinux.org/adelie/musl-locales/-/archive/0.1.0/musl-locales-0.1.0.tar.gz"
+distfiles="https://github.com/oSoWoSo/musl-locales/archive/refs/tags/${version}.tar.gz"
+checksum=043710d5d94b43e6d9ba666c20a0aa37dd0fb4fbe2cb1d3cf14157f9fffe6f9e
