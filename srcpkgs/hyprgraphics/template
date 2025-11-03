@@ -4,20 +4,17 @@ version=0.2.0
 revision=1
 build_style=cmake
 configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr"
-hostmakedepends="pkg-config hyprutils libspng"
-makedepends="cairo-devel pango-devel file-devel libjpeg-turbo-devel libjxl-devel
- librsvg-devel libwebp-devel pixman-devel libheif-devel"
+hostmakedepends="pkg-config"
+makedepends="cairo-devel pango-devel file-devel hyprutils
+ libjpeg-turbo-devel libjxl-devel libspng librsvg-devel
+ libwebp-devel pixman-devel libheif-devel"
 short_desc="hyprland graphics resources and utilities"
-maintainer="Encoded14 <linusken@tuta.io>"
+maintainer="zenobit <zenobit@disroot.org>"
 license="BSD-3-Clause"
 homepage="https://github.com/hyprwm/hyprgraphics"
 distfiles="https://github.com/hyprwm/hyprgraphics/archive/refs/tags/v${version}.tar.gz"
 checksum=c66239113504426fc8ba31aa57b971dfc29c3a62490ecba48ec20fba19b64fd9
-make_check=no # cairo_surface_write_to_png fails - Investigating
-
-#pre_check() {
-#    mkdir -p "${wrksrc}/build/test_output"
-#}
+make_check=no # cairo_surface_write_to_png fails
 
 post_install() {
 	vlicense LICENSE
