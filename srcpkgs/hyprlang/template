@@ -4,10 +4,10 @@ version=0.6.4
 revision=2
 build_style=cmake
 configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr"
-hostmakedepends="pkg-config hyprutils"
-#makedepends="hyprutils"
+hostmakedepends="pkg-config"
+makedepends="hyprutils"
 short_desc="Official implementation library for the hypr config language"
-maintainer="Encoded14 <linusken@tuta.io>"
+maintainer="zenobit <zenobit@disroot.org>"
 license="LGPL-3.0-only"
 homepage="https://hyprland.org/hyprlang/index.html"
 changelog="https://github.com/hyprwm/hyprlang/releases"
