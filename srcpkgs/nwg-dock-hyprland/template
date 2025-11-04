@@ -1,6 +1,6 @@
 # Template file for 'nwg-dock-hyprland'
 pkgname=nwg-dock-hyprland
-version=0.4.4
+version=0.4.8
 revision=1
 build_style=go
 hostmakedepends="pkg-config"
@@ -13,7 +13,7 @@ license="MIT"
 homepage="https://nwg-piotr.github.io/nwg-shell/nwg-dock-hyprland"
 #changelog=""
 distfiles="https://github.com/nwg-piotr/nwg-dock-hyprland/archive/refs/tags/v${version}.tar.gz"
-checksum=dff16c36aad83fa3a197a095b5e324c1be628a7af578095e11b7349c0f894008
+checksum=3d4b6930d3a452596276c2b8ed22f3af356f650f2990ce3f5e2395407d4ecab4
 
 post_install() {
 	vlicense LICENSE
