@@ -1,17 +1,23 @@
 # Template file for 'nebula-gtk'
 pkgname=nebula-gtk
-version=0.9.0
+version=1.0.0
 revision=1
 build_style=cargo
-hostmakedepends="pkg-config"
+hostmakedepends="pkg-config desktop-file-utils appstream-glib glib-devel libadwaita-devel gtk4-devel"
 makedepends="gtk4-devel libadwaita-devel"
-short_desc="GUI frontend for Void Linux's XBPS software tooling"
-maintainer="zenobit <zenobit@disroot.org>"
+short_desc="GTK frontend for Void Linux's XBPS tooling"
+maintainer="Letdown2491 <github.penknife946@passmail.net>"
 license="MIT"
 homepage="https://github.com/Letdown2491/nebula-gtk"
-distfiles="https://github.com/Letdown2491/nebula-gtk/archive/refs/heads/main.zip"
-checksum=7d5551d094e6fa9f22b60fddbbe4d1bf7fab750f88703cbdb1af81f20023cd75
+distfiles="https://github.com/Letdown2491/nebula-gtk/archive/refs/tags/v${version}.tar.gz"
+checksum=2ca4dcbbc7bb11801c0e96e77fcd15406411350b49f9e15924762878e73b9d54
 
 post_install() {
+	vinstall assets/applications/tech.geektoshi.Nebula.desktop 644 usr/share/applications
+	vinstall assets/icons/hicolor/128x128/apps/nebula.png 644 usr/share/icons/hicolor/128x128/apps
+	vinstall assets/icons/hicolor/256x256/apps/nebula.png 644 usr/share/icons/hicolor/256x256/apps
+	vinstall assets/icons/hicolor/512x512/apps/nebula.png 644 usr/share/icons/hicolor/512x512/apps
+	vinstall data/category_overrides.toml 644 usr/share/nebula
+	vinstall data/generated/category_suggestions.json 644 usr/share/nebula
 	vlicense LICENSE
 }
