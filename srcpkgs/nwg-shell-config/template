@@ -1,6 +1,6 @@
 # Template file for 'nwg-shell-config'
 pkgname=nwg-shell-config
-version=0.5.59
+version=0.5.62
 revision=1
 build_style=python3-pep517
 hostmakedepends="pkg-config python3-setuptools python3-wheel python3-geopy python3-requests"
@@ -13,7 +13,7 @@ license="MIT"
 homepage="https://nwg-piotr.github.io/nwg-shell/nwg-shell-config"
 #changelog=""
 distfiles="https://github.com/nwg-piotr/nwg-shell-config/archive/refs/tags/v${version}.tar.gz"
-checksum=d89fd23080205b4b8bf154b5ff55edfefd31a45c3ab22f6021742d17fd37c893
+checksum=43e3c97259a80d14170a1b3ba9bdfc10fe0028121dbac9a8b439c2d0a2b4ef21
 
 #do_install() {
 #	python3 setup.py --help
