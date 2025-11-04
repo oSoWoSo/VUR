@@ -1,5 +1,5 @@
-# Template file for 'runkit'
-pkgname=runkit
+# Template file for 'runkit-git'
+pkgname=runkit-git
 version=999
 revision=1
 build_style=cargo
