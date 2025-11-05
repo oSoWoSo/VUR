@@ -1,6 +1,6 @@
 # Template file for 'wayscriber'
 pkgname=wayscriber
-version=0.5.2
+version=0.6.3
 revision=1
 #archs="i686 x86_64"
 #build_wrksrc=
@@ -19,7 +19,7 @@ license="MIT"
 homepage="https://github.com/devmobasa/wayscriber"
 #changelog=""
 distfiles="https://github.com/devmobasa/wayscriber/archive/refs/tags/v${version}.tar.gz"
-checksum=0bfb71444824ca9eea203f2e4609e97ac676f45c29b66e4e8a7f6fd4799c5cef
+checksum=51ad5f5bc516e0a7f0076319c1ee75bc8a11bb717c6e0f63c8f09b75df803e43
 
 post_install() {
 	vlicense LICENSE
