@@ -1,0 +1,21 @@
+# Template file for 'typobuster'
+pkgname=typobuster
+version=1.0.0
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-setuptools"
+makedepends=""
+depends="python3-cairo python3-gobject gtksourceview4 gtk+3 glib"
+short_desc="Lightweight editor with text transformations and auto-correction"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/nwg-piotr/typobuster"
+changelog="https://github.com/nwg-piotr/typobuster/releases"
+distfiles="https://github.com/nwg-piotr/typobuster/archive/refs/tags/v${version}.tar.gz"
+checksum=0c098645c0db6836c3c5021782c991b2ee1cd1bef3da09534db582d6b46a67c0
+
+post_install() {
+	cp typobuster.desktop /usr/share/applications/
+	cp typobuster.svg /usr/share/pixmaps/
+	vdoc README.md
+}
