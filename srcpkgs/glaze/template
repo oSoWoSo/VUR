@@ -5,7 +5,7 @@ revision=1
 build_style=cmake
 configure_args="-DBUILD_TESTING:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release -Dglaze_ENABLE_FUZZING:BOOL=OFF"
 hostmakedepends="pkg-config"
-makedepends="openssl-devel libsanitizer-devel"
+#makedepends="openssl-devel libsanitizer-devel"
 short_desc="Extremely fast, in memory, JSON and interface library for modern C++"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
