@@ -1,6 +1,6 @@
 # Template file for 'tufw'
 pkgname=tufw
-version=0.2.5
+version=0.2.6
 revision=1
 #archs="i686 x86_64"
 #build_wrksrc=
@@ -20,7 +20,7 @@ license="MIT"
 homepage="https://github.com/peltho/tufw"
 #changelog="https://github.com/peltho/tufw/releases"
 distfiles="https://github.com/peltho/tufw/archive/refs/tags/v${version}-forward.tar.gz"
-checksum=6e1bded145fcc7e07d248212830414265ce452b9f560c003489e674cf3c12526
+checksum=85388baf5743273bf635a4aab59ae2a4fa77c29b4345f06c1593b699f2a76a05
 
 post_install() {
 	vlicense LICENSE.txt
