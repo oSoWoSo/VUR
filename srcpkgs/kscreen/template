@@ -4,9 +4,10 @@ version=6.5.2
 revision=1
 build_style=cmake
 configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
- -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_QTLINGUISTDIR=lib/qt6/linguist"
 hostmakedepends="extra-cmake-modules qt6-base qt6-tools gettext
- kf6-kcmutils kf6-kpackage pkg-config wayland-devel
+ kf6-kimageformats kf6-kcmutils kf6-kpackage pkg-config wayland-devel
  qt6-declarative-host-tools"
 makedepends="kf6-kxmlgui-devel kf6-kcmutils-devel kf6-ksvg-devel
  kf6-kdbusaddons-devel kf6-kcrash-devel

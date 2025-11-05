@@ -1,6 +1,6 @@
 # Template file for 'vtm'
 pkgname=vtm
-version=2025.10.31
+version=2025.11.07
 revision=1
 #archs="i686 x86_64"
 #build_wrksrc=
@@ -19,7 +19,7 @@ license="GPL-3.0-or-later"
 homepage="https://github.com/directvt/vtm"
 #changelog=""
 distfiles="https://github.com/directvt/vtm/archive/refs/tags/v${version}.tar.gz"
-checksum=ccb9c2e198669eb290b59c0008605235dbf510fcf885856f569b66f245c61d1d
+checksum=a31d88f65fd704838d8af4cf6aeaa108db97a0c51c8144fb70ef9422198fcdf9
 
 do_build() {
 	cd "$pkgname"

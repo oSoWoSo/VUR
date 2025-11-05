@@ -4,7 +4,8 @@ version=6.20.0
 revision=1
 build_style=cmake
 configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
- -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_QTLINGUISTDIR=lib/qt6/linguist"
 hostmakedepends="extra-cmake-modules qt6-base qt6-tools
  qt6-declarative-host-tools"
 makedepends="qt6-declarative-devel qt6-base-private-devel"
