@@ -1,14 +1,14 @@
 # Template file for 'psuinfo'
 pkgname=psuinfo
-version=1.1
-revision=2
+version=1.2
+revision=1
 depends="python3>=3.5 python3-psutil"
 short_desc="Script to display customizable system info in Tint2 or other panels"
 maintainer="Piotr Miller <nwg.piotr@gmail.com>"
 license="GPL-3.0-or-later"
 homepage="https://github.com/nwg-piotr/psuinfo"
 distfiles="https://github.com/nwg-piotr/psuinfo/archive/v${version}.tar.gz"
-checksum=bd10d37a88729fe8934bc37cd70403bc606e0959ddcdad941a6cc5846583db3d
+checksum=8e6e54a6594d4c87f10004e5ff9c7709786c5d7d7906073b40f68463e1753c9e
 
 do_install() {
 	vbin "${pkgname}"
