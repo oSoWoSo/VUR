@@ -4,7 +4,8 @@ version=6.5.2
 revision=1
 build_style=cmake
 configure_args="-DBUILD_TESTING=OFF
- -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_QTLINGUISTDIR=lib/qt6/linguist"
 hostmakedepends="pkg-config extra-cmake-modules qt6-tools qt6-base
  wayland-devel"
 makedepends="qt6-base-devel libXrandr-devel qt6-base-private-devel
