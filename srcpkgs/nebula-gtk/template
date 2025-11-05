@@ -9,6 +9,7 @@ short_desc="GTK frontend for Void Linux's XBPS tooling"
 maintainer="Letdown2491 <github.penknife946@passmail.net>"
 license="MIT"
 homepage="https://github.com/Letdown2491/nebula-gtk"
+changelog="https://raw.githubusercontent.com/Letdown2491/nebula-gtk/refs/heads/main/CHANGELOG.md"
 distfiles="https://github.com/Letdown2491/nebula-gtk/archive/refs/tags/v${version}.tar.gz"
 checksum=ecbbad939e1ccb9d13cfa2c5c51caf899990ee24be6f815b2efa99c61ee56853
 
