@@ -1,6 +1,6 @@
 # Template file for 'python3-imagehash'
 pkgname=python3-imagehash
-version=4.1.0
+version=4.3.2
 revision=1
 #archs="i686 x86_64"
 #build_wrksrc=
@@ -19,7 +19,7 @@ license="BSD-2-Clause"
 homepage="https://github.com/JohannesBuchner/imagehash"
 #changelog=""
 distfiles="https://github.com/JohannesBuchner/imagehash/archive/refs/tags/v${version}.tar.gz"
-checksum=cfa208909a4bf388006fa34e5360e829bc01f4bdf849f5f6765499fd832cb35a
+checksum=473f992da754b71ecc61c1fcfd4d4f999a0630a1475fd55e1d572016e043fdae
 
 post_install() {
     vlicense LICENSE
