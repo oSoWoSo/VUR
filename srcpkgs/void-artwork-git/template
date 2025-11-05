@@ -1,0 +1,29 @@
+# Template file for 'void-artwork-git'
+pkgname=void-artwork-git
+version=0.25
+revision=1
+short_desc="Void Linux artwork"
+maintainer="zenobit <zenobit@disroot.org>"
+license="AGPL-3.0-only"
+homepage="https://github.com/oSoWoSo/void-artwork"
+distfiles="https://github.com/oSoWoSo/void-artwork/archive/refs/tags/${version}.tar.gz"
+checksum=3da3049bf81f57f2edee7119699048970f6190f852916749abe37da4ba2e4885
+
+do_install() {
+	vinstall splash.png 644 usr/share/void-artwork
+	vinstall oldsplash.png 644 usr/share/void-artwork
+	vinstall splashwhite.png 644 usr/share/void-artwork
+	vinstall void-logo.png 644 usr/share/void-artwork
+	vinstall void-transparent.png 644 usr/share/void-artwork
+	vinstall void-logo.svg 644 usr/share/void-artwork
+	for size in 16 22 32 48 64 128 256 512; do
+		vinstall icons/void-logo-${size}.png 644 usr/share/icons/hicolor/${size}x${size}/apps void-logo.png
+		vinstall icons/void-logo-notext-${size}.png 644 usr/share/icons/hicolor/${size}x${size}/apps void-logo-notext.png
+	done
+	vinstall icons/void-logo.svg 644 usr/share/icons/hicolor/scalable/apps
+	vinstall icons/void-logo-notext.svg 644 usr/share/icons/hicolor/scalable/apps
+}
+
+post_install() {
+	vlicense LICENSE
+}
