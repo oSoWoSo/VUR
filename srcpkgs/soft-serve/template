@@ -1,6 +1,6 @@
 # Template file for 'soft-serve'
 pkgname=soft-serve
-version=0.8.5
+version=0.10.0
 revision=1
 build_style=go
 build_helper=qemu
@@ -14,7 +14,7 @@ license="MIT"
 homepage="https://github.com/charmbracelet/soft-serve"
 changelog="https://github.com/charmbracelet/soft-serve/releases"
 distfiles="https://github.com/charmbracelet/soft-serve/archive/refs/tags/v${version}.tar.gz"
-checksum=e8a432e8d1a891d7ca6f8b16fa4455db57b3484b7728fdb1ae9a77d4fa0d7045
+checksum=9d679296f46840f535aa934c4c03f332507b704d7dbe165b4920e012caf20ef3
 
 system_accounts="_softserve"
 _softserve_homedir="/var/lib/soft-serve"
