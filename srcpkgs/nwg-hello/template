@@ -1,0 +1,22 @@
+# Template file for 'nwg-hello'
+pkgname=nwg-hello
+version=0.4.1
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=python3-pep517
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="python3-setuptools"
+makedepends=""
+depends="greetd gnome-themes-extra gtk-layer-shell gtk+3"
+short_desc="GTK3-based greeter for greetd written in python "
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/nwg-piotr/nwg-hello"
+#changelog=""
+distfiles="https://github.com/nwg-piotr/nwg-hello/archive/refs/tags/v${version}.tar.gz"
+checksum=2619e7432a79c5edc10104d301602bb64a6d2feef48ffd9ed0fabe2c2ac6bd2c
