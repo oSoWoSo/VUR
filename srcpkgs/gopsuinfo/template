@@ -1,0 +1,34 @@
+# Template file for 'gopsuinfo'
+pkgname=gopsuinfo
+version=0.1.9
+revision=1
+build_style=go
+go_import_path="github.com/nwg-piotr/gopsuinfo"
+hostmakedepends="go"
+short_desc="Command to display system usage info in panels"
+maintainer="zenobit <zenobit@disroot.org>"
+license="BSD-2-Clause"
+homepage="https://github.com/nwg-piotr/gopsuinfo"
+changelog="https://github.com/nwg-piotr/gopsuinfo/releases"
+distfiles="https://github.com/nwg-piotr/gopsuinfo/archive/refs/tags/v${version}.tar.gz"
+checksum=6d845fb36edee53060e910500c8cca54b2495f19a6f330fd1bd389f271b31c7c
+
+pre_build() {
+	go get github.com/shirou/gopsutil
+}
+
+do_build() {
+	go build -o bin/gopsuinfo gopsuinfo.go
+}
+
+do_install() {
+	mkdir -p usr/share/gopsuinfo usr/bin
+}
+
+post_install() {
+	vmkdir usr/share/gopsuinfo
+	vcopy icons_light usr/share/gopsuinfo/
+	vcopy icons_dark usr/share/gopsuinfo/
+	vbin bin/gopsuinfo
+	vlicense LICENSE
+}
