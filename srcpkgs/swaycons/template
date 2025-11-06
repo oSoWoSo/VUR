@@ -1,0 +1,22 @@
+# Template file for 'swaycons'
+pkgname=swaycons
+version=0.3.1
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=cargo
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends=""
+makedepends=""
+depends=""
+short_desc="Window Icons in Sway with Nerd Fonts"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/allie-wake-up/swaycons"
+changelog="https://github.com/allie-wake-up/swaycons/compare/v0.2.0...v${version}"
+distfiles="https://github.com/allie-wake-up/swaycons/archive/refs/tags/v${version}.tar.gz"
+checksum=7693cbd5c06db25de3f67d3782089f9baade4b50d7312ed5cb93171e8f6a22d0
