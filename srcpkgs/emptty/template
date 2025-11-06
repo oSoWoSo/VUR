@@ -17,6 +17,7 @@ post_install() {
 	vinstall res/pam 644 etc/pam.d emptty
 	vinstall res/runit-run 755 etc/sv/emptty run
 	vinstall res/conf 644 etc/emptty
+	vinstall res/motd-gen.sh 644 etc/emptty
 	vman res/emptty.1
 	vlicense LICENSE
 	ln -s /run/runit/supervise.emptty ${DESTDIR}/etc/sv/emptty/supervise
