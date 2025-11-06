@@ -1,18 +1,18 @@
 # Template file for 'runkit'
 pkgname=runkit
-version=1.0.0
+version=1.3.11
 revision=1
 build_style=cargo
 hostmakedepends="pkg-config rustup"
-makedepends="gtk4-devel libadwaita-devel glib-devel"
-#depends=""
+makedepends="gtk4-devel libadwaita-devel glib-devel pango-devel"
+depends="dbus polkit"
 short_desc="Graphical manager for runit services"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
 homepage="https://github.com/Letdown2491/runkit"
-#changelog=""
+changelog="https://raw.githubusercontent.com/Letdown2491/runkit/refs/heads/main/CHANGELOG.md"
 distfiles="https://github.com/Letdown2491/runkit/archive/refs/tags/v${version}.tar.gz"
-checksum=f3eba5572ca39694b86ed15442c0de028a743a687baba133c8a35cb144b9ad4d
+checksum=f2954e9b0ee47b906a4e565c81c77abd5a2ecb2ce36d920650400f655225325b
 
 do_build() {
 	cargo build --release
@@ -24,5 +24,24 @@ do_install() {
 }
 
 post_install() {
+	# icons
+	for size in 16x16 24x24 32x32 48x48 64x64 96x96 128x128 256x256 512x512; do
+		vinstall "assets/icons/hicolor/${size}/apps/runkit.png" 644 "usr/share/icons/hicolor/${size}/apps"
+	done
+	# icons scalable
+	vinstall assets/icons/hicolor/scalable/apps/runkit.svg 644 usr/share/icons/hicolor/scalable/apps
+	# desktop file
+	vinstall assets/applications/tech.geektoshi.Runkit.desktop 644 usr/share/applications
+	# service descriptions
+	# vinstall
+	# dbus service
+	vinstall assets/dbus-1/services/tech.geektoshi.Runkit.service 644 usr/share/dbus-1/services
+	vinstall assets/dbus-1/system-services/tech.geektoshi.Runkit1.service 644 usr/share/dbus-1/system-services
+	vinstall assets/dbus-1/system.d/tech.geektoshi.Runkit1.conf 644 etc/dbus-1/system.d
+	# polkit policy
+	vinstall assets/polkit-1/actions/tech.geektoshi.Runkit.policy 644 usr/share/polkit-1/actions
+	# readme
+	vman README.md
+	# license
 	vlicense LICENSE
 }
