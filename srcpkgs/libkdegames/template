@@ -17,7 +17,9 @@ makedepends="qt6-svg-devel qt6-declarative-devel qt6-base-devel
  kf6-ki18n-devel
  kf6-knewstuff-devel kf6-kdnssd-devel
  kf6-kdeclarative-devel kf6-kcolorscheme-devel kf6-kxmlgui-devel
- kf6-kcompletion-devel kf6-kconfigwidgets-devel
+ kf6-kcompletion-devel kf6-kconfigwidgets-devel kf6-karchive-devel
+ qt6-declarative-devel qt6-svg-devel kf6-kconfig-devel
+ kf6-ki18n-devel kf6-kiconthemes-devel libopenal-devel
  libopenal-devel libsndfile-devel"
 short_desc="Common code and data for many KDE games"
 maintainer="Piotr Wójcik <chocimier@tlen.pl>"
@@ -28,7 +30,8 @@ distfiles="${KDE_SITE}/release-service/${version}/src/libkdegames-${version}.tar
 checksum=46f305677fb37978c6b47bd17ab6553b572151a63299bb7b8dc718d37fb448a4
 
 libkdegames-devel_package() {
-	depends="${sourcepkg}>=${version}_${revision} ${makedepends}"
+	depends="${sourcepkg}>=${version}_${revision} kf6-kcompletion-devel
+	 qt6-base-devel kf6-kconfig-devel kf6-kconfigwidgets-devel"
 	short_desc+=" - development files"
 	pkg_install() {
 		vmove usr/include
