@@ -16,10 +16,6 @@ makedepends="discount-devel djvulibre-devel ebook-tools-devel phonon-devel
  kf6-kconfigwidgets-devel kf6-kcoreaddons-devel kf6-kcrash-devel
  kf6-kdoctools-devel kf6-kiconthemes-devel kf6-kio-devel kf6-kirigami-devel
  kf6-kparts-devel kf6-kpty-devel kf6-kwallet-devel kf6-kwindowsystem-devel
- kf6-kxmlgui-devel qt6-svg-devel kf6-karchive-devel kf6-ki18n-devel
- qt6-declarative-devel kf6-kcolorscheme-devel kf6-kitemviews-devel
- kf6-kwidgetsaddons-devel zlib-devel freetype-devel tiff-devel
- ebook-tools-devel cups-devel
  kf6-threadweaver-devel kf6-ktextwidgets-devel plasma-activities-devel"
 depends="hicolor-icon-theme"
 checkdepends="ebook-tools dbus"
@@ -48,8 +44,7 @@ libokular_package() {
 
 libokular-devel_package() {
 	short_desc+=" - development files"
-	depends="libokular>=${version}_${revision} qt6-base-devel
-	 kf6-kcoreaddons-devel kf6-kconfig-devel kf6-kxmlgui-devel"
+	depends="lib${sourcepkg}>=${version}_${revision}"
 	pkg_install() {
 		vmove usr/include
 		vmove usr/lib/cmake
