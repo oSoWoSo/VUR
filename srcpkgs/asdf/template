@@ -1,0 +1,32 @@
+# Template file for 'asdf'
+pkgname=asdf
+version=0.18.0
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=go
+go_import_path="github.com/asdf-vm/asdf"
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="go"
+makedepends=""
+depends=""
+short_desc="Extendable version manager"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/asdf-vm/asdf"
+#changelog=""
+distfiles="https://github.com/asdf-vm/asdf/archive/refs/tags/v${version}.tar.gz"
+checksum=c452a886503277260b7c82c07031800340f892bb2147bb3af67dca7268a410b5
+make_check=no # Investigating
+
+do_install() {
+	vbin bin/asdf
+}
+
+post_install() {
+	vdoc help.txt
+}
