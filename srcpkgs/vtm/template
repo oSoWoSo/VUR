@@ -18,11 +18,18 @@ maintainer="zenobit <zenobit@disroot.org>"
 license="GPL-3.0-or-later"
 homepage="https://github.com/directvt/vtm"
 #changelog=""
-distfiles="https://github.com/directvt/vtm/archive/refs/tags/v${version}.tar.gz"
-checksum=a31d88f65fd704838d8af4cf6aeaa108db97a0c51c8144fb70ef9422198fcdf9
+lua_version=5.4.7
+distfiles="https://github.com/directvt/vtm/archive/refs/tags/v${version}.tar.gz
+ https://www.lua.org/ftp/lua-${lua_version}.tar.gz"
+checksum="a31d88f65fd704838d8af4cf6aeaa108db97a0c51c8144fb70ef9422198fcdf9
+ 9fbf5e28ef86c69858f6d3d34eccc32e911c1a28b4120ff3e84aaa70cfbf1e30"
+
+pre_configure() {
+	cd "$BUILD_DIR/$pkgname-$version"
+}
 
 do_build() {
-	cd "$pkgname"
+	cd "$pkgname/$pkgname"
 	cmake -B build -DCMAKE_INSTALL_PREFIX="/usr"
 	cmake --build build
 }
