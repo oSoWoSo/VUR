@@ -1,0 +1,26 @@
+# Template file for 'hyfetch'
+pkgname=hyfetch
+version=2.0.4
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=cargo
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends=""
+makedepends=""
+depends=""
+short_desc="Neofetch rust clone"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/hykilpikonna/hyfetch"
+#changelog=""
+distfiles="https://github.com/hykilpikonna/hyfetch/archive/refs/tags/${version}.tar.gz"
+checksum=8de8908334470f24dfae5693bd9660360ec8c1074b270f36eac659530e0b35ba
+
+do_install() {
+    vbin target/x86_64-unknown-linux-gnu/release/hyfetch
+}
