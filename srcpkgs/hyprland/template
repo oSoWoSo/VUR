@@ -1,9 +1,9 @@
 # Template file for 'hyprland'
 pkgname=hyprland
-version=0.51.1
-revision=4
+version=0.52.0
+revision=1
 build_style=cmake
-configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release \
+configure_args="--no-warn-unused-cli -Wunused-result -DCMAKE_BUILD_TYPE:STRING=Release \
  -DCMAKE_INSTALL_PREFIX:PATH=/usr -DNO_SYSTEMD:BOOL=true"
 hostmakedepends="pkg-config cpio glslang hyprwayland-scanner jq python3 xxd"
 makedepends="aquamarine cairo-devel glaze hwids hyprcursor
@@ -18,7 +18,9 @@ license="BSD-3-Clause"
 homepage="https://hyprland.org/"
 changelog="https://github.com/hyprwm/Hyprland/releases"
 distfiles="https://github.com/hyprwm/Hyprland/releases/download/v${version}/source-v${version}.tar.gz"
-checksum=f562b8d1efc9934abd9678e3a4d7bb5a56adc6ef89c4679aba269de470e66131
+checksum=c3ac1ab4b157de39a32d22a354be726cd8ebb380c8637fd6a04d8cd71eea191f
+#export XDG_RUNTIME_DIR=$HOME/.config
+make_check=no
 
 if [ "$XBPS_TARGET_LIBC" = "musl" ]; then
 	configure_args+=" -DCMAKE_CXX_FLAGS=\"-lexecinfo\""
