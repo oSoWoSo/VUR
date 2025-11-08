@@ -1,0 +1,25 @@
+# Template file for 'forgejo-runner'
+pkgname=forgejo-runner
+version=11.3.0
+revision=1
+build_style=go
+go_import_path="code.forgejo.org/forgejo/runner/v11"
+hostmakedepends="go git"
+makedepends=""
+depends=""
+checkdepends="docker"
+short_desc="Continuous integration for Forgejo"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://code.forgejo.org/forgejo/runner"
+#changelog=""
+distfiles="https://code.forgejo.org/forgejo/runner/archive/v${version}.tar.gz"
+checksum=590301eda830495922bf356c6c4d82785036d9760e099f23d36fde87b38a5fea
+make_check=no # Investigating
+
+post_install() {
+    _build-forgejo-runner-xbps/bin/runner generate-config > config.yaml
+    vconf config.yaml
+    vbin _build-forgejo-runner-xbps/bin/runner forgejo-runner
+	rm _build-forgejo-runner-xbps/bin/runner
+}
