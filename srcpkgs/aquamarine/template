@@ -9,12 +9,12 @@ makedepends="hwids hyprutils libdisplay-info-devel libinput-devel
  libseat-devel MesaLib-devel pixman-devel wayland-devel wayland-protocols"
 short_desc="Aquamarine is a very light linux rendering backend library"
 maintainer="zenobit <zenobit@disroot.org>"
-license="LGPL-3.0-only"
-homepage="https://hyprland.org/hyprlang/index.html"
+license="BSD-3-Clause"
+homepage="https://github.com/hyprwm/aquamarine"
 changelog="https://github.com/hyprwm/aquamarine/releases"
 distfiles="https://github.com/hyprwm/aquamarine/archive/refs/tags/v${version}.tar.gz"
 checksum=657e4752542872549a556d9facb8a525276b4edd5ca197818835904768aaad40
-make_check=no
+make_check=no # Ivestigating...
 
 post_install() {
 	vlicense LICENSE
