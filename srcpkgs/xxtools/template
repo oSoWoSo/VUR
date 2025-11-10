@@ -1,0 +1,24 @@
+# Template file for 'xxtools'
+pkgname=xxtools
+version=0.2
+revision=1
+#build_style=gnu-makefile
+short_desc="Tools to ease packaging tasks for Void Linux"
+maintainer="zenobit <zenobit@disroot.org>"
+license="0BSD"
+homepage="https://github.com/Piraty/xxtools"
+changelog="https://github.com/oSoWoSo/xxtools/compare/0.1...${version}"
+distfiles="https://github.com/oSoWoSo/xxtools/archive/refs/tags/${version}.tar.gz"
+checksum=c678e66d7d0ca4763f33c10c36c2f5a458f4d2ede90138cf21f9d377b59c0292
+
+do_install() {
+vmkdir /usr/bin
+	for xx in xx*; do
+		vbin $xx
+	done
+}
+
+post_install() {
+	vdoc README.md
+	vlicense LICENSE
+}
