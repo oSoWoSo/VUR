@@ -4,7 +4,7 @@ version=0.52.1
 revision=1
 build_style=cmake
 configure_args="--no-warn-unused-cli -Wunused-result -DCMAKE_BUILD_TYPE:STRING=Release \
- -DCMAKE_INSTALL_PREFIX:PATH=/usr -DNO_SYSTEMD:BOOL=true"
+ -DCMAKE_INSTALL_PREFIX:PATH=/usr -DNO_SYSTEMD:BOOL=true -Wunused-result"
 hostmakedepends="pkg-config cpio glslang hyprwayland-scanner jq python3 xxd"
 makedepends="aquamarine cairo-devel glaze hwids hyprcursor
  hyprgraphics hyprlang hyprutils libdisplay-info-devel libdrm-devel
