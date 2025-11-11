@@ -7,7 +7,7 @@ configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_I
 hostmakedepends="pkg-config hyprwayland-scanner"
 makedepends="hyprland-protocols hyprlang hyprutils
  hyprwayland-scanner wayland-devel wayland-protocols"
-short_desc="An application to enable a blue-light filter on Hyprland"
+short_desc="Application to enable a blue-light filter on Hyprland"
 maintainer="zenobit <zenobit@disroot.org>"
 license="BSD-3-Clause"
 homepage="https://github.com/hyprwm/hyprsunset"
