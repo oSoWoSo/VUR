@@ -1,6 +1,6 @@
 # Template file for 'runkit'
 pkgname=runkit
-version=1.3.11
+version=1.4.0
 revision=1
 build_style=cargo
 hostmakedepends="pkg-config rustup"
@@ -12,7 +12,7 @@ license="MIT"
 homepage="https://github.com/Letdown2491/runkit"
 changelog="https://raw.githubusercontent.com/Letdown2491/runkit/refs/heads/main/CHANGELOG.md"
 distfiles="https://github.com/Letdown2491/runkit/archive/refs/tags/v${version}.tar.gz"
-checksum=f2954e9b0ee47b906a4e565c81c77abd5a2ecb2ce36d920650400f655225325b
+checksum=63c49259d086e1830baee12aa47e5f7ad7bdf1ded98e377d5b9b347bf73065cf
 
 do_build() {
 	cargo build --release
@@ -28,20 +28,28 @@ post_install() {
 	for size in 16x16 24x24 32x32 48x48 64x64 96x96 128x128 256x256 512x512; do
 		vinstall "assets/icons/hicolor/${size}/apps/runkit.png" 644 "usr/share/icons/hicolor/${size}/apps"
 	done
+
 	# icons scalable
 	vinstall assets/icons/hicolor/scalable/apps/runkit.svg 644 usr/share/icons/hicolor/scalable/apps
+
 	# desktop file
 	vinstall assets/applications/tech.geektoshi.Runkit.desktop 644 usr/share/applications
+
 	# service descriptions
-	# vinstall
+	vinstall assets/config/services.json 644 /usr/share/runkit/
+	vbin target/release/services-merge
+
 	# dbus service
 	vinstall assets/dbus-1/services/tech.geektoshi.Runkit.service 644 usr/share/dbus-1/services
 	vinstall assets/dbus-1/system-services/tech.geektoshi.Runkit1.service 644 usr/share/dbus-1/system-services
 	vinstall assets/dbus-1/system.d/tech.geektoshi.Runkit1.conf 644 etc/dbus-1/system.d
+
 	# polkit policy
 	vinstall assets/polkit-1/actions/tech.geektoshi.Runkit.policy 644 usr/share/polkit-1/actions
+
 	# readme
-	vman README.md
+	vdoc README.md
+
 	# license
 	vlicense LICENSE
 }
