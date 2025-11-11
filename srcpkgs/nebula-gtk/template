@@ -1,6 +1,6 @@
 # Template file for 'nebula-gtk'
 pkgname=nebula-gtk
-version=1.2.2
+version=1.3.5
 revision=1
 build_style=cargo
 hostmakedepends="pkg-config desktop-file-utils appstream-glib glib-devel libadwaita-devel gtk4-devel"
@@ -11,7 +11,7 @@ license="MIT"
 homepage="https://github.com/Letdown2491/nebula-gtk"
 changelog="https://raw.githubusercontent.com/Letdown2491/nebula-gtk/refs/heads/main/CHANGELOG.md"
 distfiles="https://github.com/Letdown2491/nebula-gtk/archive/refs/tags/v${version}.tar.gz"
-checksum=ecbbad939e1ccb9d13cfa2c5c51caf899990ee24be6f815b2efa99c61ee56853
+checksum=128ac469a01cf0e724772b39b21f9702c563151e15f2f24b9a876fbdd4864756
 
 post_install() {
 	vinstall assets/applications/tech.geektoshi.Nebula.desktop 644 usr/share/applications
