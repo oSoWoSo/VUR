@@ -3,11 +3,11 @@ pkgname=hyprgraphics
 version=0.3.0
 revision=1
 build_style=cmake
-configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr"
+configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release
+ -DCMAKE_INSTALL_PREFIX:PATH=/usr"
 hostmakedepends="pkg-config"
-makedepends="cairo-devel pango-devel file-devel hyprutils
- libjpeg-turbo-devel libjxl-devel libspng librsvg-devel
- libwebp-devel pixman-devel libheif-devel"
+makedepends="cairo-devel pango-devel file-devel hyprutils libjpeg-turbo-devel
+ libjxl-devel libspng librsvg-devel libwebp-devel pixman-devel libheif-devel"
 short_desc="hyprland graphics resources and utilities"
 maintainer="zenobit <zenobit@disroot.org>"
 license="BSD-3-Clause"
