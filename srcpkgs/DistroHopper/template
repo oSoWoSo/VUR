@@ -1,0 +1,36 @@
+# Template file for 'DistroHopper'
+pkgname=DistroHopper
+version=0.91
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+#build_style=# Unable to auto-detect
+#configure_args=""
+#go_import_path=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends=""
+makedepends=""
+depends="bash qemu qemu-img gum"
+short_desc="Quickly download, create and run VM of any#TODO operating system"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/oSoWoSo/DistroHopper"
+distfiles="https://github.com/oSoWoSo/DistroHopper/archive/refs/tags/dh-${version}.tar.gz"
+checksum=17e01af166f5e8bcf676e033f8f00e85384cdaf002506ef2c2c3481bd6e9e445
+
+do_install() {
+	vmkdir /usr/bin
+	for f in action chunkcheck dh q qget qrun quickemu quickfzf quickget quickreport quicktui; do
+		vbin "$f"
+	done
+}
+
+post_install() {
+	vman docs/quickemu.1
+	vman docs/quickemu_conf.5
+	vman docs/quickget.1
+	vdoc README.md
+}
