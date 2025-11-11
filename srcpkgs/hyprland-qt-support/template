@@ -4,7 +4,7 @@ version=0.1.0
 revision=1
 build_style=cmake
 configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release \
- -DCMAKE_INSTALL_PREFIX:PATH=/usr -DINSTALL_QML_PREFIX=/lib/qt6/qml"
+ -DCMAKE_INSTALL_PREFIX:PATH=/usr -DINSTALL_QML_PREFIX=/lib/qt6/qml -Wno-dev"
 hostmakedepends="pkg-config qt6-base" # qt6-declarative-devel
 makedepends="hyprlang qt6-base-devel qt6-declarative-devel"
 short_desc="QML style provider for Hypr* QT apps"
