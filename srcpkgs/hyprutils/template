@@ -5,6 +5,7 @@ revision=1
 build_style=cmake
 hostmakedepends="pkg-config"
 makedepends="pixman-devel"
+checkdepends="gtest-devel"
 short_desc="Hyprland utilities library used across the ecosystem"
 maintainer="zenobit <zenobit@disroot.org>"
 license="BSD-3-Clause"
