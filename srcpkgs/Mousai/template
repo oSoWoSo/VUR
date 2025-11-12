@@ -1,13 +1,14 @@
 # Template file for 'Mousai'
 pkgname=Mousai
-version=0.6.6
+version=0.7.9
 revision=1
 build_style=meson
-hostmakedepends="python3 gettext glib-devel pkg-config"
-depends="python3-gobject python3-requests libadwaita"
+hostmakedepends="pkg-config rust gettext cmake cargo desktop-file-utils"
+makedepends="glib-devel gtk4-devel libadwaita-devel libsoup3-devel"
+#depends="python3-gobject python3-requests libadwaita"
 short_desc="Identify any songs in seconds"
 maintainer="Orphaned <orphan@voidlinux.org>"
 license="GPL-3.0-or-later"
 homepage="https://github.com/SeaDve/Mousai"
 distfiles="https://github.com/SeaDve/Mousai/archive/refs/tags/v$version.tar.gz"
-checksum=a1e5cb29ad16405abcab8b5e1eec82fc170e5f535f8c55b57f18c80acb18a0ae
+checksum=27c13cee28e9894d5c154af71bade2d3a7efcdd1004073fb261c316dd467cd87
