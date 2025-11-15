@@ -1,0 +1,14 @@
+# Template file for 'discordo'
+pkgname=discordo
+version=999
+revision=1
+build_style=go
+go_import_path="github.com/ayn2op/discordo"
+makedepends="libX11-devel"
+short_desc="Lightweight, secure, and feature-rich Discord terminal (TUI) client"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/ayn2op/discordo"
+#changelog=""
+distfiles="https://github.com/ayn2op/discordo/archive/refs/heads/main.zip"
+checksum=f30e810901eaf1770030ebac187064d76558cc787e24fe787bdd2703ba5ac7f4
