@@ -1,0 +1,16 @@
+# Template file for 'drako'
+pkgname=drako
+version=0.1.13
+revision=1
+build_style=go
+go_import_path="github.com/lucky7xz/drako"
+hostmakedepends=""
+makedepends=""
+depends=""
+short_desc="TUI-Deck launcher that transforming your terminal into grid-based command center"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/lucky7xz/drako"
+#changelog=""
+distfiles="https://github.com/lucky7xz/drako/archive/refs/tags/v${version}.tar.gz"
+checksum=8e6e82fa8024a9dcb5aa9edff182711ba17ee6f6e9fe71cddd91f8dcdd2e7dda
