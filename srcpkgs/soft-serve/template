@@ -1,12 +1,13 @@
 # Template file for 'soft-serve'
 pkgname=soft-serve
-version=0.10.0
+version=0.11.1
 revision=1
 build_style=go
 build_helper=qemu
 go_import_path="github.com/charmbracelet/soft-serve"
 go_ldflags="-X main.Version=${version}"
 go_package="github.com/charmbracelet/soft-serve/cmd/soft"
+checkdepends="git git-lfs openssh"
 depends="git"
 short_desc="Tasty, self-hostable Git server for the command line"
 maintainer="zenobit <zenobit@disroot.org>"
@@ -14,7 +15,7 @@ license="MIT"
 homepage="https://github.com/charmbracelet/soft-serve"
 changelog="https://github.com/charmbracelet/soft-serve/releases"
 distfiles="https://github.com/charmbracelet/soft-serve/archive/refs/tags/v${version}.tar.gz"
-checksum=9d679296f46840f535aa934c4c03f332507b704d7dbe165b4920e012caf20ef3
+checksum=c0d9b4e7f1b2cbe3d2abc161b61846ce03743f365d961619fb43b4fa35da11b7
 
 system_accounts="_softserve"
 _softserve_homedir="/var/lib/soft-serve"
