@@ -23,14 +23,15 @@ configure_args="
  $(vopt_bool harfbuzz harfbuzz)
  $(vopt_bool simd native-arch-optimization)
  $(vopt_bool glib glib)"
-hostmakedepends="pkg-config gettext cmake"
-makedepends="gettext-devel openssl-devel liblz4-devel glib-devel ibus-devel
+hostmakedepends="pkg-config gettext"
+makedepends="
+ gettext-devel openssl-devel liblz4-devel glib-devel ibus-devel
  fontconfig-devel fribidi-devel $(vopt_if harfbuzz harfbuzz-devel)
  libjpeg-turbo-devel libpng-devel giflib-devel tiff-devel libwebp-devel
  avahi-libs-devel eudev-libudev-devel libgomp-devel
  libsndfile-devel libmount-devel LuaJIT-devel poppler-cpp-devel
  librsvg-devel libspectre-devel libraw-devel libopenjpeg2-devel
- libheif-devel libavif-devel lua52-devel libjxl-devel
+ libheif-devel libavif-devel lua51-devel libjxl-devel
  $(vopt_if drm 'libdrm-devel libinput-devel libxkbcommon-devel')
  $(vopt_if elogind elogind-devel)
  $(vopt_if gstreamer gst-plugins-base1-devel)
@@ -46,7 +47,7 @@ makedepends="gettext-devel openssl-devel liblz4-devel glib-devel ibus-devel
  $(vopt_if ibus ibus-devel)"
 checkdepends="dbus xvfb-run"
 short_desc="Enlightenment Foundation Libraries"
-maintainer="Orphaned <orphan@voidlinux.org>"
+maintainer="Trevor Farrell <trevor.farrell@gmail.com>"
 license="LGPL-2.1-only"
 homepage="https://enlightenment.org"
 changelog="https://git.enlightenment.org/core/efl.git/plain/NEWS"
