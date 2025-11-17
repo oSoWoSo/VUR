@@ -1,0 +1,18 @@
+# Template file for 'sot'
+pkgname=sot
+version=4.3.2
+revision=1
+build_style=python3-pep517
+hostmakedepends="hatchling"
+depends="python3-distro python3-psutil python3-py-cpuinfo python3-rich python3-textual"
+short_desc="Command-line System Obervation Tool"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/anistark/sot"
+changelog="https://github.com/anistark/sot/compare/v1.1.0...v${version}"
+distfiles="https://github.com/anistark/sot/archive/refs/tags/v${version}.tar.gz"
+checksum=f225033905d82488206a63bb37103c4f286e0996086cd3d72bd5a27bd4357273
+
+post_install() {
+	vlicense LICENSE
+}
