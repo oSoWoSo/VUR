@@ -10,7 +10,7 @@ revision=1
 #make_install_args=""
 #conf_files=""
 #make_dirs="/var/log/dir 0755 root root"
-hostmakedepends="openjdk17"
+hostmakedepends="openjdk17 gradle"
 makedepends=""
 depends=""
 short_desc="1M+ downloads Linux reference app with basics, tips and formatted man pages"
@@ -24,13 +24,11 @@ checksum=20bf9b022335e48c53d7a8398f2a432b5b635743c793c2fd38f189382d17de39
 export JAVA_HOME=/usr/lib/jvm/openjdk17
 
 do_build() {
-	chmod +x gradlew
-	#./gradlew --jvm-args="-Xmx4g" --info build
+	gradle wrapper
 	./gradlew :cli:createJar
 }
 
 do_install() {
-	echo todo
 	cp cli/build/libs/linuxcommandlibrary.jar /usr/bin/cli.jar
 }
 
