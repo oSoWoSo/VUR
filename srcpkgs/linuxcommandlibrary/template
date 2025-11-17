@@ -1,6 +1,6 @@
 # Template file for 'linuxcommandlibrary'
 pkgname=linuxcommandlibrary
-version=3.3.1
+version=3.4.10
 revision=1
 #archs="i686 x86_64"
 #build_wrksrc=
@@ -19,7 +19,7 @@ license="Apache-2.0"
 homepage="http://linuxcommandlibrary.com/"
 #changelog=""
 distfiles="https://github.com/SimonSchubert/LinuxCommandLibrary/archive/refs/tags/v${version}.tar.gz"
-checksum=88c747fec119aba5775d3fce895f3a19adfc4dd5597062ff2837b5947e385578
+checksum=20bf9b022335e48c53d7a8398f2a432b5b635743c793c2fd38f189382d17de39
 
 export JAVA_HOME=/usr/lib/jvm/openjdk17
 
