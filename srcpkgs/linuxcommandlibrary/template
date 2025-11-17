@@ -25,15 +25,23 @@ export JAVA_HOME=/usr/lib/jvm/openjdk17
 
 do_build() {
 	gradle wrapper
-	./gradlew :cli:createJar
+	echo
+	./gradlew tasks
+	echo
+	./gradlew :common:createJar
+
+	./gradlew :cli:createFullJarRelease
+
+	./gradlew :desktop:createJar
 }
 
 do_install() {
-	cp cli/build/libs/linuxcommandlibrary.jar /usr/bin/cli.jar
+	mkdir -p usr/bin
+	cp cli/build/libs/linuxcommandlibrary.jar usr/bin/
 }
 
-
 post_install() {
-	vinstall cli/build/libs/linuxcommandlibrary.jar 644 /usr/bin/cli.jar
+	vmkdir usr/bin
+	vbin cli/build/libs/linuxcommandlibrary.jar
 }
 
