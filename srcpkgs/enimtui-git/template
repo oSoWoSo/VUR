@@ -1,0 +1,17 @@
+# Template file for 'enimtui-git'
+pkgname=enimtui-git
+version=999
+revision=1
+build_style=cargo
+cshort_desc="Another okayish terminal minesweeper knockoff"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://codeberg.org/tranzystorekk/enimtui"
+changelog="https://codeberg.org/tranzystorekk/enimtui/raw/branch/main/CHANGELOG.md"
+#distfiles="https://codeberg.org/tranzystorekk/enimtui/archive/v${version}.tar.gz"
+distfiles="https://codeberg.org/tranzystorekk/enimtui/archive/main.tar.gz"
+checksum=6e00a9a1ad4bf4457dd8dc91c634a4b9a1c6844f32d4bda92df981f079fa01c7
+
+post_install() {
+	vlicense LICENSE
+}
