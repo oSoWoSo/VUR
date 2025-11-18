@@ -1,0 +1,28 @@
+# Template file for 'neo'
+pkgname=neo
+version=0.6.1
+revision=1
+hostmakedepends="pkgconf"
+makedepends="autogen autoconf automake ncurses-devel"
+short_desc="CMatrix clone with 32-bit color and Unicode support"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/st3w/neo"
+changelog="https://raw.githubusercontent.com/st3w/neo/refs/heads/main/doc/NEWS"
+distfiles="https://github.com/st3w/neo/archive/refs/tags/v${version}.tar.gz"
+checksum=744a88cc6b98a4625ae5c5ee819640561f3df87518be0f9fca00ad787814b200
+
+do_build() {
+	./autogen.sh
+	./configure
+	make
+}
+
+do_install() {
+	make install
+}
+
+post_install() {
+	vbin src/neo
+	vman doc/neo.6
+}
