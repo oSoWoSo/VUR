@@ -1,0 +1,32 @@
+# Template file for 'oomox-gtk-theme'
+pkgname=oomox-gtk-theme
+version=1.12.8
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=gnu-makefile
+#configure_args=""
+make_build_args="gtk320"
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="librsvg sed grep bc findutils gdk-pixbuf glib gtk+3 sassc"
+makedepends="python3"
+depends=""
+short_desc="Gtk-theme with customization capabilities"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/themix-project/oomox-gtk-theme/"
+#changelog=""
+distfiles="https://github.com/themix-project/oomox-gtk-theme/archive/refs/tags/${version}.tar.gz"
+checksum=9bbe4cb306a651d1c67cde0289d8e29aa7d6ef514e1000040c4bce4a09c259ed
+
+do_build() {
+	_pkgname=themix-theme-oomox
+	_reponame=oomox-gtk-theme
+	_oomox_dir=/opt/oomox
+	_plugin_name=theme_oomox
+
+	make -f Makefile_oomox_plugin APPDIR="${_oomox_dir}" PREFIX="/usr" install
+	python -O -m compileall "${_oomox_dir}/plugins/${_plugin_name}" -d "${_oomox_dir}/plugins/${_plugin_name}"
+}
