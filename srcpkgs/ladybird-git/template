@@ -1,0 +1,26 @@
+# Template file for 'ladybird-git'
+pkgname=ladybird-git
+version=999
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=cmake
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="git bash gcc python3 curl cmake zip unzip linux-headers make pkg-config autoconf automake autoconf-archive nasm MesaLib-devel ninja qt6-base-devel qt6-tools-devel qt6-wayland-devel"
+makedepends=""
+depends=""
+short_desc="Truly independent web browser"
+maintainer="zenobit <zenobit@disroot.org>"
+license="BSD-2-Clause"
+homepage="https://ladybird.org/"
+#changelog=""
+distfiles="https://github.com/LadybirdBrowser/ladybird/archive/refs/heads/master.zip"
+checksum=f7ecbdb170f18f6136bb53d0214725c70b4f25b804a6686feb302acd43ecddf4
+
+#do_build() {
+#	./Meta/ladybird.py run
+#}
