@@ -1,0 +1,22 @@
+# Template file for 'chawan'
+pkgname=chawan
+version=0.2.2
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=gnu-makefile
+#configure_args=""
+make_build_args="LIBEXECDIR=/usr/lib/chawan"
+make_install_args="PREFIX=/usr LIBEXECDIR=/usr/lib/chawan"
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="pkg-config nim"
+makedepends="brotli-devel libssh2-devel openssl-devel"
+depends=""
+short_desc="Text-mode web browser and pager for Unix-like systems"
+maintainer="zenobit <zenobit@disroot.org>"
+license="Unlicense"
+homepage="https://chawan.net/"
+changelog="https://codeberg.org/bptato/chawan/raw/branch/master/NEWS"
+distfiles="https://codeberg.org/bptato/chawan/archive/v${version}.tar.gz"
+checksum=11354b7d3b85912e2398ab6dd67ba55b877c50555b2448e23b2c9a77aa937c2e
