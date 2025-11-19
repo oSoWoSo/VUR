@@ -1,0 +1,22 @@
+# Template file for 'themix-gui-git'
+pkgname=themix-gui-git
+version=999
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=gnu-makefile
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="python3 which"
+makedepends=""
+depends=""
+short_desc="Generate color variations of Oomox theme and some icon themes"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/themix-project/themix-gui"
+#changelog=""
+distfiles="https://github.com/themix-project/themix-gui/archive/refs/heads/master.zip"
+checksum=49aef0946762aaf862295cce238c2982a9beb3626241b3ebeace11a1fa400c4e
