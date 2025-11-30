@@ -1,25 +1,25 @@
 # Template file for 'crush'
 pkgname=crush
-version=0.13.3
+version=0.19.3
 revision=1
 build_style=go
 go_import_path=github.com/charmbracelet/crush
-go_ldflags="-X github.com/charmbracelet/crush/internal/version.Version=v${version}"
 short_desc="Glamourous AI coding agent for your favourite terminal"
 maintainer="zenobit <zenobit@disroot.org>"
 license="FSL-1.1-MIT"
 homepage="https://github.com/charmbracelet/crush"
 changelog="https://github.com/charmbracelet/crush/releases"
 distfiles="https://github.com/charmbracelet/crush/archive/refs/tags/v${version}.tar.gz"
-checksum=f790bea5920da5eca91716cce9071532a9f5ca7448a39a846a01c36ad795f23c
+checksum=d382a5494b40fc773002002774c19f8cce7231794086f2289106618b85c8f065
 repository=nonfree
 make_check=no # No tests provided
 
 do_build() {
-	go build -ldflags="-w -s -buildid='' -linkmode=external -X main.version=v${version}" .
+	go build -ldflags="-w -s -buildid='' -linkmode=external -X github.com/charmbracelet/crush/internal/version.Version=v${version}" .
 }
 
 post_install() {
+	vbin crush
 	for shell in bash zsh fish; do
 		CGO_ENABLED=0 GOARCH= go run . completion ${shell} > crush.${shell}
 		vcompletion crush.${shell} ${shell}
