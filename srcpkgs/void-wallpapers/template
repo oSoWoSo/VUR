@@ -1,0 +1,22 @@
+# Template file for 'void-wallpapers'
+pkgname=void-wallpapers
+version=1.0.1
+revision=1
+short_desc="Collection of wallpapers for Void linux"
+maintainer="zenobit <zenobit@disroot.org>"
+license="CC-BY-4.0"
+homepage="https://github.com/oSoWoSo/Void-Wallpapers"
+distfiles="https://github.com/oSoWoSo/Void-Wallpapers/archive/refs/tags/${version}.tar.gz"
+checksum=c4d6677a714b3d5b7572afc390647a2044e81babbf14873e81fc61e59b60ce44
+
+do_install() {
+	# install-backgrounds
+	for f in assets/walls/*.png; do
+		vinstall "$f" 644 usr/share/backgrounds/void
+	done
+
+	# install-logos
+	for f in assets/logos/*.png; do
+		vinstall "$f" 644 usr/share/icons/void
+	done
+}
