@@ -4,7 +4,6 @@ version=2.1
 revision=1
 build_style=python3-pep517
 hostmakedepends="python3-setuptools python3-wheel"
-depends="python3"
 checkdepends="python3-pytest"
 short_desc="Python implementation of the geodesic routines"
 maintainer="zenobit <zenobit@disroot.org>"
