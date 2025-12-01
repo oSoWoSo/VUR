@@ -10,19 +10,17 @@ short_desc="GTK based button bar for wlroots-based compositors"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
 homepage="https://github.com/nwg-piotr/nwg-bar"
-#changelog=""
+changelog="https://github.com/nwg-piotr/nwg-bar/releases"
 distfiles="https://github.com/nwg-piotr/nwg-bar/archive/refs/tags/v${version}.tar.gz"
 checksum=badc232f9eef1a225776c7f0fe2534b49ac0a957f1a81dc24acb8f341b7719d4
 
 post_install() {
-	vlicense LICENSE
-	vdoc README.md
-
 	for f in images/*; do
-		vinstall $f 644 usr/share/nwg-dock
+		vinstall $f 644 usr/share/nwg-bar
 	done
-
 	for f in config/*; do
-		vinstall $f 644 usr/share/nwg-dock
+		vinstall $f 644 usr/share/nwg-bar
 	done
+	vdoc README.md
+	vlicense LICENSE
 }
