@@ -19,7 +19,8 @@ checksum=a231629d166b58b0d557fc453374374d1fe0f3aff205b34bd8196e62ec285c55
 do_check() {
 	# Investigating...
 	# Meanwhile skip test_osm_tag which failing
-	python3 -m pytest test -k "not test_osm_tag"
+	#python3 -m pytest test -k "not test_osm_tag"
+	python3 -m pytest test -vv
 }
 
 post_install() {
