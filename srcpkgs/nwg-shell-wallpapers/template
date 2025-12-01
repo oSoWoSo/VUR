@@ -15,8 +15,8 @@ do_install() {
 }
 
 post_install() {
-	for w in wallpapers/*; do
-		vinstall $w 644 usr/share/backgrounds/nwg-shell
+	for f in wallpapers/*; do
+		vinstall "$f" 644 usr/share/backgrounds/nwg-shell
 	done
 	vinstall logo.svg 644 usr/share/icons nwg-shell.svg
 	vdoc README.md
