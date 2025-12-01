@@ -6,7 +6,7 @@ build_style=go
 go_import_path=github.com/nwg-piotr/nwg-drawer
 hostmakedepends="pkg-config"
 makedepends="cairo-devel gdk-pixbuf-devel gtk+3-devel gtk-layer-shell-devel pango-devel libgirepository-devel"
-depends="gtk+3 zlib pango libharfbuzz atk cairo gdk-pixbuf glib gtk-layer-shell glibc fontconfig freetype"
+#depends="gtk+3 zlib pango libharfbuzz atk cairo gdk-pixbuf glib gtk-layer-shell glibc fontconfig freetype"
 short_desc="Application drawer for wlroots-based Wayland compositors"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
@@ -18,4 +18,7 @@ checksum=0caa9f3a5efbd7492ce57fc6952e7f78e2d6ee71d4a430aeb0aa7535abecdab5
 post_install() {
 	vlicense LICENSE
 	vdoc README.md
+	vcopy desktop-directories usr/share/nwg-drawer
+	vcopy img usr/share/nwg-drawer
+	vcopy drawer.css /usr/share/nwg-drawer
 }
