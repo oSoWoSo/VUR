@@ -5,7 +5,7 @@ revision=1
 build_style=python3-pep517
 hostmakedepends="pkg-config python3-setuptools python3-wheel python3-geopy python3-requests"
 #makedepends="python3-gobject-devel gtk+3-devel gtk-layer-shell-devel"
-depends="python3 gtklock noto-fonts-ttf playerctl python3-geopy python3-gobject python3-i3ipc wlsunset"
+#depends="python3 gtklock noto-fonts-ttf playerctl python3-geopy python3-gobject python3-i3ipc wlsunset"
 short_desc="Graphical user interface for configuring sway and Hyprland"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
@@ -16,21 +16,9 @@ checksum=43e3c97259a80d14170a1b3ba9bdfc10fe0028121dbac9a8b439c2d0a2b4ef21
 make_check=no # No checks provided
 
 post_install() {
-	vinstall nwg-shell-config.svg 644 usr/share/pixmaps
-	vinstall nwg-shell-config.svg 644 usr/share/pixmaps
-	vinstall nwg-shell-update.svg 644 usr/share/pixmaps
-	vinstall nwg-shell-translate.svg 644 usr/share/pixmaps
-	vinstall nwg-update-noupdate.svg 644 usr/share/pixmaps
-	vinstall nwg-update-available.svg 644 usr/share/pixmaps
-	vinstall nwg-update-checking.svg 644 usr/share/pixmaps
-	vinstall nwg-screenshot.svg 644 usr/share/pixmaps
-	vinstall nwg-1.svg 644 usr/share/pixmaps
-	vinstall nwg-2.svg 644 usr/share/pixmaps
-	vinstall nwg-3.svg 644 usr/share/pixmaps
-	vinstall nwg-workspace.svg 644 usr/share/pixmaps
-	vinstall nwg-shell-config.desktop 644 usr/share/applications
-	vinstall README.md 644 usr/share/doc/nwg-shell-config
-	vbin nwg-system-update
+	vinstall nwg*.svg 644 usr/share/pixmaps
+	vinstall nwg*.desktop 644 usr/share/applications
+	vbin ${FILESDIR}/nwg-system-update
 	vdoc README.md
 	vlicense LICENSE
 }
