@@ -16,9 +16,9 @@ distfiles="https://github.com/nwg-piotr/nwg-drawer/archive/refs/tags/v${version}
 checksum=0caa9f3a5efbd7492ce57fc6952e7f78e2d6ee71d4a430aeb0aa7535abecdab5
 
 post_install() {
-	vlicense LICENSE
-	vdoc README.md
+	vinstall drawer.css 644 usr/share/nwg-drawer
 	vcopy desktop-directories usr/share/nwg-drawer
 	vcopy img usr/share/nwg-drawer
-	vcopy drawer.css /usr/share/nwg-drawer
+	vdoc README.md
+	vlicense LICENSE
 }
