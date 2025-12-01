@@ -16,14 +16,12 @@ distfiles="https://github.com/nwg-piotr/nwg-look/archive/refs/tags/v${version}.t
 checksum=ddaba674253fbbf8f3ee7392315e51408af445adb85ed4b0f70e50301801720d
 
 post_install() {
-	vinstall stuff/main.glade 644 usr/share/nwg-look
-	vinstall stuff/nwg-look.desktop 644 usr/share/applications
-	vinstall stuff/nwg-look.svg 644 usr/share/pixmaps
-
 	for lang in langs/*.json; do
 		vinstall ${lang} 644 usr/share/nwg-look/langs
 	done
-
+	vinstall stuff/main.glade 644 usr/share/nwg-look
+	vinstall stuff/nwg-look.desktop 644 usr/share/applications
+	vinstall stuff/nwg-look.svg 644 usr/share/pixmaps
 	vdoc README.md
 	vlicense LICENSE
 }
