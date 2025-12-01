@@ -16,8 +16,12 @@ checksum=d5f3cd29dcd987badae6fe8bb1a1ed79ca4cf221d9f5052d7d9594bdb73c020d
 make_check=no # No checks provided
 
 post_install() {
-	vinstall nwg*.svg 644 usr/share/pixmaps
-	vinstall nwg*.desktop 644 usr/share/applications
-	vlicense LICENSE
+	for f in *.svg; do
+		vinstall $f 644 usr/share/pixmaps
+	done
+	for f in *.desktop; do
+		vinstall $f 644 usr/share/applications
+	done
 	vdoc README.md
+	vlicense LICENSE
 }
