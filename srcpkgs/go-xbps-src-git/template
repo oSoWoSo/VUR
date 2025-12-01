@@ -1,0 +1,28 @@
+# Template file for 'go-xbps-src-git'
+pkgname=go-xbps-src-git
+version=999
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=go
+go_import_path=github.com/Duncaen/go-xbps-src
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends=""
+makedepends=""
+depends=""
+short_desc="What is that?"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Duncaen/go-xbps-src"
+#changelog=""
+distfiles="https://github.com/Duncaen/go-xbps-src/archive/refs/heads/master.zip>master.tar.gz"
+checksum=e2c89fffe90ed2d2fa5dff561b393574c5f9a2d9636a27b0fcf089fe82836057
+
+pre_build() {
+	go get github.com/Duncaen/go-xbps
+	go get github.com/Duncaen/go-xbps-src
+}
