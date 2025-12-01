@@ -3,17 +3,46 @@ pkgname=nwg-shell
 version=0.5.49
 revision=1
 build_style=python3-pep517
-hostmakedepends="go python3-setuptools python3-wheel nwg-shell-config
- nwg-bar nwg-clipman nwg-displays nwg-dock nwg-drawer nwg-look nwg-menu
- nwg-panel python3-geopy python3-yaml python3-requests python3-netifaces"
+#hostmakedepends="go python3-setuptools python3-wheel nwg-shell-config nwg-bar nwg-clipman nwg-displays nwg-dock nwg-drawer nwg-look nwg-menu nwg-panel python3-geopy python3-yaml python3-requests python3-netifaces"
+hostmakedepends="go python3-setuptools"
 makedepends="python3-gobject-devel gtk+3-devel gtk-layer-shell-devel"
-depends="azote gnome-themes-extra grim gtklock ImageMagick jq sway slurp
- libayatana-appindicator network-manager-applet nwg-bar nwg-clipman
- nwg-displays nwg-dock nwg-drawer nwg-look nwg-menu nwg-panel swappy
- nwg-readme-browser nwg-shell-config papirus-icon-theme dejavu-fonts-ttf
- playerctl polkit-gnome swaybg swayidle swaylock SwayNotificationCenter
- wl-clipboard wlsunset xorg-server-xwayland python3-geopy python3-yaml
- python3-requests python3-netifaces nwg-shell-wallpapers"
+depends="azote
+ nwg-bar
+ nwg-clipman
+ nwg-displays
+ nwg-dock
+ nwg-drawer
+ nwg-look
+ nwg-menu
+ nwg-panel
+ nwg-readme-browser
+ nwg-shell-config
+ nwg-shell-wallpapers
+ dejavu-fonts-ttf
+ gnome-themes-extra
+ grim
+ gtklock
+ ImageMagick
+ jq
+ libayatana-appindicator
+ network-manager-applet
+ papirus-icon-theme
+ playerctl
+ polkit-gnome
+ python3-geopy
+ python3-netifaces
+ python3-requests
+ python3-yaml
+ slurp
+ sway
+ swappy
+ swaybg
+ swayidle
+ swaylock
+ SwayNotificationCenter
+ wl-clipboard
+ wlsunset
+ xorg-server-xwayland"
 short_desc="GTK based shell for sway and Hyprland Wayland compositors"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
@@ -23,16 +52,12 @@ distfiles="https://github.com/nwg-piotr/nwg-shell/archive/refs/tags/v${version}.
 checksum=6bcacbb99cd517d9a26a821262d15e00a89dcd7e276ac467a8004dcf3dc37379
 make_check=no # No checks provided
 
-#do_install() {
-#	python3 setup.py install --optimize=1
-#}
-
 post_install() {
-	#for file in scripts/*; do
-	#	vbin ${file}
-	#done
-	#vinstall nwg-shell.jpg 644 /usr/share/backgrounds
-	#vinstall nwg-readme.desktop 644 /usr/share/applications
+	for f in scripts/*; do
+		vbin $f
+	done
+	vinstall nwg-shell.jpg 644 /usr/share/backgrounds
+	vinstall nwg-readme.desktop 644 /usr/share/applications
 	vdoc README.md
 	vlicense LICENSE
 }
