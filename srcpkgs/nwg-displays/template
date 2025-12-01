@@ -16,12 +16,11 @@ checksum=d9595196995f6295ffba1ed74ec038cecdc85c75cec6bafc67cb2b04ebbf0112
 make_check=no # No checks provided
 
 post_install() {
+	for lang in nwg_displays/langs/*.json; do
+		vinstall "${lang}" 644 usr/share/nwg-displays/langs
+	done
 	vinstall nwg-displays.svg 644 usr/share/pixmaps
 	vinstall nwg-displays.desktop 644 usr/share/applications
 	vdoc README.md
 	vlicense LICENSE
-
-	for lang in nwg_displays/langs/*.json; do
-		vinstall "${lang}" 644 usr/share/nwg-displays/langs
-	done
 }
