@@ -1,0 +1,79 @@
+# Template file for 'doublecmd-qt'
+pkgname=doublecmd-qt
+version=1.1.30
+revision=1
+build_style=gnu-makefile
+# Disable PIE check for this Pascal-built executable
+nostrip=yes
+no_pie=yes
+hostmakedepends="lazarus fpc git which"
+makedepends="qt5pas-devel"
+depends="desktop-file-utils hicolor-icon-theme"
+short_desc="Cross-platform open source file manager with two panels"
+maintainer="Kukuchai <kukuchai@localhostl>"
+license="GPL-2.0-or-later"
+homepage="https://doublecmd.sourceforge.io/"
+distfiles="https://github.com/doublecmd/doublecmd/archive/v${version}.tar.gz"
+checksum=8624accc3a06d18173b4f386e5956ceb276a5a274c208891d25e5dbc402d4094
+conflicts=doublecmd-gtk
+
+post_patch() {
+	set -x
+	echo "=== Applying patches ==="
+	# 1. Fix dclinux.pas range-check error
+	sed -i 's/FS_IOC_GETFLAGS = \$80086601;/FS_IOC_GETFLAGS = cuint(\$80086601);/' \
+		components/doublecmd/dclinux.pas
+	sed -i 's/FS_IOC_SETFLAGS = \$40086602;/FS_IOC_SETFLAGS = cuint(\$40086602);/' \
+		components/doublecmd/dclinux.pas
+	# 2. Disable range checking for dclinux.pas
+	sed -i '1i{$R-}' components/doublecmd/dclinux.pas
+	# 3. FLEXIBLE APPROACH: Find the first function after implementation and insert before it
+	local usersgroups_file="src/platform/unix/uusersgroups.pas"
+	# Find the line number of the first function after "implementation"
+	insert_line=$(awk '/^implementation$/ {found=1} found && /^function|^procedure/ {print NR; exit}' "$usersgroups_file")
+	if [ -n "$insert_line" ]; then
+		echo "Inserting StrToUIntDef before line $insert_line"
+		func_text="function StrToUIntDef(const S: string; Default: Cardinal): Cardinal;\nvar\n  Code: Integer;\n  V: Cardinal;\nbegin\n  Val(S, V, Code);\n  if Code = 0 then Result := V else Result := Default;\nend;\n"
+		sed -i "${insert_line}i$func_text" "$usersgroups_file"
+	else
+		echo "ERROR: Could not find insertion point"
+		exit 1
+	fi
+}
+
+post_extract() {
+	# Make the main and component build scripts executable
+	chmod +x build.sh components/build.sh 2>/dev/null || :
+}
+
+do_build() {
+	set -x
+	# Build components
+	lazbuild --lazarusdir=/usr/lib/lazarus --pcp=./.lazarus components/multithreadprocs/multithreadprocslaz.lpk
+	lazbuild --lazarusdir=/usr/lib/lazarus --pcp=./.lazarus components/kascrypt/kascrypt.lpk
+	lazbuild --lazarusdir=/usr/lib/lazarus --pcp=./.lazarus components/doublecmd/doublecmd_common.lpk
+	lazbuild --lazarusdir=/usr/lib/lazarus --pcp=./.lazarus components/Image32/Image32.lpk
+	lazbuild --lazarusdir=/usr/lib/lazarus --pcp=./.lazarus components/chsdet/chsdet.lpk
+	lazbuild --lazarusdir=/usr/lib/lazarus --pcp=./.lazarus components/synunihighlighter/synuni.lpk
+	lazbuild --lazarusdir=/usr/lib/lazarus --pcp=./.lazarus components/gifanim/pkg_gifanim.lpk
+	lazbuild --lazarusdir=/usr/lib/lazarus --pcp=./.lazarus components/viewer/viewerpackage.lpk
+	lazbuild --lazarusdir=/usr/lib/lazarus --pcp=./.lazarus components/virtualterminal/virtualterminal.lpk
+	lazbuild --lazarusdir=/usr/lib/lazarus --pcp=./.lazarus components/KASToolBar/kascomp.lpk
+
+	# Finally, build the main application with Qt5 widgetset in RELEASE mode
+	lazbuild --lazarusdir=/usr/lib/lazarus --pcp=./.lazarus --widgetset=qt5 --build-mode=Release src/doublecmd.lpi
+	set +x
+}
+
+do_install() {
+	# Install the binary
+	vbin doublecmd
+
+	# Install desktop file and icons (paths from source tree)
+	vinstall install/linux/doublecmd.desktop 644 usr/share/applications
+	vinstall doublecmd.png 644 usr/share/pixmaps
+
+	# Install language files, plugins, etc.
+	vcopy language usr/share/doublecmd
+	vcopy plugins usr/lib/doublecmd
+}
