@@ -16,8 +16,12 @@ checksum=43e3c97259a80d14170a1b3ba9bdfc10fe0028121dbac9a8b439c2d0a2b4ef21
 make_check=no # No checks provided
 
 post_install() {
-	vinstall nwg*.svg 644 usr/share/pixmaps
-	vinstall nwg*.desktop 644 usr/share/applications
+	for f in *.svg; do
+		vinstall $f 644 usr/share/pixmaps
+	done
+	for f in *.desktop; do
+		vinstall $f 644 usr/share/applications
+	done
 	vbin ${FILESDIR}/nwg-system-update
 	vdoc README.md
 	vlicense LICENSE
