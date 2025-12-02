@@ -1,0 +1,22 @@
+# Template file for 'forgejo-cli'
+pkgname=forgejo-cli
+version=0.3.0
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config"
+makedepends="openssl-devel oniguruma-devel libgit2-1.9-devel"
+#depends=""
+short_desc="CLI tool for interacting with Forgejo"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT, Apache-2.0"
+homepage="https://codeberg.org/forgejo-contrib/forgejo-cli"
+changelog="https://codeberg.org/forgejo-contrib/forgejo-cli/compare/v0.0.1...v${version}"
+distfiles="https://codeberg.org/forgejo-contrib/forgejo-cli/archive/v${version}.tar.gz"
+checksum=12d39d3e26a7ee572ae75d9db1faa9367de5af0e849d9cca24b77cb870142751
+
+post_install() {
+	vinstall ${FILESDIR}/Forgejo.svg 644 usr/share/pixmaps
+	vinstall ${FILESDIR}/Forgejo-cli.desktop 644 usr/share/applications
+	vlicense LICENSE-MIT
+	vlicense LICENSE-APACHE
+}
