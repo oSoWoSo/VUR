@@ -1,0 +1,36 @@
+# Template file for 'shellspec'
+pkgname=shellspec
+version=0.28.1
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=gnu-makefile
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="git docker"
+makedepends=""
+#depends="sh"
+short_desc="Full-featured BDD unit testing framework for all POSIX shells"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/shellspec/shellspec"
+#changelog=""
+distfiles="https://github.com/shellspec/shellspec/archive/refs/tags/${version}.tar.gz"
+checksum=400d835466429a5fe6c77a62775a9173729d61dd43e05dfa893e8cf6cb511783
+
+do_check() {
+	# Do not fail on warning sice a bash bug outputs to stderr when not expected https://mail.gnu.org/archive/html/bug-bash/2022-10/msg00073.html
+	echo '--no-warning-as-failure' >> .shellspec
+	make test
+}
+
+do_install() {
+	PREFIX="/usr" make install
+}
+
+post_install() {
+	vlicense LICENSE
+}
