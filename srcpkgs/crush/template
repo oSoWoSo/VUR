@@ -1,6 +1,6 @@
 # Template file for 'crush'
 pkgname=crush
-version=0.19.3
+version=0.20.1
 revision=1
 build_style=go
 go_import_path=github.com/charmbracelet/crush
@@ -10,7 +10,7 @@ license="FSL-1.1-MIT"
 homepage="https://github.com/charmbracelet/crush"
 changelog="https://github.com/charmbracelet/crush/releases"
 distfiles="https://github.com/charmbracelet/crush/archive/refs/tags/v${version}.tar.gz"
-checksum=d382a5494b40fc773002002774c19f8cce7231794086f2289106618b85c8f065
+checksum=b654bb09ca5cd662aae176ee22bf63db3ce879b5158031f0e52d2f2f16112ebb
 repository=nonfree
 make_check=no # No tests provided
 
