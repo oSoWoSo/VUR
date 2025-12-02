@@ -8,7 +8,7 @@ _depends="python3-sphinxcontrib-htmlhelp python3-imagesize python3-alabaster
  python3-sphinxcontrib-applehelp python3-Babel
  python3-sphinxcontrib-serializinghtml python3-docutils python3-Jinja2
  python3-sphinxcontrib-devhelp python3-sphinxcontrib-qthelp
- python3-Pygments python3-snowballstemmer"
+ python3-Pygments"
 hostmakedepends="python3-flit_core python3-pyproject-hooks $_depends"
 depends="$_depends python3-packaging"
 checkdepends="$depends python3-html5lib python3-mypy ImageMagick gettext
