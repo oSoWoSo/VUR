@@ -1,0 +1,42 @@
+# Template file for 'quiet'
+pkgname=quiet
+version=6.3.0
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+#build_style=gnu-configure
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="python3 python3-setuptools git volta"
+makedepends=""
+depends=""
+short_desc="Private, p2p alternative to Slack and Discord built on Tor & IPFS"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-only"
+homepage="https://www.tryquiet.org/"
+#changelog=""
+distfiles="https://github.com/TryQuiet/quiet/archive/refs/tags/@quiet/desktop@${version}.tar.gz"
+checksum=f3a574920f7f69a824b4561e2e3737ca42c4a378d34caf7a2a4d2463a8392155
+
+do_build() {
+	export PATH=/tmp/.volta/bin:$PATH
+	volta install --verbose node@18.20.4
+	volta install --verbose npm@10.7.0
+	git clone https://github.com/TryQuiet/auth.git 3rd-party/auth
+	git clone https://github.com/TryQuiet/js-libp2p-noise.git 3rd-party/js-libp2p-noise
+	git clone https://github.com/TryQuiet/orbitdb.git 3rd-party/orbitdb
+	git clone https://github.com/TryQuiet/quiet-storage-service.git 3rd-party/qss
+	npm i lerna@6.6.2
+	npm i typescript@4.9.5
+	npm i -g pnpm@9.12.1 # may be needed depending on configuration
+	npm install
+	#npm run pull:submodules
+	npm run bootstrap
+}
+
+do_install() {
+	echo TODO
+}
