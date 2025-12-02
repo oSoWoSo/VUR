@@ -75,5 +75,7 @@ do_install() {
 
 	# Install language files, plugins, etc.
 	vcopy language usr/share/doublecmd
+	vcopy highlighters usr/share/doublecmd
 	vcopy plugins usr/lib/doublecmd
+	vcopy tools usr/lib/doublecmd
 }
