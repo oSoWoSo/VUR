@@ -1,0 +1,36 @@
+# Template file for 'sonusmix'
+pkgname=sonusmix
+version=0.1.1
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config meson git cargo-about"
+makedepends="dbus-devel libglib-devel gdk-pixbuf-devel gtk4-devel
+ pipewire-devel clang21-devel glibc-devel"
+depends=""
+short_desc="Tool to easily route and manage audio devices in Pipewire"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MPL-2.0"
+homepage="https://codeberg.org/sonusmix/sonusmix"
+#changelog=""
+distfiles="https://codeberg.org/sonusmix/sonusmix/archive/v${version}.tar.gz"
+checksum=363e5780924ac28041bd8596e9d570ac3e6491a2324680dd00a6469f05e65581
+make_check=no # Investingating
+
+pre_build() {
+	export CARGO_TARGET_DIR=target
+	#cargo install --locked cargo-make
+	#cargo build --release --all-features
+}
+
+post_install() {
+	#for SIZE in 16 24 32 48 64 128 256 512; do
+	#	vmkdir "assets/icons/hicolor/${SIZE}x${SIZE}/apps"
+	#	resvg -w "$SIZE" -h "$SIZE" assets/sonusmix.svg "assets/icons/hicolor/${SIZE}x${SIZE}/apps/sonusmix.png"
+	#done
+	vbin target/release/sonusmix
+	vinstall assets/sonusmix.svg 644 assets/icons/hicolor/scalable/apps
+	vinstall assets/sonusmix.svg 644 usr/share/pixmaps
+	vinstall assets/org.sonusmix.Sonusmix.desktop 644 usr/share/applications
+	vlicense LICENSE
+	vdoc README.md
+}
