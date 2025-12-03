@@ -1,0 +1,22 @@
+# Template file for 'forkrun-git'
+pkgname=forkrun-git
+version=999
+revision=1
+hostmakedepends=""
+makedepends=""
+depends=""
+short_desc="Runs multiple inputs through a script/function in parallel using bash coprocs"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/jkool702/forkrun"
+#changelog=""
+distfiles="https://github.com/jkool702/forkrun/archive/refs/heads/main.zip>forkrun.tar.gz"
+checksum=a60781dfae66915a1cbc32bd2ffed2744251278807d951d0220cdf919daef207
+
+do_install() {
+	vbin forkrun.bash forkrun
+}
+
+post_install() {
+	vlicense LICENSE
+}
