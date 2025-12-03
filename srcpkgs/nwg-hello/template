@@ -19,11 +19,11 @@ post_install() {
 		vinstall "$f" 644 usr/share/nwg-hello
 	done
 	vinstall nwg.jpg 644 usr/share/nwg-hello
-	vinstall cache.json 664 var/cache/nwg-hello
 	vinstall nwg-hello-default.json 644 etc/nwg-hello
 	vinstall nwg-hello-default.css 644 etc/nwg-hello
 	vinstall hyprland.conf 644 etc/nwg-hello
 	vinstall sway-config 644 etc/nwg-hello
+	vinstall cache.json 664 var/cache/nwg-hello
 	vdoc README.md
 	vlicense LICENSE
 }
