@@ -1,0 +1,23 @@
+# Template file for 'distroshelf'
+pkgname=distroshelf
+version=1.2.0
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=meson
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="pkg-config cargo cmake rust gettext gtk-update-icon-cache
+ gtk4-update-icon-cache AppStream desktop-file-utils"
+makedepends="glib-devel gnulib"
+depends=""
+short_desc="GTK4 client for distrobox"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/ranfdev/DistroShelf/tree/main"
+#changelog=""
+distfiles="https://github.com/ranfdev/DistroShelf/archive/refs/tags/v${version}.tar.gz"
+checksum=94560cebcded2e8ea92c30d8817c5e07d563aea7f5065e75e963da9fc05c8aaf
