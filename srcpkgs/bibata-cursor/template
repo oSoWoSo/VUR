@@ -14,8 +14,8 @@ checksum="1f21e5cade53d668476f973bd8ec827882a0e32c38e0e766abf007f8b3b46313
  87898034589777e77bfa610ed42e6663a6ba57bb91116d296f800199c1bb9183"
 
 pre_build() {
-  mv bitmaps "Bibata_Cursor-$version/"
-  cd "Bibata_Cursor-$version" && rm -rf themes bin
+	mv bitmaps "Bibata_Cursor-$version/"
+	cd "Bibata_Cursor-$version" && rm -rf themes bin
 }
 
 
