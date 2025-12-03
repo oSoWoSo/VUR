@@ -1,0 +1,135 @@
+# Template file for 'spacefm-git'
+pkgname=spacefm-git
+version=999
+_glaze_version=6.1.0
+_magic_version=0.9.7
+_spdlog_version=1.16.0
+_ztd_version=master
+revision=1
+build_style=meson
+#configure_args="$(vopt_with gtk3)"
+configure_args=""
+hostmakedepends="
+ bash
+ cli11
+ cmake
+ cppzmq
+ intltool
+ pkg-config
+ python3
+"
+makedepends="
+ botan-devel
+ eudev-libudev-devel
+ exo-devel
+ ffmpegthumbnailer-devel
+ gtk+-devel
+ gtk+3-devel
+ gtkmm-devel
+ gtkmm4-devel
+ libbsd-devel
+ libgexiv2-devel
+ libsigc++3-devel
+ pugixml-devel
+ startup-notification-devel
+ xxHash-devel
+ glib-devel
+ gtk4-devel
+ cairo-devel
+ gdk-pixbuf-devel
+ pango-devel
+ ffmpegthumbnailer-devel
+"
+depends="hicolor-icon-theme desktop-file-utils"
+short_desc="Multi-panel tabbed file manager"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/thermitegod/spacefm"
+#distfiles="https://github.com/thermitegod/spacefm/archive/refs/tags/v${version}.tar.gz"
+distfiles="
+ https://github.com/thermitegod/spacefm/archive/refs/heads/master.zip>spacefm.tar.gz
+ https://github.com/stephenberry/glaze/archive/refs/tags/v6.1.0.tar.gz>glaze.tar.gz
+ https://github.com/Neargye/magic_enum/archive/refs/tags/v0.9.7.tar.gz>magic.tar.gz
+ https://github.com/gabime/spdlog/archive/refs/tags/v1.16.0.tar.gz>spdlog.tar.gz
+ https://github.com/thermitegod/ztd/archive/refs/heads/master.zip>ztd.tar.gz"
+checksum="
+ 7299191df9eca7fe4b9f2005a57ff7ffe346e49a2706bc11ff4d0a9daad271b7
+ 4ec01e893363701735d1ef3842fa77a74c4a664edaf08d6a1da0e744900d4125
+ b403d3dad4ef542fdc3024fa37d3a6cedb4ad33c72e31b6d9bab89dcaf69edf7
+ 8741753e488a78dd0d0024c980e1fb5b5c85888447e309d9cb9d949bdb52aa3e
+ e08bf53308642b34d28f1b7238310db75c39541006eac1df204e13b20c3aa051"
+conf_files="/etc/spacefm/spacefm.conf"
+
+#build_options="gtk3"
+#build_options_default="gtk3"
+#CFLAGS="-fcommon"
+
+# Build options
+#build_options="socket media system_cli11 system_concurrencpp system_glaze system_magic_enum system_ztd"
+build_options="socket media"
+build_options_default="socket media system_cli11 system_concurrencpp system_glaze system_magic_enum system_ztd"
+desc_option_socket="Enable socket support"
+desc_option_media="Enable media support"
+desc_option_system_cli11="Use system CLI11 library"
+desc_option_system_concurrencpp="Use system concurrencpp library"
+desc_option_system_glaze="Use system glaze library"
+desc_option_system_magic_enum="Use system magic_enum library"
+desc_option_system_ztd="Use system ztd library"
+
+if [ "$build_option_socket" ]; then
+	configure_args+=" -Dsocket=true"
+	makedepends+=" cppzmq"
+else
+	configure_args+=" -Dsocket=false"
+fi
+
+if [ "$build_option_media" ]; then
+	configure_args+=" -Dmedia=true"
+	makedepends+=" libgexiv2-devel"
+else
+	configure_args+=" -Dmedia=false"
+fi
+
+if [ "$build_option_system_cli11" ]; then
+	configure_args+=" -Dwith-system-cli11=true"
+	makedepends+=" cli11"
+else
+	configure_args+=" -Dwith-system-cli11=false"
+fi
+
+if [ "$build_option_system_concurrencpp" ]; then
+	configure_args+=" -Dwith-system-concurrencpp=true"
+	makedepends+=" concurrencpp-devel"
+else
+	configure_args+=" -Dwith-system-concurrencpp=false"
+fi
+
+if [ "$build_option_system_glaze" ]; then
+	configure_args+=" -Dwith-system-glaze=true"
+	makedepends+=" glaze"
+else
+	configure_args+=" -Dwith-system-glaze=false"
+fi
+
+if [ "$build_option_system_magic_enum" ]; then
+	configure_args+=" -Dwith-system-magic-enum=true"
+	makedepends+=" magic_enum"
+else
+	configure_args+=" -Dwith-system-magic-enum=false"
+fi
+
+if [ "$build_option_system_ztd" ]; then
+	configure_args+=" -Dwith-system-ztd=true"
+	makedepends+=" ztd"
+else
+	configure_args+=" -Dwith-system-ztd=false"
+fi
+
+post_extract() {
+	mv spacefm-master/* ./
+	mv glaze-${_glaze_version}/* subprojects/glaze/
+	mv magic_enum-${_magic_version}/* subprojects/magic_enum/
+	mv spdlog-${_spdlog_version}/* subprojects/spdlog/
+	mv ztd-${_ztd_version}/* subprojects/ztd/
+	rmdir spacefm-master glaze-${_glaze_version} magic_enum-${_magic_version} spdlog-${_spdlog_version} ztd-${_ztd_version}
+}
