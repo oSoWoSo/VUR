@@ -16,11 +16,19 @@ checksum=ca555c88afbf74117318cc8e27f5fa05d49fd3a6d1aeab9611f3c4363c77e677
 nocross=yes
 
 pre_configure() {
-	npm install
+	#local _arch
+	case "$XBPS_TARGET_MACHINE" in
+		x86_64*) _arch=x64 ;;
+		aarch64*) _arch=arm64 ;;
+	esac
+	npm install -a ${_arch}
 }
 
 do_build() {
-	npm run package
+	chmod 4755 node_modules/electron/dist/chrome-sandbox
+	#chown root node_modules/electron/dist/chrome-sandbox
+	npm run
+	npm run package -a ${_arch}
 }
 
 do_install() {
