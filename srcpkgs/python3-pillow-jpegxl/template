@@ -1,18 +1,33 @@
 # Template file for 'python3-pillow-jpegxl'
 pkgname=python3-pillow-jpegxl
-version=1.3.5
+version=1.3.6
 revision=1
 build_style=python3-pep517
+build_args="--features=dynamic"
 build_helper=rust
-hostmakedepends="cargo cmake maturin patchelf pkg-config python3-installer python3-pip"
+hostmakedepends="cargo cmake maturin patchelf pkg-config python3-installer
+ python3-wheel libjxl-devel libjxl-tools libjxl-plugins"
 makedepends="libjxl-devel"
+depends="python3-packaging python3-Pillow"
+checkdepends="python3-pytest python3-numpy python3-openexr exiv2 python3-pyexiv2"
 short_desc="Pillow plugin for JPEG-XL, using Rust for bindings"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
 homepage="https://github.com/Isotr0py/pillow-jpegxl-plugin"
 changelog="https://github.com/Isotr0py/pillow-jpegxl-plugin/releases"
+#distfiles="https://files.pythonhosted.org/packages/fd/61/e39775d226e0434e7330dd353e30169cda6d578314ed96ce34291ff6737e/pillow_jxl_plugin-${version}.tar.gz"
 distfiles="https://github.com/Isotr0py/pillow-jpegxl-plugin/archive/refs/tags/v${version}.tar.gz"
-checksum=81a35b2de2b5e42072c5e23d59032a7722e5e9feddd04795ba5c693c2098de87
+checksum=1ffd776ed3026b14d2fac7dd8f3f9a18a0ad8dfb11396ab958a39e664edfeff1
+#make_check=no  # pyexiv2 bundled libexiv2.so path issue
+
+do_build() {
+	maturin build --release --features dynamic
+}
+
+post_build() {
+	mkdir -p dist
+	cp target/wheels/*.whl dist/
+}
 
 post_install() {
 	vlicense LICENSE
