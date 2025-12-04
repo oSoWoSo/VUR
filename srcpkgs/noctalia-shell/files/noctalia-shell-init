@@ -1,0 +1,76 @@
+#!/bin/sh
+
+# Noctalia Shell initialization script
+
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/noctalia-shell"
+SYSTEM_DIR="/usr/share/quickshell/noctalia-shell"
+
+print_usage() {
+	cat << USAGE
+Usage: noctalia-shell [OPTIONS]
+
+Initialize Noctalia Shell configuration.
+
+Options:
+  --copy      Copy files to user config (manual updates required)
+  --force     Overwrite existing configuration
+  -h, --help  Show this help message
+
+Default (no options): Create symlink for automatic updates
+
+Configuration locations:
+  System: ${SYSTEM_DIR}
+  User:   ${CONFIG_DIR}
+USAGE
+}
+
+case "$1" in
+	--copy)
+		if [ -e "$CONFIG_DIR" ] && [ "$2" != "--force" ]; then
+			echo "Error: $CONFIG_DIR already exists. Use --force to overwrite."
+			exit 1
+		fi
+		rm -rf "$CONFIG_DIR"
+		mkdir -p "$(dirname "$CONFIG_DIR")"
+		cp -r "$SYSTEM_DIR" "$CONFIG_DIR"
+		echo "Copied Noctalia Shell to $CONFIG_DIR"
+		;;
+	--force)
+		rm -rf "$CONFIG_DIR"
+		mkdir -p "$(dirname "$CONFIG_DIR")"
+		ln -sf "$SYSTEM_DIR" "$CONFIG_DIR"
+		echo "Force-linked Noctalia Shell to $CONFIG_DIR"
+		;;
+	-h|--help)
+		print_usage
+		exit 0
+		;;
+	"")
+		if [ -e "$CONFIG_DIR" ]; then
+			echo "Error: $CONFIG_DIR already exists."
+			echo "Use --force to overwrite or --copy to copy files."
+			exit 1
+		fi
+		mkdir -p "$(dirname "$CONFIG_DIR")"
+		ln -sf "$SYSTEM_DIR" "$CONFIG_DIR"
+		echo "Linked Noctalia Shell to $CONFIG_DIR"
+		echo "Updates will be applied automatically on package upgrade."
+		;;
+	*)
+		echo "Unknown option: $1"
+		print_usage
+		exit 1
+		;;
+esac
+
+echo ""
+echo "Next steps:"
+echo "1. Add to your compositor config:"
+echo "   Niri:     spawn-at-startup \"qs\""
+echo "   Hyprland: exec-once=qs"
+echo "   Sway:     exec qs"
+echo ""
+echo "2. Install optional dependencies for full functionality:"
+echo "   xbps-install -S cliphist matugen cava wlsunset"
+echo ""
+echo "See https://docs.noctalia.dev for more information."
