@@ -58,7 +58,6 @@ post_install() {
 	done
 	vinstall nwg-shell.jpg 644 usr/share/backgrounds
 	vinstall nwg-readme.desktop 644 usr/share/applications
-	vinstall nwg-shell/skel 644 etc
 	vdoc README.md
 	vlicense LICENSE
 }
