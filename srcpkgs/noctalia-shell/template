@@ -1,0 +1,23 @@
+# Template file for 'noctalia-shell'
+pkgname=noctalia-shell
+version=3.5.0
+revision=1
+depends="quickshell fonts-roboto-ttf font-inter gpu-screen-recorder brightnessctl ImageMagick ffmpeg"
+short_desc="Sleek and minimal desktop shell thoughtfully crafted for Wayland"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://docs.noctalia.dev/docs/"
+changelog="https://github.com/noctalia-dev/noctalia-shell/compare/v3.0.0...v${version}"
+distfiles="https://github.com/noctalia-dev/noctalia-shell/archive/refs/tags/v${version}.tar.gz"
+checksum=b7dc74896cc67b58f27a01825d43354bab654ad0b157f9fbd4d4337a954e34d6
+
+do_install() {
+	vmkdir usr/share/quickshell/noctalia-shell
+	vcopy "*" usr/share/quickshell/noctalia-shell/
+	vbin "${FILESDIR}/noctalia-shell-init"
+}
+
+post_install() {
+	vdoc README.md
+	vlicense LICENSE
+}
