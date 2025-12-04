@@ -1,0 +1,22 @@
+# Template file for 'python3-openexr'
+pkgname=python3-openexr
+version=3.4.4
+revision=1
+build_style=python3-pep517
+hostmakedepends="cmake git ninja python3-setuptools python3-wheel
+ python3-scikit-build-core python3-pybind11"
+makedepends="python3-devel libopenexr-devel"
+depends="python3-numpy"
+checkdepends="python3-pytest"
+short_desc="Python bindings for OpenEXR"
+maintainer="zenobit <zenobit@disroot.org>"
+license="BSD-3-Clause"
+homepage="https://github.com/AcademySoftwareFoundation/openexr"
+changelog="https://github.com/AcademySoftwareFoundation/openexr/raw/refs/tags/v3.4.4/CHANGES.md"
+distfiles="https://github.com/AcademySoftwareFoundation/openexr/archive/refs/tags/v${version}.tar.gz"
+checksum=7c663c3c41da9354b5af277bc2fd1d2360788050b4e0751a32bcd50e8abaef8f
+make_check=no # No test provided? Investigating
+
+post_install() {
+	vlicense LICENSE.md
+}
