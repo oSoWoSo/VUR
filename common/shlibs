@@ -4912,9 +4912,9 @@ libpisp.so.1 libpisp-1.3.0_1
 libMpvQt.so.2 mpvqt-1.1.1_1
 libfwupd.so.3 fwup-2.0.16_1
 libhyprcursor.so.0 hyprcursor-0.1.12_1
-libhyprlang.so.2 hyprlang-0.6.3_1
 libaquamarine.so.9 aquamarine-0.10.0_1
 libhyprcursor.so.0 hyprcursor-0.1.13_1
+libhyprlang.so.2 hyprlang-0.6.7_1
 libhyprcursor.so.0 hyprcursor-0.1.13_1
 libhyprlang.so.2 hyprlang-0.6.4_2
 libhyprgraphics.so.2 hyprgraphics-0.3.0_1
