@@ -1,6 +1,6 @@
 # Template file for 'bash-completion'
 pkgname=bash-completion
-version=2.16.0
+version=2.17.0
 revision=1
 build_style=gnu-configure
 make_install_args="profiledir=/etc/bash/bashrc.d compatdir=/usr/share/bash-completion"
@@ -12,7 +12,7 @@ license="GPL-2.0-or-later"
 homepage="https://github.com/scop/bash-completion"
 changelog="https://raw.githubusercontent.com/scop/bash-completion/refs/heads/main/CHANGELOG.md"
 distfiles="https://github.com/scop/bash-completion/releases/download/${version}/bash-completion-${version}.tar.xz"
-checksum=3369bd5e418a75fb990863925aed5b420398acebb320ec4c0306b3eae23f107a
+checksum=dd9d825e496435fb3beba3ae7bea9f77e821e894667d07431d1d4c8c570b9e58
 
 # Summary of tests:
 # = 26 failed, 1106 passed, 457 skipped, 14 xfailed, 4 xpassed in 1126.01s (0:18:46) =
