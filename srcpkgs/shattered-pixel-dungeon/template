@@ -1,6 +1,6 @@
 # Template file for 'shattered-pixel-dungeon'
 pkgname=shattered-pixel-dungeon
-version=3.2.5
+version=3.3.0
 revision=1
 hostmakedepends="openjdk11 gradle"
 depends="virtual?java-runtime desktop-file-utils hicolor-icon-theme"
@@ -9,7 +9,7 @@ maintainer="Mihail Ivanchev <contact@ivanchev.net>"
 license="GPL-3.0-only"
 homepage="https://github.com/00-Evan/shattered-pixel-dungeon"
 distfiles="https://github.com/00-Evan/shattered-pixel-dungeon/archive/v${version}.tar.gz"
-checksum=698e3c2b4b7b159e102a5fcd82fde27747c49c7cc21009a1692f52c17d45cce9
+checksum=f6dff9532d93382b6bc143d6a4b5b5515d1b9fe7a378cf13a3916d306a74de43
 
 do_build() {
 	vsed -i settings.gradle -e 's|include.*:android.*|//&|'
