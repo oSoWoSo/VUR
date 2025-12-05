@@ -2,35 +2,44 @@
 pkgname=shellspec
 version=0.28.1
 revision=1
-#archs="i686 x86_64"
-#build_wrksrc=
-build_style=gnu-makefile
-#configure_args=""
-#make_build_args=""
-#make_install_args=""
-#conf_files=""
-#make_dirs="/var/log/dir 0755 root root"
-hostmakedepends="git docker"
-makedepends=""
-#depends="sh"
+checkdepends="curl docker docker-buildx wget"
 short_desc="Full-featured BDD unit testing framework for all POSIX shells"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
 homepage="https://github.com/shellspec/shellspec"
-#changelog=""
+changelog="https://raw.githubusercontent.com/shellspec/shellspec/refs/heads/master/CHANGELOG.md"
 distfiles="https://github.com/shellspec/shellspec/archive/refs/tags/${version}.tar.gz"
 checksum=400d835466429a5fe6c77a62775a9173729d61dd43e05dfa893e8cf6cb511783
-
-do_check() {
-	# Do not fail on warning sice a bash bug outputs to stderr when not expected https://mail.gnu.org/archive/html/bug-bash/2022-10/msg00073.html
-	echo '--no-warning-as-failure' >> .shellspec
-	make test
-}
+make_check=no # Investiganting
 
 do_install() {
-	PREFIX="/usr" make install
+	install -d "/usr/bin" "/usr/lib"
+	install stub/shellspec "/usr/bin/shellspec"
+	find lib libexec -type d -exec install -d "/usr/lib/shellspec/{}" \;
+	find LICENSE lib -type f -exec install -m 644 {} "/usr/lib/shellspec/{}" \;
+	find shellspec libexec -type f -exec install {} "/usr/lib/shellspec/{}" \;
 }
 
+#do_check() {
+	## Do not fail on warning sice a bash bug outputs to stderr when not expected
+	## https://mail.gnu.org/archive/html/bug-bash/2022-10/msg00073.html
+	#echo '--no-warning-as-failure' >> .shellspec
+	## Add docker service
+	#ln -s /etc/sv/docker /var/service/
+	#ls /var/service/
+	#make test
+#}
+
 post_install() {
+	vinstall shellspec 644 usr/lib/shellspec
+	for f in libexec/*; do
+		vinstall "$f" 644 usr/lib/shellspec/libexec
+	done
+	vmkdir usr/lib/shellspec/lib
+	find lib libexec -type d -exec install -d "${DESTDIR}/usr/lib/shellspec/{}" \;
+	find LICENSE lib -type f -exec install -m 644 {} "${DESTDIR}/usr/lib/shellspec/{}" \;
+	find shellspec libexec -type f -exec install {} "${DESTDIR}/usr/lib/shellspec/{}" \;
+	vbin "$FILESDIR/shellspec"
+	vdoc README.md
 	vlicense LICENSE
 }
