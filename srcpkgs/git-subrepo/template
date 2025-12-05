@@ -1,0 +1,22 @@
+# Template file for 'git-subrepo'
+pkgname=git-subrepo
+version=0.4.9
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=gnu-configure
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends=""
+makedepends=""
+depends=""
+short_desc="Improvement from git-submodule and git-subtree"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/ingydotnet/git-subrepo"
+#changelog=""
+distfiles="https://github.com/ingydotnet/git-subrepo/archive/refs/tags/${version}.tar.gz"
+checksum=badbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadb
