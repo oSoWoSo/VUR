@@ -1,0 +1,19 @@
+# Template file for 'python3-sphinxygen'
+pkgname=python3-sphinxygen
+version=1.0.12
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-setuptools"
+depends="python3-Sphinx"
+checkdepends="python3-pytest python3-html5lib doxygen python3-Sphinx"
+short_desc="Script to read Doxygen XML output and emit ReST for Sphinx"
+maintainer="zenobit <zenobit@disroot.org>"
+license="0BSD"
+homepage="https://gitlab.com/drobilla/sphinxygen"
+changelog="https://gitlab.com/drobilla/sphinxygen/-/raw/main/NEWS"
+distfiles="https://gitlab.com/drobilla/sphinxygen/-/archive/v${version}/sphinxygen-v${version}.tar.gz"
+checksum=b1ac1515e84fa4c31dc10ad1a7800c0f305a1a3887b4b4e6e1980ceda4f50173
+
+post_install() {
+	vlicense LICENSE
+}
