@@ -15,5 +15,6 @@ do_install() {
 }
 
 post_install() {
+	vdoc README.md
 	vlicense LICENSE
 }
