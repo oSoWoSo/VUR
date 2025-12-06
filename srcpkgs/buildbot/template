@@ -1,0 +1,22 @@
+# Template file for 'buildbot'
+pkgname=buildbot
+version=4.3.0
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=python3-pep517
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="python3-setuptools python3-wheel"
+makedepends=""
+depends=""
+short_desc="Python-based continuous integration testing framework"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-2.0-only"
+homepage="https://www.buildbot.net/"
+#changelog=""
+distfiles="https://github.com/buildbot/buildbot/archive/refs/tags/v${version}.tar.gz"
+checksum=a7d60816a90ae392caa12526aa5b5ad2113ca874f46c6da71d071425ea751fa6
