@@ -1,4 +1,4 @@
-name: List Branches
+name: Update branchList and workflow
 
 on:
   create:
@@ -23,12 +23,22 @@ jobs:
           rm -f .github/branchList
           git branch -a | tail -n +3 | head -n -1 | cut -d '/' -f3- | tee -a .github/branchList
 
+      - name: Update workflow
+        run: |
+          cd .github/workflows
+          cp -f ../START.yml syncBranch.yml
+          while read -r line; do
+            echo "        - $(echo "$line")"
+          done < ../branchList >> syncBranch.yml
+          cat ../REST.yml >> syncBranch.yml
+
       - name: "Push results"
         run: |
           git config --global user.name "web-flow"
           git config --global user.email "noreply@github.com"
           git status
-          git add --all || echo "Nothing to add"
-          git commit -m "Update branchList" || echo "Nothing to commit"
+          git add .github/branchList || echo "Nothing to add"
+          git add .github/workflows/syncBranch.yml
+          git commit -m "Update branchList and workflow" || echo "Nothing to commit"
           git push || echo "Nothing to push"
           git status
