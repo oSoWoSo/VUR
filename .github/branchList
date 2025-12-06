@@ -31,7 +31,6 @@ distrobox
 distrohopper
 dooble-qt6
 dotbot
-dtrx
 easybashgui
 easyeffects
 easyeffects+fmt
@@ -42,11 +41,13 @@ eww
 exfatprogs
 feature/autosync
 fmt11+
+freeplane
 fzf
 gama
 gcompris
 gcompris-qt
 geany
+geany-editorconfig
 gh-action
 gh-pages
 git-filter-repo
@@ -54,7 +55,7 @@ gitea
 gmrun
 go
 godot
-gpu-screen-recorder
+godot+
 gpu-screen-recorder-gtk
 grsync
 gum
@@ -78,7 +79,6 @@ hyprland
 hyprland-0.38
 hyprland-0.51.0
 hyprpicker
-hyprutils
 input-remapper
 io.elementary.code
 jqless
@@ -90,7 +90,6 @@ kitty
 labwc-menu
 lapce
 lazycli
-lazydocker
 lazygit
 lazygit-CZ
 lcl
@@ -115,6 +114,7 @@ mangohud
 manpages
 master
 megasync
+minder
 minikube
 mpg123
 mpv
@@ -157,7 +157,6 @@ pillow
 pmbootstrap
 podget
 poedit
-protontricks
 protonup
 psuinfo
 python3-dasbus
@@ -175,25 +174,23 @@ sakura
 scrcpy
 shatteredPD
 skate
-smc
 soft-serve
 spacefm
 ssr
 sync
-system-monitoring-center
 tailscale
 tailspin
 tcl
 tere
 terminator
 test
-test-sync-branches-workflow
 testing
 thunderbird
 tips
 tk
 topgrade
 tuisic
+tuxpaint
 u/conky
 u/mergerfs
 u/moar
@@ -213,4 +210,3 @@ winetricks
 wishlist
 xdgmenumaker
 yacy
-yad
