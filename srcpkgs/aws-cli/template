@@ -1,7 +1,7 @@
 # Template file for 'aws-cli'
 pkgname=aws-cli
-version=1.22.88
-revision=5
+version=2.32.11
+revision=1
 build_style=python3-module
 hostmakedepends="python3-setuptools"
 depends="groff python3-botocore python3-s3transfer python3-colorama
@@ -12,7 +12,7 @@ maintainer="Robert Lowry <bobertlo@gmail.com>"
 license="Apache-2.0"
 homepage="https://github.com/aws/aws-cli"
 distfiles="https://github.com/aws/aws-cli/archive/${version}.tar.gz"
-checksum=cc0961786a5020fbe4708506e8aa39c90a07199f625e9ac62c1f2d8db7e8bd69
+checksum=1bb673a68efae6046bab949116e4608fabba65faff904a8097681967153a9746
 
 do_check() {
 	# integration tests want aws credentials, have some other issues not worth fixing
