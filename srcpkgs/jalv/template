@@ -1,19 +1,19 @@
 # Template file for 'jalv'
 pkgname=jalv
-version=1.6.8
+version=1.8.0
 revision=1
 build_style=meson
-hostmakedepends="pkg-config $(vopt_if qt qt5-host-tools)"
+hostmakedepends="pkg-config cmake mdocml $(vopt_if qt qt6-base)"
 makedepends="lv2 lilv-devel suil-devel serd-devel sord-devel sratom-devel
  $(vopt_if portaudio portaudio-devel jack-devel) $(vopt_if gtk3 gtk+3-devel)
- $(vopt_if qt qt5-devel)"
+ $(vopt_if qt qt6-base-devel)"
 short_desc="LV2 host for JACK"
 maintainer="Orphaned <orphan@voidlinux.org>"
 license="ISC"
 homepage="https://drobilla.net/software/jalv"
 changelog="https://drobilla.net/category/jalv/"
 distfiles="http://download.drobilla.net/jalv-${version}.tar.xz"
-checksum=edae77b1280ea44d4c0b2b732686defd370fde25ed1da289896d9f53b6fc15e1
+checksum=6dfa7f8709047c8ed944541dc093a6b5762990a9f49dce4c6a8bf1f922243bf4
 
 build_options="portaudio gtk3 qt"
 build_options_default="gtk3 qt"
