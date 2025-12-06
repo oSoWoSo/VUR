@@ -1,12 +1,13 @@
 # Template file for 'ReText'
 pkgname=ReText
-version=7.2.3
-revision=4
+version=8.1.0
+revision=1
 build_style=python3-module
-hostmakedepends="ImageMagick python3 qt5-host-tools qt5-tools python3-setuptools"
-makedepends="python3-Markdown python3-Markups python3-PyQt5-webkit qt5-tools"
+hostmakedepends="ImageMagick python3 qt6-tools python3-setuptools"
+makedepends="python3-Markdown python3-Markups qt6-tools"
 depends="desktop-file-utils python3-chardet python3-docutils python3-Markdown
- python3-Markups python3-PyQt5-webkit python3-Pygments python3-enchant"
+ python3-Markups python3-Pygments python3-enchant
+ python3-pyqt6"
 checkdepends="${depends} python3-pytest"
 short_desc="Simple editor for Markdown and reStructuredText"
 maintainer="Enno Boland <gottox@voidlinux.org>"
@@ -14,7 +15,7 @@ license="GPL-2.0-or-later"
 homepage="https://github.com/retext-project/retext"
 changelog="https://raw.githubusercontent.com/retext-project/retext/master/changelog.md"
 distfiles="https://github.com/retext-project/retext/archive/${version}.tar.gz"
-checksum=45c47f58c4f9939429da09340833c0ffbe507f2c806e16b30aa1cf90eb954274
+checksum=eb53486197ad92af65fc8a21f8362011d29c8c58ecba84de40dc11cb953439d2
 # FIXME: fails with "Fatal Python error: Aborted"
 # make_check_pre="xvfb-run"
 
@@ -23,7 +24,7 @@ post_install() {
 
 	for size in 16 22 24 32 48 128; do
 		vmkdir $icondir/${size}x${size}/apps
-			convert -resize $size icons/retext.png $DESTDIR/$icondir/${size}x${size}/apps/retext.png;
+			magick ReText/icons/retext.png -resize $size $DESTDIR/$icondir/${size}x${size}/apps/retext.png;
 	done
 
 	vmkdir usr/share/mime/packages
