@@ -1,0 +1,20 @@
+# Template file for 'hw-probe'
+pkgname=hw-probe
+version=1.6
+revision=1
+build_style=gnu-makefile
+configure_args="PREFIX=/usr"
+depends="perl perl-Digest-SHA1 hwinfo curl dmidecode smartmontools
+ pciutils usbutils mcelog hdparm acpica-utils drm_info mesa-demos
+ memtester sysstat cpuid util-linux xinput libva-utils inxi
+ Vulkan-Utility-Libraries i2c-tools opensc libdisplay-info"
+short_desc="Probe for hardware, check operability and find drivers"
+maintainer="zenobit <zenobit@disroot.org>"
+license="LGPL-2.1-or-later, BSD-4-Clause"
+homepage="https://linux-hardware.org/"
+distfiles="https://github.com/linuxhw/hw-probe/archive/refs/tags/${version}.tar.gz"
+checksum=de048be6aef357d3142c9e2327d6f79d205a42aa3396ad381ed319115d1c9a22
+
+post_install() {
+	vlicense LICENSES/BSD-4-Clause
+}
