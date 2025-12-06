@@ -1,4 +1,4 @@
-name: List Branches
+name: Update branchList and syncBranch
 
 on:
   create:
@@ -7,15 +7,24 @@ on:
   delete:
     branches:
       - '**'
+  push:
+    branches:
+      - VUR
+    paths:
+      - '.github/REST.yml'
+      - '.github/START.yml'
   workflow_dispatch:
-
+permissions:
+  contents: write
+  actions: write
 jobs:
   list-branches:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
+          token: ${{ secrets.TOKEN }}
           fetch-depth: 0
 
       - name: List branches
@@ -23,12 +32,24 @@ jobs:
           rm -f .github/branchList
           git branch -a | tail -n +3 | head -n -1 | cut -d '/' -f3- | tee -a .github/branchList
 
+      - name: Update workflow
+        run: |
+          cd .github/workflows
+          cp -f ../START.yml syncBranch.yml
+          while read -r line; do
+            echo "        - $(echo "$line")"
+          done < ../branchList >> syncBranch.yml
+          cat ../REST.yml >> syncBranch.yml
+
       - name: "Push results"
+        env:
+          token: ${{ secrets.TOKEN }}
         run: |
           git config --global user.name "web-flow"
           git config --global user.email "noreply@github.com"
           git status
-          git add --all || echo "Nothing to add"
-          git commit -m "Update branchList" || echo "Nothing to commit"
+          git add .github/branchList || echo "Nothing to add"
+          git add .github/workflows/syncBranch.yml
+          git commit -m "Update branchList and workflow" || echo "Nothing to commit"
           git push || echo "Nothing to push"
           git status
