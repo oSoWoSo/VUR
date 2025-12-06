@@ -16,14 +16,19 @@ on:
         - Hyprland
         - LACT
         - ROCm-SMI-LIB
+        - Sphinx
         - SweetHome3D
+        - TESTING
         - VUR
         - VUR-backup
+        - WIP
         - actions/checkupstream
         - ansicolor
         - auto-cpufreq
         - awesome-appmenu
         - azote
+        - bibata-cursor
+        - botan
         - btop
         - btop-rocm
         - bubbletea
@@ -32,30 +37,40 @@ on:
         - check-anywhere
         - chezmoi
         - conky
+        - cortile
+        - crush
         - cs
         - desktop-file-utils
         - discover
         - distrobox
         - distrohopper
         - dooble-qt6
+        - dotbot
+        - dtrx
         - easybashgui
         - easyeffects
+        - easyeffects+fmt
         - ebg
-        - emptty
+        - elightenment
         - enlightenment
         - eww
         - exfatprogs
         - feature/autosync
+        - fmt11+
         - fzf
         - gama
         - gcompris
         - gcompris-qt
+        - geany
         - gh-action
         - gh-pages
         - git-filter-repo
         - gitea
+        - gmrun
         - go
         - godot
+        - gpu-screen-recorder
+        - gpu-screen-recorder-gtk
         - grsync
         - gum
         - gxkb
@@ -76,12 +91,15 @@ on:
         - hypr-test
         - hyprland
         - hyprland-0.38
+        - hyprland-0.51.0
         - hyprpicker
+        - hyprutils
         - input-remapper
         - io.elementary.code
         - jqless
         - kando
         - kando2
+        - kde-material-you-colors
         - kirc
         - kitty
         - labwc-menu
@@ -96,13 +114,17 @@ on:
         - libgit2
         - libvirt
         - liferea
+        - limine
         - linux
         - lite-xl
         - litexl
         - lokalize
         - lsp-plugins
         - lutris
+        - lxqt
+        - ly
         - lynx
+        - main
         - mame
         - mangohud
         - manpages
@@ -117,6 +139,7 @@ on:
         - n/fastfetch
         - n/superfile
         - n/yazi
+        - nemu
         - nerd-fonts
         - nheko
         - nushell
@@ -140,6 +163,7 @@ on:
         - oculante
         - omegat
         - opentyrian
+        - opentyrian2000
         - paperde
         - papirus-icon-theme
         - pasystray
@@ -156,11 +180,15 @@ on:
         - qpdfview
         - qt-virt
         - quickemu
+        - regex-tui
         - repo-sync/projekty/default
         - revert-47-wayshot
+        - runkit
         - rust
+        - rustnet
         - sakura
         - scrcpy
+        - shatteredPD
         - skate
         - smc
         - soft-serve
@@ -174,11 +202,13 @@ on:
         - tere
         - terminator
         - test
+        - test-sync-branches-workflow
         - testing
         - thunderbird
         - tips
         - tk
         - topgrade
+        - tuisic
         - u/conky
         - u/mergerfs
         - u/moar
@@ -198,6 +228,7 @@ on:
         - wishlist
         - xdgmenumaker
         - yacy
+        - yad
 
       sync_test_mode: # Adds a boolean option that appears during manual workflow run for easy test mode config
         description: 'Fork Sync Test Mode'
