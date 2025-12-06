@@ -1,4 +1,4 @@
-name: Update branchList and workflow
+name: Update branchList and syncBranch
 
 on:
   create:
@@ -7,14 +7,22 @@ on:
   delete:
     branches:
       - '**'
+  push:
+    branches:
+      - VUR
+    paths:
+      - '.github/REST.yml'
+      - '.github/START.yml'
   workflow_dispatch:
-
+permissions:
+  contents: write
+  actions: write
 jobs:
   list-branches:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
