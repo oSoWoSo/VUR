@@ -1,15 +1,17 @@
 # Template file for 'serd'
 pkgname=serd
-version=0.32.2
+version=0.32.6
 revision=1
 build_style=meson
+hostmakedepends="pkg-config mdocml doxygen python3-Sphinx
+ python3-sphinxygen python3-lv2-theme"
 short_desc="Lightweight C library for RDF syntax"
 maintainer="Orphaned <orphan@voidlinux.org>"
 license="ISC"
 homepage="http://drobilla.net/software/serd.html"
 changelog="https://gitlab.com/drobilla/serd/-/raw/master/NEWS"
 distfiles="https://download.drobilla.net/serd-${version}.tar.xz"
-checksum=df7dc2c96f2ba1decfd756e458e061ded7d8158d255554e7693483ac0963c56b
+checksum=0fbe094952fe176ba4da4f2f767ddfb5f60e67e64d1761b4383a0b872cfd071a
 
 if [ "${XBPS_CHECK_PKGS}" ]; then
 	configure_args="-Dtests=enabled"
