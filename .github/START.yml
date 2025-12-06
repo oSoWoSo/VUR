@@ -1,4 +1,4 @@
-e: 'Sync branch'
+name: 'Sync branch'
 
 on:
   #schedule:
