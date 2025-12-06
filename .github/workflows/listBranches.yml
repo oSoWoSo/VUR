@@ -24,6 +24,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
         with:
+          token: ${{ secrets.TOKEN }}
           fetch-depth: 0
 
       - name: List branches
@@ -41,6 +42,8 @@ jobs:
           cat ../REST.yml >> syncBranch.yml
 
       - name: "Push results"
+        env:
+          token: ${{ secrets.TOKEN }}
         run: |
           git config --global user.name "web-flow"
           git config --global user.email "noreply@github.com"
