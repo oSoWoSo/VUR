@@ -17,6 +17,7 @@ on:
         - LACT
         - ROCm-SMI-LIB
         - SweetHome3D
+        - TESTING
         - VUR
         - VUR-backup
         - actions/checkupstream
