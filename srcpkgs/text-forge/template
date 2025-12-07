@@ -1,0 +1,30 @@
+# Template file for 'text-forge'
+pkgname=text-forge
+version=0.2.0
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+#build_style=gnu-configure
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends=""
+makedepends=""
+depends=""
+short_desc="Extensible and modular code editor with Godot"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/text-forge/text-forge"
+#changelog="https://raw.githubusercontent.com/text-forge/text-forge/refs/heads/Main/CHANGELOG.md"
+distfiles="https://github.com/text-forge/text-forge/archive/refs/tags/v0.2.0-rc2.tar.gz"
+checksum=31d4a0b0c591565df2f50552e6c866dcbd15232b0ceba65d325f4b6888629875
+
+do_install() {
+	echo TODO
+}
+
+post_install() {
+	vlicense LICENSE
+}
