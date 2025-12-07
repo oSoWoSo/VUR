@@ -1,0 +1,42 @@
+# Template file for 'text-forge-bin'
+pkgname=text-forge-bin
+version=0.2.0
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+#build_style=gnu-configure
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends=""
+makedepends=""
+depends=""
+short_desc="Extensible and modular code editor with Godot (binary)"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/text-forge/text-forge"
+#changelog="https://raw.githubusercontent.com/text-forge/text-forge/refs/heads/Main/CHANGELOG.md"
+#distfiles="https://github.com/text-forge/text-forge/archive/refs/tags/v0.2.0-rc2.tar.gz"
+distfiles="https://github.com/text-forge/text-forge/releases/download/v0.2.0-rc2/Text.Forge.0.2.rc2.linux.zip>text.forge.tar.gz"
+checksum=9279b525bb6df1702ec62cfe4a37b1f5b467cec5d39fc0993427296500e63bdc
+nopie_files=/etc/text-forge/TextForge.x86_64
+
+pre_install() {
+	mv 'Text Forge.x86_64' TextForge.x86_64
+}
+
+do_install() {
+	vmkdir etc/text-forge
+	vcopy action_scripts etc/text-forge/
+	vcopy data etc/text-forge/
+	vinstall icon.png 644 usr/share/pixmaps/
+	vinstall TextForge.x86_64 755 etc/text-forge/
+	vbin "${FILESDIR}/text-forge.sh" text-forge
+}
+
+post_install() {
+	vdoc README.md
+	vlicense LICENSE
+}
