@@ -1,0 +1,22 @@
+# Template file for 'gitleaks'
+pkgname=gitleaks
+version=8.30.0
+revision=1
+build_style=go
+go_import_path="github.com/zricethezav/gitleaks/v8"
+go_build_tags="netgo"
+go_ldflags="-X github.com/zricethezav/gitleaks/v8/version.Version=${version}"
+makedepends=""
+depends=""
+checkdepends="git"
+short_desc="Find secrets with Gitleaks"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://gitleaks.io"
+changelog="https://github.com/gitleaks/gitleaks/compare/v0.1.0...v${version}"
+distfiles="https://github.com/gitleaks/gitleaks/archive/refs/tags/v${version}.tar.gz"
+checksum=606b3ce45d1e64d28ac7729ee03480a8ee2c5e5a5c5122844bd9516f3cc1bcf3
+
+post_install() {
+	vlicense LICENSE
+}
