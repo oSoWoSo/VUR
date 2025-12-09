@@ -1,0 +1,20 @@
+# Template file for 'deletor'
+pkgname=deletor
+version=1.5.0
+revision=1
+build_style=go
+go_import_path=github.com/pashkov256/deletor
+hostmakedepends=""
+makedepends=""
+depends=""
+short_desc="Manage and delete files efficiently with an interactive TUI and scriptable CLI"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/pashkov256/deletor"
+changelog="https://github.com/pashkov256/deletor/compare/v1.0.0...v${version}"
+distfiles="https://github.com/pashkov256/deletor/archive/refs/tags/v${version}.tar.gz"
+checksum=e4a2a2ca3a1fa420c1962c2d8dd1778a3fbd06dc9a468e6d5f76b9d26971bbeb
+
+post_install() {
+	vlicense LICENSE
+}
