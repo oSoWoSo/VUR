@@ -227,7 +227,6 @@ on:
         - wishlist
         - xdgmenumaker
         - yacy
-        - yad
 
       sync_test_mode: # Adds a boolean option that appears during manual workflow run for easy test mode config
         description: 'Fork Sync Test Mode'
