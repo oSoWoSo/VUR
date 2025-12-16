@@ -1,0 +1,23 @@
+# Template file for 'git-scope'
+pkgname=git-scope
+version=1.2.2
+revision=1
+build_style=go
+go_import_path="github.com/Bharath-code/git-scope"
+short_desc="Fast TUI to see the status of all git repositories on your machine"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://bharath-code.github.io/git-scope/"
+#changelog=""
+distfiles="https://github.com/Bharath-code/git-scope/archive/refs/tags/v${version}.tar.gz"
+checksum=e10bfa9e04455116cef40824bb00c70bc8c555741714c7098fd1bc1e3982683c
+
+do_build() {
+	go build ./cmd/git-scope
+}
+
+post_install() {
+	vbin git-scope
+	vdoc README.md
+	vlicense LICENSE
+}
