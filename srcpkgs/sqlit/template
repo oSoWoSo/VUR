@@ -1,0 +1,18 @@
+# Template file for 'sqlit'
+pkgname=sqlit
+version=0.5.6
+revision=1
+build_style=python3-pep517
+hostmakedepends="hatchling"
+depends="python3-paramiko python3-pyperclip python3-textual python3-pyodbc python3-sshtunnel"
+short_desc="User friendly TUI for SQL databases"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/Maxteabag/sqlit"
+#changelog=""
+distfiles="https://github.com/Maxteabag/sqlit/archive/refs/tags/v${version}.tar.gz"
+checksum=a0df1fdcc9c20432318f6748e146a421680840e04bf39dd9889df343cbed5608
+
+post_install() {
+	vlicense LICENSE
+}
