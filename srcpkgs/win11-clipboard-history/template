@@ -1,0 +1,32 @@
+# Template file for 'win11-clipboard-history'
+pkgname=win11-clipboard-history
+version=0.2.7
+revision=1
+build_style=gnu-makefile
+hostmakedepends="cargo nodejs pkg-config rust-std"
+makedepends="openssl-devel glib-devel gtk+3-devel libsoup3-devel
+ libwebkit2gtk41-devel libayatana-appindicator-devel"
+depends=""
+short_desc="Beautiful, Windows 11-style Clipboard History Manager for Linux"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://clipboard.gustavosett.dev/"
+#changelog=""
+distfiles="https://github.com/gustavosett/Windows-11-Clipboard-History-For-Linux/archive/refs/tags/v${version}.tar.gz"
+checksum=8e96a17bf5ea9a63bfcd5dc96acc505a0422693cb46241f740507d4a6aa1a69d
+
+pre_build() {
+	npm install
+}
+
+do_build() {
+	npm run tauri:build
+}
+
+#do_install() {
+#
+#}
+
+post_install() {
+	vlicense LICENSE
+}
