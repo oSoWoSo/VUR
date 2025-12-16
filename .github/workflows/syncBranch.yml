@@ -306,7 +306,10 @@ jobs:
 
     - name: Resolve conflicts automatically
       if: steps.check_conflict.outputs.conflict_detected == 'true'
+      shell: bash
       run: |
+        set -eo pipefail
+        
         echo "🔍 Analyzing conflicts..."
         
         # Get list of conflicted files
@@ -314,6 +317,31 @@ jobs:
         
         echo "📝 Conflicted files:"
         echo "$CONFLICT_FILES"
+        
+        # Function to compare versions
+        compare_versions() {
+          local v1=$1
+          local v2=$2
+          
+          if [ -z "$v1" ] || [ -z "$v2" ]; then
+            echo "2"
+            return 0
+          fi
+          
+          # Extract version number
+          v1_num=$(echo "$v1" | sed 's/version=//' | tr -d '"' | tr -d "'")
+          v2_num=$(echo "$v2" | sed 's/version=//' | tr -d '"' | tr -d "'")
+          
+          # Use sort -V for natural version sorting
+          if [ "$v1_num" = "$v2_num" ]; then
+            echo "0"
+          elif printf '%s\n%s' "$v1_num" "$v2_num" | sort -V -C 2>/dev/null; then
+            echo "1"
+          else
+            echo "3"
+          fi
+          return 0
+        }
         
         # For each conflicted file
         for file in $CONFLICT_FILES; do
@@ -333,35 +361,11 @@ jobs:
           echo "  Current (ours):  $OURS_VERSION $OURS_REVISION"
           echo "  Incoming (theirs): $THEIRS_VERSION $THEIRS_REVISION"
           
-          # Function to compare versions
-          compare_versions() {
-            local v1=$1
-            local v2=$2
-            
-            if [ -z "$v1" ] || [ -z "$v2" ]; then
-              return 2  # Cannot compare
-            fi
-            
-            # Extract version number
-            v1_num=$(echo "$v1" | sed 's/version=//' | tr -d '"' | tr -d "'")
-            v2_num=$(echo "$v2" | sed 's/version=//' | tr -d '"' | tr -d "'")
-            
-            # Use sort -V for natural version sorting
-            if [ "$v1_num" = "$v2_num" ]; then
-              return 0  # Equal
-            elif printf '%s\n%s' "$v1_num" "$v2_num" | sort -V -C 2>/dev/null; then
-              return 1  # v1 < v2
-            else
-              return 3  # v1 > v2
-            fi
-          }
-          
           # Decide which version to use
           CHOICE=""
           
           if [ -n "$OURS_VERSION" ] && [ -n "$THEIRS_VERSION" ]; then
-            compare_versions "$OURS_VERSION" "$THEIRS_VERSION"
-            result=$?
+            result=$(compare_versions "$OURS_VERSION" "$THEIRS_VERSION")
             
             case $result in
               0)  # Same version, compare revision
@@ -439,6 +443,7 @@ jobs:
         # Set git config for rebase continuation
         git config user.name "GitHub Actions Bot"
         git config user.email "actions@github.com"
+        
         # Continue rebase
         GIT_EDITOR=true git rebase --continue || {
           echo "❌ Rebase failed even after resolving conflicts"
