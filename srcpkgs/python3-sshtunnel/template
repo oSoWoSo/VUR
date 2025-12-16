@@ -1,0 +1,18 @@
+# Template file for 'python3-sshtunnel'
+pkgname=python3-sshtunnel
+version=0.4.0
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-setuptools python3-wheel"
+depends="python3-paramiko"
+short_desc="SSH tunnels to remote server"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/pahaz/sshtunnel"
+#changelog=""
+distfiles="https://github.com/pahaz/sshtunnel/archive/refs/tags/${version}.tar.gz"
+checksum=12f8abab8e67a89714d22041cfd2a05edc9d5abde936b11f64ac1fb726e176bf
+
+post_install() {
+	vlicense LICENSE
+}
