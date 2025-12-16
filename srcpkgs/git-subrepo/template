@@ -2,21 +2,35 @@
 pkgname=git-subrepo
 version=0.4.9
 revision=1
-#archs="i686 x86_64"
-#build_wrksrc=
-build_style=gnu-configure
-#configure_args=""
-#make_build_args=""
-#make_install_args=""
-#conf_files=""
-#make_dirs="/var/log/dir 0755 root root"
-hostmakedepends=""
-makedepends=""
-depends=""
+depends="git"
+checkdepends="make"
 short_desc="Improvement from git-submodule and git-subtree"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
 homepage="https://github.com/ingydotnet/git-subrepo"
 #changelog=""
 distfiles="https://github.com/ingydotnet/git-subrepo/archive/refs/tags/${version}.tar.gz"
-checksum=badbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadb
+checksum=775987fbf313c9051d56b757672972629cc44a6cfd9c310fb07f2311f001e432
+
+do_check() {
+	git config --global init.defaultBranch master
+	git config --global user.email "check@void.org"
+	git config --global user.name "check"
+	git clone https://github.com/ingydotnet/git-subrepo REPO
+	cd REPO
+	make test
+}
+
+do_install() {
+	vinstall lib/git-subrepo 755 usr/libexec/git-core
+	vinstall ext/bashplus/lib/bash+.bash 644 usr/libexec/git-core/git-subrepo.d
+	vinstall lib/git-subrepo.d/help-functions.bash 644 usr/libexec/git-core/git-subrepo.d
+}
+
+post_install() {
+	vbin "${FILESDIR}/git-subrepo"
+	vcompletion share/completion.bash bash
+	vcompletion share/zsh-completion/_git-subrepo zsh
+	vman man/man1/git-subrepo.1
+	vlicense License
+}
