@@ -1,0 +1,17 @@
+# Template file for 'python3-pyodbc'
+pkgname=python3-pyodbc
+version=5.3.0
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-setuptools"
+makedepends="python3-devel unixodbc-devel"
+short_desc="Python ODBC bridge"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT-0"
+homepage="https://github.com/mkleehammer/pyodbc"
+distfiles="https://github.com/mkleehammer/pyodbc/archive/refs/tags/${version}.tar.gz"
+checksum=9662d791a69bcdd1288f9256a4dd88da3718a5da8128af32afa76b94c24f6b7c
+
+post_install() {
+	vlicense LICENSE.txt
+}
