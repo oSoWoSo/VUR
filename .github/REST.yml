@@ -44,14 +44,35 @@ jobs:
 
     - name: Check for conflicts
       id: check_conflict
-      if: failure()
+      if: always()
       run: |
-        if git status | grep -q "rebase in progress"; then
+        # Check if we're in a rebase state
+        if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
           echo "conflict_detected=true" >> $GITHUB_OUTPUT
           echo "⚠️ Conflict detected, starting automatic resolution..."
+          
+          # Show rebase status
+          echo ""
+          echo "📊 Rebase status:"
+          if [ -f .git/rebase-merge/msgnum ]; then
+            CURRENT=$(cat .git/rebase-merge/msgnum)
+            TOTAL=$(cat .git/rebase-merge/end)
+            echo "  Progress: $CURRENT/$TOTAL commits"
+          fi
+          
+          # Show git status
+          echo ""
+          echo "📝 Git status:"
+          git status --short
+          
+        elif [ "${{ steps.sync.outcome }}" = "failure" ]; then
+          echo "conflict_detected=false" >> $GITHUB_OUTPUT
+          echo "❌ Sync failed but not due to conflict"
+          git status
+          exit 1
         else
           echo "conflict_detected=false" >> $GITHUB_OUTPUT
-          exit 1  # Error other than conflict
+          echo "✅ Sync completed without conflicts"
         fi
 
     - name: Resolve conflicts automatically
@@ -186,8 +207,15 @@ jobs:
     - name: Continue rebase
       if: steps.check_conflict.outputs.conflict_detected == 'true'
       run: |
-        git -c core.editor=true rebase --continue || {
+        # Set git config for rebase continuation
+        git config user.name "GitHub Actions Bot"
+        git config user.email "actions@github.com"
+        # Continue rebase
+        GIT_EDITOR=true git rebase --continue || {
           echo "❌ Rebase failed even after resolving conflicts"
+          echo ""
+          echo "Current rebase state:"
+          git status
           exit 1
         }
         echo "✅ Rebase completed successfully"
@@ -195,11 +223,15 @@ jobs:
     - name: Push changes
       if: steps.check_conflict.outputs.conflict_detected == 'true'
       run: |
-        git push --force-with-lease origin ${{ env.BRANCH }}
-        echo "✅ Changes pushed"
+        echo "🚀 Pushing resolved changes..."
+        git push --force-with-lease origin ${{ env.BRANCH }} || {
+          echo "⚠️ Force-with-lease failed, trying regular force push..."
+          git push --force origin ${{ env.BRANCH }}
+        }
+        echo "✅ Changes pushed successfully"
 
     - name: New commits found
-      if: steps.sync.outputs.has_new_commits == 'true'
+      if: steps.sync.outputs.has_new_commits == 'true' || steps.check_conflict.outputs.conflict_detected == 'true'
       run: echo "✅ New commits were synchronized."
     
     - name: No new commits
