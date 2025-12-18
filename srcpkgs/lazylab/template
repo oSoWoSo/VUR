@@ -1,0 +1,21 @@
+# Template file for 'lazylab'
+pkgname=lazylab
+version=1.4.0
+revision=1
+build_style=go
+go_import_path=github.com/EspenTeigen/lazylab
+short_desc="Terminal user interface for gitlab"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/EspenTeigen/lazylab"
+#changelog=""
+distfiles="https://github.com/EspenTeigen/lazylab/archive/refs/tags/v${version}.tar.gz"
+checksum=9463db973a1c3446555349cf6638b70a8ca61bbd29f3daddea5f0285acea7463
+
+do_build() {
+	go build -o lazylab ./cmd/lazylab
+}
+
+post_install() {
+	vlicense LICENSE
+}
