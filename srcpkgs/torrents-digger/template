@@ -1,0 +1,29 @@
+# Template file for 'torrents-digger'
+pkgname=torrents-digger
+version=1.1.3+13
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=cargo
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="just flutter"
+makedepends=""
+depends=""
+short_desc="Digs Torrents from the Internet"
+maintainer="zenobit <zenobit@disroot.org>"
+license="Unlicense"
+homepage="https://gitlab.com/ForTheCommunity/torrentsdigger"
+#changelog=""
+distfiles="https://gitlab.com/ForTheCommunity/torrentsdigger/-/archive/v${version}/torrentsdigger-v${version}.tar.gz"
+checksum=27b7cfacc7f7a80870ccc73635f0c415a553fc16c77332258bf4ed3408b32d02
+
+export APP_NAME=$(grep 'name:' pubspec.yaml | head -1 | awk '{print $2}' | sed 's/-/_/g' | sed 's/\r//g')
+export APP_VERSION=$(grep 'version:' pubspec.yaml | head -1 | awk '{print $2}' | sed 's/+//' | sed 's/ /_/g' | sed 's/\r//g')
+
+do_build() {
+	flutter pub get
+}
