@@ -1,0 +1,21 @@
+# Template file for 'fresh'
+pkgname=fresh
+version=0.1.55
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config python3 ninja"
+makedepends="oniguruma-devel"
+depends=""
+checkdepends="git libzstd-devel"
+short_desc="Text editor for your terminal: easy, powerful and fast"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-2.0-only"
+homepage="https://sinelaw.github.io/fresh/"
+#changelog=""
+distfiles="https://github.com/sinelaw/fresh/archive/refs/tags/v${version}.tar.gz"
+checksum=a694c29ad9ddf5754b569b40cd7d74ffbcd3c740927710933be2bd58b7e5cf4d
+
+do_check() {
+	cargo install cargo-nextest
+	cargo nextest run -j=4 --no-fail-fast --locked --all-features --all-targets
+}
