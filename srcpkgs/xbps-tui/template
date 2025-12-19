@@ -1,0 +1,12 @@
+# Template file for 'xbps-tui'
+pkgname=xbps-tui
+version=0.2.9
+revision=1
+build_style=cargo
+short_desc="TUI-wrapper for xbps package manager on Void Linux"
+maintainer="zenobit <zenobit@disroot.org>"
+license="GPL-3.0-only"
+homepage="https://codeberg.org/lukeflo/xbps-tui"
+#changelog=""
+distfiles="https://codeberg.org/lukeflo/xbps-tui/archive/v${version}.tar.gz"
+checksum=4f397fecc7767226f1edb55ab3de3049377f3845c883f4368603c8c711d6d9ed
