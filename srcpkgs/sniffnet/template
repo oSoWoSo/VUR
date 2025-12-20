@@ -1,0 +1,18 @@
+# Template file for 'sniffnet'
+pkgname=sniffnet
+version=1.4.2
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config fontconfig"
+makedepends="gtk+3-devel alsa-lib-devel libpcap-devel"
+short_desc="Comfortably monitor your Internet traffic"
+maintainer="zenobit <zenobit@disroot.org>"
+license="Apache-2.0, MIT"
+homepage="https://sniffnet.net/"
+#changelog=""
+distfiles="https://github.com/GyulyVGC/sniffnet/archive/refs/tags/v${version}.tar.gz"
+checksum=7fc4cc610a2bbd823604abe6acabceac2cbeb9d42129851df9b6b24cc24d05c7
+
+post_install() {
+	vlicense LICENSE-MIT
+}
