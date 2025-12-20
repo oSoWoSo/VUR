@@ -44,6 +44,7 @@ pre_install() {
 	# Prevent 98-fixup-gir-path hook from failing
 	# This hook is for GObject Introspection and not needed for Rust binaries
 	if [ "$CROSS_BUILD" ]; then
-		mkdir -p "${PKGDESTDIR}/usr/${XBPS_CROSS_TRIPLET}/usr"
+		# Remove the directory if it exists so the hook can create a symlink
+		mv "${PKGDESTDIR}/${XBPS_CROSS_TRIPLET}/${pgname}-${version}/usr/${XBPS_CROSS_TRIPLET}/usr" "${PKGDESTDIR}/${XBPS_CROSS_TRIPLET}/${pgname}-${version}/backup"
 	fi
 }
