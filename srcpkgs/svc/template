@@ -1,0 +1,15 @@
+# Template file for 'svc'
+pkgname=svc
+version=1.0.0
+revision=1
+build_style=gnu-makefile
+hostmakedepends=""
+makedepends=""
+depends=""
+short_desc="Small and simple alternative to sv"
+maintainer="zenobit <zenobit@disroot.org>"
+license="AGPL-3.0-oonly"
+homepage="https://github.com/WladimirBec/svc"
+#changelog=""
+distfiles="https://github.com/WladimirBec/svc/archive/refs/tags/${version}.tar.gz"
+checksum=da46f8a65a2c18aa8ca502a0988ac6129ee2e973555c54c9bca37dcd94690701
