@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: Simon Schneegans <code@simonschneegans.de>
+# SPDX-License-Identifier: CC0-1.0
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Kando
+GenericName=Pie Menu
+Comment=Do things with utmost efficiency
+Categories=Utility;
+Icon=kando
+Exec=AppRun %U
+StartupNotify=true
+Terminal=false

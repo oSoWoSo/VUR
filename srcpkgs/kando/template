@@ -1,13 +1,12 @@
 # Template file for 'kando'
 pkgname=kando
 version=2.2.0
+#version=2.1.2
 revision=1
 _alpha="-alpha.1"
-archs="x86_64 aarch64"
-build_style=cmake
-hostmakedepends="pkg-config nodejs wayland-devel" # meson
-makedepends="libX11-devel libXtst-devel libxkbcommon-devel wayland-devel electron35-devel"
-depends="electron35"
+archs="x86_64* aarch64*"
+hostmakedepends="pkg-config nodejs cmake wayland-devel"
+makedepends="libX11-devel libXtst-devel libxkbcommon-devel wayland-devel"
 short_desc="Do things with utmost efficiency"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
@@ -16,79 +15,34 @@ changelog="https://raw.githubusercontent.com/kando-menu/kando/refs/heads/main/do
 #distfiles="https://github.com/kando-menu/kando/archive/refs/tags/v${version}.tar.gz"
 distfiles="https://github.com/kando-menu/kando/archive/refs/tags/v${version}${_alpha}.tar.gz"
 checksum=c9b08569bc7d95d4a5cb9d2ef913dc6053f73596824f467414830362561ef145
-#nocross=yes
 
 pre_configure() {
-	local _arch
-	case "$XBPS_TARGET_MACHINE" in
-		x86_64*) _arch=x64 ;;
-		aarch64*) _arch=arm64 ;;
-	esac
-
-	export HOME="$DESTDIR/node-home"
-	export NVM_DIR="$DESTDIR/node-nvm"
-
-	# set up nvm
-	#source /usr/share/nvm/init-nvm.sh || [[ $? != 1 ]]
-	#nvm install ${_nodeversion:-node}
-	#nvm use ${_nodeversion:-node}
-
-	export SYSTEM_ELECTRON_VERSION=$(< "/usr/lib/electron${_electron_version:-}/version")
-	export ELECTRON_VERSION=${SYSTEM_ELECTRON_VERSION%%.*}
-	export ELECTRON_SKIP_BINARY_DOWNLOAD=1
-
-	# set electron version
-	sed -E \
-		-e 's&^(\s*)("electron"): "(.*)"(,?)$&\1\2: "'"$SYSTEM_ELECTRON_VERSION"'"\4&' \
-		-i "$_pkgsrc/package.json"
-
-	# allow any npm version
-	sed -E \
-		-e 's&("npm"): \S+$&\1: ">=1.0.0"&' \
-		-i "$_pkgsrc/package.json"
-
-	# set electronDist and electronVersion for electron forge
-	sed -E \
-		-e '/packagerConfig: \{/a\ electronDist: "/usr/lib/electron'"$SYSTEM_ELECTRON_VERSION"'",\n electronVersion: "'"$SYSTEM_ELECTRON_VERSION"'",' \
-		-i "$_pkgsrc/forge.config.ts"
-
-	local _builder_options=(
-		-c.electronDist="'/usr/lib/electron${ELECTRON_VERSION:-}'"
-		-c.electronVersion=${SYSTEM_ELECTRON_VERSION}
-	)
-
-	npm install --no-audit --no-fund # -a ${_arch}
+	export NPM_CONFIG_LOGLEVEL=error
+	npm install --no-audit --no-fund
 }
 
 do_build() {
-	chmod 4755 node_modules/electron/dist/chrome-sandbox
-	#chown -v root node_modules/electron/dist/chrome-sandbox
-	echo -e "\n\nnpm run\n\n"
-	npm run
-	echo -e "\n\nnpm run start\n\n"
-	npm run start
-	echo -e "\n\nnpm run package\n\n"
-	npm run package # -a ${_arch}
+	case "$XBPS_TARGET_MACHINE" in
+		x86_64*) _arch="x64" ;;
+		aarch64*) _arch="arm64" ;;
+	esac
+	npm run package -- --arch=${_arch}
 }
 
 do_install() {
-	mkdir -p usr/lib/kando
-	cp -r out/Kando-linux-x64/* usr/lib/kando/
-	mkdir -p usr/share/icons
-	cp assets/icons/*.png usr/share/icons/
-	mkdir -p usr/share/applications
-	cp appstream/menu.kando.Kando.desktop usr/share/applications/
+	case "$XBPS_TARGET_MACHINE" in
+		x86_64*) _outdir="Kando-linux-x64" ;;
+		aarch64*) _outdir="Kando-linux-arm64" ;;
+	esac
+	vmkdir usr/lib/kando
+	vcopy "out/${_outdir}/*" usr/lib/kando/
 }
 
 post_install() {
-	vcopy usr/lib/kando /usr/lib/kando
-	vmkdir usr/share/icons
-	vcopy usr/share/icons usr/share/icons
-	vmkdir usr/share/applications
-	vcopy usr/share/applications usr/share/applications
 	vbin "${FILESDIR}/kando"
-	for f in docs/*.md; do
-		vdoc "$f"
-	done
-	vlicense usr/lib/kando/LICENSE
+	#vmkdir -p usr/share/icons
+	vinstall assets/icons/icon.svg 644 usr/share/icons/hicolor/scalable/apps kando.svg
+	vinstall assets/icons/square-icon.svg 644 usr/share/icons/hicolor/scalable/apps kando-square.svg
+	vinstall "${FILESDIR}/kando.desktop" 644 usr/share/applications
+	vlicense LICENSE.md
 }
