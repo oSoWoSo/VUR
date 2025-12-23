@@ -1,4 +1,2 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
-exec /usr/lib/kando/kando "$@"
+#!/bin/sh
+exec electron35 /usr/lib/kando/.webpack/main "\$@"
