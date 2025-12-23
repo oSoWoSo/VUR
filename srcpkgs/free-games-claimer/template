@@ -1,0 +1,71 @@
+# Template file for 'free-games-claimer'
+pkgname=free-games-claimer
+version=1.8
+revision=1
+hostmakedepends="nodejs"
+makedepends=""
+depends="nodejs xorg-server-xvfb x11vnc tini dos2unix gtk+3 alsa-lib
+ libXcomposite pango cairo atk gdk-pixbuf dbus-glib libXcursor tiny libxcb
+ libXdamage libXfixes freetype fontconfig glib libXrender"
+short_desc="Automatically claims free games and DLCs"
+maintainer="zenobit <zenobit@disroot.org>"
+license="AGPL-3.0-only"
+homepage="https://github.com/vogler/free-games-claimer"
+#changelog=""
+distfiles="https://github.com/vogler/free-games-claimer/archive/refs/tags/v${version}.tar.gz"
+checksum=3d4e54d547bae995c8d2a6e5a38827e777218c8eb9d109e13f2587d1a2a23fd7
+
+do_build() {
+	npm install --no-audit --no-fund
+	npm install playwright
+	npx playwright install firefox
+	mkdir -p cache
+	# Playwright installs patched firefox to ~/.cache/ms-playwright/firefox-*
+	mv /tmp/.cache/* cache/
+}
+
+## Install up-to-date node & npm, deps for virtual screen & noVNC, firefox, pip for apprise.
+# novnc websockify
+# RUN ln -s /usr/share/novnc/vnc_auto.html /usr/share/novnc/index.html
+# RUN pip install apprise
+# WORKDIR /fgc
+# COPY package*.json ./
+
+## Playwright installs patched firefox to ~/.cache/ms-playwright/firefox-*
+## Requires some system deps to run (see inlined install-deps above).
+## Old: PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD + install firefox (had to be done after `npm install` to get the correct version). Now: playwright-firefox as npm dep and `npm install` will only install that.
+## From 1.38 Playwright will no longer install browser automatically for playwright, but apparently still for playwright-firefox: https://github.com/microsoft/playwright/releases/tag/v1.38.0
+## RUN npx playwright install firefox
+#RUN dos2unix ./*.sh && chmod +x ./*.sh
+#COPY docker-entrypoint.sh /usr/local/bin/
+## Configure VNC via environment variables:
+#ENV VNC_PORT 5900
+#ENV NOVNC_PORT 6080
+#EXPOSE 5900
+#EXPOSE 6080
+## Configure Xvfb via environment variables:
+#ENV WIDTH 1920
+#ENV HEIGHT 1080
+#ENV DEPTH 24
+## Show browser instead of running headless
+#ENV SHOW 1
+## Script to setup display server & VNC is always executed.
+#ENTRYPOINT ["docker-entrypoint.sh"]
+## Default command to run. This is replaced by appending own command, e.g. `docker run ... node prime-gaming` to only run this script.
+#CMD node epic-games; node prime-gaming; node gog
+
+do_install() {
+	vinstall jsconfig.json 644 usr/lib/node_modules/fgc
+	vinstall package.json 644 usr/lib/node_modules/fgc
+	vinstall package-lock.json 644 usr/lib/node_modules/fgc
+	vinstall renovate.json 644 usr/lib/node_modules/fgc
+
+	vinstall aliexpress.js 644 usr/lib/node_modules/fgc
+	vinstall epic-games.js 644 usr/lib/node_modules/fgc
+	vinstall gog.js 644 usr/lib/node_modules/fgc
+	vinstall prime-gaming.js 644 usr/lib/node_modules/fgc
+	vinstall unrealengine.js 644 usr/lib/node_modules/fgc
+
+	vcopy node_modules usr/lib/node_modules/fgc
+}
+
