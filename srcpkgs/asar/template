@@ -1,0 +1,29 @@
+# Template file for 'asar'
+pkgname=asar
+version=4.0.1
+revision=1
+hostmakedepends="nodejs"
+makedepends="nodejs" #modclean"
+depends="nodejs"
+short_desc="Creating Electron app packages"
+maintainer="Soc Virnyl S. Estela <renegan.ronin@gmail.com>"
+license="MIT"
+homepage="https://github.com/electron/asar"
+distfiles="https://github.com/electron/asar/archive/refs/tags/v${version}.tar.gz"
+checksum=b8b40ad6a61986e161b8d0b5eae00aed2d8b80430c126eb4dfe50c5803c2bd21
+#python_version=3
+
+do_install() {
+	#npm install -g --user root --engine-strict --prefix "$DESTDIR"/usr "${XBPS_SRCDISTDIR}/${pkgname}-${version}/v${version}.tar.gz"
+  export ELECTRON_SKIP_BINARY_DOWNLOAD=1
+  npm i --force
+  npm run build
+	#local _npmdir="${DESTDIR}/usr/lib/node_modules/${pkgname}"
+	#cd "$_npmdir"
+	#modclean -r -a "*.ts,.bin,.vscode,bin.js" --ignore='license'
+}
+
+post_install() {
+	vlicense LICENSE.md
+	vdoc README.md
+}
