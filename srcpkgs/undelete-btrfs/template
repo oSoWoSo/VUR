@@ -2,8 +2,6 @@
 pkgname=undelete-btrfs
 version=999
 revision=1
-#hostmakedepends=""
-#makedepends=""
 depends="bash"
 short_desc="Undelete files in a BTRFS file system"
 maintainer="zenobit <zenobit@disroot.org>"
@@ -13,11 +11,9 @@ distfiles="https://github.com/danthem/undelete-btrfs/archive/refs/heads/master.z
 checksum=99d47ccda5f9b8c4722dfe4fd5ae4342e3cbb68b94f2a9f548278b8ea2a7f811
 
 do_install() {
-	vmkdir usr/bin
-	vcopy undelete.sh usr/bin/undelete-btrfs
+	vbin undelete.sh undelete-btrfs
 }
 
 post_install() {
-	#vbin undelete.sh undelete-btrfs
 	vdoc README.md
 }
