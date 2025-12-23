@@ -1,34 +1,74 @@
 # Template file for 'kando'
 pkgname=kando
-version=2.1.2
+version=2.2.0
 revision=1
+_alpha="-alpha.1"
 archs="x86_64 aarch64"
 build_style=cmake
-hostmakedepends="pkg-config nodejs wayland-devel"
-makedepends="libX11-devel libXtst-devel libxkbcommon-devel wayland-devel"
+hostmakedepends="pkg-config nodejs wayland-devel" # meson
+makedepends="libX11-devel libXtst-devel libxkbcommon-devel wayland-devel electron35-devel"
+depends="electron35"
 short_desc="Do things with utmost efficiency"
 maintainer="zenobit <zenobit@disroot.org>"
 license="MIT"
 homepage="https://kando.menu"
 changelog="https://raw.githubusercontent.com/kando-menu/kando/refs/heads/main/docs/changelog.md"
-distfiles="https://github.com/kando-menu/kando/archive/refs/tags/v${version}.tar.gz"
-checksum=ca555c88afbf74117318cc8e27f5fa05d49fd3a6d1aeab9611f3c4363c77e677
-nocross=yes
+#distfiles="https://github.com/kando-menu/kando/archive/refs/tags/v${version}.tar.gz"
+distfiles="https://github.com/kando-menu/kando/archive/refs/tags/v${version}${_alpha}.tar.gz"
+checksum=c9b08569bc7d95d4a5cb9d2ef913dc6053f73596824f467414830362561ef145
+#nocross=yes
 
 pre_configure() {
-	#local _arch
+	local _arch
 	case "$XBPS_TARGET_MACHINE" in
 		x86_64*) _arch=x64 ;;
 		aarch64*) _arch=arm64 ;;
 	esac
-	npm install -a ${_arch}
+
+	export HOME="$DESTDIR/node-home"
+	export NVM_DIR="$DESTDIR/node-nvm"
+
+	# set up nvm
+	#source /usr/share/nvm/init-nvm.sh || [[ $? != 1 ]]
+	#nvm install ${_nodeversion:-node}
+	#nvm use ${_nodeversion:-node}
+
+	export SYSTEM_ELECTRON_VERSION=$(< "/usr/lib/electron${_electron_version:-}/version")
+	export ELECTRON_VERSION=${SYSTEM_ELECTRON_VERSION%%.*}
+	export ELECTRON_SKIP_BINARY_DOWNLOAD=1
+
+	# set electron version
+	sed -E \
+		-e 's&^(\s*)("electron"): "(.*)"(,?)$&\1\2: "'"$SYSTEM_ELECTRON_VERSION"'"\4&' \
+		-i "$_pkgsrc/package.json"
+
+	# allow any npm version
+	sed -E \
+		-e 's&("npm"): \S+$&\1: ">=1.0.0"&' \
+		-i "$_pkgsrc/package.json"
+
+	# set electronDist and electronVersion for electron forge
+	sed -E \
+		-e '/packagerConfig: \{/a\ electronDist: "/usr/lib/electron'"$SYSTEM_ELECTRON_VERSION"'",\n electronVersion: "'"$SYSTEM_ELECTRON_VERSION"'",' \
+		-i "$_pkgsrc/forge.config.ts"
+
+	local _builder_options=(
+		-c.electronDist="'/usr/lib/electron${ELECTRON_VERSION:-}'"
+		-c.electronVersion=${SYSTEM_ELECTRON_VERSION}
+	)
+
+	npm install --no-audit --no-fund # -a ${_arch}
 }
 
 do_build() {
 	chmod 4755 node_modules/electron/dist/chrome-sandbox
-	#chown root node_modules/electron/dist/chrome-sandbox
+	#chown -v root node_modules/electron/dist/chrome-sandbox
+	echo -e "\n\nnpm run\n\n"
 	npm run
-	npm run package -a ${_arch}
+	echo -e "\n\nnpm run start\n\n"
+	npm run start
+	echo -e "\n\nnpm run package\n\n"
+	npm run package # -a ${_arch}
 }
 
 do_install() {
