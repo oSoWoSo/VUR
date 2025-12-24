@@ -1,0 +1,36 @@
+# Template file for 'wsget'
+pkgname=wsget
+version=0.7.3
+revision=1
+build_style=go
+build_helper=qemu
+go_import_path=github.com/ksysoev/wsget
+short_desc="WebSocket CLI client with advanced features for testing and debugging"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/ksysoev/wsget"
+#changelog=""
+distfiles="https://github.com/ksysoev/wsget/archive/refs/tags/v${version}.tar.gz"
+checksum=4af46b4178fac3679274cec42b53d4e289c3d788782f6ad8ab082cd685e112fc
+
+pre_build() {
+	go mod download
+}
+
+do_build() {
+	go build -o wsget cmd/wsget/main.go
+}
+
+do_install() {
+	vbin wsget
+}
+
+post_install() {
+	for shell in bash fish zsh; do
+		vtargetrun ${DESTDIR}/usr/bin/wsget completion ${shell} > wsget.${shell}
+		vcompletion wsget.${shell} ${shell}
+	done
+
+	vlicense LICENSE
+	vdoc README.md
+}
