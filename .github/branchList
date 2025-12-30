@@ -42,11 +42,13 @@ eww
 exfatprogs
 feature/autosync
 fmt11+
+freeplane
 fzf
 gama
 gcompris
 gcompris-qt
 geany
+geany-editorconfig
 gh-action
 gh-pages
 git-filter-repo
@@ -54,6 +56,7 @@ gitea
 gmrun
 go
 godot
+godot+
 gpu-screen-recorder
 gpu-screen-recorder-gtk
 grsync
@@ -71,6 +74,7 @@ h-tomlplusplus
 h-xdg-desktop-portal
 helix
 heroic
+hut
 hw-probe
 hypr+gcc
 hypr-test
@@ -90,7 +94,6 @@ kitty
 labwc-menu
 lapce
 lazycli
-lazydocker
 lazygit
 lazygit-CZ
 lcl
@@ -115,6 +118,7 @@ mangohud
 manpages
 master
 megasync
+minder
 minikube
 mpg123
 mpv
@@ -193,6 +197,7 @@ tips
 tk
 topgrade
 tuisic
+tuxpaint
 u/conky
 u/mergerfs
 u/moar

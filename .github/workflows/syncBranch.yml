@@ -57,11 +57,13 @@ on:
         - exfatprogs
         - feature/autosync
         - fmt11+
+        - freeplane
         - fzf
         - gama
         - gcompris
         - gcompris-qt
         - geany
+        - geany-editorconfig
         - gh-action
         - gh-pages
         - git-filter-repo
@@ -69,6 +71,7 @@ on:
         - gmrun
         - go
         - godot
+        - godot+
         - gpu-screen-recorder
         - gpu-screen-recorder-gtk
         - grsync
@@ -86,6 +89,7 @@ on:
         - h-xdg-desktop-portal
         - helix
         - heroic
+        - hut
         - hw-probe
         - hypr+gcc
         - hypr-test
@@ -105,7 +109,6 @@ on:
         - labwc-menu
         - lapce
         - lazycli
-        - lazydocker
         - lazygit
         - lazygit-CZ
         - lcl
@@ -130,6 +133,7 @@ on:
         - manpages
         - master
         - megasync
+        - minder
         - minikube
         - mpg123
         - mpv
@@ -208,6 +212,7 @@ on:
         - tk
         - topgrade
         - tuisic
+        - tuxpaint
         - u/conky
         - u/mergerfs
         - u/moar
