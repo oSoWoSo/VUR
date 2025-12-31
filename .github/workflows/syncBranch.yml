@@ -89,7 +89,6 @@ on:
         - h-xdg-desktop-portal
         - helix
         - heroic
-        - hut
         - hw-probe
         - hypr+gcc
         - hypr-test
@@ -176,7 +175,6 @@ on:
         - pmbootstrap
         - podget
         - poedit
-        - protontricks
         - protonup
         - psuinfo
         - python3-dasbus
