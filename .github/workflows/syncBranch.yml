@@ -46,7 +46,6 @@ on:
         - distrohopper
         - dooble-qt6
         - dotbot
-        - dtrx
         - easybashgui
         - easyeffects
         - easyeffects+fmt
@@ -72,7 +71,6 @@ on:
         - go
         - godot
         - godot+
-        - gpu-screen-recorder
         - gpu-screen-recorder-gtk
         - grsync
         - gum
@@ -96,7 +94,6 @@ on:
         - hyprland-0.38
         - hyprland-0.51.0
         - hyprpicker
-        - hyprutils
         - input-remapper
         - io.elementary.code
         - jqless
