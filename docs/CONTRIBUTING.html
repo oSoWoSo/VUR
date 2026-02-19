@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>CONTRIBUTING</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+<script>
+  function toggleTheme(){
+    const html=document.documentElement;
+    const current=html.getAttribute("data-theme")||"dark";
+    const next=current==="dark"?"light":"dark";
+    html.setAttribute("data-theme",next);
+    localStorage.setItem("theme",next)
+  }
+  (function(){
+    const saved=localStorage.getItem("theme")||"dark";
+    document.documentElement.setAttribute("data-theme",saved)
+  })();
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toc = document.getElementById("TOC");
+    if (!toc) return;
+
+    // Add toc-title with toggle button
+    const titleEl = document.createElement("div");
+    titleEl.id = "toc-title";
+    titleEl.innerHTML = '<span>Contents</span><span id="toc-toggle-icon">◀</span>';
+    toc.insertBefore(titleEl, toc.firstChild);
+
+    // Wrap TOC + the rest of the content in .page-wrapper
+    const body = document.body;
+    const wrapper = document.createElement("div");
+    wrapper.className = "page-wrapper";
+
+    // Find all elements after <nav> (main nav menu)
+    const topNav = document.querySelector("body > nav");
+    const siblings = [];
+    let el = topNav ? topNav.nextElementSibling : body.firstElementChild;
+    while (el) {
+      siblings.push(el);
+      el = el.nextElementSibling;
+    }
+
+    siblings.forEach((s) => wrapper.appendChild(s));
+    body.appendChild(wrapper);
+
+    // Wrap main content (everything except TOC) in .main-content
+    const mainContent = document.createElement("div");
+    mainContent.className = "main-content";
+    Array.from(wrapper.children).forEach((child) => {
+      if (child.id !== "TOC") mainContent.appendChild(child);
+    });
+    wrapper.appendChild(mainContent);
+
+    // Collapsible toggle
+    const icon = document.getElementById("toc-toggle-icon");
+    const saved = localStorage.getItem("toc-collapsed");
+    if (saved === "true") {
+      toc.classList.add("collapsed");
+      icon.textContent = "▶";
+    }
+
+    titleEl.addEventListener("click", function () {
+      toc.classList.toggle("collapsed");
+      const isCollapsed = toc.classList.contains("collapsed");
+      icon.textContent = isCollapsed ? "▶" : "◀";
+      localStorage.setItem("toc-collapsed", isCollapsed);
+    });
+  });
+</script>
+<nav><ul>
+  <li><a href="https://osowoso.org">oSoWoSo</a></li>
+  <li>⏮️</a></li>
+  <li><a href="index.html">Home</a></li>
+  <li><a class="no-release" href="https://github.com/oSoWoSo/VUR/releases/latest">⏬ release</a></li>
+  <li><a href="https://github.com/oSoWoSo/VUR/archive/refs/heads/main.zip">📦repo zip</a></li>
+  <li><a href="https://github.com/oSoWoSo/VUR">🔗git</a></li>
+  <li>⏭️</a></li>
+  <li><a href="CONTRIBUTING-cz.html">CONTRIBUTING-cz</a></li>
+  <li><a href="CONTRIBUTING.html" class="active">CONTRIBUTING</a></li>
+  <li><a href="Manual-cz.html">Manual-cz</a></li>
+  <li><a href="Manual.html">Manual</a></li>
+  <li><a href="README-cz.html">README-cz</a></li>
+</ul></nav>
+<header id="title-block-header">
+<h1 class="title">CONTRIBUTING</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#contributing-to-void-packages"
+id="toc-contributing-to-void-packages">Contributing to void-packages</a>
+<ul>
+<li><a href="#package-requirements"
+id="toc-package-requirements">Package Requirements</a></li>
+<li><a
+href="#creating-updating-and-modifying-packages-in-void-by-yourself"
+id="toc-creating-updating-and-modifying-packages-in-void-by-yourself">Creating,
+updating, and modifying packages in Void by yourself</a>
+<ul>
+<li><a href="#creating-a-new-template"
+id="toc-creating-a-new-template">Creating a new template</a></li>
+<li><a href="#updating-a-template" id="toc-updating-a-template">Updating
+a template</a></li>
+<li><a href="#adopting-a-template" id="toc-adopting-a-template">Adopting
+a template</a></li>
+<li><a href="#orphaning-a-template"
+id="toc-orphaning-a-template">Orphaning a template</a></li>
+<li><a href="#committing-your-changes"
+id="toc-committing-your-changes">Committing your changes</a></li>
+<li><a href="#starting-a-pull-request"
+id="toc-starting-a-pull-request">Starting a pull request</a></li>
+</ul></li>
+<li><a href="#testing-pull-requests"
+id="toc-testing-pull-requests">Testing Pull Requests</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="contributing-to-void-packages">Contributing to
+void-packages</h1>
+<p>void-packages is the backbone of the Void Linux distribution. It
+contains all the definitions to build packages from source.</p>
+<p>This document describes how you, as a contributor, can help with
+adding packages, correcting bugs and adding features to
+void-packages.</p>
+<h2 id="package-requirements">Package Requirements</h2>
+<p>To be included in the Void repository, software must meet at least
+one of the following requirements. Exceptions to the list are possible,
+and might be accepted, but are extremely unlikely. If you believe you
+have an exception, start a PR and make an argument for why that
+particular piece of software, while not meeting any of the following
+requirements, is a good candidate for the Void packages system.</p>
+<ol type="1">
+<li><p><strong>System</strong>: The software should be installed
+system-wide, not per-user.</p></li>
+<li><p><strong>Compiled</strong>: The software needs to be compiled
+before being used, even if it is software that is not needed by the
+whole system.</p></li>
+<li><p><strong>Required</strong>: Another package either within the
+repository or pending inclusion requires the package.</p></li>
+</ol>
+<p>In particular, new themes are highly unlikely to be accepted. Simple
+shell scripts are unlikely to be accepted unless they provide
+considerable value to a broad user base. New fonts may be accepted if
+they provide value beyond aesthetics (e.g. they contain glyphs for a
+script missing in already packaged fonts). Packages related to
+cryptocurrencies (wallets, miners, nodes, etc) are not accepted.</p>
+<p>Browser forks, including those based on Chromium and Firefox, are
+generally not accepted. Such forks require heavy patching, maintenance
+and hours of build time.</p>
+<p>Software need to be used in version announced by authors as ready to
+use by the general public - usually called releases. Betas, arbitrary
+VCS revisions, templates using tip of development branch taken at build
+time and releases created by the package maintainer won't be
+accepted.</p>
+<h2
+id="creating-updating-and-modifying-packages-in-void-by-yourself">Creating,
+updating, and modifying packages in Void by yourself</h2>
+<p>If you really want to get a new package or package update into Void
+Linux, we recommend you contribute it yourself.</p>
+<p>We provide a <a href="./Manual.md">comprehensive Manual</a> on how to
+create new packages. There's also a <a href="./README.md">manual for
+xbps-src</a>, which is used to build package files from templates.</p>
+<p>For this guide, we assume you have basic knowledge about <a
+href="http://git-scm.org">git</a>, as well as a <a
+href="http://github.com">GitHub Account</a> with <a
+href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh">SSH
+set up</a>.</p>
+<p>You should also <a
+href="https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address">set
+the email</a> on your GitHub account and in git so your commits are
+associated with your GitHub account properly.</p>
+<p>To get started, <a
+href="https://help.github.com/articles/fork-a-repo">fork</a> the
+void-linux <code>void-packages</code> git repository on GitHub and clone
+it:</p>
+<pre><code>$ git clone git@github.com:&lt;user&gt;/void-packages.git</code></pre>
+<p>To keep your forked repository up to date, setup the
+<code>upstream</code> remote to pull in new changes:</p>
+<pre><code>$ git remote add upstream https://github.com/void-linux/void-packages.git
+$ git pull --rebase upstream master</code></pre>
+<p>This can also be done with the <code>github-cli</code> tool:</p>
+<pre><code>$ gh repo fork void-linux/void-packages
+$ gh repo clone &lt;user&gt;/void-packages</code></pre>
+<p>This automatically sets up the <code>upstream</code> remote, so
+<code>git pull --rebase upstream master</code> can still be used to keep
+your fork up-to-date.</p>
+<p>Using the GitHub web editor for making changes is strongly
+discouraged, because you will need to clone the repo anyways to edit and
+test your changes.</p>
+<p>Using the <code>master</code> branch of your fork for contributing is
+also strongly discouraged. It can cause many issues with updating your
+pull request (also called a PR), and having multiple PRs open at once.
+To create a new branch:</p>
+<pre><code>$ git checkout master -b &lt;a-descriptive-name&gt;</code></pre>
+<h3 id="creating-a-new-template">Creating a new template</h3>
+<p>You can use the helper tool <code>xnew</code>, from the <a
+href="https://github.com/leahneukirchen/xtools">xtools</a> package, to
+create new templates:</p>
+<pre><code>$ xnew pkgname subpkg1 subpkg2 ...</code></pre>
+<p>Templates must have the name
+<code>void-packages/srcpkgs/&lt;pkgname&gt;/template</code>, where
+<code>pkgname</code> is the same as the <code>pkgname</code> variable in
+the template.</p>
+<p>For deeper insights on the contents of template files, please read
+the <a href="./Manual.md">manual</a>, and be sure to browse the existing
+template files in the <code>srcpkgs</code> directory of this repository
+for concrete examples.</p>
+<h3 id="updating-a-template">Updating a template</h3>
+<p>At minimum, a template update will consist of changing
+<code>version</code> and <code>checksum</code>, if there was an upstream
+version change, and/or <code>revision</code>, if a template-specific
+change (e.g. patch, correction, etc.) is needed. Other changes to the
+template may be needed depending on what changes the upstream has
+made.</p>
+<p>The checksum can be updated automatically with the
+<code>xgensum</code> helper from the <a
+href="https://github.com/leahneukirchen/xtools">xtools</a> package:</p>
+<pre><code>$ xgensum -i &lt;pkgname&gt;</code></pre>
+<h3 id="adopting-a-template">Adopting a template</h3>
+<p>If a template is orphaned (maintained by
+<code>orphan@voidlinux.org</code>) or the current
+<code>maintainer</code> has not contributed to Void in over a year,
+template maintainership can be adopted by someone else. To ensure a
+template gets the care it needs, template adopters should be familiar
+with the package and have an established history of contributions to
+Void. Those who have contributed several updates, especially for the
+template in question, are good candidates for template
+maintainership.</p>
+<p>It is best to adopt a template when making another change to it. When
+adopting the template, add your name or username and email to the
+<code>maintainer</code> field in the template, and mention the adoption
+in your commit message, for example:</p>
+<pre><code>libfoo: update to 1.2.3, adopt.</code></pre>
+<h3 id="orphaning-a-template">Orphaning a template</h3>
+<p>If you no longer wish to maintain a template, you can remove yourself
+as maintainer by setting the <code>maintainer</code> field in the
+template to <code>Orphaned &lt;orphan@voidlinux.org&gt;</code>. The
+commit message should mention this, for example:</p>
+<pre><code>libfoo: orphan.</code></pre>
+<p>It is not necessary to make other changes to the template when
+orphaning, and incrementing the revision (triggering a rebuild) is not
+necessary either.</p>
+<h3 id="committing-your-changes">Committing your changes</h3>
+<p>After making your changes, please check that the package builds
+successfully. From the top level directory of your local copy of the
+<code>void-packages</code> repository, run:</p>
+<pre><code>$ ./xbps-src pkg &lt;pkgname&gt;</code></pre>
+<p>Your package must build successfully for at least x86, but we
+recommend also trying a cross-build for armv6l* as well, e.g.:</p>
+<pre><code>$ ./xbps-src -a armv6l pkg &lt;pkgname&gt;</code></pre>
+<p>When building for <code>x86_64*</code> or <code>i686</code>, building
+with the <code>-Q</code> flag or with <code>XBPS_CHECK_PKGS=yes</code>
+set in <code>etc/conf</code> (to run the check phase) is strongly
+encouraged. Also, new packages and updates will not be accepted unless
+they have been runtime tested by installing and running the package.</p>
+<p>When you've finished working on the template file, please check it
+with <code>xlint</code> helper from the <a
+href="https://github.com/leahneukirchen/xtools">xtools</a> package:</p>
+<pre><code>$ xlint template</code></pre>
+<p>If <code>xlint</code> reports any issues, resolve them before
+committing.</p>
+<p>Once you have made and verified your changes to the package template
+and/or other files, make one commit per package (including all changes
+to its sub-packages). Each commit message should have one of the
+following formats:</p>
+<ul>
+<li><p>for new packages, use
+<code>New package: &lt;pkgname&gt;-&lt;version&gt;</code> (<a
+href="https://github.com/void-linux/void-packages/commit/8ed8d41c40bf6a82cf006c7e207e05942c15bff8">example</a>).</p></li>
+<li><p>for package updates, use
+<code>&lt;pkgname&gt;: update to &lt;version&gt;.</code> (<a
+href="https://github.com/void-linux/void-packages/commit/c92203f1d6f33026ae89f3e4c1012fb6450bbac1">example</a>).</p></li>
+<li><p>for template modifications without a version change, use
+<code>&lt;pkgname&gt;: &lt;reason&gt;</code> (<a
+href="https://github.com/void-linux/void-packages/commit/ff39c912d412717d17232de9564f659b037e95b5">example</a>).</p></li>
+<li><p>for package removals, use
+<code>&lt;pkgname&gt;: remove package</code> and include the removal
+reason in the commit body (<a
+href="https://github.com/void-linux/void-packages/commit/4322f923bdf5d4e0eb36738d4f4717d72d0a0ca4">example</a>).</p></li>
+<li><p>for changes to any other file, use
+<code>&lt;filename&gt;: &lt;reason&gt;</code> (<a
+href="https://github.com/void-linux/void-packages/commit/e00bea014c36a70d60acfa1758514b0c7cb0627d">example</a>,
+<a
+href="https://github.com/void-linux/void-packages/commit/93bf159ce10d8e474da5296e5bc98350d00c6c82">example</a>,
+<a
+href="https://github.com/void-linux/void-packages/commit/dc62938c67b66a7ff295eab541dc37b92fb9fb78">example</a>,
+<a
+href="https://github.com/void-linux/void-packages/commit/e52317e939d41090562cf8f8131a68772245bdde">example</a>)</p></li>
+</ul>
+<p>If you want to describe your changes in more detail, explain in the
+commit body (separated from the first line with a blank line) (<a
+href="https://github.com/void-linux/void-packages/commit/f1c45a502086ba1952f23ace9084a870ce437bc6">example</a>).</p>
+<p><code>xbump</code>, available in the <a
+href="https://github.com/leahneukirchen/xtools">xtools</a> package, can
+be used to commit a new or updated package:</p>
+<pre><code>$ xbump &lt;pkgname&gt; &lt;git commit options&gt;</code></pre>
+<p><code>xrevbump</code>, also available in the <a
+href="https://github.com/leahneukirchen/xtools">xtools</a> package, can
+be used to commit a template modification for a package:</p>
+<pre><code>$ xrevbump &#39;&lt;message&gt;&#39; &lt;pkgnames...&gt;</code></pre>
+<p><code>xbump</code> and <code>xrevbump</code> will use
+<code>git commit</code> to commit the changes with the appropriate
+commit message. For more fine-grained control over the commit, specific
+options can be passed to <code>git commit</code> by adding them after
+the package name.</p>
+<h3 id="starting-a-pull-request">Starting a pull request</h3>
+<p>Once you have successfully built the package, you can <a
+href="https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request">create
+a pull request</a>. Pull requests are also known as PRs.</p>
+<p>Most pull requests should only contain a single package and
+dependencies which are not part of void-packages yet.</p>
+<p>If you make updates to packages containing a soname bump, you also
+need to update <code>common/shlibs</code> and revbump all packages that
+are dependant. There should be a commit for each package revbump, and
+those commits should be part of the same pull request.</p>
+<p>When you make changes to your pull request, please <em>do not close
+and reopen your pull request</em>. Instead, just <a
+href="#review">forcibly git push</a>, overwriting any old commits.
+Closing and opening your pull requests repeatedly spams the Void
+maintainers.</p>
+<h4 id="continuous-integration">Continuous Integration</h4>
+<p>Pull requests are automatically submitted for Continuous Integration
+(CI) testing to ensure packages build and pass their tests (on native
+builds) on various combinations of C library and architecture. Packages
+expected to take longer than several hours or need more than 14G of
+storage to complete their build (for example, Firefox or the Linux
+kernel) will fail CI and should include <code>[ci skip]</code> in the PR
+title or body (the comment field when the PR is being opened) to avoid
+spurious failures and wasted CI builder time. Use your best judgment on
+build times based on your local building experience. If you skip CI when
+submitting a PR, please build and cross-build for a variety of
+architectures locally, with both glibc and musl, and note your local
+results in PR comments. Make sure to cover 64-bit and 32-bit
+architectures.</p>
+<p>If you notice a failure in CI that didn't happen locally, that is
+likely because you didn't run tests locally. Use
+<code>./xbps-src -Q pkg &lt;package&gt;</code> to do so. Some tests
+won't work in the CI environment or at all, and their templates should
+encode this information using the <code>make_check</code> variable.</p>
+<p>Continuous Integration will also check if the templates you have
+changed comply with the our guidelines. At the moment not all packages
+comply with the rules, so if you update a package, it may report errors
+about places you haven't touched. Please feel free to fix those errors
+too.</p>
+<h4 id="review">Review</h4>
+<p>It's possible (and common) that a pull request will contain mistakes
+or reviewers will ask for additional tweaks. Reviewers will comment on
+your pull request and point out which changes are needed before the pull
+request can be merged.</p>
+<p>Most PRs will have a single commit, as seen <a
+href="#committing-your-changes">above</a>, so if you need to make
+changes to the commit and already have a pull request open, you can use
+the following commands:</p>
+<pre><code>$ git add &lt;file&gt;
+$ git commit --amend
+$ git push -f</code></pre>
+<p>A more powerful way of modifying commits than using
+<code>git commit --amend</code> is with <a
+href="https://git-scm.com/docs/git-rebase#_interactive_mode">git-rebase</a>,
+which allows you to join, reorder, change description of past commits
+and more.</p>
+<p>Alternatively, if there are issues with your git history, you can
+make another branch and push it to the existing PR:</p>
+<pre><code>$ git checkout master -b &lt;attempt2&gt;
+$ # do changes anew
+$ git push -f &lt;fork&gt; &lt;attempt2&gt;:&lt;branch-of-pr&gt;</code></pre>
+<h4 id="closing-the-pull-request">Closing the pull request</h4>
+<p>Once you have applied all requested changes, the reviewers will merge
+your request.</p>
+<p>If the pull request becomes inactive for some days, the reviewers may
+or may not warn you when they are about to close it. If it stays
+inactive further, it will be closed.</p>
+<p>Please abstain from temporarily closing a pull request while revising
+the templates. Instead, leave a comment on the PR describing what still
+needs work, <a
+href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/changing-the-stage-of-a-pull-request#converting-a-pull-request-to-a-draft">mark
+it as a draft</a>, or add "[WIP]" to the PR title. Only close your pull
+request if you're sure you don't want your changes to be included.</p>
+<h4 id="publishing-the-package">Publishing the package</h4>
+<p>Once the reviewers have merged the pull request, our <a
+href="http://build.voidlinux.org">build server</a> is automatically
+triggered and builds all packages in the pull request for all supported
+platforms. Upon completion, the packages are available to all Void Linux
+users.</p>
+<h2 id="testing-pull-requests">Testing Pull Requests</h2>
+<p>While it is the responsibility of the PR creator to test changes
+before sending it, one person can't test all configuration options,
+usecases, hardware, etc. Testing new package submissions and updates is
+always helpful, and is a great way to get started with contributing.
+First, <a
+href="https://github.com/void-linux/void-packages#quick-start">clone the
+repository</a> if you haven't done so already. Then check out the pull
+request, either with <code>github-cli</code>:</p>
+<pre><code>$ gh pr checkout &lt;number&gt;</code></pre>
+<p>Or with <code>git</code>:</p>
+<p>If your local void-packages repository is cloned from your fork, you
+may need to add the main repository as a remote first:</p>
+<pre><code>$ git remote add upstream https://github.com/void-linux/void-packages.git</code></pre>
+<p>Then fetch and check out the PR (replacing
+<code>&lt;remote&gt;</code> with either <code>origin</code> or
+<code>upstream</code>):</p>
+<pre><code>$ git fetch &lt;remote&gt; pull/&lt;number&gt;/head:&lt;branch-name&gt;
+$ git checkout &lt;branch-name&gt;</code></pre>
+<p>Then <a
+href="https://github.com/void-linux/void-packages#building-packages">build
+and install</a> the package and test its functionality.</p>
+<script>
+(function () {
+  function hexToRgb(hex) {
+    hex = hex.trim().replace(/^#/, '');
+    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+    const n = parseInt(hex, 16);
+    return [n >> 16 & 255, n >> 8 & 255, n & 255];
+  }
+
+  function clamp(v, min, max) {
+    return Math.min(Math.max(v, min), max);
+  }
+
+  function Color(r, g, b) {
+    this.r = r / 255;
+    this.g = g / 255;
+    this.b = b / 255;
+  }
+
+  Color.prototype.applyFilter = function (funcs) {
+    let [r, g, b] = [this.r * 255, this.g * 255, this.b * 255];
+
+    function multiply(matrix) {
+      const nr = clamp(r * matrix[0] + g * matrix[1] + b * matrix[2], 0, 255);
+      const ng = clamp(r * matrix[3] + g * matrix[4] + b * matrix[5], 0, 255);
+      const nb = clamp(r * matrix[6] + g * matrix[7] + b * matrix[8], 0, 255);
+      r = nr; g = ng; b = nb;
+    }
+
+    function hueRotate(angle) {
+      const a = angle / 180 * Math.PI;
+      const sin = Math.sin(a), cos = Math.cos(a);
+      multiply([
+        0.213 + cos*0.787 - sin*0.213, 0.715 - cos*0.715 - sin*0.715, 0.072 - cos*0.072 + sin*0.928,
+        0.213 - cos*0.213 + sin*0.143, 0.715 + cos*0.285 + sin*0.140, 0.072 - cos*0.072 - sin*0.283,
+        0.213 - cos*0.213 - sin*0.787, 0.715 - cos*0.715 + sin*0.715, 0.072 + cos*0.928 + sin*0.072,
+      ]);
+    }
+
+    function sepia(v) {
+      multiply([
+        0.393 + 0.607*(1-v), 0.769 - 0.769*(1-v), 0.189 - 0.189*(1-v),
+        0.349 - 0.349*(1-v), 0.686 + 0.314*(1-v), 0.168 - 0.168*(1-v),
+        0.272 - 0.272*(1-v), 0.534 - 0.534*(1-v), 0.131 + 0.869*(1-v),
+      ]);
+    }
+
+    function saturate(v) {
+      multiply([
+        0.213 + 0.787*v, 0.715 - 0.715*v, 0.072 - 0.072*v,
+        0.213 - 0.213*v, 0.715 + 0.285*v, 0.072 - 0.072*v,
+        0.213 - 0.213*v, 0.715 - 0.715*v, 0.072 + 0.928*v,
+      ]);
+    }
+
+    for (const [fn, val] of funcs) {
+      if (fn === 'invert')    { r = clamp((1-r/255)*255*val + r/255*255*(1-val),0,255); g = clamp((1-g/255)*255*val + g/255*255*(1-val),0,255); b = clamp((1-b/255)*255*val + b/255*255*(1-val),0,255); }
+      if (fn === 'sepia')     sepia(val);
+      if (fn === 'saturate')  saturate(val);
+      if (fn === 'hueRotate') hueRotate(val);
+      if (fn === 'brightness'){ r = clamp(r*val,0,255); g = clamp(g*val,0,255); b = clamp(b*val,0,255); }
+    }
+
+    return new Color(r, g, b);
+  };
+
+  function loss(result, target) {
+    return (
+      Math.pow(result.r*255 - target.r*255, 2) +
+      Math.pow(result.g*255 - target.g*255, 2) +
+      Math.pow(result.b*255 - target.b*255, 2)
+    );
+  }
+
+  function solve(target) {
+    function css(v) {
+      return [
+        ['invert',    clamp(v[0], 0, 1)],
+        ['sepia',     clamp(v[1], 0, 1)],
+        ['saturate',  clamp(v[2], 0, 20)],
+        ['hueRotate', clamp(v[3], 0, 360)],
+        ['brightness',clamp(v[4], 0, 10)],
+        ['brightness',clamp(v[5], 0, 10)],
+      ];
+    }
+
+    function score(v) {
+      return loss(new Color(0,0,0).applyFilter(css(v)), target);
+    }
+
+    let best = null, bestScore = Infinity;
+    for (let i = 0; i < 30; i++) {
+      let v = [Math.random(), Math.random(), Math.random()*10, Math.random()*360, Math.random()*2, Math.random()*2];
+      for (let step = 1; step > 0.0001; step *= 0.9) {
+        for (let j = 0; j < v.length; j++) {
+          const orig = v[j];
+          v[j] += step * (Math.random() > 0.5 ? 1 : -1);
+          const s = score(v);
+          if (s < bestScore) { bestScore = s; best = [...v]; }
+          else v[j] = orig;
+        }
+      }
+    }
+
+    const f = css(best);
+    return [
+      `invert(${(clamp(f[0][1],0,1)*100).toFixed(0)}%)`,
+      `sepia(${(clamp(f[1][1],0,1)*100).toFixed(0)}%)`,
+      `saturate(${(clamp(f[2][1],0,20)*100).toFixed(0)}%)`,
+      `hue-rotate(${clamp(f[3][1],0,360).toFixed(0)}deg)`,
+      `brightness(${(clamp(f[4][1],0,10)*100).toFixed(0)}%)`,
+      `brightness(${(clamp(f[5][1],0,10)*100).toFixed(0)}%)`,
+    ].join(' ');
+  }
+
+  // Cache solved filters per color so theme switching is instant
+  const cache = {};
+
+  function applyIconColor() {
+    const raw = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-icon').trim();
+    if (!raw) return false;
+
+    let rgb;
+    if (raw.startsWith('#')) {
+      rgb = hexToRgb(raw);
+    } else if (raw.startsWith('rgb')) {
+      rgb = raw.match(/\d+/g).map(Number).slice(0, 3);
+    } else {
+      return false;
+    }
+
+    const key = rgb.join(',');
+    if (!cache[key]) {
+      cache[key] = solve(new Color(...rgb));
+    }
+
+    document.documentElement.style.setProperty('--filter-icon', cache[key]);
+    return true;
+  }
+
+  function init() {
+    if (!applyIconColor()) return;
+
+    // Watch for data-theme attribute changes on <html> — re-apply immediately
+    new MutationObserver(function(mutations) {
+      for (const m of mutations) {
+        if (m.attributeName === 'data-theme') {
+          applyIconColor();
+          break;
+        }
+      }
+    }).observe(document.documentElement, { attributes: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+<script data-goatcounter="https://vur.gocounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<script src="https://giscus.app/client.js"
+        data-repo="osowoso/VUR"
+        data-repo-id="R_kgDOGNy3Og"
+        data-category="General"
+        data-category-id="DIC_kwDOGNy3Os4CBWcR"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="cs"
+        crossorigin="anonymous"
+        async></script>
+</body>
+</html>
