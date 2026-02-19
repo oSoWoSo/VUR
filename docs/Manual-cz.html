@@ -1,0 +1,2858 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Manual-cz</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+<script>
+  function toggleTheme(){
+    const html=document.documentElement;
+    const current=html.getAttribute("data-theme")||"dark";
+    const next=current==="dark"?"light":"dark";
+    html.setAttribute("data-theme",next);
+    localStorage.setItem("theme",next)
+  }
+  (function(){
+    const saved=localStorage.getItem("theme")||"dark";
+    document.documentElement.setAttribute("data-theme",saved)
+  })();
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toc = document.getElementById("TOC");
+    if (!toc) return;
+
+    // Add toc-title with toggle button
+    const titleEl = document.createElement("div");
+    titleEl.id = "toc-title";
+    titleEl.innerHTML = '<span>Contents</span><span id="toc-toggle-icon">◀</span>';
+    toc.insertBefore(titleEl, toc.firstChild);
+
+    // Wrap TOC + the rest of the content in .page-wrapper
+    const body = document.body;
+    const wrapper = document.createElement("div");
+    wrapper.className = "page-wrapper";
+
+    // Find all elements after <nav> (main nav menu)
+    const topNav = document.querySelector("body > nav");
+    const siblings = [];
+    let el = topNav ? topNav.nextElementSibling : body.firstElementChild;
+    while (el) {
+      siblings.push(el);
+      el = el.nextElementSibling;
+    }
+
+    siblings.forEach((s) => wrapper.appendChild(s));
+    body.appendChild(wrapper);
+
+    // Wrap main content (everything except TOC) in .main-content
+    const mainContent = document.createElement("div");
+    mainContent.className = "main-content";
+    Array.from(wrapper.children).forEach((child) => {
+      if (child.id !== "TOC") mainContent.appendChild(child);
+    });
+    wrapper.appendChild(mainContent);
+
+    // Collapsible toggle
+    const icon = document.getElementById("toc-toggle-icon");
+    const saved = localStorage.getItem("toc-collapsed");
+    if (saved === "true") {
+      toc.classList.add("collapsed");
+      icon.textContent = "▶";
+    }
+
+    titleEl.addEventListener("click", function () {
+      toc.classList.toggle("collapsed");
+      const isCollapsed = toc.classList.contains("collapsed");
+      icon.textContent = isCollapsed ? "▶" : "◀";
+      localStorage.setItem("toc-collapsed", isCollapsed);
+    });
+  });
+</script>
+<nav><ul>
+  <li><a href="https://osowoso.org">oSoWoSo</a></li>
+  <li>⏮️</a></li>
+  <li><a href="index.html">Home</a></li>
+  <li><a class="no-release" href="https://github.com/oSoWoSo/VUR/releases/latest">⏬ release</a></li>
+  <li><a href="https://github.com/oSoWoSo/VUR/archive/refs/heads/main.zip">📦repo zip</a></li>
+  <li><a href="https://github.com/oSoWoSo/VUR">🔗git</a></li>
+  <li>⏭️</a></li>
+  <li><a href="CONTRIBUTING-cz.html">CONTRIBUTING-cz</a></li>
+  <li><a href="CONTRIBUTING.html">CONTRIBUTING</a></li>
+  <li><a href="Manual-cz.html" class="active">Manual-cz</a></li>
+  <li><a href="Manual.html">Manual</a></li>
+  <li><a href="README-cz.html">README-cz</a></li>
+</ul></nav>
+<header id="title-block-header">
+<h1 class="title">Manual-cz</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#manuál-ke-zdrojovým-balíčkům-xbps"
+id="toc-manuál-ke-zdrojovým-balíčkům-xbps">Manuál ke zdrojovým balíčkům
+XBPS</a>
+<ul>
+<li><a href="#úvod" id="toc-úvod">Úvod</a></li>
+<li><a href="#fáze-sestavení-balíčku"
+id="toc-fáze-sestavení-balíčku">Fáze sestavení balíčku</a></li>
+<li><a href="#konvence-pojmenovávání-balíčků"
+id="toc-konvence-pojmenovávání-balíčků">Konvence pojmenovávání
+balíčků</a></li>
+<li><a href="#globální-funkce" id="toc-globální-funkce">Globální
+funkce</a></li>
+<li><a href="#globální-proměnné" id="toc-globální-proměnné">Globální
+proměnné</a></li>
+<li><a href="#dostupné-proměnné" id="toc-dostupné-proměnné">Dostupné
+proměnné</a></li>
+<li><a href="#úložiště" id="toc-úložiště">Úložiště</a></li>
+<li><a href="#kontrola-nových-upstream-vydání"
+id="toc-kontrola-nových-upstream-vydání">Kontrola nových upstream
+vydání</a></li>
+<li><a href="#manipulace-s-náplastmi"
+id="toc-manipulace-s-náplastmi">Manipulace s náplastmi</a></li>
+<li><a href="#vytvářet-stylové-skripty"
+id="toc-vytvářet-stylové-skripty">vytvářet stylové skripty</a></li>
+<li><a href="#vytvářet-pomocné-skripty"
+id="toc-vytvářet-pomocné-skripty">vytvářet pomocné skripty</a></li>
+<li><a href="#funkce" id="toc-funkce">Funkce</a></li>
+<li><a href="#možnosti-sestavení" id="toc-možnosti-sestavení">Možnosti
+sestavení</a></li>
+<li><a href="#instalovat-a-odebrat-soubory"
+id="toc-instalovat-a-odebrat-soubory">INSTALOVAT a ODEBRAT
+soubory</a></li>
+<li><a href="#installmsg-a-removemsg-soubory"
+id="toc-installmsg-a-removemsg-soubory">INSTALL.msg a REMOVE.msg
+soubory</a></li>
+<li><a href="#vytváření-systémových-účtůskupin-za-běhu"
+id="toc-vytváření-systémových-účtůskupin-za-běhu">Vytváření systémových
+účtů/skupin za běhu</a></li>
+<li><a href="#psaní-runitových-služeb"
+id="toc-psaní-runitových-služeb">Psaní runitových služeb</a></li>
+<li><a href="#32bitové-balíčky" id="toc-32bitové-balíčky">32bitové
+balíčky</a></li>
+<li><a href="#dílčí-balíčky" id="toc-dílčí-balíčky">Dílčí
+balíčky</a></li>
+<li><a href="#některé-třídy-balíčků"
+id="toc-některé-třídy-balíčků">Některé třídy balíčků</a></li>
+<li><a href="#přejmenování-balíčku"
+id="toc-přejmenování-balíčku">Přejmenování balíčku</a></li>
+<li><a href="#odebírání-balíčku" id="toc-odebírání-balíčku">Odebírání
+balíčku</a></li>
+<li><a href="#spouštěče-xbps" id="toc-spouštěče-xbps">Spouštěče
+XBPS</a></li>
+<li><a href="#zrušte-konkrétní-dokumentaci"
+id="toc-zrušte-konkrétní-dokumentaci">Zrušte konkrétní
+dokumentaci</a></li>
+<li><a href="#poznámky" id="toc-poznámky">Poznámky</a></li>
+<li><a href="#přispívání-přes-git"
+id="toc-přispívání-přes-git">Přispívání přes git</a></li>
+<li><a href="#pomoc" id="toc-pomoc">Pomoc</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="manuál-ke-zdrojovým-balíčkům-xbps">Manuál ke zdrojovým balíčkům
+XBPS</h1>
+<p>Tento článek obsahuje vyčerpávající návod, jak vytvořit nové zdrojové
+balíčky pro XBPS, nativní balíčkovací systém <code>Void Linux</code>
+.</p>
+<p><em>Obsah</em></p>
+<ul>
+<li>Manuál ke zdrojovým balíčkům XBPS
+<ul>
+<li><a href="#Introduction">Úvod</a></li>
+<li><a href="#buildphase">Fáze sestavení balíčku</a></li>
+<li><a href="#namingconventions">Konvence pojmenovávání balíčků</a>
+<ul>
+<li><a href="#libs">Knihovny</a></li>
+<li><a href="#language_modules">Jazykové moduly</a></li>
+<li><a href="#language_bindings">Jazykové vazby</a></li>
+<li><a href="#programs">Programy</a></li>
+</ul></li>
+<li><a href="#global_funcs">Globální funkce</a></li>
+<li><a href="#global_vars">Globální proměnné</a></li>
+<li><a href="#available_vars">Dostupné proměnné</a>
+<ul>
+<li><a href="#mandatory_vars">Povinné proměnné</a></li>
+<li><a href="#optional_vars">Nepovinné proměnné</a></li>
+<li><a href="#explain_depends">O závislých proměnných</a></li>
+</ul></li>
+<li><a href="#repositories">Úložiště</a>
+<ul>
+<li><a href="#repo_by_branch">Repozitáře definované větví</a></li>
+<li><a href="#pkg_defined_repo">Repozitáře definované balíčky</a></li>
+</ul></li>
+<li><a href="#updates">Kontrola nových upstream vydání</a></li>
+<li><a href="#patches">Manipulace s náplastmi</a></li>
+<li><a href="#build_scripts">Vytvářejte stylové skripty</a></li>
+<li><a href="#build_helper">Vytvářejte pomocné skripty</a></li>
+<li><a href="#functions">Funkce</a></li>
+<li><a href="#build_options">Možnosti sestavení</a></li>
+<li><a href="#install_remove_files">INSTALOVAT a ODEBRAT
+soubory</a></li>
+<li><a href="#install_remove_files_msg">INSTALL.msg a REMOVE.msg
+soubory</a></li>
+<li><a href="#runtime_account_creation">Vytváření systémových
+účtů/skupin za běhu</a></li>
+<li><a href="#writing_runit_services">Psaní runitových služeb</a></li>
+<li><a href="#32bit_pkgs">32bitové balíčky</a></li>
+<li><a href="#pkgs_sub">Dílčí balíčky</a></li>
+<li><a href="#pkgs_classes">Některé třídy balíčků</a>
+<ul>
+<li><a href="#pkgs_development">Vývojové balíčky</a></li>
+<li><a href="#pkgs_data">Datové balíčky</a></li>
+<li><a href="#pkgs_documentation">Balíčky dokumentace</a></li>
+<li><a href="#pkgs_python">Python balíčky</a></li>
+<li><a href="#pkgs_go">Přejít na balíčky</a></li>
+<li><a href="#pkgs_haskell">Haskell balíčky</a></li>
+<li><a href="#pkgs_font">Balíčky písem</a></li>
+</ul></li>
+<li><a href="#pkg_rename">Přejmenování balíčku</a></li>
+<li><a href="#pkg_remove">Odebírání balíčku</a></li>
+<li><a href="#xbps_triggers">Spouštěče XBPS</a>
+<ul>
+<li><a href="#triggers_appstream_cache">appstream-cache</a></li>
+<li><a href="#triggers_binfmts">binfmts</a></li>
+<li><a href="#triggers_dkms">dkms</a></li>
+<li><a href="#triggers_gconf_schemas">schémata gconf</a></li>
+<li><a href="#triggers_gdk_pixbuf_loaders">gdk-pixbuf-loadery</a></li>
+<li><a href="#triggers_gio_modules">gio-moduly</a></li>
+<li><a href="#triggers_gsettings_schemas">získávání-schémata</a></li>
+<li><a href="#triggers_gtk_icon_cache">gtk-ikona-mezipaměť</a></li>
+<li><a href="#triggers_gtk_immodules">gtk-immodules</a></li>
+<li><a href="#triggers_gtk_pixbuf_loaders">gtk-pixbuf-loadery</a></li>
+<li><a href="#triggers_gtk3_immodules">gtk3-immodules</a></li>
+<li><a href="#triggers_hwdb.d_dir">hwdb.d-dir</a></li>
+<li><a href="#triggers_info_files">info-soubory</a></li>
+<li><a
+href="#triggers_initramfs_regenerate">initramfs-regenerate</a></li>
+<li><a href="#triggers_kernel_hooks">kernel-háky</a></li>
+<li><a href="#triggers_mimedb">mimedb</a></li>
+<li><a href="#triggers_mkdirs">mkdirs</a></li>
+<li><a href="#triggers_pango_module">pango-moduly</a></li>
+<li><a href="#triggers_pycompile">pycompile</a></li>
+<li><a href="#triggers_register_shell">registr-shell</a></li>
+<li><a href="#triggers_system_accounts">systémové účty</a></li>
+<li><a href="#triggers_texmf_dist">texmf-dist</a></li>
+<li><a href="#triggers_update_desktopdb">update-desktopdb</a></li>
+<li><a href="#triggers_x11_fonts">x11-fonty</a></li>
+<li><a href="#triggers_xml_catalog">xml-katalog</a></li>
+</ul></li>
+<li><a href="#documentation">Zrušte konkrétní dokumentaci</a></li>
+<li><a href="#notes">Poznámky</a></li>
+<li><a href="#contributing">Přispívání přes git</a></li>
+<li><a href="#help">Pomoc</a></li>
+</ul></li>
+</ul>
+<p><a id="Introduction"></a></p>
+<h3 id="úvod">Úvod</h3>
+<p>Úložiště <code>void-packages</code> obsahuje všechny recepty ke
+stažení, kompilaci a sestavování binárních balíčků pro Void Linux. Tyto
+soubory <code>source</code> balíčků se nazývají <code>templates</code>
+.</p>
+<p>Soubory <code>template</code> jsou skripty shellu, které definují
+<code>variables</code> a <code>functions</code> , které má zpracovat
+<code>xbps-src</code> , tvůrce balíčků, za účelem generování binárních
+balíčků. Shell používaný <code>xbps-src</code> je GNU bash;
+<code>xbps-src</code> si neklade za cíl být kompatibilní s POSIX
+<code>sh</code> .</p>
+<p>Podle konvence všechny šablony začínají komentářem, který říká, že se
+jedná o <code>template file</code> pro určitý balíček. Většina řádků by
+měla mít méně než 80 sloupců; proměnné, které vypisují mnoho hodnot, lze
+rozdělit na nové řádky, přičemž pokračování na dalším řádku je odsazeno
+o jednu mezeru.</p>
+<p>Jednoduchý příklad <code>template</code> je následující:</p>
+<pre><code># Template file for &#39;foo&#39;
+pkgname=foo
+version=1.0
+revision=1
+build_style=gnu-configure
+short_desc=&quot;Package description, no more than 72 characters&quot;
+maintainer=&quot;name &lt;email&gt;&quot;
+license=&quot;GPL-3.0-or-later&quot;
+homepage=&quot;http://www.foo.org&quot;
+distfiles=&quot;http://www.foo.org/foo-${version}.tar.gz&quot;
+checksum=&quot;fea0a94d4b605894f3e2d5572e3f96e4413bcad3a085aae7367c2cf07908b2ff&quot;</code></pre>
+<p>Soubor šablony obsahuje definice ke stažení, sestavení a instalaci
+souborů balíčků do <code>fake destdir</code> a poté lze vygenerovat
+binární balíček s definicemi v něm uvedenými.</p>
+<p>Nedělejte si starosti, pokud něco není jasné, jak by mělo být.
+Rezervované <code>variables</code> a <code>functions</code> budou
+vysvětleny později. Tento soubor <code>template</code> by měl být
+vytvořen v adresáři, který odpovídá <code>$pkgname</code> , Příklad:
+<code>void-packages/srcpkgs/foo/template</code> .</p>
+<p>Pokud po běhu vše proběhlo v pořádku</p>
+<pre><code>$ ./xbps-src pkg &lt;pkgname&gt;</code></pre>
+<p>v místním úložišti <code>hostdir/binpkgs</code> bude vygenerován
+binární balíček s názvem <code>foo-1.0_1.&lt;arch&gt;.xbps</code></p>
+<p><a id="buildphase"></a></p>
+<h3 id="fáze-sestavení-balíčku">Fáze sestavení balíčku</h3>
+<p>Sestavení balíčku se skládá z následujících fází:</p>
+<ul>
+<li><p><code>setup</code> Tato fáze připravuje prostředí pro sestavení
+balíčku.</p></li>
+<li><p><code>fetch</code> Tato fáze stáhne požadované zdroje pro
+<code>source package</code> , jak je definováno proměnnou
+<code>distfiles</code> nebo funkcí <code>do_fetch()</code> .</p></li>
+<li><p><code>extract</code> Tato fáze rozbalí soubory
+<code>distfiles</code> do <code>$wrksrc</code> nebo spustí funkci
+<code>do_extract()</code> , což je adresář, který se má použít ke
+kompilaci <code>source package</code> .</p></li>
+<li><p><code>patch</code> Tato fáze aplikuje všechny záplaty v adresáři
+záplat balíčku a lze ji použít k provedení dalších operací před
+konfigurací balíčku.</p></li>
+<li><p><code>configure</code> Tato fáze provede
+<code>configuration</code> <code>source package</code> , tj.
+<code>GNU configure scripts</code> .</p></li>
+<li><p><code>build</code> Tato fáze zkompiluje/připraví
+<code>source files</code> pomocí <code>make</code> nebo jiné
+kompatibilní metody.</p></li>
+<li><p><code>check</code> Tato volitelná fáze kontroluje výsledek fáze
+<code>build</code> spuštěním testovací sady, kterou balíček poskytuje.
+Pokud výchozí funkce <code>do_check</code> poskytovaná stylem sestavení
+nic nedělá, šablona by měla vhodně nastavit
+<code>make_check_target</code> a/nebo <code>make_check_args</code> nebo
+definovat svou vlastní funkci <code>do_check</code> . Pokud testy trvají
+příliš dlouho nebo se nedají spustit ve všech prostředích,
+<code>make_check</code> by měl být nastaven na odpovídající hodnotu nebo
+<code>do_check</code> by měl být přizpůsoben tak, aby omezil testovací
+sadu, pokud není <code>XBPS_CHECK_PKGS</code> <code>full</code>
+.</p></li>
+<li><p><code>install</code> Tato fáze nainstaluje
+<code>package files</code> do balíčku destdir
+<code>&lt;masterdir&gt;/destdir/&lt;pkgname&gt;-&lt;version&gt;</code> ,
+pomocí <code>make install</code> nebo jakoukoli jinou kompatibilní
+metodou.</p></li>
+<li><p><code>pkg</code> Tato fáze vytvoří <code>binary packages</code>
+se soubory uloženými v <code>package destdir</code> a zaregistruje je do
+místního úložiště.</p></li>
+<li><p><code>clean</code> Tato fáze vyčistí balíček (pokud je
+definován).</p></li>
+</ul>
+<p><code>xbps-src</code> podporuje spuštění pouze zadané fáze, a pokud
+proběhla úspěšně, fáze bude později přeskočena (pokud její pracovní
+adresář <code>${wrksrc}</code> nebude odstraněn pomocí
+<code>xbps-src clean</code> ).</p>
+<p><a id="namingconventions"></a></p>
+<h3 id="konvence-pojmenovávání-balíčků">Konvence pojmenovávání
+balíčků</h3>
+<p><a id="libs"></a></p>
+<h4 id="knihovny">Knihovny</h4>
+<p>Knihovny jsou balíčky, které poskytují sdílené objekty (*.so) v
+/usr/lib. Měly by být pojmenovány jako jejich název upstream balíčku s
+následujícími výjimkami:</p>
+<ul>
+<li>Balíček je dílčím balíčkem frontendové aplikace a poskytuje sdílené
+objekty používané základním balíčkem a dalšími knihovnami třetích stran.
+V takovém případě by měl mít předponu 'lib'. Výjimka z tohoto pravidla
+je: Pokud je spustitelný soubor použit pouze pro sestavení tohoto
+balíčku, přesune se do balíčku -devel.</li>
+</ul>
+<p>Příklad: wireshark -&gt; subpkg libwireshark</p>
+<p>Knihovny musí být rozděleny do dvou dílčích balíčků:
+<code>&lt;name&gt;</code> a <code>&lt;name&gt;-devel</code> .</p>
+<ul>
+<li><p><code>&lt;name&gt;</code> by mělo obsahovat pouze ty části
+balíčku, které jsou potřebné ke spuštění propojeného programu.</p></li>
+<li><p><code>&lt;name&gt;-devel</code> by měl obsahovat všechny soubory,
+které jsou potřeba ke kompilaci balíčku proti tomuto balíčku. Pokud je
+knihovna dílčím balíčkem, měl by se jeho odpovídající vývojový balíček
+jmenovat <code>lib&lt;name&gt;-devel</code></p></li>
+</ul>
+<p><a id="language_modules"></a></p>
+<h4 id="jazykové-moduly">Jazykové moduly</h4>
+<p>Jazykové moduly jsou rozšířením skriptovacích nebo kompilovaných
+jazyků. Tyto balíčky samy o sobě neposkytují žádné spustitelné soubory,
+ale mohou je používat jiné balíčky napsané ve stejném jazyce.</p>
+<p>Konvence pojmenování těchto balíčků je:</p>
+<pre><code>&lt;language&gt;-&lt;name&gt;</code></pre>
+<p>Pokud balíček obsahuje modul i spustitelný soubor, měl by být
+rozdělen na balíček poskytující spustitelný soubor s názvem
+<code>&lt;name&gt;</code> a modul s názvem
+<code>&lt;language&gt;-&lt;name&gt;</code> . Pokud balíček začíná
+samotným názvem jazyků, lze předponu jazyka vypustit. Krátké názvy
+jazyků nejsou platnou náhradou jazykové předpony.</p>
+<p>Example: perl-URI, python3-pyside2</p>
+<p><a id="language_bindings"></a></p>
+<h4 id="jazykové-vazby">Jazykové vazby</h4>
+<p>Jazykové vazby jsou balíčky, které umožňují programům nebo knihovnám
+mít rozšíření nebo zásuvné moduly napsané v určitém jazyce.</p>
+<p>Konvence pojmenování těchto balíčků je:</p>
+<pre><code>&lt;name&gt;-&lt;language&gt;</code></pre>
+<p>Example: gimp-python3, irssi-perl</p>
+<p><a id="programs"></a></p>
+<h4 id="programy">Programy</h4>
+<p>Programy ukládají spustitelné soubory do /usr/bin (nebo ve velmi
+speciálních případech do jiných .../bin adresářů)</p>
+<p>U těchto balíčků by měl být použit název upstream balíčků. Pamatujte,
+že na rozdíl od mnoha jiných distribucí, void nepíše názvy balíčků
+malými písmeny. Obecně platí, že pokud tar.gz balíku obsahuje velká
+písmena, pak by je měl obsahovat i název balíku; pokud tomu tak není,
+název balíčku je malá písmena.</p>
+<p>Programy lze rozdělit na balíčky programů a balíčky knihoven.
+Programový balíček by měl být pojmenován tak, jak je popsáno výše.
+Balíček knihovny by měl mít předponu "lib" (viz část
+<code>Libraries</code> )</p>
+<p><a id="global_funcs"></a></p>
+<h3 id="globální-funkce">Globální funkce</h3>
+<p>Následující funkce jsou definovány <code>xbps-src</code> a lze je
+použít na libovolné šabloně:</p>
+<ul>
+<li><p><em>vinstall()</em>
+<code>vinstall &lt;file&gt; &lt;mode&gt; &lt;targetdir&gt; [&lt;name&gt;]</code></p>
+<p>Nainstaluje <code>file</code> se zadaným <code>mode</code> do
+<code>targetdir</code> v pkg <code>$DESTDIR</code> . Volitelný 4.
+argument lze použít ke změně <code>file name</code> .</p></li>
+<li><p><em>vcopy()</em>
+<code>vcopy &lt;pattern&gt; &lt;targetdir&gt;</code></p>
+<p>Zkopíruje rekurzivně všechny soubory ve <code>pattern</code> do
+<code>targetdir</code> v balíčku <code>$DESTDIR</code> .</p></li>
+<li><p><em>vmove()</em> <code>vmove &lt;pattern&gt;</code></p>
+<p>Přesune <code>pattern</code> do zadaného adresáře v balíčku
+<code>$DESTDIR</code> .</p></li>
+<li><p><em>vmkdir()</em>
+<code>vmkdir &lt;directory&gt; [&lt;mode&gt;]</code></p>
+<p>Vytvoří adresář v pkg <code>$DESTDIR</code> . 2. volitelný argument
+nastavuje režim adresáře.</p></li>
+<li><p><em>vbin()</em> <code>vbin &lt;file&gt; [&lt;name&gt;]</code></p>
+<p>Nainstaluje <code>file</code> do <code>usr/bin</code> v pkg
+<code>$DESTDIR</code> s oprávněním 0755. Volitelný 2. argument lze
+použít ke změně <code>file name</code> .</p></li>
+<li><p><em>vman()</em> <code>vman &lt;file&gt; [&lt;name&gt;]</code></p>
+<p>Nainstaluje <code>file</code> jako manuálovou stránku.
+<code>vman()</code> analyzuje název a určuje sekci a také lokalizaci.
+Také transparentně převádí gzipované (.gz) a bzipované (.bz2) manuálové
+stránky na prostý text. Příklad mapování:</p>
+<ul>
+<li><code>foo.1</code> -&gt;
+<code>${DESTDIR}/usr/share/man/man1/foo.1</code></li>
+<li><code>foo.fr.1</code> -&gt;
+<code>${DESTDIR}/usr/share/man/fr/man1/foo.1</code></li>
+<li><code>foo.1p</code> -&gt;
+<code>${DESTDIR}/usr/share/man/man1/foo.1p</code></li>
+<li><code>foo.1.gz</code> -&gt;
+<code>${DESTDIR}/usr/share/man/man1/foo.1</code></li>
+<li><code>foo.1.bz2</code> -&gt;
+<code>${DESTDIR}/usr/share/man/man1/foo.1</code></li>
+</ul></li>
+<li><p><em>vdoc()</em> <code>vdoc &lt;file&gt; [&lt;name&gt;]</code></p>
+<p>Nainstaluje <code>file</code> do
+<code>usr/share/doc/&lt;pkgname&gt;</code> v balíčku
+<code>$DESTDIR</code> . Volitelný 2. argument lze použít ke změně
+<code>file name</code> .</p></li>
+<li><p><em>vconf()</em>
+<code>vconf &lt;file&gt; [&lt;name&gt;]</code></p>
+<p>Nainstaluje <code>file</code> do <code>etc</code> v pkg
+<code>$DESTDIR</code> . Volitelný 2. argument lze použít ke změně
+<code>file name</code> .</p></li>
+<li><p><em>vsconf()</em>
+<code>vsconf &lt;file&gt; [&lt;name&gt;]</code></p>
+<p>Nainstaluje <code>file</code> do
+<code>usr/share/examples/&lt;pkgname&gt;</code> v pkg
+<code>$DESTDIR</code> . Volitelný 2. argument lze použít ke změně
+<code>file name</code> .</p></li>
+<li><p><a id="vlicense"></a> <em>vlicense()</em>
+<code>vlicense &lt;file&gt; [&lt;name&gt;]</code></p>
+<p>Nainstaluje <code>file</code> do
+<code>usr/share/licenses/&lt;pkgname&gt;</code> v balíčku
+<code>$DESTDIR</code> . Volitelný 2. argument lze použít ke změně
+<code>file name</code> . Podívejte se <a href="#var_license">na
+licenci</a> , kdy ji použít.</p></li>
+<li><p><em>vsv()</em>
+<code>vsv &lt;service&gt; [&lt;facility&gt;]</code></p>
+<p>Nainstaluje <code>service</code> z <code>${FILESDIR}</code> do
+/etc/sv. Služba musí být adresář obsahující alespoň spouštěcí skript.
+Všimněte si, že <code>supervise</code> symbolický odkaz bude automaticky
+vytvořen <code>vsv</code> a že spouštěcí skript je touto funkcí
+automaticky proveden jako spustitelný. Další informace o tom, jak
+vytvořit nový adresář služeb, najdete <a
+href="http://smarden.org/runit/faq.html#create">v příslušné části
+FAQ</a> . Pokud ve <code>${FILESDIR}/$service</code> neexistuje, bude
+automaticky vytvořena podslužba <code>log</code> obsahující
+<code>exec vlogger -t $service -p $facility</code> . není-li zadán druhý
+argument, použije se funkce <code>daemon</code> . Další informace o
+<code>vlogger</code> a dostupných hodnotách pro zařízení naleznete <a
+href="https://man.voidlinux.org/vlogger.8">v části vlogger(8)</a>
+.</p></li>
+<li><p><em>vsed()</em>
+<code>vsed -i &lt;file&gt; -e &lt;regex&gt;</code></p>
+<p>Wrapper kolem sed, který kontroluje sha256sum souboru před a po
+spuštění příkazu sed, aby zjistil případy, ve kterých volání sed nic
+nezměnilo. Přebírá libovolné množství souborů a regexů opakovaným
+voláním <code>-i file</code> a <code>-e regex</code> , musí být
+specifikován alespoň jeden soubor a jeden regex.</p>
+<p>Všimněte si, že vsed zavolá příkaz sed pro každý zadaný regulární
+výraz pro každý zadaný soubor v pořadí, v jakém jsou zadány.</p></li>
+<li><p><em>vcompletion()</em>
+<code>&lt;file&gt; &lt;shell&gt; [&lt;command&gt;]</code></p>
+<p>Nainstaluje dokončení shellu ze <code>file</code> pro
+<code>command</code> do správného umístění a s příslušným názvem souboru
+pro <code>shell</code> . Pokud <code>command</code> není zadán, bude
+jako výchozí nastaven <code>pkgname</code> . Argument <code>shell</code>
+může být jeden z <code>bash</code> , <code>fish</code> nebo
+<code>zsh</code> .</p></li>
+<li><p><em>vextract()</em>
+<code>[-C &lt;target directory&gt;] [--no-strip-components|--strip-components=&lt;n&gt;] &lt;file&gt;</code></p>
+<p>Extrahuje <code>file</code> do <code>target directory</code> s
+odstraněnými <code>n</code> adresářovými komponentami. Pokud
+<code>target directory</code> není zadán, použije se jako výchozí
+pracovní adresář. Pokud není zadáno <code>--strip-components</code> nebo
+<code>--no-strip-components</code> , výchozí je
+<code>--strip-components=1</code> .</p></li>
+<li><p><em>vsrcextract()</em>
+<code>[-C &lt;target directory&gt;] [--no-strip-components|--strip-components=&lt;n&gt;] &lt;file&gt;</code></p>
+<p>Extrahuje
+<code>$XBPS_SRCDISTDIR/$pkgname-$version/&lt;file&gt;</code> do
+<code>target directory</code> s <code>n</code> odstraněnými komponentami
+adresáře. Pokud <code>target directory</code> není zadán, použije se
+jako výchozí pracovní adresář. Pokud není zadáno
+<code>--strip-components</code> nebo <code>--no-strip-components</code>
+, výchozí je <code>--strip-components=1</code> .</p>
+<p>To je užitečné při použití ve spojení s <code>skip_extraction</code>
+a pro submodulové distfiles.</p></li>
+<li><p><em>vsrccopy()</em>
+<code>&lt;file&gt;... &lt;target&gt;</code></p>
+<p>Zkopíruje <code>file</code> z
+<code>$XBPS_SRCDISTDIR/$pkgname-$version/</code> do <code>target</code>
+adresáře a vytvoří <code>target</code> , pokud neexistuje.</p>
+<p>To je užitečné při použití ve spojení s <code>skip_extraction</code>
+.</p></li>
+</ul>
+<blockquote>
+<p>Zástupné znaky shellu musí být správně uvozovány, Příklad:
+<code>vmove "usr/lib/*.a"</code> .</p>
+</blockquote>
+<p><a id="global_vars"></a></p>
+<h3 id="globální-proměnné">Globální proměnné</h3>
+<p>Následující proměnné jsou definovány <code>xbps-src</code> a lze je
+použít v jakékoli šabloně:</p>
+<ul>
+<li><p><code>makejobs</code> Nastavte na <code>-jX</code> pokud je
+definováno <code>XBPS_MAKEJOBS</code> , abyste povolili paralelní úlohy
+s <code>GNU make</code> .</p></li>
+<li><p><code>sourcepkg</code> Nastaveno na hlavní název balíku, lze jej
+použít pro shodu s hlavním balíkem spíše než s dalšími názvy binárních
+balíků.</p></li>
+<li><p><code>CHROOT_READY</code> Nastavte, zda je cílový chroot
+(masterdir) připraven pro sestavení chrootu.</p></li>
+<li><p><code>CROSS_BUILD</code> Nastavte, zda <code>xbps-src</code>
+křížově kompiluje balíček.</p></li>
+<li><p><code>XBPS_CHECK_PKGS</code> Nastavte, zda bude
+<code>xbps-src</code> spouštět testy pro balíček. Delší testovací sady
+by měly být spouštěny v <code>do_check()</code> pouze pokud je nastaveno
+na <code>full</code> .</p></li>
+<li><p><code>DESTDIR</code> Úplná cesta k falešnému destdir používanému
+zdrojovým balíčkem pkg, nastavená na
+<code>&lt;masterdir&gt;/destdir/${sourcepkg}-${version}</code>
+.</p></li>
+<li><p><code>FILESDIR</code> Úplná cesta k adresáři balíčku
+<code>files</code> , tj. <code>srcpkgs/foo/files</code> . Adresář
+<code>files</code> lze použít k uložení dalších souborů, které se mají
+nainstalovat jako součást zdrojového balíčku.</p></li>
+<li><p><code>PKGDESTDIR</code> Úplná cesta k falešnému cílovému adresáři
+používanému funkcí <code>pkg_install()</code> v <code>subpackages</code>
+, nastavená na
+<code>&lt;masterdir&gt;/destdir/${pkgname}-${version}</code> .</p></li>
+<li><p><code>XBPS_BUILDDIR</code> Adresář pro uložení
+<code>source code</code> zpracovávaného zdrojového balíčku, nastavte na
+<code>&lt;masterdir&gt;/builddir</code> . Balíček <code>wrksrc</code> je
+vždy uložen v tomto adresáři, například
+<code>${XBPS_BUILDDIR}/${wrksrc}</code> .</p></li>
+<li><p><code>XBPS_MACHINE</code> Architektura stroje vrácená
+<code>xbps-uhelper arch</code> .</p></li>
+<li><p><code>XBPS_ENDIAN</code> Endianness stroje ("le" nebo
+"be").</p></li>
+<li><p><code>XBPS_LIBC</code> Knihovna C počítače ("glibc" nebo
+"musl").</p></li>
+<li><p><code>XBPS_WORDSIZE</code> Velikost slova stroje v bitech (32
+nebo 64).</p></li>
+<li><p><code>XBPS_NO_ATOMIC8</code> Stroj postrádá nativní 64bitové
+atomy (potřebuje emulaci libatomic).</p></li>
+<li><p><code>XBPS_SRCDISTDIR</code> Úplná cesta k místu, kde jsou
+uloženy <code>source distfiles</code> , tj.
+<code>$XBPS_HOSTDIR/sources</code> .</p></li>
+<li><p><code>XBPS_SRCPKGDIR</code> Úplná cesta k adresáři
+<code>srcpkgs</code> .</p></li>
+<li><p><code>XBPS_TARGET_MACHINE</code> Architektura cílového počítače
+při křížové kompilaci balíčku.</p></li>
+<li><p><code>XBPS_TARGET_ENDIAN</code> Endianness cílového počítače
+("le" nebo "be").</p></li>
+<li><p><code>XBPS_TARGET_LIBC</code> Knihovna C cílového počítače
+("glibc" nebo "musl").</p></li>
+<li><p><code>XBPS_TARGET_WORDSIZE</code> Velikost slova cílového
+počítače v bitech (32 nebo 64).</p></li>
+<li><p><code>XBPS_TARGET_NO_ATOMIC8</code> Cílový počítač postrádá
+nativní 64bitové atomy (potřebuje emulaci libatomic).</p></li>
+<li><p><code>XBPS_FETCH_CMD</code> Nástroj pro načítání souborů z
+<code>ftp</code> , <code>http</code> nebo <code>https</code>
+serverů.</p></li>
+<li><p><code>XBPS_WRAPPERDIR</code> Úplná cesta k místu, kde jsou
+uloženy obaly xbps-src pro nástroje.</p></li>
+<li><p><code>XBPS_CROSS_BASE</code> Úplná cesta k místu, kde jsou
+nainstalovány závislosti mezi kompilací, se liší podle cílového tripletu
+architektury. tj. <code>aarch64</code> -&gt;
+<code>/usr/aarch64-linux-gnu</code> .</p></li>
+<li><p><code>XBPS_RUST_TARGET</code> Triplet cílové architektury
+používaný <code>rustc</code> a <code>cargo</code> .</p></li>
+<li><p><code>XBPS_BUILD_ENVIRONMENT</code> Umožňuje operace specifické
+pro průběžnou integraci. Pokud se jedná o kontinuální integraci,
+nastavte na <code>void-packages-ci</code> .</p></li>
+</ul>
+<p><a id="available_vars"></a></p>
+<h3 id="dostupné-proměnné">Dostupné proměnné</h3>
+<p><a id="mandatory_vars"></a></p>
+<h4 id="povinné-proměnné">Povinné proměnné</h4>
+<p>Seznam povinných proměnných pro šablonu:</p>
+<ul>
+<li><p><code>homepage</code> URL odkazující na upstream domovskou
+stránku.</p></li>
+<li><p><a id="var_license"></a> <code>license</code> A string matching
+the license's <a href="https://spdx.org/licenses">SPDX Short
+identifier</a>, <code>Public Domain</code>, or string prefixed with
+<code>custom:</code> for other licenses. Multiple licenses should be
+listed as an <a
+href="https://spdx.github.io/spdx-spec/v3.0/annexes/SPDX-license-expressions/">SPDX
+license expression</a> (examples: <code>MIT OR Apache-2.0</code>,
+<code>MIT AND (LGPL-2.1-or-later OR BSD-3-Clause)</code>). Usage of
+<code>AND</code>, <code>OR</code>, <code>WITH</code>, and
+<code>()</code> are supported by xlint. The legacy comma-separated
+format should be converted when encountered (example:
+<code>GPL-3.0-or-later, custom:Hugware</code>).</p>
+<p>Prázdné metabalíčky, které neobsahují žádné soubory, a proto nemají a
+nevyžadují žádnou licenci, by měly používat <code>Public Domain</code>
+.</p>
+<p>Poznámka: <code>AGPL</code> , <code>MIT</code> , <code>BSD</code> ,
+<code>ISC</code> , <code>X11</code> a vlastní licence vyžadují, aby byl
+licenční soubor dodán s binárním balíčkem.</p></li>
+<li><p><code>maintainer</code> Řetězec ve tvaru
+<code>name &lt;user@domain&gt;</code> . E-mail pro toto pole musí být
+platný e-mail, na kterém vás lze zastihnout. Balíčky používající e-maily
+<code>users.noreply.github.com</code> nebudou přijímány.</p></li>
+<li><p><code>pkgname</code> Řetězec s názvem balíčku, odpovídající
+<code>srcpkgs/&lt;pkgname&gt;</code> .</p></li>
+<li><p><code>revision</code> Číslo, které musí být nastaveno na 1 při
+vytváření <code>source package</code> nebo aktualizováno na novou
+<code>upstream version</code> . Toto by mělo být zvýšeno pouze tehdy,
+když byly modifikovány generované <code>binary packages</code>
+.</p></li>
+<li><p><code>short_desc</code> Řetězec se stručným popisem tohoto
+balíčku. Maximálně 72 znaků.</p></li>
+<li><p><code>version</code> Řetězec s verzí balíčku. Nesmí obsahovat
+pomlčky ani podtržítko a je vyžadována alespoň jedna číslice. Použití
+substituce proměnné Shell není povoleno.</p></li>
+</ul>
+<p><code>pkgname</code> a <code>version</code> jsou zakázány obsahovat
+speciální znaky. Proto není nutné je citovat a podle konvence by ani
+neměly být.</p>
+<p><a id="optional_vars"></a></p>
+<h4 id="nepovinné-proměnné">Nepovinné proměnné</h4>
+<ul>
+<li><p><code>hostmakedepends</code> Seznam <code>host</code> závislostí
+potřebných k sestavení balíčku, který bude nainstalován do hlavního
+adresáře. Verzi není třeba zadávat, protože vždy bude vyžadována
+aktuální verze v srcpkgs. Příklad:
+<code>hostmakedepends="foo blah"</code> .</p></li>
+<li><p><code>makedepends</code> Seznam <code>target</code> závislostí
+potřebných k sestavení balíčku, který bude nainstalován do hlavního
+adresáře. Verzi není třeba zadávat, protože vždy bude vyžadována
+aktuální verze v srcpkgs. Příklad: <code>makedepends="foo blah"</code>
+.</p></li>
+<li><p><code>checkdepends</code> Seznam závislostí potřebných ke
+spuštění kontrol balíčků, tj. skriptu nebo pravidla make specifikovaného
+ve funkci <code>do_check()</code> šablony. Příklad:
+<code>checkdepends="gtest"</code> .</p></li>
+<li><p><code>depends</code> Seznam závislostí potřebných ke spuštění
+balíčku. Tyto závislosti se neinstalují do hlavního adresáře, ale
+kontrolují se pouze v případě, že v místním úložišti existuje binární
+balíček, který vyhovuje požadované verzi. Závislosti lze specifikovat
+pomocí následujících komparátorů verzí: <code>&lt;</code> ,
+<code>&gt;</code> , <code>&lt;=</code> , <code>&gt;=</code> nebo
+<code>foo-1.0_1</code> aby odpovídaly přesné verzi. Pokud není definován
+komparátor verzí (pouze název balíčku), je komparátor verzí automaticky
+nastaven na <code>&gt;=0</code> . Příklad:
+<code>depends="foo blah&gt;=1.0"</code> . Další informace naleznete v
+části <a href="#deps_runtime">Závislosti běhového prostředí</a>
+.</p></li>
+<li><p><code>bootstrap</code> Je-li povoleno, je zdrojový balíček
+považován za součást procesu <code>bootstrap</code> a vyžaduje se, aby
+bylo možné vytvářet balíčky v chrootu. Tuto vlastnost musí nastavit
+pouze malý počet balíčků.</p></li>
+<li><p><code>conflicts</code> Volitelný seznam balíčků, které jsou v
+konfliktu s tímto balíčkem. Konflikty lze zadat pomocí následujících
+komparátorů verzí: <code>&lt;</code> , <code>&gt;</code> ,
+<code>&lt;=</code> , <code>&gt;=</code> nebo <code>foo-1.0_1</code> aby
+odpovídaly přesné verzi. Pokud není definován komparátor verzí (pouze
+název balíčku), je komparátor verzí automaticky nastaven na
+<code>&gt;=0</code> . Příklad:
+<code>conflicts="foo blah&gt;=0.42.3"</code> .</p></li>
+<li><p><code>distfiles</code> Úplná adresa URL pro <code>upstream</code>
+zdrojové distribuční soubory. Více souborů lze oddělit mezerami. Soubory
+musí končit <code>.tar.lzma</code> , <code>.tar.xz</code> ,
+<code>.txz</code> , <code>.tar.bz2</code> , <code>.tbz</code> ,
+<code>.tar.gz</code> , <code>.tgz</code> , <code>.gz</code> ,
+<code>.bz2</code> , <code>.tar</code> nebo <code>.zip</code> . Chcete-li
+definovat cílový název souboru, připojte k adrese URL
+<code>&gt;filename</code> . Příklad: distfiles="<a
+href="http://foo.org/foo-1.0.tar.gz">http://foo.org/foo-1.0.tar.gz</a>
+<a
+href="http://foo.org/bar-1.0.tar.gz&amp;gt;bar.tar.gz">http://foo.org/bar-1.0.tar.gz&amp;gt;bar.tar.gz</a>"</p>
+<p>Aby se předešlo opakování, existuje několik proměnných pro běžné
+hostitelské weby:</p>
+<table>
+<thead>
+<tr>
+<th>Variabilní</th>
+<th>Hodnota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPAN_SITE</td>
+<td><a
+href="https://cpan.perl.org/modules/by-module">https://cpan.perl.org/modules/by-module</a></td>
+</tr>
+<tr>
+<td>DEBIAN_SITE</td>
+<td><a
+href="http://ftp.debian.org/debian/pool">http://ftp.debian.org/debian/pool</a></td>
+</tr>
+<tr>
+<td>FREEDESKTOP_SITE</td>
+<td><a
+href="https://freedesktop.org/software">https://freedesktop.org/software</a></td>
+</tr>
+<tr>
+<td>GNOME_SITE</td>
+<td><a
+href="https://ftp.gnome.org/pub/GNOME/sources">https://ftp.gnome.org/pub/GNOME/sources</a></td>
+</tr>
+<tr>
+<td>GNU_SITE</td>
+<td><a href="https://ftp.gnu.org/gnu">https://ftp.gnu.org/gnu</a></td>
+</tr>
+<tr>
+<td>KERNEL_SITE</td>
+<td><a
+href="https://www.kernel.org/pub/linux">https://www.kernel.org/pub/linux</a></td>
+</tr>
+<tr>
+<td>MOZILLA_SITE</td>
+<td><a
+href="https://ftp.mozilla.org/pub">https://ftp.mozilla.org/pub</a></td>
+</tr>
+<tr>
+<td>NONGNU_SITE</td>
+<td><a
+href="https://download.savannah.nongnu.org/releases">https://download.savannah.nongnu.org/releases</a></td>
+</tr>
+<tr>
+<td>PYPI_SITE</td>
+<td><a
+href="https://files.pythonhosted.org/packages/source">https://files.pythonhosted.org/packages/source</a></td>
+</tr>
+<tr>
+<td>SOURCEFORGE_SITE</td>
+<td><a
+href="https://downloads.sourceforge.net/sourceforge">https://downloads.sourceforge.net/sourceforge</a></td>
+</tr>
+<tr>
+<td>UBUNTU_SITE</td>
+<td><a
+href="http://archive.ubuntu.com/ubuntu/pool">http://archive.ubuntu.com/ubuntu/pool</a></td>
+</tr>
+<tr>
+<td>XORG_SITE</td>
+<td><a
+href="https://www.x.org/releases/individual">https://www.x.org/releases/individual</a></td>
+</tr>
+<tr>
+<td>KDE_SITE</td>
+<td><a
+href="https://download.kde.org/stable">https://download.kde.org/stable</a></td>
+</tr>
+<tr>
+<td>VIDEOLAN_SITE</td>
+<td><a
+href="https://download.videolan.org/pub/videolan">https://download.videolan.org/pub/videolan</a></td>
+</tr>
+</tbody>
+</table></li>
+<li><p><code>checksum</code> Digesty <code>sha256</code> odpovídající
+<code>${distfiles}</code> . Více souborů lze oddělit mezerami.
+Upozorňujeme, že objednávka musí být stejná, jako byla použita v
+<code>${distfiles}</code> . Příklad:
+<code>checksum="kkas00xjkjas"</code></p></li>
+</ul>
+<p>Pokud soubor distfile změní svůj kontrolní součet pro každé stažení,
+protože je zabalen za běhu na serveru, jako např. snapshot tarballs z
+libovolného z <code>https://*.googlesource.com/</code> webů, kontrolní
+součet <code>archive contents</code> lze určit pomocí předřazení reklamy
+na (@). U tarballů můžete najít kontrolní součet obsahu pomocí příkazu
+<code>tar xf &lt;tarball.ext&gt; --to-stdout | sha256sum</code> .</p>
+<ul>
+<li><p><code>wrksrc</code> Název adresáře, do kterého jsou extrahovány
+zdroje balíčků, nastavený na <code>${pkgname}-${version}</code>
+.</p></li>
+<li><p><code>build_wrksrc</code> Adresář související s
+<code>${wrksrc}</code> , který bude použit při sestavování
+balíčku.</p></li>
+<li><p><code>create_wrksrc</code> Obvykle, po extrahování, pokud
+existuje více souborů a/nebo adresářů nejvyšší úrovně nebo pokud
+neexistují žádné adresáře, soubory a adresáře nejvyšší úrovně budou
+zabaleny do jedné další vrstvy adresáře. Chcete-li toto chování vynutit,
+nastavte <code>create_wrksrc</code> .</p></li>
+<li><p><code>build_style</code> Určuje <code>build method</code> pro
+balíček. Přečtěte si níže, abyste se dozvěděli více o dostupných
+<code>build methods</code> balíčků nebo o efektu ponechání tohoto
+nenastaveného.</p></li>
+<li><p><code>build_helper</code> mezerami oddělený seznam souborů v
+<code>common/build-helper</code> které mají být získávány a jeho
+proměnné zpřístupněny v šabloně. tj. <code>build_helper="rust"</code>
+.</p></li>
+<li><p><code>configure_script</code> Název <code>configure</code>
+skriptu, který se má spustit ve fázi <code>configure</code> , pokud je
+<code>${build_style}</code> nastaveno na metody sestavení
+<code>configure</code> nebo <code>gnu-configure</code> . Standardně
+nastaveno na <code>./configure</code> .</p></li>
+<li><p><code>configure_args</code> Argumenty, které mají být předány
+<code>configure</code> skriptu, pokud je <code>${build_style}</code>
+nastaveno na metody sestavení <code>configure</code> nebo
+<code>gnu-configure</code> . Ve výchozím nastavení musí být předpona
+nastavena na <code>/usr</code> . V balíčcích <code>gnu-configure</code>
+jsou některé volby již standardně nastaveny:
+<code>--prefix=/usr --sysconfdir=/etc --infodir=/usr/share/info --mandir=/usr/share/man --localstatedir=/var</code>
+.</p></li>
+<li><p><code>make_cmd</code> Spustitelný soubor, který se spustí ve fázi
+<code>build</code> , pokud je <code>${build_style}</code> nastaveno na
+metody sestavení <code>configure</code> , <code>gnu-configure</code>
+nebo <code>gnu-makefile</code> . Standardně nastaveno na
+<code>make</code> .</p></li>
+<li><p><code>make_build_args</code> Argumenty, které mají být předány do
+<code>${make_cmd}</code> ve fázi sestavování, pokud je
+<code>${build_style}</code> nastaveno na metody sestavení
+<code>configure</code> , <code>gnu-configure</code> nebo
+<code>gnu-makefile</code> . Ve výchozím nastavení zrušeno.</p></li>
+<li><p><code>make_check_args</code> Argumenty, které mají být předány do
+<code>${make_cmd}</code> ve fázi kontroly, pokud je
+<code>${build_style}</code> nastaveno na metody sestavení
+<code>configure</code> , <code>gnu-configure</code> nebo
+<code>gnu-makefile</code> . Ve výchozím nastavení zrušeno.</p></li>
+<li><p><code>make_install_args</code> Argumenty, které mají být předány
+do <code>${make_cmd}</code> ve fázi <code>install</code> , pokud je
+<code>${build_style}</code> nastaveno na metody sestavení
+<code>configure</code> , <code>gnu-configure</code> nebo
+<code>gnu-makefile</code> .</p></li>
+<li><p><code>make_build_target</code> Cíl sestavení. Pokud je
+<code>${build_style}</code> nastaveno na <code>configure</code> ,
+<code>gnu-configure</code> nebo <code>gnu-makefile</code> , toto je cíl
+předaný <code>${make_cmd}</code> ve fázi sestavení; když není nastaveno,
+použije se výchozí cíl. Pokud <code>${build_style}</code> je
+<code>python3-pep517</code> , toto je cesta k adresáři balíčku, který by
+měl být vytvořen jako Python wheel; pokud není nastaveno, výchozí
+hodnota je <code>.</code> (aktuální adresář s ohledem na
+sestavení).</p></li>
+<li><p><code>make_check_target</code> Cíl, který má být předán do
+<code>${make_cmd}</code> ve fázi kontroly, pokud je
+<code>${build_style}</code> nastaveno na metody sestavení
+<code>configure</code> , <code>gnu-configure</code> nebo
+<code>gnu-makefile</code> . Ve výchozím nastavení je nastavena
+<code>check</code> .</p></li>
+<li><p><code>make_install_target</code> Cíl instalace. Když je
+<code>${build_style}{/code1} nastaven na {code2}configure{/code2}, {code3}gnu-configure{/code3} nebo {code4}gnu-makefile{/code4}, toto je cíl předaný {code5}${make_command}</code>
+ve fázi instalace; pokud není nastaveno, ve výchozím nastavení se
+<code>install</code> . Pokud <code>${build_style}</code> je
+<code>python3-pep517</code>, jedná se o cestu pythonovského kola
+vytvořeného fází sestavení, která se nainstaluje; když není nastaveno,
+styl sestavení <code>python3-pep517</code> bude hledat wheel
+odpovídající názvu a verzi balíčku v aktuálním adresáři s ohledem na
+instalaci.</p></li>
+<li><p><code>make_check_pre</code> Výraz před <code>${make_cmd}</code> .
+To lze použít pro příkazy wrapper nebo pro nastavení proměnných
+prostředí pro příkaz check. Ve výchozím nastavení prázdné.</p></li>
+<li><p><code>patch_args</code> Argumenty, které mají být předány příkazu
+<code>patch(1)</code> při aplikaci oprav na zdroje balíčků během
+<code>do_patch()</code> . Opravy jsou uloženy ve
+<code>srcpkgs/&lt;pkgname&gt;/patches</code> a musí být ve formátu
+<code>-p1</code> . Standardně nastaveno na <code>-Np1</code> .</p></li>
+<li><p><code>disable_parallel_build</code> Pokud je nastaveno, balíček
+nebude sestavován paralelně a <code>XBPS_MAKEJOBS</code> bude nastaven
+na 1. Pokud balíček nefunguje správně s <code>XBPS_MAKEJOBS</code> , ale
+stále má mechanismus pro paralelní sestavení, nastavte
+<code>disable_parallel_build</code> a použijte
+<code>XBPS_ORIG_MAKEJOBS</code> (který má původní hodnotu z
+<code>XBPS_MAKEJOBS</code> ) v šabloně.</p></li>
+<li><p><code>disable_parallel_check</code> Pokud sady testů pro balíček
+nebudou sestaveny a spuštěny paralelně a <code>XBPS_MAKEJOBS</code> bude
+nastaveno na 1. Pokud balíček nefunguje dobře s
+<code>XBPS_MAKEJOBS</code> , ale stále má mechanismus pro paralelní
+spouštění kontrol, nastavte <code>disable_parallel_check</code> a
+použijte <code>XBPS_ORIG_MAKEJOBS</code> ( který má v šabloně původní
+hodnotu <code>XBPS_MAKEJOBS</code> ).</p></li>
+<li><p><code>make_check</code> Nastavuje případy, ve kterých se spustí
+fáze <code>check</code> . Tato možnost musí být doplněna komentářem
+vysvětlujícím, proč testy selhávají. Povolené hodnoty:</p>
+<ul>
+<li><code>yes</code> (výchozí) ke spuštění, pokud je nastaveno
+<code>XBPS_CHECK_PKGS</code> .</li>
+<li><code>extended</code> na spuštění, pokud je
+<code>XBPS_CHECK_PKGS</code> <code>full</code> .</li>
+<li><code>ci-skip</code> se spustí lokálně, pokud je nastaveno
+<code>XBPS_CHECK_PKGS</code> , ale ne jako součást kontrol požadavku na
+stažení.</li>
+<li><code>no</code> nikdy neběhat.</li>
+</ul></li>
+<li><p><code>keep_libtool_archives</code> Je-li povoleno, archivy
+<code>GNU Libtool</code> nebudou odstraněny. Ve výchozím nastavení jsou
+tyto soubory vždy automaticky odstraněny.</p></li>
+<li><p><code>skip_extraction</code> Seznam názvů souborů, které by
+neměly být extrahovány ve fázi <code>extract</code> . Toto musí
+odpovídat základnímu názvu jakékoli adresy URL definované v
+<code>${distfiles}</code> . Příklad:
+<code>skip_extraction="foo-${version}.tar.gz"</code> .</p></li>
+<li><p><code>nodebug</code> Pokud je povoleno, balíčky -dbg se
+nevygenerují, i když je nastaveno <code>XBPS_DEBUG_PKGS</code>
+.</p></li>
+<li><p><code>conf_files</code> Seznam konfiguračních souborů, které
+binární balíček vlastní; to předpokládá úplné cesty, zástupné znaky
+budou rozšířeny a více položek může být odděleno mezerami. Příklad:
+<code>conf_files="/etc/foo.conf /etc/foo2.conf /etc/foo/*.conf"</code>
+.</p></li>
+<li><p><code>mutable_files</code> Seznam souborů, které binární balíček
+vlastní, s očekáváním, že tyto soubory budou změněny. Ty se chovají
+hodně jako <code>conf_files</code> , ale bez předpokladu, že je bude
+upravovat člověk.</p></li>
+<li><p><code>make_dirs</code> Seznam položek definujících adresáře a
+oprávnění, která mají být vytvořena při instalaci. Každý záznam by měl
+být oddělen mezerou a sám bude obsahovat mezery.
+<code>make_dirs="/dir 0750 user group"</code> . Uživatel, skupina a
+režim jsou vyžadovány na každém řádku, i když jsou
+<code>755 root root</code> . Podle konvence existuje pouze jeden záznam
+<code>dir perms user group</code> na řádek.</p></li>
+<li><p><code>repository</code> Definuje úložiště, do kterého bude
+balíček umístěn. Seznam platných úložišť naleznete v <em>části
+Úložiště</em> .</p></li>
+<li><p><code>nostrip</code> Pokud je nastaveno, binární soubory ELF se
+symboly ladění nebudou odstraněny. Ve výchozím nastavení jsou všechny
+binární soubory odstraněny.</p></li>
+<li><p><code>nostrip_files</code> Seznam binárních souborů ELF oddělený
+mezerami, které nebudou zbaveny ladicích symbolů. Soubory mohou být
+zadány úplnou cestou nebo názvem souboru.</p></li>
+<li><p><code>noshlibprovides</code> Je-li nastaveno, nebudou binární
+soubory ELF kontrolovány za účelem shromažďování poskytnutých sonames ve
+sdílených knihovnách.</p></li>
+<li><p><code>noverifyrdeps</code> Pokud je nastaveno, binární soubory
+ELF a sdílené knihovny nebudou kontrolovány za účelem shromažďování
+jejich reverzních závislostí. Musíte zadat všechny závislosti v
+<code>depends</code> , když to potřebujete nastavit.</p></li>
+<li><p><code>skiprdeps</code> Seznam názvů souborů oddělených mezerami
+určenými jejich absolutní cestou v <code>$DESTDIR</code> , které nebudou
+kontrolovány na závislosti za běhu. To může být užitečné pro přeskočení
+souborů, které nejsou určeny ke spuštění nebo načtení na hostiteli, ale
+mají být odeslány na nějaké cílové zařízení nebo emulaci.</p></li>
+<li><p><code>ignore_elf_files</code> Seznam souborů strojového kódu v
+adresáři /usr/share zadaných absolutní cestou oddělených mezerami, které
+jsou očekávané a povolené.</p></li>
+<li><p><code>ignore_elf_dirs</code> Bílými mezerami oddělený seznam
+adresářů v adresáři /usr/share specifikovaných absolutní cestou, které
+jsou očekávány a které mohou obsahovat soubory strojového kódu.</p></li>
+<li><p><code>nocross</code> Je-li nastaveno, křížová kompilace nebude
+povolena a bude okamžitě ukončena. Toto by mělo být nastaveno na řetězec
+popisující, proč selže, nebo na odkaz na buildlog (od oficiálních
+tvůrců, CI buildlogy mohou zmizet) demonstrující selhání.</p></li>
+<li><p><code>restricted</code> Pokud je nastaveno, xbps-src odmítne
+sestavit balíček, pokud <code>etc/conf</code> nemá
+<code>XBPS_ALLOW_RESTRICTED=yes</code> . Primární stavitelé pro Void
+Linux toto nastavení nemají, takže primární úložiště nebudou mít žádný
+omezený balíček. To je užitečné pro balíčky, kde licence zakazuje
+redistribuci.</p></li>
+<li><p><code>subpackages</code> Seznam dílčích balíčků oddělených
+mezerami (odpovídající <code>foo_package()</code> ), aby se přepsal
+uhodnutý seznam. Toto použijte pouze v případě, že je vyžadováno
+specifické pořadí dílčích balíčků, jinak by ve většině případů fungovalo
+výchozí nastavení.</p></li>
+<li><p><code>metapackage</code> Pokud je nastaveno na <code>yes</code> ,
+balíček musí být prázdný metabalíček, tj. balíček, který závisí pouze na
+jiných balíčcích.</p></li>
+<li><p><code>broken</code> Je-li nastaveno, sestavení balíčku nebude
+povoleno, protože jeho stav je aktuálně poškozen. Toto by mělo být
+nastaveno na řetězec popisující, proč je poškozený, nebo na odkaz na
+buildlog demonstrující selhání.</p></li>
+<li><p><code>shlib_provides</code> Seznam dalších soname oddělených
+mezerami, na kterých balíček poskytuje. To se spíše připojí k
+vygenerovanému souboru než jej nahradí.</p></li>
+<li><p><code>shlib_requires</code> Seznam dalších sonames, které balíček
+vyžaduje, oddělených mezerami. To se spíše připojí k vygenerovanému
+souboru než jej nahradí.</p></li>
+<li><p><code>nopie</code> Pouze musí být nastaveno na něco, aby bylo
+aktivní, zakáže sestavení balíčku s funkcemi zpevnění (PIE, relro,
+atd.). U většiny balíčků to není nutné.</p></li>
+<li><p><code>nopie_files</code> Seznam binárních souborů ELF oddělených
+mezerami, které nebudou kontrolovány na PIE. Soubory musí být zadány
+úplnou cestou.</p></li>
+<li><p><code>reverts</code> xbps podporuje unikátní funkci, která
+umožňuje automatický downgrade z poškozených balíčků. V poli
+<code>reverts</code> lze definovat seznam poškozených pkgver, který by
+měl výsledný balíček vrátit. Toto pole <em>musí</em> být definováno před
+poli <code>version</code> a <code>revision</code> , aby fungovalo podle
+očekávání. Verze definované v <code>reverts</code> musí být větší než
+verze definovaná ve <code>version</code> . Příklad:</p>
+<pre><code>reverts=&quot;2.0_1 2.0_2&quot;
+version=1.9
+revision=2</code></pre></li>
+<li><p><code>alternatives</code> Seznam podporovaných alternativ, které
+balíček poskytuje, oddělený mezerami. Seznam se skládá ze tří složek
+oddělených dvojtečkou: skupina, symbolický odkaz a cíl. Příklad:
+<code>alternatives="vi:/usr/bin/vi:/usr/bin/nvi ex:/usr/bin/ex:/usr/bin/nvi-ex"</code>
+.</p></li>
+<li><p><code>font_dirs</code> Seznam adresářů oddělených mezerami určený
+absolutní cestou, kam balíček písem instaluje svá písma. Používá se v
+<code>x11-fonts</code> xbps-trigger k opětovnému sestavení mezipaměti
+písem během instalace/odebírání balíčku. Příklad:
+<code>font_dirs="/usr/share/fonts/TTF /usr/share/fonts/X11/misc"</code></p></li>
+<li><p><code>dkms_modules</code> Seznam modulů Dynamic Kernel Module
+Support (dkms) oddělených mezerami, které budou nainstalovány a
+odstraněny <code>dkms</code> xbps-trigger s instalací/odstraněním
+balíčku. Formát je mezerou oddělený pár řetězců, které představují název
+modulu, většinou <code>pkgname</code> , a verzi modulu, většinou
+<code>version</code> . Příklad:
+<code>dkms_modules="$pkgname $version zfs 4.14"</code></p></li>
+<li><p><code>register_shell</code> Seznam shellů oddělených mezerami
+definovaný absolutní cestou, které mají být zaregistrovány do databáze
+systémových shellů. Používá ho spouštěč <code>register-shell</code> .
+Příklad: <code>register_shell="/bin/tcsh /bin/csh"</code></p></li>
+<li><p><code>tags</code> Seznam tagů (kategorií) oddělených mezerami,
+které jsou registrovány v metadatech balíčku a uživatelé je mohou
+dotazovat pomocí <code>xbps-query</code> . Příklad pro qutebrowser:
+<code>tags="browser chromium-based qt5 python3"</code></p></li>
+<li><p><code>perl_configure_dirs</code> Seznam oddělených prázdných míst
+ve vztahu k <code>wrksrc</code> , které obsahují soubory Makefile.PL,
+které musí být procesy, aby balík fungoval. Používá se v modulu
+build_style perl a mimo něj nemá žádné použití. Příklad:
+<code>perl_configure_dirs="blob/bob foo/blah"</code></p></li>
+<li><p><code>preserve</code> Je-li nastaveno, soubory vlastněné balíkem
+v systému nebudou při aktualizaci, přeinstalaci nebo odebrání balíku
+odstraněny. To je většinou užitečné pro balíčky jádra, které by neměly
+odstraňovat soubory jádra, když jsou odstraněny, pro případ, že by to
+mohlo přerušit zavádění uživatele a načítání modulů. Jinak by se ve
+většině případů neměl používat.</p></li>
+<li><p><code>fetch_cmd</code> Spustitelný soubor, který se má použít k
+načtení URL v <code>distfiles</code> během fáze <code>do_fetch</code>
+.</p></li>
+<li><p><code>changelog</code> URL odkazující na upstream changelog.
+Preferovány jsou soubory s nezpracovaným textem.</p></li>
+<li><p><code>archs</code> Bílými znaky oddělený seznam architektur, pro
+které lze balíček sestavit, dostupné architektury lze nalézt pod
+<code>common/cross-profiles</code> . Obecně platí, že <code>archs</code>
+by měly být nastaveny pouze tehdy, pokud se upstream software výslovně
+zaměřuje na určité architektury nebo existuje pádný důvod, proč by
+software neměl být dostupný na některých podporovaných architekturách.
+Předřazení vzoru vlnovkou znamená zákaz stavět na naznačených obloucích.
+První odpovídající vzor se použije pro povolení/zakázání sestavení.
+Pokud neodpovídá žádný vzor, ​​balíček se sestaví, pokud poslední vzor
+obsahuje vlnovku. Příklady:</p>
+<pre><code> # Build package only for musl architectures
+ archs=&quot;*-musl&quot;
+ # Build package for x86_64-musl and any non-musl architecture
+ archs=&quot;x86_64-musl ~*-musl&quot;
+ # Default value (all arches)
+ archs=&quot;*&quot;</code></pre></li>
+</ul>
+<p>Dříve byla k dispozici speciální hodnota <code>noarch</code> , ale od
+té doby byla odstraněna.</p>
+<ul>
+<li><p><code>nocheckperms</code> Je-li nastaveno, xbps-src neselže při
+běžných chybách oprávnění (světové zapisovatelné soubory atd.)</p></li>
+<li><p><code>nofixperms</code> Je-li nastaveno, xbps-src neopraví běžné
+chyby oprávnění (spustitelné manuálové stránky atd.)</p></li>
+<li><p><code>no_generic_pkgconfig_link</code> Je-li nastaveno, xbps-src
+nevytvoří před vytvořením šablony symbolický odkaz z
+<code>$XBPS_CROSS_TRIPLET-pkg-config{/code1} na {code2}$XBPS_WRAPPERDIR/pkg-config</code>.</p></li>
+</ul>
+<p><a id="explain_depends"></a></p>
+<h4 id="o-mnoha-typech-depends-proměnných">O mnoha typech
+<code>depends</code> proměnných</h4>
+<p>Doposud jsme uvedli čtyři typy <code>depends</code> proměnných:
+<code>hostmakedepends</code> , <code>makedepends</code> ,
+<code>checkdepends</code> a <code>depends</code> . Tyto různé druhy
+proměnných jsou nezbytné, protože <code>xbps-src</code> podporuje
+křížovou kompilaci a aby se zabránilo instalaci zbytečných balíčků v
+prostředí sestavení.</p>
+<p>Během procesu sestavení musí být na hostiteli <em>spuštěny</em>
+programy, jako je <code>yacc</code> nebo kompilátor C. Balíčky
+obsahující tyto programy by měly být uvedeny v
+<code>hostmakedepends</code> a budou nainstalovány na hostitele při
+sestavování cílového balíčku. Některé z těchto balíčků jsou závislé na
+balíčku <code>base-chroot</code> a nemusí být uvedeny. Je možné, že
+některé programy potřebné k sestavení projektu jsou umístěny v balíčcích
+<code>-devel</code> .</p>
+<p>Cílový balíček může také záviset na jiných balíčcích pro knihovny,
+které se mají odkazovat na soubory záhlaví nebo na soubory záhlaví. Tyto
+balíčky by měly být uvedeny v <code>makedepends</code> a budou odpovídat
+cílové architektuře bez ohledu na architekturu sestavovacího stroje.
+Typicky budou <code>makedepends</code> obsahovat hlavně balíčky
+<code>-devel</code> .</p>
+<p>Kromě toho, pokud je nastaveno <code>XBPS_CHECK_PKGS</code> nebo je
+předána volba <code>-Q</code> do <code>xbps-src</code> , může cílový
+balíček vyžadovat specifické závislosti nebo knihovny, které jsou
+propojeny s jeho testovacími binárními soubory, aby mohl spustit
+testovací sadu. Tyto závislosti by měly být uvedeny v
+<code>checkdepends</code> a budou nainstalovány, jako by byly součástí
+<code>hostmakedepends</code> . Některé závislosti, které lze zahrnout do
+<code>checkdepends</code> , jsou:</p>
+<ul>
+<li><code>dejagnu</code> : používá se pro některé projekty GNU</li>
+<li><code>cmocka-devel</code> : propojeno do testovacích binárních
+souborů</li>
+<li><code>dbus</code> : umožňuje spouštět
+<code>dbus-run-session &lt;test-command&gt;</code> a poskytovat relaci
+D-Bus pro aplikace, které to potřebují</li>
+<li><code>git</code> : některé testovací sady spouštějí příkaz
+<code>git</code></li>
+</ul>
+<p><a id="deps_runtime"></a>A konečně, balíček může vyžadovat určité
+závislosti za běhu, bez kterých je nepoužitelný. Tyto závislosti, pokud
+je XBPS nezjistí automaticky, by měly být uvedeny v <code>depends</code>
+.</p>
+<p>Knihovny propojené objekty ELF jsou detekovány automaticky pomocí
+<code>xbps-src</code> , proto je nelze specifikovat v šablonách pomocí
+<code>depends</code> . Tato proměnná by měla obsahovat:</p>
+<ul>
+<li>spustitelné soubory nazývané jako samostatné procesy.</li>
+<li>ELF objekty pomocí dlopen(3).</li>
+<li>neobjektový kód, např. hlavičky C, moduly perl/python/ruby/etc.</li>
+<li>datové soubory.</li>
+<li>přepíše minimální verzi uvedenou v souboru
+<code>common/shlibs</code> .</li>
+</ul>
+<p>Závislosti běhu pro objekty ELF se zjišťují kontrolou, které SONAME
+vyžadují, a poté jsou SONAME mapovány na binární název balíčku s
+minimální požadovanou verzí. Soubor <code>common/shlibs</code> nastavuje
+mapování <code>&lt;SONAME&gt; &lt;pkgname&gt;&gt;=&lt;version&gt;</code>
+.</p>
+<p>Například balíček <code>foo-1.0_1</code> poskytuje
+<code>libfoo.so.1</code> SONAME a software vyžadující tuto knihovnu bude
+odkazovat na <code>libfoo.so.1</code> ; výsledný binární balíček bude
+mít závislost běhu na balíčku <code>foo&gt;=1.0_1</code> jak je uvedeno
+v <code>common/shlibs</code> :</p>
+<pre><code># common/shlibs
+...
+libfoo.so.1 foo-1.0_1
+...</code></pre>
+<ul>
+<li>První pole určuje SONAME.</li>
+<li>Ve druhém poli byl uveden název balíčku a minimální požadovaná
+verze.</li>
+<li>Třetí volitelné pole (obvykle nastavené na <code>ignore</code> ) lze
+použít k přeskočení kontrol v soname bumps.</li>
+</ul>
+<p>Závislosti deklarované přes <code>depends</code> se neinstalují do
+hlavního adresáře, spíše se kontrolují, pokud existují jako binární
+balíčky, a jsou automaticky sestaveny <code>xbps-src</code> pokud zadaná
+verze není v lokálním úložišti.</p>
+<p>Ve speciálním případě mohou být <code>virtual</code> závislosti
+specifikovány jako runtime závislosti v proměnné šablony
+<code>depends</code> . Několik různých balíčků může poskytovat běžnou
+funkcionalitu deklarováním virtuálního názvu a verze v proměnné šablony
+<code>provides</code> (např <code>provides="vpkg-0.1_1"</code> ).
+Balíčky, které se spoléhají na společnou funkčnost bez ohledu na
+konkrétního poskytovatele, mohou deklarovat závislost na názvu
+virtuálního balíčku s předponou <code>virtual?</code> (např.
+<code>depends="virtual?vpkg-0.1_1"</code> ). Když je balíček sestaven
+pomocí <code>xbps-src</code> , bude potvrzena existence poskytovatelů
+virtuálních balíčků a budou sestaveni v případě potřeby. Mapa z
+virtuálních balíčků na jejich výchozí poskytovatele je definována v
+<code>etc/defaults.virtual</code> . Jednotlivá mapování mohou být
+přepsána místními preferencemi v <code>etc/virtual</code> . Komentáře v
+<code>etc/defaults.virtual</code> poskytují více informací o této
+mapě.</p>
+<p>A konečně, obecně platí, že pokud je balíček sestavován přesně
+stejným způsobem bez ohledu na to, zda je konkrétní balíček přítomen v
+<code>makedepends</code> nebo <code>hostmakedepends</code> , neměl by
+být tento balíček přidán jako závislost na čase sestavení.</p>
+<p><a id="repositories"></a></p>
+<h3 id="úložiště">Úložiště</h3>
+<p><a id="repo_by_branch"></a></p>
+<h4 id="repozitáře-definované-větví">Repozitáře definované větví</h4>
+<p>Globální úložiště převezme název aktuální větve, kromě případů, kdy
+je název větve hlavní. Potom bude výsledné úložiště v globálním rozsahu.
+Scénář použití je takový, že uživatel může aktualizovat více balíčků v
+druhé větvi, aniž by znečišťoval své místní úložiště.</p>
+<p><a id="pkg_defined_repo"></a></p>
+<h4 id="repozitáře-definované-balíčkem">Repozitáře definované
+balíčkem</h4>
+<p>Druhým způsobem, jak definovat úložiště, je nastavení proměnné
+<code>repository</code> v šabloně. Tímto způsobem může správce definovat
+úložiště pro konkrétní balíček nebo skupinu balíčků. To se v současnosti
+používá k rozlišení mezi určitými třídami balíčků.</p>
+<p>Následující názvy úložišť jsou platné:</p>
+<ul>
+<li><code>bootstrap</code> : Úložiště pro balíčky specifické pro
+xbps-src.</li>
+<li><code>debug</code> : Úložiště pro balíčky obsahující ladicí symboly.
+Téměř ve všech případech jsou tyto balíčky generovány automaticky.</li>
+<li><code>nonfree</code> : Úložiště pro balíčky, které jsou uzavřeným
+zdrojem nebo mají nesvobodné licence.</li>
+</ul>
+<p><a id="updates"></a></p>
+<h3 id="kontrola-nových-upstream-vydání">Kontrola nových upstream
+vydání</h3>
+<p>Nové upstream verze mohou být automaticky kontrolovány pomocí
+<code>./xbps-src update-check &lt;pkgname&gt;</code> . V některých
+případech je potřeba přepsat rozumné výchozí hodnoty přiřazením
+následujících proměnných v <code>update</code> souboru ve stejném
+adresáři jako příslušný soubor <code>template</code> :</p>
+<ul>
+<li><p><code>site</code> obsahuje URL, kde je uvedeno číslo verze. Pokud
+není nastaveno, jako výchozí se použije <code>homepage</code> a
+adresáře, kde jsou uloženy <code>distfiles</code> .</p></li>
+<li><p><code>pkgname</code> je název balíčku, který výchozí vzor
+kontroluje. Není-li nastaveno, použije se výchozí <code>pkgname</code>
+ze šablony.</p></li>
+<li><p><code>pattern</code> je regulární výraz kompatibilní s perl,
+který odpovídá číslu verze. Ukotvěte číslo verze pomocí <code>\K</code>
+a <code>(?=...)</code> . Příklad:
+<code>pattern='&lt;b&gt;\K[\d.]+(?=&lt;/b&gt;)'</code> , toto odpovídá
+číslu verze uzavřenému ve značkách <code>&lt;b&gt;...&lt;/b&gt;</code>
+.</p></li>
+<li><p><code>ignore</code> je mezerami oddělený seznam shellů, které
+odpovídají číslům verzí, které nejsou brány v úvahu při kontrole
+novějších verzí. Příklad: <code>ignore="*b*"</code></p></li>
+<li><p><code>version</code> je číslo verze používané k porovnání s
+upstream verzemi. Příklad: <code>version=${version//./_}</code></p></li>
+<li><p><code>single_directory</code> lze nastavit tak, aby zakázalo
+zjišťování adresáře obsahujícího jednu verzi zdrojů v url a následné
+hledání nové verze v sousedních adresářích.</p></li>
+<li><p><code>vdprefix</code> je perl kompatibilní regulární výraz
+odpovídající část, která předchází číselné části adresáře verze v url.
+Výchozí hodnota je <code>(|v|$pkgname)[-_.]*</code> .</p></li>
+<li><p><code>vdsuffix</code> je perl kompatibilní regulární výraz
+odpovídající část, která následuje číselnou část adresáře verze v url.
+Výchozí hodnota je <code>(|\.x)</code> .</p></li>
+<li><p><code>disabled</code> lze nastavit pro zakázání kontroly
+aktualizací pro balíček v případech, kdy kontrola aktualizací není možná
+nebo nedává smysl. Toto by mělo být nastaveno na řetězec popisující,
+proč je zakázáno.</p></li>
+</ul>
+<p><a id="patches"></a></p>
+<h3 id="manipulace-s-náplastmi">Manipulace s náplastmi</h3>
+<p>Někdy je potřeba software opravit, nejčastěji k opravě nalezených
+chyb nebo k opravě kompilace s novým softwarem.</p>
+<p>Pro řešení tohoto problému má xbps-src funkci záplatování. Vyhledá
+všechny soubory, které odpovídají globu
+<code>srcpkgs/$pkgname/patches/*.{diff,patch}</code> a automaticky
+použije všechny soubory, které najde pomocí <code>patch(1)</code> s
+<code>-Np1</code> . To se děje během fáze <code>do_patch()</code> .
+Proměnná <code>PATCHESDIR</code> je k dispozici v šabloně a ukazuje na
+adresář <code>patches</code> .</p>
+<p>Chování záplatování lze změnit následujícími způsoby:</p>
+<ul>
+<li><p>V adresáři <code>patches</code> lze vytvořit soubor nazvaný
+<code>series</code> se seznamem oprav odděleným novým řádkem, které se
+mají aplikovat v uvedeném pořadí. Pokud je přítomen xbps-src, použije
+pouze záplaty uvedené v souboru <code>series</code> .</p></li>
+<li><p>Soubor se stejným názvem jako jeden z patchů, ale s příponou
+<code>.args</code> lze použít k nastavení arg předávaných
+<code>patch(1)</code> . Pokud například <code>foo.patch</code> vyžaduje
+předání speciálních argumentů do <code>patch(1)</code> , které nelze
+použít při aplikaci jiných patchů, lze vytvořit
+<code>foo.patch.args</code> obsahující tyto argumenty.</p></li>
+</ul>
+<p><a id="build_scripts"></a></p>
+<h3 id="vytvářet-stylové-skripty">vytvářet stylové skripty</h3>
+<p>Proměnná <code>build_style</code> určuje metodu sestavení pro
+sestavení a instalaci balíčku. Očekává název libovolného dostupného
+skriptu v adresáři <code>void-packages/common/build-style</code> .
+Vezměte prosím na vědomí, že požadované balíčky pro spuštění skriptu
+<code>build_style</code> musí být definovány pomocí
+<code>$hostmakedepends</code> .</p>
+<p>Aktuální seznam dostupných skriptů <code>build_style</code> je
+následující:</p>
+<ul>
+<li><p>Pokud <code>build_style</code> není nastaven, šablona musí
+(alespoň) definovat funkci <code>do_install()</code> a volitelně více
+fází sestavení, jako je <code>do_configure()</code> ,
+<code>do_build()</code> atd., a může přepsat výchozí
+<code>do_fetch()</code> a <code>do_extract()</code> , které načítají a
+extrahovat soubory definované v proměnné <code>distfiles</code>
+.</p></li>
+<li><p><code>cargo</code> Pro balíky napsané v rzi, které používají
+Cargo pro stavbu. Konfigurační argumenty (jako je
+<code>--features</code> ) lze definovat v proměnné
+<code>configure_args</code> a jsou předány do cargo během
+<code>do_build</code> .</p></li>
+<li><p><code>cmake</code> U balíčků, které používají systém sestavení
+CMake, lze konfigurační argumenty předávat pomocí
+<code>configure_args</code> . Proměnná <code>cmake_builddir</code> může
+být definována tak, aby specifikovala adresář pro sestavení pod
+<code>build_wrksrc</code> namísto výchozího <code>build</code>
+.</p></li>
+<li><p><code>configure</code> U balíčků, které používají konfigurační
+skripty jiné než GNU, by mělo být předáno alespoň
+<code>--prefix=/usr</code> prostřednictvím <code>configure_args</code>
+.</p></li>
+<li><p><code>fetch</code> Pro balíčky, které pouze načítají soubory a
+instalují se tak, jak jsou, pomocí <code>do_install()</code> .</p></li>
+<li><p><code>gnu-configure</code> Pro balíčky, které používají
+konfigurační skripty kompatibilní s GNU autotools, lze další
+konfigurační argumenty předat pomocí <code>configure_args</code>
+.</p></li>
+<li><p><code>gnu-makefile</code> U balíčků, které používají GNU make,
+lze argumenty buildu předat pomocí <code>make_build_args</code> a
+argumenty instalace pomocí <code>make_install_args</code> . Cíl
+sestavení lze přepsat pomocí <code>make_build_target</code> a cíl
+instalace pomocí <code>make_install_target</code> . Tento styl
+sestavování se snaží kompenzovat makefily, které nerespektují proměnné
+prostředí, takže dobře napsané makefily, ty, které dělají takové věci,
+jako je připojení ( <code>+=</code> ) k proměnným, by měly mít v těle
+šablony nastaveno <code>make_use_env</code> .</p></li>
+<li><p><code>go</code> Pro programy napsané v Go, které se řídí
+standardní strukturou balíčků. Proměnná <code>go_import_path</code> musí
+být nastavena na cestu importu balíčku, např.
+<code>github.com/github/hub</code> pro program <code>hub</code> . Tyto
+informace lze nalézt v souboru <code>go.mod</code> pro moderní projekty
+Go. Očekává se, že distfile obsahuje balíček, ale závislosti budou
+staženy pomocí <code>go get</code> .</p></li>
+<li><p><code>R-cran</code> Pro balíčky, které jsou dostupné v The
+Comprehensive R Archive Network (CRAN). Styl sestavení vyžaduje, aby
+<code>pkgname</code> začínal <code>R-cran-</code> a všechny pomlčky (
+<code>-</code> ) ve verzi dané CRAN byly nahrazeny znakem <code>r</code>
+v proměnné <code>version</code> . Umístění <code>distfiles</code> bude
+automaticky nastaveno a balíček bude závislý na <code>R</code>
+.</p></li>
+<li><p><code>gemspec</code> Pro balíčky, které používají soubory <a
+href="https://guides.rubygems.org/specification-reference/">gemspec</a>
+pro vytvoření rubínového drahokamu a jeho následnou instalaci. Příkaz
+gem lze přepsat příkazem <code>gem_cmd</code> .
+<code>configure_args</code> lze použít k předání argumentů během
+kompilace. Pokud váš balíček nepoužívá zkompilovaná rozšíření, zvažte
+použití stylu sestavení <code>gem</code> .</p></li>
+<li><p><code>gem</code> Pro balíčky, které se instalují pomocí drahokamů
+od <a href="https://rubygems.org/">RubyGems</a> . Příkaz gem lze přepsat
+příkazem <code>gem_cmd</code> . <code>distfiles</code> je nastaven
+stylem sestavení, pokud tak šablona nečiní. Pokud váš drahokam poskytuje
+rozšíření, která musí být zkompilována, zvažte použití stylu sestavení
+<code>gemspec</code> .</p></li>
+<li><p><code>ruby-module</code> Pro balíčky, které jsou moduly ruby ​​a
+lze je nainstalovat přes <code>ruby install.rb</code> . Další argumenty
+instalace lze zadat pomocí <code>make_install_args</code> .</p></li>
+<li><p><code>perl-ModuleBuild</code> Pro balíčky, které používají metodu
+Perl <a href="https://metacpan.org/pod/Module::Build">Module::Build</a>
+.</p></li>
+<li><p><code>perl-module</code> Pro balíčky, které používají metodu
+sestavení Perl <a
+href="http://perldoc.perl.org/ExtUtils/MakeMaker.html">ExtUtils::MakeMaker</a>
+.</p></li>
+<li><p><code>raku-dist</code> Pro balíčky, které používají metodu
+sestavení Raku <code>raku-install-dist</code> s rakudo.</p></li>
+<li><p><code>waf3</code> Pro balíčky, které používají Python3 metodu
+sestavení <code>waf</code> s python3.</p></li>
+<li><p><code>slashpackage</code> Pro balíčky, které k sestavení
+používají hierarchii /package a package/compile, jako je například
+<code>daemontools</code> nebo jakýkoli <code>djb</code>
+software.</p></li>
+<li><p><code>qmake</code> U balíčků, které používají profily Qt5/Qt6
+qmake ( <code>*.pro</code> ), mohou být argumenty qmake pro fázi
+configure předány prostřednictvím <code>configure_args</code> ,
+argumenty make build mohou být předány pomocí
+<code>make_build_args</code> a argumenty instalace pomocí
+<code>make_install_args</code> . Cíl sestavení lze přepsat pomocí
+<code>make_build_target</code> a cíl instalace pomocí
+<code>make_install_target</code> .</p></li>
+<li><p><code>meson</code> U balíčků, které používají systém Meson Build,
+lze konfigurační volby předat přes <code>configure_args</code> , příkaz
+meson lze přepsat pomocí <code>meson_cmd</code> a umístění out of source
+buildu pomocí <code>meson_builddir</code></p></li>
+<li><p><code>void-cross</code> Pro cross-toolchain balíčky používané k
+budování Void systémů. Neexistují žádné povinné proměnné (cílový triplet
+je odvozen), ale můžete zadat některé volitelné -
+<code>cross_gcc_skip_go</code> lze zadat pro přeskočení
+<code>gccgo</code> , jednotlivé argumenty konfigurace podprojektu lze
+zadat pomocí <code>cross_*_configure_args</code> kde <code>*</code> je
+<code>binutils</code> , <code>gcc_bootstrap</code> (předčasné gcc),
+<code>gcc</code> (final gcc), <code>glibc</code> (nebo <code>musl</code>
+), <code>configure_args</code> je navíc předán jak ranému, tak konečnému
+<code>gcc</code> . Můžete také zadat vlastní <code>CFLAGS</code> a
+<code>LDFLAGS</code> pro knihovnu libc jako
+<code>cross_(glibc|musl)_(cflags|ldflags)</code> .</p></li>
+<li><p><code>zig-build</code> Pro balíčky používající systém sestavení
+<a href="https://ziglang.org">Zig</a> . Další argumenty lze předat
+vyvolání <code>zig build</code> pomocí <code>configure_args</code>
+.</p></li>
+</ul>
+<p>U balíčků, které používají metodu sestavení modulu Python (
+<code>setup.py</code> nebo <a
+href="https://www.python.org/dev/peps/pep-0517/">PEP 517</a> ), si
+můžete vybrat jednu z následujících možností:</p>
+<ul>
+<li><p><code>python3-module</code> pro sestavení modulů Pythonu
+3.x</p></li>
+<li><p><code>python3-pep517</code> k sestavení modulů Pythonu 3.x, které
+poskytují popis sestavení PEP 517 bez skriptu
+<code>setup.py</code></p></li>
+</ul>
+<p>Proměnné prostředí pro konkrétní <code>build_style</code> lze
+deklarovat v názvu souboru, který odpovídá názvu
+<code>build_style</code> , Příklad:</p>
+<pre><code>`common/environment/build-style/gnu-configure.sh`</code></pre>
+<ul>
+<li><code>texmf</code> Pro texmf zip/tarballs, které potřebují jít do
+/usr/share/texmf-dist. Zahrnuje manipulaci s duplikáty.</li>
+</ul>
+<p><a id="build_helper"></a></p>
+<h3 id="vytvářet-pomocné-skripty">vytvářet pomocné skripty</h3>
+<p>Proměnná <code>build_helper</code> specifikuje úryvky shellu, které
+mají být získávány a které vytvoří vhodné prostředí pro práci s určitými
+sadami balíčků.</p>
+<p>Aktuální seznam dostupných skriptů <code>build_helper</code> je
+následující:</p>
+<ul>
+<li><p><code>cmake-wxWidgets-gtk3</code> nastavuje proměnnou
+<code>WX_CONFIG</code> , kterou používá FindwxWidgets.cmake</p></li>
+<li><p><code>gir</code> specifikuje závislosti pro nativní a křížová
+sestavení pro řešení GObject Introspection. Následující proměnné lze
+nastavit v šabloně pro zpracování křížových sestavení, která vyžadují
+další nápovědu nebo vykazují problémy. <code>GIR_EXTRA_LIBS_PATH</code>
+definuje další cesty, které se mají prohledávat při propojování cílových
+binárních souborů, které mají být introspekovány.
+<code>GIR_EXTRA_OPTIONS</code> definuje další možnosti pro
+<code>g-ir-scanner-qemuwrapper</code> volající
+<code>qemu-&lt;target_arch&gt;-static</code> při spuštění cílového
+binárního souboru. Můžete například zadat
+<code>GIR_EXTRA_OPTIONS="-strace"</code> abyste viděli stopu toho, co se
+stane při spuštění této binárky.</p></li>
+<li><p><code>meson</code> vytvoří křížový soubor
+<code>${XBPS_WRAPPERDIR}/meson/xbps_meson.cross</code> , který
+nakonfiguruje meson pro křížové sestavení. To je zvláště užitečné pro
+sestavování balíčků, které zalamují vyvolání mesonu (např. balíčky
+<code>python3-pep517</code> , které používají backend meson) a přidává
+se standardně pro balíčky, které používají styl sestavení
+<code>meson</code> .</p></li>
+<li><p><code>numpy</code> konfiguruje prostředí pro křížovou kompilaci
+pythonových balíčků, které poskytují kompilovaná rozšíření odkazující na
+knihovny NumPy C. Pokud je také nakonfigurován pomocník sestavení
+<code>meson</code> , zapíše se sekundární křížový soubor
+<code>${XBPS_WRAPPERDIR}/meson/xbps_numpy.cross</code> , aby informoval
+meson, kde lze nalézt běžné komponenty NumPy.</p></li>
+<li><p><code>python3</code> konfiguruje prostředí cross-build tak, aby
+používala knihovny Pythonu, hlavičkové soubory a konfigurace interpretů
+v cílovém kořenovém adresáři. Pomocník <code>python3</code> je
+standardně přidán pro balíčky, které používají styly sestavení
+<code>python3-module</code> nebo <code>python3-pep517</code> .</p></li>
+<li><p><code>qemu</code> nastavuje další proměnné pro styly sestavení
+<code>cmake</code> a <code>meson</code> , aby bylo možné spouštět
+křížově kompilované binární soubory uvnitř qemu. Nastaví
+<code>CMAKE_CROSSCOMPILING_EMULATOR</code> pro cmake a
+<code>exe_wrapper</code> pro meson na
+<code>qemu-&lt;target_arch&gt;-static</code> a
+<code>QEMU_LD_PREFIX</code> na <code>XBPS_CROSS_BASE</code> . Vytvoří
+také funkci <code>vtargetrun</code> pro zabalení příkazů do volání
+<code>qemu-&lt;target_arch&gt;-static</code> pro cílovou
+architekturu.</p></li>
+<li><p><code>qmake</code> vytvoří konfigurační soubor
+<code>qt.conf</code> (srov. <code>qmake</code> <code>build_style</code>
+) potřebný pro křížová sestavení a qmake-wrapper, aby <code>qmake</code>
+použil tuto konfiguraci. Cílem je opravit křížová sestavení pro případ,
+že je styl sestavení smíšený: např. když ve stylu
+<code>gnu-configure</code> konfigurační skript volá <code>qmake</code>
+nebo <code>Makefile</code> ve stylu <code>gnu-makefile</code> . Toto je
+pro balíčky Qt5.</p></li>
+<li><p><code>qmake6</code> is like <code>qmake</code> but for
+Qt6.</p></li>
+<li><p><code>rust</code> specifikuje proměnné prostředí požadované pro
+křížovou kompilaci přepravek přes náklad a pro kompilaci cargo -sys
+přepravek. Přidává také obalovač <code>cargo</code> , který detekuje a
+prochází sestavami <code>cargo-auditable</code> . Tento pomocník je
+standardně přidán pro balíčky, které používají styl sestavení
+<code>cargo</code> .</p></li>
+<li><p><code>haskell</code> specifikuje proměnné prostředí pro cabal.
+Tato pomocná funkce je standardně přidána pro balíčky, které používají
+styl sestavení <code>haskell-stack</code> nebo <code>cabal</code>
+.</p></li>
+</ul>
+<p><a id="functions"></a></p>
+<h3 id="funkce">Funkce</h3>
+<p>Následující funkce mohou být definovány pro změnu chování, jak se
+balíček stahuje, kompiluje a instaluje.</p>
+<ul>
+<li><p><code>pre_fetch()</code> Akce, které se mají provést před
+<code>do_fetch()</code> .</p></li>
+<li><p><code>do_fetch()</code> pokud je definováno a není nastaveno
+<code>distfiles</code> , použijte jej k načtení požadovaných
+zdrojů.</p></li>
+<li><p><code>post_fetch()</code> Akce, které se mají provést po
+<code>do_fetch()</code> .</p></li>
+<li><p><code>pre_extract()</code> Akce, které se mají provést po
+<code>post_fetch()</code> .</p></li>
+<li><p><code>do_extract()</code> pokud je definováno a není nastaveno
+<code>distfiles</code> , použijte jej k extrahování požadovaných
+zdrojů.</p></li>
+<li><p><code>post_extract()</code> Akce, které se mají provést po
+<code>do_extract()</code> .</p></li>
+<li><p><code>pre_patch()</code> Akce, které se mají provést po
+<code>post_extract()</code> .</p></li>
+<li><p><code>do_patch()</code> pokud je definována, použijte ji k
+přípravě prostředí pro sestavení a spuštění háčků pro aplikaci
+záplat.</p></li>
+<li><p><code>post_patch()</code> Akce, které se mají provést po
+<code>do_patch()</code> .</p></li>
+<li><p><code>pre_configure()</code> Akce, které se mají provést po
+<code>post_patch()</code> .</p></li>
+<li><p><code>do_configure()</code> Akce pro provedení konfigurace
+balíčku; <code>${configure_args}</code> by měl být stále předán, pokud
+se jedná o konfigurační skript GNU.</p></li>
+<li><p><code>post_configure()</code> Akce, které se mají provést po
+<code>do_configure()</code> .</p></li>
+<li><p><code>pre_build()</code> Akce, které se mají provést po
+<code>post_configure()</code> .</p></li>
+<li><p><code>do_build()</code> Akce k provedení sestavení
+balíčku.</p></li>
+<li><p><code>post_build()</code> Akce, které se mají provést po
+<code>do_build()</code> .</p></li>
+<li><p><code>pre_check()</code> Akce, které se mají provést po
+<code>post_build()</code> .</p></li>
+<li><p><code>do_check()</code> Akce, které se mají provést pro spuštění
+kontroly balíčku.</p></li>
+<li><p><code>post_check()</code> Akce, které se mají provést po
+<code>do_check()</code> .</p></li>
+<li><p><code>pre_install()</code> Akce, které se mají provést po
+<code>post_check()</code> .</p></li>
+<li><p><code>do_install()</code> Akce, které se mají provést k instalaci
+souborů balíčku do <code>fake destdir</code> .</p></li>
+<li><p><code>post_install()</code> Akce, které se mají provést po
+<code>do_install()</code> .</p></li>
+<li><p><code>do_clean()</code> Akce, které se mají provést pro vyčištění
+po úspěšné fázi balíčku.</p></li>
+</ul>
+<blockquote>
+<p>Funkce definovaná v šabloně má přednost před stejnou funkcí
+definovanou skriptem <code>build_style</code> .</p>
+</blockquote>
+<p>Aktuální pracovní adresář pro funkce je nastaven takto:</p>
+<ul>
+<li><p>Pro pre_fetch, pre_extract, do_clean:
+<code>&lt;masterdir&gt;</code> .</p></li>
+<li><p>Pro do_fetch, post_fetch: <code>XBPS_BUILDDIR</code> .</p></li>
+<li><p>Pro do_extract přes do_patch: <code>wrksrc</code> .</p></li>
+<li><p>Pro post_patch až post_install: <code>build_wrksrc</code> pokud
+je definován, jinak <code>wrksrc</code> .</p></li>
+</ul>
+<p><a id="build_options"></a></p>
+<h3 id="možnosti-sestavení">Možnosti sestavení</h3>
+<p>Některé balíčky mohou být sestaveny s různými možnostmi sestavení,
+aby bylo možné povolit/zakázat další funkce; Kolekce zdrojových balíčků
+XBPS vám to umožňuje pomocí několika jednoduchých úprav souboru
+<code>template</code> .</p>
+<p>Následující proměnné mohou být nastaveny tak, aby umožňovaly možnosti
+sestavení balíčku:</p>
+<ul>
+<li><p><code>build_options</code> Nastavuje možnosti sestavení
+podporované zdrojovým balíčkem.</p></li>
+<li><p><code>build_options_default</code> Nastavuje výchozí možnosti
+sestavení, které má použít zdrojový balíček.</p></li>
+<li><p><code>desc_option_&lt;option&gt;</code> Nastaví popis pro
+<code>option</code> volby sestavení . To se musí shodovat s klíčovým
+slovem nastaveným v <em>build_options</em> . Všimněte si, že pokud je
+možnost sestavení dostatečně obecná, její popis by měl být místo toho
+přidán do <code>common/options.description</code> .</p></li>
+</ul>
+<p>Po definování těchto požadovaných proměnných můžete zkontrolovat
+proměnnou <code>build_option_&lt;option&gt;</code> , abyste věděli, zda
+byla nastavena, a podle toho upravit zdrojový balíček. Kromě toho jsou k
+dispozici následující funkce:</p>
+<ul>
+<li><p><em>vopt_if()</em>
+<code>vopt_if &lt;option&gt; &lt;if_true&gt; [&lt;if_false&gt;]</code></p>
+<p>Výstup <code>if_true</code> pokud je nastavena <code>option</code> ,
+nebo <code>if_false</code> pokud není nastavena.</p></li>
+<li><p><em>vopt_with()</em>
+<code>vopt_with &lt;option&gt; [&lt;flag&gt;]</code></p>
+<p>Výstup <code>--with-&lt;flag&gt;</code> , pokud je tato možnost
+nastavena, nebo <code>--without-&lt;flag&gt;</code> v opačném případě.
+Není-li <code>flag</code> nastaven, výchozí je <code>option</code> .</p>
+<p>Příklady:</p>
+<ul>
+<li><code>vopt_with dbus</code></li>
+<li><code>vopt_with xml xml2</code></li>
+</ul></li>
+<li><p><em>vopt_enable()</em>
+<code>vopt_enable &lt;option&gt; [&lt;flag&gt;]</code></p>
+<p>Stejné jako <code>vopt_with</code> , ale používá
+<code>--enable-&lt;flag&gt;</code> a <code>--disable-&lt;flag&gt;</code>
+.</p></li>
+<li><p><em>vopt_conflict()</em>
+<code>vopt_conflict &lt;option 1&gt; &lt;option 2&gt;</code></p>
+<p>Vydá chybu a ukončí se, pokud jsou obě možnosti nastaveny
+současně.</p></li>
+<li><p><em>vopt_bool()</em>
+<code>vopt_bool &lt;option&gt; &lt;property&gt;</code></p>
+<p>Výstupy <code>-D&lt;property&gt;=true</code> pokud je volba
+nastavena, nebo <code>-D&lt;property&gt;=false</code> v opačném
+případě.</p></li>
+<li><p><em>vopt_feature()</em>
+<code>vopt_feature &lt;option&gt; &lt;property&gt;</code></p>
+<p>Stejné jako <code>vopt_bool</code> , ale používá
+<code>-D&lt;property&gt;=enabled</code> a
+<code>-D&lt;property&gt;=disabled</code> .</p></li>
+</ul>
+<p>Následující příklad ukazuje, jak změnit zdrojový balíček, který
+používá konfiguraci GNU, aby povolil novou možnost sestavení pro podporu
+obrázků PNG:</p>
+<pre><code># Template file for &#39;foo&#39;
+pkgname=foo
+version=1.0
+revision=1
+build_style=gnu-configure
+configure_args=&quot;... $(vopt_with png)&quot;
+makedepends=&quot;... $(vopt_if png libpng-devel)&quot;
+...
+
+# Package build options
+build_options=&quot;png&quot;
+desc_option_png=&quot;Enable support for PNG images&quot;
+
+# To build the package by default with the `png` option:
+#
+# build_options_default=&quot;png&quot;
+
+...
+</code></pre>
+<p>Podporované možnosti sestavení pro zdrojový balíček lze zobrazit
+pomocí <code>xbps-src</code> :</p>
+<pre><code>$ ./xbps-src show-options foo</code></pre>
+<p>Možnosti sestavení lze povolit pomocí parametru <code>-o</code>
+<code>xbps-src</code> :</p>
+<pre><code>$ ./xbps-src -o option,option1 &lt;cmd&gt; foo</code></pre>
+<p>Možnosti sestavení lze zakázat jejich přidáním předponu
+<code>~</code> :</p>
+<pre><code>$ ./xbps-src -o ~option,~option1 &lt;cmd&gt; foo</code></pre>
+<p>Oba způsoby lze použít společně k povolení a/nebo zakázání více
+možností současně s <code>xbps-src</code> :</p>
+<pre><code>$ ./xbps-src -o option,~option1,~option2 &lt;cmd&gt; foo</code></pre>
+<p>Možnosti sestavení lze také zobrazit pro binární balíčky pomocí
+<code>xbps-query(8)</code> :</p>
+<pre><code>$ xbps-query -R --property=build-options foo</code></pre>
+<p>Trvalé globální možnosti sestavení balíčku lze nastavit pomocí
+proměnné <code>XBPS_PKG_OPTIONS</code> v konfiguračním souboru
+<code>etc/conf</code> . Možnosti sestavení pro jednotlivé balíčky lze
+nastavit pomocí <code>XBPS_PKG_OPTIONS_&lt;pkgname&gt;</code> .</p>
+<blockquote>
+<p>POZNÁMKA: Pokud <code>pkgname</code> obsahuje <code>dashes</code> ,
+měly by být nahrazeny <code>underscores</code> Příklad:
+<code>XBPS_PKG_OPTIONS_xorg_server=opt</code> .</p>
+</blockquote>
+<p>Seznam podporovaných voleb sestavení balíčku a jeho popis je
+definován v souboru <code>common/options.description</code> .</p>
+<p><a id="install_remove_files"></a></p>
+<h3 id="instalovat-a-odebrat-soubory">INSTALOVAT a ODEBRAT soubory</h3>
+<p>Útržky shellu INSTALL a REMOVE lze použít k provedení určitých akcí v
+určené fázi, když je binární balíček instalován, aktualizován nebo
+odstraněn. Existují některé proměnné, které jsou vždy nastaveny
+<code>xbps</code> při provádění skriptů:</p>
+<ul>
+<li><code>$ACTION</code> : pro podmínění jeho akcí: <code>pre</code>
+nebo <code>post</code> .</li>
+<li><code>$PKGNAME</code> : název balíčku.</li>
+<li><code>$VERSION</code> : verze balíčku.</li>
+<li><code>$UPDATE</code> : nastavte na <code>yes</code> pokud se balíček
+aktualizuje, <code>no</code> , pokud se balíček <code>installed</code>
+nebo <code>removed</code> .</li>
+<li><code>$CONF_FILE</code> : úplná cesta k <code>xbps.conf</code>
+.</li>
+<li><code>$ARCH</code> : cílová architektura, na které běží.</li>
+</ul>
+<p>Příklad toho, jak má být vytvořen skript <code>INSTALL</code> nebo
+<code>REMOVE</code> , je uveden níže:</p>
+<pre><code># INSTALL
+case &quot;$ACTION&quot; in
+pre)
+    # Actions to execute before the package files are unpacked.
+    ...
+    ;;
+post)
+    if [ &quot;$UPDATE&quot; = &quot;yes&quot; ]; then
+        # actions to execute if package is being updated.
+        ...
+    else
+        # actions to execute if package is being installed.
+        ...
+    fi
+    ;;
+esac</code></pre>
+<p>dílčí balíčky mohou mít také své vlastní soubory <code>INSTALL</code>
+a <code>REMOVE</code> , jednoduše je vytvořte jako
+<code>srcpkgs/&lt;pkgname&gt;/&lt;subpkg&gt;.INSTALL</code> nebo
+<code>srcpkgs/&lt;pkgname&gt;/&lt;subpkg&gt;.REMOVE</code> .</p>
+<blockquote>
+<p>POZNÁMKA: Vždy používejte cesty relativně k aktuálnímu pracovnímu
+adresáři, jinak pokud skripty nelze spustit přes <code>chroot(2)</code>
+nebudou správně fungovat.</p>
+</blockquote>
+<blockquote>
+<p>POZNÁMKA: K tisku zpráv nepoužívejte skripty INSTALL/REMOVE, další
+informace naleznete v další části.</p>
+</blockquote>
+<p><a id="install_remove_files_msg"></a></p>
+<h3 id="installmsg-a-removemsg-soubory">INSTALL.msg a REMOVE.msg
+soubory</h3>
+<p>Soubory <code>INSTALL.msg</code> a <code>REMOVE.msg</code> lze použít
+k vytištění zprávy v době po instalaci nebo před odstraněním.</p>
+<p>V ideálním případě by tyto soubory neměly přesáhnout 80 znaků na
+řádek.</p>
+<p>dílčí balíčky mohou mít také své vlastní soubory
+<code>INSTALL.msg</code> a <code>REMOVE.msg</code> , jednoduše je
+vytvořte jako
+<code>srcpkgs/&lt;pkgname&gt;/&lt;subpkg&gt;.INSTALL.msg</code> nebo
+<code>srcpkgs/&lt;pkgname&gt;/&lt;subpkg&gt;.REMOVE.msg</code> .</p>
+<p>Toto by se mělo používat pouze pro kritické zprávy, jako je varování
+uživatelů o porušení změn.</p>
+<p><a id="runtime_account_creation"></a></p>
+<h3 id="vytváření-systémových-účtůskupin-za-běhu">Vytváření systémových
+účtů/skupin za běhu</h3>
+<p>Existuje spouštěč spolu s některými proměnnými, které jsou specificky
+určeny k vytvoření <strong>systémových uživatelů a skupin</strong> při
+konfiguraci binárního balíčku. K tomuto účelu lze použít následující
+proměnné:</p>
+<ul>
+<li><p><code>system_groups</code> Určuje názvy nových <em>skupin
+systémů</em> , které mají být vytvořeny, oddělené mezerami. Volitelně
+lze zadat <strong>gid</strong> oddělením dvojtečkou, tj.
+<code>system_groups="_mygroup:78"</code> nebo
+<code>system_groups="_foo _blah:8000"</code> .</p></li>
+<li><p><code>system_accounts</code> Určuje jména nových
+<strong>systémových uživatelů/skupin,</strong> které mají být vytvořeny,
+oddělená mezerami, tj <code>system_accounts="_foo _blah:22"</code> .
+Volitelně lze <strong>uid</strong> a <strong>gid</strong> specifikovat
+jejich oddělením dvojtečkou, tj. <code>system_accounts="_foo:48"</code>
+. Pro změnu chování <strong>systémových účtů</strong> lze zadat další
+proměnné:</p>
+<ul>
+<li><code>&lt;account&gt;_homedir</code> domovský adresář uživatele.
+Pokud není nastaveno, výchozí je <code>/var/empty</code> .</li>
+<li><code>&lt;account&gt;_shell</code> shell pro nového uživatele. Pokud
+není nastaveno, výchozí je <code>/sbin/nologin</code> .</li>
+<li><code>&lt;account&gt;_descr</code> popis pro nového uživatele. Pokud
+není nastaveno, výchozí je
+<code>&lt;account&gt; unprivileged user</code> .</li>
+<li><code>&lt;account&gt;_groups</code> další skupiny, které mají být
+přidány pro nového uživatele.</li>
+<li><code>&lt;account&gt;_pgroup</code> pro nastavení primární skupiny,
+ve výchozím nastavení je primární skupina nastavena na
+<code>&lt;account&gt;</code> .</li>
+</ul></li>
+</ul>
+<p><strong>Systémový uživatel</strong> je vytvořen pomocí dynamicky
+přiděleného <strong>uid/gid</strong> ve vašem systému a je vytvořen jako
+<code>system account</code> , pokud není nastaveno <strong>uid</strong>
+. Pro zadaný <code>system account</code> bude vytvořena nová skupina a
+bude použita výhradně pro tento účel.</p>
+<p>Systémové účty a skupiny musí mít předponu podtržítka, aby se
+předešlo střetu s názvy uživatelských účtů.</p>
+<blockquote>
+<p>POZNÁMKA: Zásady podtržení se nevztahují na staré balíčky, kvůli
+nevyhnutelnému porušení změny uživatelského jména by se podle něj měly
+řídit pouze nové balíčky.</p>
+</blockquote>
+<p><a id="writing_runit_services"></a></p>
+<h3 id="psaní-runitových-služeb">Psaní runitových služeb</h3>
+<p>Void Linux používá <a href="http://smarden.org/runit/">runit</a> pro
+bootování a dohled nad službami.</p>
+<p>Většinu informací o tom, jak je napsat, najdete v jejich <a
+href="http://smarden.org/runit/faq.html#create">FAQ</a> . Následují
+pokyny specifické pro Void Linux, jak psát služby.</p>
+<p>Pokud démon služby podporuje příznaky CLI, zvažte přidání podpory pro
+jeho změnu prostřednictvím proměnné <code>OPTS</code> čtením souboru s
+názvem <code>conf</code> ve stejném adresáři jako démon.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> <span class="ot">-r</span> conf <span class="bu">]</span> <span class="kw">&amp;&amp;</span> <span class="bu">.</span> ./conf</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span> daemon <span class="va">${OPTS</span><span class="op">:-</span> --flag-enabled-by-default<span class="va">}</span></span></code></pre></div>
+<p>Pokud služba vyžaduje vytvoření adresáře pod <code>/run</code> nebo
+jeho odkazu <code>/var/run</code> pro ukládání runtime informací (jako
+Pidfiles), zapište jej do souboru služby. Pokud jej potřebujete vytvořit
+se specifickými oprávněními, doporučujeme použít <code>install</code>
+namísto <code>mkdir -p</code> .</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install</span> <span class="at">-d</span> <span class="at">-m0700</span> /run/foo</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span> foo</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/sh</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install</span> <span class="at">-d</span> <span class="at">-m0700</span> <span class="at">-o</span> bar <span class="at">-g</span> bar /run/bar</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span> bar</span></code></pre></div>
+<p>Pokud služba vyžaduje adresáře v částech systému, které obecně nejsou
+v dočasných souborových systémech. Poté použijte proměnnou
+<code>make_dirs</code> v šabloně k vytvoření těchto adresářů, když je
+balíček nainstalován.</p>
+<p>Pokud balíček nainstaluje servisní soubor systemd nebo jinou
+jednotku, ponechte jej na místě jako referenční bod, pokud jeho zahrnutí
+nemá žádné negativní vedlejší účinky.</p>
+<p>Příklady, kdy <em>neinstalovat</em> systémové jednotky:</p>
+<ol type="1">
+<li>Když tak učiníte, změní se běhové chování přibaleného softwaru.</li>
+<li>Když se to provádí pomocí příznaku doby kompilace, který také mění
+závislosti sestavení.</li>
+</ol>
+<p><a id="32bit_pkgs"></a></p>
+<h3 id="32bitové-balíčky">32bitové balíčky</h3>
+<p>32bitové balíčky se sestavují automaticky, když je tvůrce x86
+(32bit), ale existují některé proměnné, které mohou chování změnit:</p>
+<ul>
+<li><p><code>lib32depends</code> Je-li tato proměnná nastavena, budou
+zde uvedené závislosti použity spíše než závislosti detekované
+automaticky <code>xbps-src</code> a <strong>závisí</strong> . Vezměte
+prosím na vědomí, že závislosti musí být specifikovány pomocí
+komparátorů verzí, Příklad:
+<code>lib32depends="foo&gt;=0 blah&lt;2.0"</code> .</p></li>
+<li><p><code>lib32disabled</code> Pokud je tato proměnná nastavena,
+nebude sestaven žádný 32bitový balíček.</p></li>
+<li><p><code>lib32files</code> Další soubory, které mají být přidány do
+<strong>32bitového</strong> balíčku. To očekává absolutní cesty oddělené
+mezerami, Příklad:
+<code>lib32files="/usr/bin/blah /usr/include/blah."</code> .</p></li>
+<li><p><code>lib32symlinks</code> Vytvoří symbolický odkaz cílového
+souboru uloženého v adresáři <code>lib32</code> . To očekává základní
+název cílového souboru, Příklad: <code>lib32symlinks="foo"</code>
+.</p></li>
+<li><p><code>lib32mode</code> Pokud není nastaveno, do
+<strong>32bitového</strong> balíčku budou zkopírovány pouze
+sdílené/statické knihovny a soubory pkg-config. Pokud je nastaveno na
+<code>full</code> všechny soubory budou zkopírovány do 32bitového
+balíčku, nezměněné.</p></li>
+</ul>
+<p><a id="pkgs_sub"></a></p>
+<h3 id="dílčí-balíčky">Dílčí balíčky</h3>
+<p>Ve výše uvedeném příkladu se vygeneruje pouze binární balíček, ale
+pomocí některých jednoduchých vylepšení lze z jedné šablony/sestavení
+vygenerovat více binárních balíčků, tomu se říká
+<code>subpackages</code> .</p>
+<p>Chcete-li vytvořit další <code>subpackages</code> musí
+<code>template</code> definovat novou funkci s tímto názvem:
+<code>&lt;subpkgname&gt;_package()</code> , Příklad:</p>
+<pre><code># Template file for &#39;foo&#39;
+pkgname=foo
+version=1.0
+revision=1
+build_style=gnu-configure
+short_desc=&quot;A short description max 72 chars&quot;
+maintainer=&quot;name &lt;email&gt;&quot;
+license=&quot;GPL-3.0-or-later&quot;
+homepage=&quot;http://www.foo.org&quot;
+distfiles=&quot;http://www.foo.org/foo-${version}.tar.gz&quot;
+checksum=&quot;fea0a94d4b605894f3e2d5572e3f96e4413bcad3a085aae7367c2cf07908b2ff&quot;
+
+# foo-devel is a subpkg
+foo-devel_package() {
+    short_desc+=&quot; - development files&quot;
+    depends=&quot;${sourcepkg}&gt;=${version}_${revision}&quot;
+    pkg_install() {
+        vmove usr/include
+        vmove &quot;usr/lib/*.a&quot;
+        vmove &quot;usr/lib/*.so&quot;
+        vmove usr/lib/pkgconfig
+    }
+}</code></pre>
+<p>Všechny dílčí balíčky potřebují další symbolický odkaz na
+<code>main</code> balíček, jinak závislosti vyžadující tyto balíčky
+nenajdou svou <code>template</code> Příklad:</p>
+<pre><code> /srcpkgs
+  |- foo &lt;- directory (main pkg)
+  |  |- template
+  |- foo-devel &lt;- symlink to `foo`</code></pre>
+<p>Hlavní balíček by měl specifikovat všechny požadované
+<code>build dependencies</code> , aby bylo možné sestavit všechny dílčí
+balíčky definované v šabloně.</p>
+<p>Důležitým bodem <code>subpackages</code> je, že jsou zpracovány poté,
+co hlavní balíček dokončil svou fázi <code>install</code> . Funkce
+<code>pkg_install()</code> na nich specifikovaná se běžně používá k
+přesunu souborů z <code>main</code> balíčku destdir do
+<code>subpackage</code> destdir.</p>
+<p>Pomocné funkce <code>vinstall</code> , <code>vmkdir</code> ,
+<code>vcopy</code> a <code>vmove</code> jsou jen obaly, které
+zjednodušují proces vytváření, kopírování a přesouvání souborů/adresářů
+mezi <code>main</code> balíčkem destdir ( <code>$DESTDIR</code> ) do
+<code>subpackage</code> destdir ( <code>$PKGDESTDIR</code> ).</p>
+<p>Dílčí balíčky jsou zpracovávány vždy v abecedním pořadí; Chcete-li
+vynutit vlastní objednávku, lze proměnnou <code>subpackages</code>
+deklarovat s požadovanou objednávkou.</p>
+<p><a id="pkgs_classes"></a></p>
+<h3 id="některé-třídy-balíčků">Některé třídy balíčků</h3>
+<p><a id="pkgs_development"></a></p>
+<h4 id="vývojové-balíčky">Vývojové balíčky</h4>
+<p>Vývojový balíček, běžně generovaný jako dílčí balíček, bude obsahovat
+pouze soubory potřebné pro vývoj, to znamená záhlaví, statické knihovny,
+symbolické odkazy sdílených knihoven, soubory pkg-config, dokumentaci
+API nebo jakýkoli jiný skript, který je užitečný pouze při vývoji pro
+cíl. software.</p>
+<p>Vývojový balíček by měl záviset na balíčcích, které se vyžadují k
+propojení s poskytnutými sdílenými knihovnami, tj. pokud
+<code>libfoo</code> poskytuje sdílenou knihovnu <code>libfoo.so.2</code>
+a propojení potřebuje <code>-lbar</code> , balíček poskytující sdílenou
+knihovnu <code>libbar</code> by měl být přidán jako závislost ; a s
+největší pravděpodobností bude záviset na jeho vývojovém balíčku.</p>
+<p>Pokud vývojový balíček poskytuje soubor <code>pkg-config</code> ,
+měli byste ověřit, jaké závislosti potřebuje balíček pro dynamické nebo
+statické propojení, a přidat příslušné <code>development</code> balíčky
+jako závislosti.</p>
+<p>Vývojové balíčky pro jazyky C a C++ obvykle <code>vmove</code>
+následující podmnožinu souborů z hlavního balíčku:</p>
+<ul>
+<li>Záhlaví souborů <code>usr/include</code></li>
+<li>Statické knihovny <code>usr/lib/*.a</code></li>
+<li>Symbolické odkazy sdílené knihovny <code>usr/lib/*.so</code></li>
+<li>Pravidla Cmake <code>usr/lib/cmake</code>
+<code>usr/share/cmake</code></li>
+<li>Zabalte konfigurační soubory <code>usr/lib/pkgconfig</code>
+<code>usr/share/pkgconfig</code></li>
+<li>Autoconf makra <code>usr/share/aclocal</code></li>
+<li>Soubory XML pro introspekci Gobject
+<code>usr/share/gir-1.0</code></li>
+<li>Vala vazby <code>usr/share/vala</code></li>
+</ul>
+<p><a id="pkgs_data"></a></p>
+<h4 id="datové-balíčky">Datové balíčky</h4>
+<p>Dalším běžným typem dílčího balíčku je dílčí balíček
+<code>-data</code> . Tento typ dílčího balíku se používá k rozdělení na
+architektuře nezávislé, velké (ger) nebo velké množství dat z hlavní
+části balíku a části závislé na architektuře. Je na vás, abyste se
+rozhodli, zda má podbalíček <code>-data</code> pro váš balíček smysl.
+Tento typ je běžný pro hry (grafika, zvuk a hudba), knihovny součástí
+(CAD) nebo materiál karet (mapy). Hlavní balíček pak musí mít
+<code>depends="${pkgname}-data-${version}_${revision}"</code> , možná
+kromě jiných, neautomatických závislostí.</p>
+<p><a id="pkgs_documentation"></a></p>
+<h4 id="balíčky-dokumentace">Balíčky dokumentace</h4>
+<p>Balíčky určené pro interakci uživatele ne vždy bezpodmínečně vyžadují
+svou dokumentační část. Uživatel, který nechce např. vyvíjet s Qt5,
+nebude muset instalovat (obrovský) balíček qt5-doc. Odborník to nemusí
+potřebovat nebo se rozhodne používat online verzi.</p>
+<p>Obecně je balíček <code>-doc</code> užitečný, pokud lze hlavní
+balíček použít s dokumentací i bez dokumentace a velikost dokumentace
+není opravdu malá. Základní balíček a podbalíček <code>-devel</code> by
+měly být malé, aby při sestavování balíčků závislých na konkrétním
+balíčku nebylo nutné bezdůvodně instalovat velké množství dokumentace.
+Velikost části dokumentace by tedy měla být vaším vodítkem při
+rozhodování, zda oddělit podbalíček <code>-doc</code> či nikoli.</p>
+<p><a id="pkgs_python"></a></p>
+<h4 id="python-balíčky">Python balíčky</h4>
+<p>Balíčky Pythonu by měly být sestaveny se stylem sestavení
+<code>python3-module</code> , pokud je to možné. Tím se nastaví některé
+proměnné prostředí potřebné k umožnění křížové kompilace. Je také možná
+podpora umožňující sestavení modulu python pro více verzí z jedné
+šablony. Styl sestavení <code>python3-pep517</code> poskytuje prostředky
+k sestavení pythonových balíčků, které poskytují definici sestavovacího
+systému v souladu s <a
+href="https://www.python.org/dev/peps/pep-0517/">PEP 517</a> bez
+tradičního skriptu <code>setup.py</code> . Styl sestavení
+<code>python3-pep517</code> neposkytuje konkrétní backend sestavení,
+takže balíčky budou muset přidat vhodného poskytovatele backendu do
+<code>hostmakedepends</code> .</p>
+<p>Balíčky Pythonu, které se spoléhají na
+<code>python3-setuptools</code> by obecně měly mapovat závislosti
+<code>setup_requires</code> v <code>setup.py</code> na
+<code>hostmakedepends</code> v šabloně a <code>install_requires</code>
+závislosti na <code>depends</code> v šabloně; include
+<code>python3</code> in <code>depends</code> , pokud neexistují žádné
+další závislosti na pythonu. Pokud balíček obsahuje zkompilované
+rozšíření, měly by být balíčky <code>python3-devel</code> přidány do
+<code>makedepends</code> , stejně jako všechny balíčky python, které
+také poskytují nativní knihovny, se kterými bude rozšíření propojeno (i
+když je tento balíček také zahrnut v <code>hostmakedepends</code> , aby
+vyhovoval <code>setuptools</code> ) .</p>
+<p><strong>Poznámka</strong> : Python <code>setuptools</code> se pokusí
+použít <code>pip</code> nebo <code>EasyInstall</code> k načtení
+chybějících závislostí v době sestavování. Pokud si po sestavení balíčku
+všimnete varování o ukončení podpory <code>EasyInstall</code> nebo
+vejcích python přítomných v <code>${wrksrc}/.eggs</code> , pak by tyto
+balíčky měly být přidány do <code>hostmakedepends</code> .</p>
+<p>Následující proměnné mohou ovlivnit, jak jsou balíčky python
+sestavovány a konfigurovány v době po instalaci:</p>
+<ul>
+<li><p><code>pycompile_module</code> : Ve výchozím nastavení jsou
+soubory a adresáře nainstalované do
+<code>usr/lib/pythonX.Y/site-packages</code> , kromě <code>*-info</code>
+a <code>*.so</code> , v době instalace kompilovány jako python moduly.
+Tato proměnná očekává jejich podmnožinu, která by měla být kompilována
+po bajtech, pokud je výchozí hodnota nesprávná. Více modulů pythonu může
+být specifikováno oddělených mezerami, Příklad:
+<code>pycompile_module="foo blah"</code> . Pokud modul pythonu
+nainstaluje soubor do <code>site-packages</code> , nikoli do adresáře,
+použijte název souboru, Příklad:
+<code>pycompile_module="fnord.py"</code> .</p></li>
+<li><p><code>pycompile_dirs</code> : tato proměnná očekává adresáře
+pythonu, které by měly být rekurzivně <code>byte-compiled</code> bajty
+cílovou verzí pythonu. To se liší od <code>pycompile_module</code> tím,
+že lze zadat libovolnou cestu, Příklad:
+<code>pycompile_dirs="usr/share/foo"</code> .</p></li>
+<li><p><code>python_version</code> : tato proměnná očekává podporovanou
+hlavní verzi Pythonu. Ve většině případů je verze odvozena z shebang,
+instalační cesty nebo stylu sestavení. Vyžaduje se pouze pro některé
+vícejazyčné aplikace (např. aplikace je napsána v C, zatímco příkaz je
+napsán v Pythonu) nebo pouze pro ty, které jsou v jednom souboru
+Pythonu, které jsou uloženy v <code>/usr/bin</code> . Pokud je
+<code>python_version</code> nastaveno na <code>ignore</code> , shebangy
+obsahující python nebudou přepsány. Toto použijte pouze v případě, že by
+balíček neměl používat systémovou verzi pythonu.</p></li>
+<li><p><code>python_extras</code> : Doplňky modulu Python, které je
+třeba vzít v úvahu při ověřování závislostí modulu Python. Lze použít k
+zajištění kontroly dalších sad závislostí. Příklad:
+<code>python_extras="all"</code> .</p></li>
+<li><p><code>nopyprovides</code> : pokud je nastaveno, nevytvářet
+<code>provides</code> položky pro moduly Pythonu v balíčku.</p></li>
+<li><p><code>noverifypydeps</code> : pokud je nastaveno, neověřujte
+závislosti modulu Python.</p></li>
+</ul>
+<p>V šablonách je také definována sada užitečných proměnných:</p>
+<table>
+<thead>
+<tr>
+<th>Proměnná</th>
+<th>Hodnota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>py2_ver</td>
+<td>2.X</td>
+</tr>
+<tr>
+<td>py2_lib</td>
+<td>usr/lib/python2.X</td>
+</tr>
+<tr>
+<td>py2_sitelib</td>
+<td>usr/lib/python2.X/site-packages</td>
+</tr>
+<tr>
+<td>py2_inc</td>
+<td>usr/include/python2.X</td>
+</tr>
+<tr>
+<td>py3_ver</td>
+<td>3.X</td>
+</tr>
+<tr>
+<td>py3_lib</td>
+<td>usr/lib/python3.X</td>
+</tr>
+<tr>
+<td>py3_sitelib</td>
+<td>usr/lib/python3.X/site-packages</td>
+</tr>
+<tr>
+<td>py3_inc</td>
+<td>usr/include/python3.Xm</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>POZNÁMKA: Očekává se, že musí být vygenerovány další subpkg, aby bylo
+možné sbalit více verzí pythonu.</p>
+</blockquote>
+<p><a id="pkgs_go"></a></p>
+<h4 id="přejít-na-balíčky">Přejít na balíčky</h4>
+<p>Pokud je to možné, balíčky Go by měly být sestaveny stylem
+<code>go</code> build. Styl sestavení <code>go</code> se stará o
+stahování závislostí Go a nastavení křížové kompilace.</p>
+<p>Následující proměnné šablony ovlivňují způsob, jakým jsou sestavovány
+balíčky Go:</p>
+<ul>
+<li><code>go_import_path</code> : Cesta k importu balíčku obsaženého v
+souboru distfile, jak by byla použita s <code>go get</code> . Například
+program <code>hub</code> GitHub má cestu importu
+<code>github.com/github/hub</code> . Tato proměnná je povinná.</li>
+<li><code>go_package</code> : Mezerou oddělený seznam cest importu
+balíčků, které by měly být sestaveny. Výchozí hodnota je
+<code>go_import_path</code> .</li>
+<li><code>go_build_tags</code> : Volitelný, mezerami oddělený seznam
+značek sestavení, které se mají předat Go.</li>
+<li><code>go_mod_mode</code> : Režim stahování modulu, který se má
+použít. Může být <code>off</code> , aby se ignorovaly všechny soubory
+go.mod, <code>default</code> se používá výchozí chování Go nebo cokoli,
+co přijímá <code>go build -mod MODE</code> . Výchozí hodnota je
+<code>vendor</code> , pokud existuje adresář dodavatele, jinak
+<code>default</code> .</li>
+<li><code>go_ldflags</code> : Argumenty, které se mají předat
+propojovacím krokům nástroje go.</li>
+</ul>
+<p>Následující proměnné prostředí ovlivňují, jak jsou balíčky Go
+sestaveny:</p>
+<ul>
+<li><code>XBPS_MAKEJOBS</code> : Hodnota předaná do parametru
+<code>-p</code> parametru <code>go install</code> pro řízení paralelismu
+kompilátoru Go.</li>
+</ul>
+<p>Občas je nutné provádět operace ze stromu zdroje Go. To obvykle
+potřebují programy používající go-bindata nebo jinak připravující
+některá aktiva. Pokud je to možné, proveďte to v pre_build(). Cesta ke
+zdroji balíčku uvnitř <code>$GOPATH</code> je dostupná jako
+<code>$GOSRCPATH</code> .</p>
+<p><a id="pkgs_haskell"></a></p>
+<h4 id="haskell-balíčky">Haskell balíčky</h4>
+<p>Haskell balíčky lze sestavit buď stylem <code>cabal</code> , nebo
+<code>haskell-stack</code> . Použijte ten, který je pohodlnější nebo
+lépe podporovaný upstreamem. Někdy je možný pouze jeden z těchto dvou. U
+balíčků, které obsahují haskellové části, ale používají jiný styl
+sestavení, jako je <code>gnu-makefile</code> , nezapomeňte použít
+<code>haskell</code> build helper.</p>
+<p>Následující proměnné ovlivňují, jak jsou balíčky sestavovány pomocí
+cabal:</p>
+<ul>
+<li><code>cabal_index_state</code> : Stav indexu hackage cabal, který se
+má použít pro načítání závislostí. Zdrojový balíček projektu Haskell by
+měl obsahovat soubor freeze, který nastavuje stav indexu, některé jej
+také nastavují ve svém souboru projektu cabal. Pokud tomu tak není, musí
+být v šabloně balíčku nastaveno časové razítko ISO. Například
+<code>2025-07-05T14:01:16Z</code> .</li>
+<li><code>configure_args</code> : Argumenty předávané
+<code>cabal configure</code> . Krok configure generuje soubor
+<code>cabal.project.local</code> .</li>
+<li><code>make_build_args</code> : Argumenty předávané příkazu
+<code>cabal build</code> .</li>
+<li><code>make_build_target</code> : Cíl předán <code>cabal build</code>
+.</li>
+<li><code>make_check_args</code> : Argumenty předané do
+<code>cabal test</code> .</li>
+<li><code>make_check_target</code> : Cíl testu byl předán cabalu místo
+"test".</li>
+<li><code>make_install_target</code> : Cíl předán
+<code>cabal install</code> .</li>
+</ul>
+<p>A tyto proměnné ovlivňují, jak jsou balíčky sestavovány pomocí
+stack:</p>
+<ul>
+<li><code>stackage</code> : Verze Stackage použitá k sestavení balíčku,
+např <code>lts-3.5</code> . Alternativně:
+<ul>
+<li>Pro projekt můžete připravit konfiguraci <code>stack.yaml</code> a
+vložit ji do <code>files/stack.yaml</code> .</li>
+<li>Pokud je ve zdrojových souborech přítomen soubor
+<code>stack.yaml</code> , bude použit.</li>
+</ul></li>
+<li><code>make_build_args</code> : Toto je předáno tak, jak je, do
+<code>stack build ...</code> , takže tam můžete přidat své parametry
+<code>--flag ...</code></li>
+</ul>
+<p>Pro opravu závislostí balíčků Haskell je nutné je explicitně načíst z
+Hackage přidáním do <code>distfiles</code> místo aby je stahoval Cabal
+nebo Stack. Po extrahování a opravě lze cestu k opravené verzi přidat k
+<code>packages</code> v souboru <code>cabal.project</code> nebo
+<code>stack.yaml</code> . Stack je automaticky vyhledá, pokud soubor
+<code>stack.yaml</code> neexistuje, prohledáním adresáře. Nástroj pro
+sestavení pak použije opravenou verzi závislosti, místo aby ji stahoval
+z Hackage.</p>
+<p><a id="pkgs_font"></a></p>
+<h4 id="balíčky-písem">Balíčky písem</h4>
+<p>Balíčky písem se píší velmi jednoduše, vždy se nastavují pomocí
+následujících proměnných:</p>
+<ul>
+<li><code>depends="font-util"</code> : protože jsou vyžadovány pro
+regeneraci mezipaměti písem během instalace/odebírání balíčku</li>
+<li><code>font_dirs</code> : který by měl být nastaven na adresář, kam
+balíček instaluje své fonty</li>
+</ul>
+<p><a id="pkg_rename"></a></p>
+<h3 id="přejmenování-balíčku">Přejmenování balíčku</h3>
+<ul>
+<li>Vytvořte prázdný balíček se starým názvem v závislosti na novém
+balíčku. To je nezbytné pro poskytování aktualizací systémů, kde je již
+nainstalován starý balíček. Toto by měl být podbalíček nového, kromě
+případů, kdy se číslo verze nového balíčku snížilo: pak vytvořte
+samostatnou šablonu pomocí staré verze a zvýšené revize.</li>
+<li>Upravte odkazy na balíček v jiných šablonách a common/shlibs.</li>
+<li>Nenastavujte <code>replaces=</code> , může to mít za následek
+odstranění obou balíků ze systémů pomocí xbps.</li>
+</ul>
+<p><a id="pkg_remove"></a></p>
+<h3 id="odebírání-balíčku">Odebírání balíčku</h3>
+<p>Následuje seznam věcí, které je třeba udělat, aby bylo zaručeno, že
+odstranění šablony balíčků a potažmo jeho binárních balíčků z repozitářů
+Void Linuxu proběhne hladce.</p>
+<p>Před odstraněním šablony balíčku:</p>
+<ul>
+<li>Zaručit, že žádný balíček na něm nebo na některém z jeho dílčích
+balíčků nezávisí. Za tímto účelem můžete v šablonách vyhledat odkazy na
+balíček pomocí <code>grep -r '\bpkg\b' srcpkgs/</code> .</li>
+<li>Záruka, že žádný balíček nezávisí na shlibs, které poskytuje.</li>
+</ul>
+<p>Při odstraňování šablony balíčku:</p>
+<ul>
+<li>Odstraňte všechny symbolické odkazy, které ukazují na balíček.
+<code>find srcpkgs/ -lname &lt;pkg&gt;</code> by mělo stačit.</li>
+<li>Pokud balíček obsahuje shliby, ujistěte se, že jste je odstranili z
+common/shlibs.</li>
+<li>Některé balíčky používají záplaty a soubory z jiných balíčků pomocí
+symbolických odkazů, obvykle jsou tyto balíčky stejné, ale byly
+rozděleny, aby se předešlo cyklickým závislostem. Ujistěte se, že
+balíček, který odstraňujete, není zdrojem těchto záplat/souborů.</li>
+<li>Odebrat šablonu balíčku.</li>
+<li>Přidejte <code>pkgname&lt;=version_revision</code> do
+<code>replaces</code> proměnné šablony <code>removed-packages</code> .
+Všechny odstraněné dílčí balíčky by měly být přidány také. Tím se
+balíček odinstaluje ze systémů, kde je nainstalován.</li>
+<li>Odstraňte balíček z indexu úložiště nebo kontaktujte člena týmu,
+který tak může učinit.</li>
+</ul>
+<p><a id="xbps_triggers"></a></p>
+<h3 id="spouštěče-xbps">Spouštěče XBPS</h3>
+<p>Spouštěče XBPS jsou sbírkou úryvků kódu poskytovaných balíčkem
+<code>xbps-triggers</code> , které se přidávají do skriptů
+INSTALL/REMOVE balíčků buď ručně nastavením proměnné
+<code>triggers</code> v šabloně, nebo automaticky, když jsou splněny
+specifické podmínky.</p>
+<p>Následuje seznam všech dostupných spouštěčů, jejich aktuální stav, co
+každý z nich dělá a jaké podmínky musí splňovat, aby byl automaticky
+zahrnut do balíčku.</p>
+<p>Toto není úplný přehled balíčku. Doporučuje se přečíst odkazované
+proměnné a samotné spouštěče.</p>
+<p><a id="triggers_appstream_cache"></a></p>
+<h4 id="appstream-cache">appstream-cache</h4>
+<p>Spouštěč appstream-cache je zodpovědný za opětovné sestavení
+mezipaměti metadat appstreamu.</p>
+<p>Během instalace spustí
+<code>appstreamcli refresh-cache --verbose --force --datapath $APPSTREAM_PATHS --cachepath var/cache/app-info/gv</code>
+. Ve výchozím nastavení jsou APPSTREAM_PATHS všechny cesty, které bude
+appstreamcli hledat pro soubory metadat.</p>
+<p>Adresáře prohledávané appstreamcli jsou:</p>
+<ul>
+<li><code>usr/share/appdata</code></li>
+<li><code>usr/share/app-info</code></li>
+<li><code>var/lib/app-info</code></li>
+<li><code>var/cache/app-info</code></li>
+</ul>
+<p>Během odstraňování balíčku <code>AppStream</code> dojde k odstranění
+adresáře <code>var/cache/app-info/gv</code> .</p>
+<p>Automaticky se přidá do balíčků, které mají soubory XML v jednom z
+adresářů prohledaných appstreamcli.</p>
+<p><a id="triggers_binfmts"></a></p>
+<h4 id="binfmts">binfmts</h4>
+<p>Spouštěč binfmts je zodpovědný za registraci a odstranění libovolných
+spustitelných binárních formátů, známých jako binfmts.</p>
+<p>Během instalace/odstranění používá <code>update-binfmts</code> z
+balíčku <code>binfmt-support</code> k registraci/odstranění položek z
+libovolné databáze spustitelných binárních formátů.</p>
+<p>Je automaticky přidán do balíčků, které obsahují soubory v
+<code>usr/share/binfmts</code> . Tyto soubory by měly být ve formátu
+<code>update-binfmts</code> a budou importovány pomocí
+<code>update-binfmts --import</code> .</p>
+<p>I když to není preferováno, spouštěč lze přidat také pomocí proměnné
+<code>binfmts</code> , která by měla obsahovat řádky definující binfmts
+pro registraci:</p>
+<pre><code>/path/to/interpreter [update-binfmts binary format specification arguments ...]
+...</code></pre>
+<p>Viz <a
+href="https://man.voidlinux.org/man8/update-binfmts.8"><code>update-binfmts(8)</code></a>
+pro více podrobností.</p>
+<p><a id="triggers_dkms"></a></p>
+<h4 id="dkms">dkms</h4>
+<p>Spouštěč dkms je zodpovědný za kompilaci a odstranění dynamických
+modulů jádra balíčku.</p>
+<p>Během instalace trigger zkompiluje a nainstaluje dynamický modul pro
+všechny <code>linux</code> balíčky, které mají nainstalovaný
+odpovídající balíček linux-headers. Během odebírání bude odebrán
+odpovídající modul</p>
+<p>Chcete-li zahrnout spouštěč, použijte proměnnou
+<code>dkms_modules</code> , protože spouštěč nedělá nic, pokud není
+definován.</p>
+<p><a id="triggers_gconf_schemas"></a></p>
+<h4 id="schémata-gconf">schémata gconf</h4>
+<p>Spouštěč gconf-schemas je zodpovědný za registraci a odstranění
+souborů .schemas a .entries do adresáře databáze schémat.</p>
+<p>Během instalace používá <code>gconftool-2</code> k instalaci souborů
+.schemas a .entries do <code>usr/share/gconf/schemas</code> . Během
+odstraňování používá <code>gconftool-2</code> k odstranění položek a
+schémat patřících k balíčku, který je odstraňován z databáze.</p>
+<p>Chcete-li jej zahrnout, přidejte do <code>triggers</code>
+<code>gconf-schemas</code> a přidejte vhodná .schemas do proměnné
+<code>gconf_schemas</code> a .entries do <code>gconf_entries</code>
+.</p>
+<p>Automaticky se přidává do balíčků, které mají jako adresář
+<code>/usr/share/gconf/schemas</code> . Všechny soubory s příponou
+schématu v tomto adresáři jsou předány spouštěči.</p>
+<p><a id="triggers_gdk_pixbuf_loaders"></a></p>
+<h4 id="gdk-pixbuf-loadery">gdk-pixbuf-loadery</h4>
+<p>Spouštěč gdk-pixbuf-loaders je zodpovědný za udržování mezipaměti
+zavaděčů GDK Pixbuf.</p>
+<p>Během instalace spouští
+<code>gdk-pixbuf-query-loaders --update-cache</code> a také smaže
+zastaralý soubor <code>etc/gtk-2.0/gdk-pixbuf.loaders</code> pokud
+existuje. Během odstraňování balíčku gdk-pixbuf odstraní soubor
+mezipaměti, pokud je přítomen. Normálně na
+<code>usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache</code> .</p>
+<p>Lze jej přidat definováním <code>gdk-pixbuf-loaders</code> v proměnné
+<code>triggers</code> . Je také automaticky přidán do každého balíčku,
+který má jako adresář k dispozici cestu
+<code>usr/lib/gdk-pixbuf-2.0/2.10.0/loaders</code> .</p>
+<p><a id="triggers_gio_modules"></a></p>
+<h4 id="gio-moduly">gio-moduly</h4>
+<p>Spouštěč gio-modules je zodpovědný za aktualizaci mezipaměti modulu
+Glib GIO moduly <code>gio-querymodules</code> z balíčku
+<code>glib</code></p>
+<p>Během instalace a odebrání pouze spustí <code>gio-querymodules</code>
+, aby aktualizoval soubor mezipaměti přítomný pod
+<code>usr/lib/gio/modules</code> .</p>
+<p>Automaticky se přidává do balíčků, které mají jako adresář
+<code>/usr/lib/gio/modules</code> .</p>
+<p><a id="triggers_gsettings_schemas"></a></p>
+<h4 id="gsettings-schémata">gsettings-schémata</h4>
+<p>Spouštěč gsettings-schemas je zodpovědný za kompilaci souborů
+schématu Glib Glib GSettings XML během instalace a odstranění
+zkompilovaných souborů během odstraňování.</p>
+<p>Během instalace používá <code>glib-compile-schemas</code> z
+<code>glib</code> ke kompilaci schémat do souborů s příponou .compiled
+do <code>/usr/share/glib-2.0/schemas</code> .</p>
+<p>Během odstraňování balíčku glib smaže všechny soubory v
+<code>/usr/share/glib-2.0/schemas</code> , které končí příponou
+.compiled.</p>
+<p>Je automaticky přidán do balíčků, které mají jako adresář
+<code>/usr/share/glib-2.0/schemas</code> .</p>
+<p><a id="triggers_gtk_icon_cache"></a></p>
+<h4 id="gtk-ikona-mezipaměť">gtk-ikona-mezipaměť</h4>
+<p>Spouštěč gtk-icon-cache je zodpovědný za aktualizaci mezipaměti ikon
+gtk+.</p>
+<p>Během instalace používá <code>gtk-update-icon-cache</code> k
+aktualizaci mezipaměti ikon.</p>
+<p>Při odstraňování balíčku gtk+ smaže soubor
+<code>icon-theme.cache</code> v adresářích definovaných proměnnou
+<code>gtk_iconcache_dirs</code> .</p>
+<p>Automaticky se přidává do balíčků, které mají jako adresář k
+dispozici <code>/usr/share/icons</code> , všechny adresáře v tomto
+adresáři mají svou absolutní cestu předán spouštěči.</p>
+<p><a id="triggers_gtk_immodules"></a></p>
+<h4 id="gtk-immodules">gtk-immodules</h4>
+<p>Spouštěč gtk-immodules je zodpovědný za aktualizaci souboru modulů IM
+(Input Method) pro gtk+.</p>
+<p>Během instalace používá
+<code>gtk-query-immodules-2.0 --update-cache</code> k aktualizaci
+souboru mezipaměti. Odstraní také zastaralý konfigurační soubor
+<code>etc/gtk-2.0/gtk.immodules</code> pokud existuje.</p>
+<p>Během odstraňování balíčku <code>gtk+</code> odstraní soubor
+mezipaměti, který se nachází na
+<code>usr/lib/gtk-2.0/2.10.0/immodules.cache</code> .</p>
+<p>Automaticky se přidává do balíčků, které mají jako adresář
+<code>/usr/lib/gtk-2.0/2.10.0/immodules</code> .</p>
+<p><a id="triggers_gtk_pixbuf_loaders"></a></p>
+<h4 id="gtk-pixbuf-loadery">gtk-pixbuf-loadery</h4>
+<p>gtk-pixbuf-loaders je starý název pro aktuální spouštěč
+<code>gdk-pixbuf-loaders</code> a je v procesu odstraňování. V současné
+době se znovu spouští do <code>gdk-pixbuf-loaders</code> jako opatření
+kompatibility.</p>
+<p>Informace o tom, jak to funguje, najdete v <a
+href="#triggers_gdk_pixbuf_loaders">gdk-pixbuf-loaders</a> .</p>
+<p><a id="triggers_gtk3_immodules"></a></p>
+<h4 id="gtk3-immodules">gtk3-immodules</h4>
+<p>Spouštěč gtk3-immodules je zodpovědný za aktualizaci souboru modulů
+IM (Input Method) pro gtk+3.</p>
+<p>Během instalace spustí
+<code>gtk-query-immodules-3.0 --update-cache</code> pro aktualizaci
+souboru mezipaměti. Také odstraní zastaralý konfigurační soubor
+<code>etc/gtk-3.0/gtk.immodules</code> pokud existuje.</p>
+<p>Během odstraňování balíčku <code>gtk+3</code> odstraní soubor
+mezipaměti, který se nachází na
+<code>usr/lib/gtk-3.0/3.0.0/immodules.cache</code> .</p>
+<p>Automaticky se přidává do balíčků, které mají jako adresář
+<code>/usr/lib/gtk-3.0/3.0.0/immodules</code> .</p>
+<p><a id="triggers_hwdb.d_dir"></a></p>
+<h4 id="hwdbd-dir">hwdb.d-dir</h4>
+<p>Spouštěč hwdb.d-dir je zodpovědný za aktualizaci hardwarové
+databáze.</p>
+<p>Během instalace a odebrání spouští
+<code>usr/bin/udevadm hwdb --root=. --update</code> .</p>
+<p>Je automaticky přidán do balíčků, které mají jako adresář
+<code>/usr/lib/udev/hwdb.d</code> .</p>
+<p><a id="triggers_info_files"></a></p>
+<h4 id="info-soubory">info-soubory</h4>
+<p>Spouštěč info-files je zodpovědný za registraci a odregistrování GNU
+informačních souborů balíčku.</p>
+<p>Kontroluje existenci informačních souborů, které jsou mu předkládány,
+a zda běží pod jinou architekturou.</p>
+<p>Během instalace používá <code>install-info</code> k registraci
+informačních souborů do <code>usr/share/info</code> .</p>
+<p>Během odstraňování používá <code>install-info --delete</code> k
+odstranění informačních souborů z registru umístěného na
+<code>usr/share/info</code> .</p>
+<p>Pokud běží pod jinou architekturou, pokusí se použít utilitu
+<code>install-info</code> hostitele.</p>
+<p><a id="triggers_initramfs_regenerate"></a></p>
+<h4 id="initramfs-regenerate">initramfs-regenerate</h4>
+<p>Spouštěč initramfs-regenerate spustí regeneraci všech obrazů
+initramfs jádra po instalaci nebo odstranění balíčku. O spoušť je třeba
+požádat ručně.</p>
+<p>Tento háček je pravděpodobně nejužitečnější pro balíčky DKMS, protože
+poskytuje prostředek pro zahrnutí nově zkompilovaných modulů jádra do
+obrazů initramfs pro všechna aktuálně dostupná jádra. Při použití v
+balíčku DKMS se doporučuje ručně zahrnout spouštěč <code>dkms</code>
+<em>před</em> spouštěč <code>initramfs-regenerate</code> pomocí
+např.</p>
+<pre><code></code></pre>
+<p>triggers="dkms initramfs-regenerate"</p>
+<pre><code></code></pre>
+<p>Ačkoli <code>xbps-src</code> automaticky zahrne spouštěč
+<code>dkms</code> kdykoli je nainstalován <code>dkms_modules</code> ,
+automatické přidání přijde <em>po</em> <code>initramfs-regenerate</code>
+, což způsobí, že obrazy initramfs budou znovu vytvořeny před kompilací
+modulů.</p>
+<p>Ve výchozím nastavení spouštěč používá
+<code>dracut --regenerate-all</code> k opětovnému vytvoření obrázků
+initramfs. Pokud <code>/etc/default/initramfs-regenerate</code> existuje
+a definuje <code>INITRAMFS_GENERATOR=mkinitcpio</code> , spouštěč místo
+toho použije <code>mkinitcpio</code> a zacyklí všechny verze jádra, pro
+které se zdá, že jsou nainstalovány moduly. Případně nastavení
+<code>INITRAMFS_GENERATOR=none</code> zcela zakáže regeneraci
+obrazu.</p>
+<p><a id="triggers_kernel_hooks"></a></p>
+<h4 id="kernel-háky">kernel-háky</h4>
+<p>Spouštěč kernel-hooks je zodpovědný za spouštění skriptů během
+instalace/odebírání balíčků jádra.</p>
+<p>Dostupné cíle jsou před instalací, před odstraněním, po instalaci a
+po odstranění.</p>
+<p>Při spuštění se pokusí spustit všechny spustitelné soubory nalezené
+pod <code>etc/kernel.d/$TARGET</code> . Proměnná <code>TARGET</code> je
+jedním ze 4 cílů dostupných pro spouštěč. Vytvoří také adresář, pokud
+není přítomen.</p>
+<p>Během aktualizací se nebude pokoušet spustit žádné spustitelné
+soubory, když běží s cílem před odstraněním.</p>
+<p>Je přidána automaticky, pokud je definována pomocná proměnná
+<code>kernel_hooks_version</code> . Není však povinné jej mít
+definované.</p>
+<p><a id="triggers_mimedb"></a></p>
+<h4 id="mimedb">mimedb</h4>
+<p>Spouštěč mimedb je zodpovědný za aktualizaci databáze
+shared-mime-info.</p>
+<p>Ve všech spuštěních se pouze spustí
+<code>update-mime-database -n usr/share/mime</code> .</p>
+<p>Je automaticky přidán do balíčků, které mají jako adresář k dispozici
+<code>/usr/share/mime</code> .</p>
+<p><a id="triggers_mkdirs"></a></p>
+<h4 id="mkdirs">mkdirs</h4>
+<p>Spouštěč mkdirs je zodpovědný za vytváření a odstraňování adresářů
+diktovaných proměnnou <code>make_dirs</code> .</p>
+<p>Během instalace vezme proměnnou <code>make_dirs</code> a rozdělí ji
+do skupin po 4 proměnných.</p>
+<ul>
+<li>dir = úplná cesta k adresáři</li>
+<li>režim = Unixová oprávnění pro adresář</li>
+<li>uid = jméno vlastnícího uživatele</li>
+<li>gid = název vlastnící skupiny</li>
+</ul>
+<p>Bude pokračovat v rozdělování hodnot <code>make_dirs</code> do skupin
+po 4, dokud hodnoty neskončí.</p>
+<p>Během instalace vytvoří adresář s <code>dir</code> a poté nastaví
+režim s <code>mode</code> a oprávněním pomocí <code>uid:gid</code> .</p>
+<p>Během odstraňování smaže adresář pomocí <code>rmdir</code> .</p>
+<p>Chcete-li zahrnout tento spouštěč, použijte proměnnou
+<code>make_dirs</code> , protože spouštěč nedělá nic, pokud není
+definován.</p>
+<p><a id="triggers_pango_module"></a></p>
+<h4 id="pango-moduly">pango-moduly</h4>
+<p>Spouštěč pango-modules se aktuálně odstraňuje, protože upstream
+odstranil kód, který je za něj zodpovědný.</p>
+<p>Slouží k aktualizaci souboru pango modules pomocí
+<code>pango-modulesquery</code> během instalace libovolného balíčku.</p>
+<p>V současné době odstraňuje soubor
+<code>etc/pango/pango.modules</code> během odstraňování balíčku
+pango.</p>
+<p>Může být přidán definováním <code>pango-modules</code> v proměnné
+<code>triggers</code> a nemá žádný způsob, jak se automaticky přidat do
+balíčku.</p>
+<p><a id="triggers_pycompile"></a></p>
+<h4 id="pycompile">pycompile</h4>
+<p>Spouštěč pycompile je zodpovědný za kompilaci kódu pythonu do
+nativního bajtkódu a odstranění generovaného bajtkódu.</p>
+<p>Během instalace zkompiluje veškerý kód pythonu pod cestami, které
+jsou uvedeny v <code>pycompile_dirs</code> a všechny moduly popsané v
+<code>pycompile_module</code> do nativního bytecode a aktualizuje
+mezipaměť ldconfig(8).</p>
+<p>Během odstraňování odstraní veškerý nativní bytecode a aktualizuje
+mezipaměť ldconfig(8).</p>
+<p>K zahrnutí tohoto spouštěče použijte proměnné
+<code>pycompile_dirs</code> a <code>pycompile_module</code> . Spouštěč
+neprovede nic, pokud není definována alespoň jedna z těchto
+proměnných.</p>
+<p>Proměnnou <code>python_version</code> lze nastavit tak, aby řídila
+chování spouštěče.</p>
+<p><a id="triggers_register_shell"></a></p>
+<h4 id="registr-shell">registr-shell</h4>
+<p>Spouštěč registry-shell je zodpovědný za registraci a odstraňování
+položek shellu do <code>etc/shells</code> .</p>
+<p>Během instalace připojí soubor <code>etc/shells</code> s novým
+shellem a také změní oprávnění k souboru na <code>644</code> .</p>
+<p>Během odstraňování použije <code>sed</code> k odstranění shellu ze
+souboru.</p>
+<p>Chcete-li zahrnout tento spouštěč, použijte proměnnou
+<code>register_shell</code> , protože spouštěč nedělá nic, pokud není
+definován.</p>
+<p><a id="triggers_system_accounts"></a></p>
+<h4 id="systémové-účty">systémové účty</h4>
+<p>Spouštěč systémových účtů je zodpovědný za vytváření a deaktivaci
+systémových účtů a skupin.</p>
+<p>Během odstraňování deaktivuje účet nastavením Shell na /bin/false,
+Home na /var/empty a připojením '- pro odinstalovaný balíček $pkgname'
+do Popisu. Příklad:
+<code>transmission unprivileged user - for uninstalled package transmission</code></p>
+<p>Tento spouštěč lze použít pouze pomocí proměnné
+<code>system_accounts</code> .</p>
+<p><a id="triggers_texmf_dist"></a></p>
+<h4 id="texmf-dist">texmf-dist</h4>
+<p>Spouštěč texmf-dist je zodpovědný za regeneraci texmf databází
+TeXLive.</p>
+<p>Během instalace i odebrání regeneruje databáze texhash i formátování
+pomocí <code>texhash</code> a <code>fmtutil-sys</code> a přidává nebo
+odstraňuje jakékoli nové hashe nebo formáty.</p>
+<p>Běží na každém balíčku, který změní /usr/share/texmf-dist. To je
+pravděpodobně přehnané, ale je to mnohem čistší než kontrola každého
+adresáře formátu a každého adresáře, který je hašován. Navíc je velmi
+pravděpodobné, že jakýkoli balíček dotýkající se /usr/share/texmf-dist
+stejně vyžaduje jeden z těchto spouštěčů.</p>
+<p><a id="triggers_update_desktopdb"></a></p>
+<h4 id="update-desktopdb">update-desktopdb</h4>
+<p>Spouštěč update-desktopdb je zodpovědný za aktualizaci systémové
+databáze MIME.</p>
+<p>Během instalace se spustí
+<code>update-desktop-database usr/share/applications</code> což povede k
+vytvoření souboru mezipaměti na
+<code>usr/share/applications/mimeinfo.cache</code> .</p>
+<p>Během odebírání balíčku <code>desktop-file-utils</code> se odstraní
+soubor mezipaměti, který byl vytvořen během instalace.</p>
+<p>Je automaticky přidán do balíčků, které mají
+<code>/usr/share/applications</code> k dispozici jako adresář.</p>
+<p><a id="triggers_x11_fonts"></a></p>
+<h4 id="x11-fonty">x11-fonty</h4>
+<p>Spouštěč x11-fonts je zodpovědný za opětovné sestavení souborů
+fonts.dir a fonts.scale pro balíčky, které instalují fonty X11, a
+aktualizuje mezipaměť fontconfig pro tyto fonty.</p>
+<p>Během instalace a odstranění spouští <code>mkfontdir</code> ,
+<code>mkfontscale</code> a <code>fc-cache</code> pro všechny adresáře
+písem, které byly zadány přes proměnnou <code>font_dirs</code> .</p>
+<p>Chcete-li zahrnout tento spouštěč, použijte proměnnou
+<code>font_dirs</code> , protože spouštěč nedělá nic, pokud není
+definován.</p>
+<p><a id="triggers_xml_catalog"></a></p>
+<h4 id="xml-katalog">xml-katalog</h4>
+<p>Spouštěč xml-catalog je zodpovědný za registraci a odstraňování
+položek katalogu SGML/XML.</p>
+<p>Během instalace používá <code>xmlcatmgr</code> k registraci všech
+katalogů, které mu předávají proměnné <code>sgml_entries</code> a
+<code>xml_entries</code> v <code>usr/share/sgml/catalog</code> a
+<code>usr/share/xml/catalog</code> .</p>
+<p>Během odstraňování používá <code>xmlcatmgr</code> k odstranění všech
+katalogů, které mu byly předány proměnnými <code>sgml_entries</code> a
+<code>xml_entries</code> v <code>usr/share/sgml/catalog</code> a
+<code>usr/share/xml/catalog</code> .</p>
+<p>Chcete-li zahrnout tento spouštěč, použijte proměnnou
+<code>sgml_entries</code> nebo/a proměnnou <code>xml_entries</code> ,
+protože spouštěč nebude dělat nic, pokud nebude žádná z nich
+definována.</p>
+<p><a id="documentation"></a></p>
+<h3 id="zrušte-konkrétní-dokumentaci">Zrušte konkrétní dokumentaci</h3>
+<p>Chcete-li zdokumentovat podrobnosti o konfiguraci a použití balíčku
+specifické pro Void Linux, které nepokrývá upstream dokumentace, vložte
+poznámky do <code>srcpkgs/&lt;pkgname&gt;/files/README.voidlinux</code>
+a nainstalujte pomocí <code>vdoc "${FILESDIR}/README.voidlinux"</code>
+.</p>
+<p><a id="notes"></a></p>
+<h3 id="poznámky">Poznámky</h3>
+<ul>
+<li><p>Ujistěte se, že veškerý software je nakonfigurován tak, aby
+používal předponu <code>/usr</code> .</p></li>
+<li><p>Binární soubory by měly být vždy nainstalovány v
+<code>/usr/bin</code> .</p></li>
+<li><p>Manuálové stránky by měly být vždy instalovány v
+<code>/usr/share/man</code> .</p></li>
+<li><p>Pokud software poskytuje <strong>sdílené knihovny</strong> a
+hlavičky, pravděpodobně byste měli vytvořit
+<code>development package</code> , který obsahuje <code>headers</code> ,
+<code>static libraries</code> a další soubory potřebné pro vývoj (není
+vyžadováno za běhu).</p></li>
+<li><p>Pokud aktualizujete balíček, buďte opatrní s nárazy SONAME, před
+odesláním nových aktualizací zkontrolujte nainstalované soubory (
+<code>./xbps-src show-files pkg</code> ).</p></li>
+<li><p>Ujistěte se, že binární soubory nejsou odstraněny softwarem,
+nechejte to udělat xbps-src; jinak <code>debug</code> balíčky nebudou
+mít ladicí symboly.</p></li>
+</ul>
+<p><a id="contributing"></a></p>
+<h3 id="přispívání-přes-git">Přispívání přes git</h3>
+<p>Pro začátek si na GitHubu <a
+href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo">vytvořte
+fork</a> void-linux repozitáře <code>void-packages</code> a naklonujte
+ho:</p>
+<pre><code>$ git clone git@github.com:&lt;user&gt;/void-packages.git</code></pre>
+<p>Viz <a href="./CONTRIBUTING.md">CONTRIBUTING.md</a> pro informace o
+tom, jak formátovat vaše odevzdání a další tipy pro přispívání.</p>
+<p>Jakmile provedete změny ve vašem <code>forked</code> úložišti,
+odešlete žádost o stažení githubu.</p>
+<p>Chcete-li, aby byl váš rozvětvený repozitář vždy aktuální, nastavte
+<code>upstream</code> dálkové ovládání tak, aby načítalo nové změny:</p>
+<pre><code>$ git remote add upstream https://github.com/void-linux/void-packages.git
+$ git pull --rebase upstream master</code></pre>
+<p><a id="help"></a></p>
+<h3 id="pomoc">Pomoc</h3>
+<p>Pokud po přečtení této <code>manual</code> stále potřebujete nějakou
+pomoc, připojte se k nám na <code>#xbps</code> přes IRC na
+<code>irc.libera.chat</code> .</p>
+<script>
+(function () {
+  function hexToRgb(hex) {
+    hex = hex.trim().replace(/^#/, '');
+    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+    const n = parseInt(hex, 16);
+    return [n >> 16 & 255, n >> 8 & 255, n & 255];
+  }
+
+  function clamp(v, min, max) {
+    return Math.min(Math.max(v, min), max);
+  }
+
+  function Color(r, g, b) {
+    this.r = r / 255;
+    this.g = g / 255;
+    this.b = b / 255;
+  }
+
+  Color.prototype.applyFilter = function (funcs) {
+    let [r, g, b] = [this.r * 255, this.g * 255, this.b * 255];
+
+    function multiply(matrix) {
+      const nr = clamp(r * matrix[0] + g * matrix[1] + b * matrix[2], 0, 255);
+      const ng = clamp(r * matrix[3] + g * matrix[4] + b * matrix[5], 0, 255);
+      const nb = clamp(r * matrix[6] + g * matrix[7] + b * matrix[8], 0, 255);
+      r = nr; g = ng; b = nb;
+    }
+
+    function hueRotate(angle) {
+      const a = angle / 180 * Math.PI;
+      const sin = Math.sin(a), cos = Math.cos(a);
+      multiply([
+        0.213 + cos*0.787 - sin*0.213, 0.715 - cos*0.715 - sin*0.715, 0.072 - cos*0.072 + sin*0.928,
+        0.213 - cos*0.213 + sin*0.143, 0.715 + cos*0.285 + sin*0.140, 0.072 - cos*0.072 - sin*0.283,
+        0.213 - cos*0.213 - sin*0.787, 0.715 - cos*0.715 + sin*0.715, 0.072 + cos*0.928 + sin*0.072,
+      ]);
+    }
+
+    function sepia(v) {
+      multiply([
+        0.393 + 0.607*(1-v), 0.769 - 0.769*(1-v), 0.189 - 0.189*(1-v),
+        0.349 - 0.349*(1-v), 0.686 + 0.314*(1-v), 0.168 - 0.168*(1-v),
+        0.272 - 0.272*(1-v), 0.534 - 0.534*(1-v), 0.131 + 0.869*(1-v),
+      ]);
+    }
+
+    function saturate(v) {
+      multiply([
+        0.213 + 0.787*v, 0.715 - 0.715*v, 0.072 - 0.072*v,
+        0.213 - 0.213*v, 0.715 + 0.285*v, 0.072 - 0.072*v,
+        0.213 - 0.213*v, 0.715 - 0.715*v, 0.072 + 0.928*v,
+      ]);
+    }
+
+    for (const [fn, val] of funcs) {
+      if (fn === 'invert')    { r = clamp((1-r/255)*255*val + r/255*255*(1-val),0,255); g = clamp((1-g/255)*255*val + g/255*255*(1-val),0,255); b = clamp((1-b/255)*255*val + b/255*255*(1-val),0,255); }
+      if (fn === 'sepia')     sepia(val);
+      if (fn === 'saturate')  saturate(val);
+      if (fn === 'hueRotate') hueRotate(val);
+      if (fn === 'brightness'){ r = clamp(r*val,0,255); g = clamp(g*val,0,255); b = clamp(b*val,0,255); }
+    }
+
+    return new Color(r, g, b);
+  };
+
+  function loss(result, target) {
+    return (
+      Math.pow(result.r*255 - target.r*255, 2) +
+      Math.pow(result.g*255 - target.g*255, 2) +
+      Math.pow(result.b*255 - target.b*255, 2)
+    );
+  }
+
+  function solve(target) {
+    function css(v) {
+      return [
+        ['invert',    clamp(v[0], 0, 1)],
+        ['sepia',     clamp(v[1], 0, 1)],
+        ['saturate',  clamp(v[2], 0, 20)],
+        ['hueRotate', clamp(v[3], 0, 360)],
+        ['brightness',clamp(v[4], 0, 10)],
+        ['brightness',clamp(v[5], 0, 10)],
+      ];
+    }
+
+    function score(v) {
+      return loss(new Color(0,0,0).applyFilter(css(v)), target);
+    }
+
+    let best = null, bestScore = Infinity;
+    for (let i = 0; i < 30; i++) {
+      let v = [Math.random(), Math.random(), Math.random()*10, Math.random()*360, Math.random()*2, Math.random()*2];
+      for (let step = 1; step > 0.0001; step *= 0.9) {
+        for (let j = 0; j < v.length; j++) {
+          const orig = v[j];
+          v[j] += step * (Math.random() > 0.5 ? 1 : -1);
+          const s = score(v);
+          if (s < bestScore) { bestScore = s; best = [...v]; }
+          else v[j] = orig;
+        }
+      }
+    }
+
+    const f = css(best);
+    return [
+      `invert(${(clamp(f[0][1],0,1)*100).toFixed(0)}%)`,
+      `sepia(${(clamp(f[1][1],0,1)*100).toFixed(0)}%)`,
+      `saturate(${(clamp(f[2][1],0,20)*100).toFixed(0)}%)`,
+      `hue-rotate(${clamp(f[3][1],0,360).toFixed(0)}deg)`,
+      `brightness(${(clamp(f[4][1],0,10)*100).toFixed(0)}%)`,
+      `brightness(${(clamp(f[5][1],0,10)*100).toFixed(0)}%)`,
+    ].join(' ');
+  }
+
+  // Cache solved filters per color so theme switching is instant
+  const cache = {};
+
+  function applyIconColor() {
+    const raw = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-icon').trim();
+    if (!raw) return false;
+
+    let rgb;
+    if (raw.startsWith('#')) {
+      rgb = hexToRgb(raw);
+    } else if (raw.startsWith('rgb')) {
+      rgb = raw.match(/\d+/g).map(Number).slice(0, 3);
+    } else {
+      return false;
+    }
+
+    const key = rgb.join(',');
+    if (!cache[key]) {
+      cache[key] = solve(new Color(...rgb));
+    }
+
+    document.documentElement.style.setProperty('--filter-icon', cache[key]);
+    return true;
+  }
+
+  function init() {
+    if (!applyIconColor()) return;
+
+    // Watch for data-theme attribute changes on <html> — re-apply immediately
+    new MutationObserver(function(mutations) {
+      for (const m of mutations) {
+        if (m.attributeName === 'data-theme') {
+          applyIconColor();
+          break;
+        }
+      }
+    }).observe(document.documentElement, { attributes: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+<script data-goatcounter="https://vur.gocounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<script src="https://giscus.app/client.js"
+        data-repo="osowoso/VUR"
+        data-repo-id="R_kgDOGNy3Og"
+        data-category="General"
+        data-category-id="DIC_kwDOGNy3Os4CBWcR"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="cs"
+        crossorigin="anonymous"
+        async></script>
+</body>
+</html>
