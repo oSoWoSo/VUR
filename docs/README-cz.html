@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>README-cz</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+<script>
+  function toggleTheme(){
+    const html=document.documentElement;
+    const current=html.getAttribute("data-theme")||"dark";
+    const next=current==="dark"?"light":"dark";
+    html.setAttribute("data-theme",next);
+    localStorage.setItem("theme",next)
+  }
+  (function(){
+    const saved=localStorage.getItem("theme")||"dark";
+    document.documentElement.setAttribute("data-theme",saved)
+  })();
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toc = document.getElementById("TOC");
+    if (!toc) return;
+
+    // Add toc-title with toggle button
+    const titleEl = document.createElement("div");
+    titleEl.id = "toc-title";
+    titleEl.innerHTML = '<span>Contents</span><span id="toc-toggle-icon">◀</span>';
+    toc.insertBefore(titleEl, toc.firstChild);
+
+    // Wrap TOC + the rest of the content in .page-wrapper
+    const body = document.body;
+    const wrapper = document.createElement("div");
+    wrapper.className = "page-wrapper";
+
+    // Find all elements after <nav> (main nav menu)
+    const topNav = document.querySelector("body > nav");
+    const siblings = [];
+    let el = topNav ? topNav.nextElementSibling : body.firstElementChild;
+    while (el) {
+      siblings.push(el);
+      el = el.nextElementSibling;
+    }
+
+    siblings.forEach((s) => wrapper.appendChild(s));
+    body.appendChild(wrapper);
+
+    // Wrap main content (everything except TOC) in .main-content
+    const mainContent = document.createElement("div");
+    mainContent.className = "main-content";
+    Array.from(wrapper.children).forEach((child) => {
+      if (child.id !== "TOC") mainContent.appendChild(child);
+    });
+    wrapper.appendChild(mainContent);
+
+    // Collapsible toggle
+    const icon = document.getElementById("toc-toggle-icon");
+    const saved = localStorage.getItem("toc-collapsed");
+    if (saved === "true") {
+      toc.classList.add("collapsed");
+      icon.textContent = "▶";
+    }
+
+    titleEl.addEventListener("click", function () {
+      toc.classList.toggle("collapsed");
+      const isCollapsed = toc.classList.contains("collapsed");
+      icon.textContent = isCollapsed ? "▶" : "◀";
+      localStorage.setItem("toc-collapsed", isCollapsed);
+    });
+  });
+</script>
+<nav><ul>
+  <li><a href="https://osowoso.org">oSoWoSo</a></li>
+  <li>⏮️</a></li>
+  <li><a href="index.html">Home</a></li>
+  <li><a class="no-release" href="https://github.com/oSoWoSo/VUR/releases/latest">⏬ release</a></li>
+  <li><a href="https://github.com/oSoWoSo/VUR/archive/refs/heads/main.zip">📦repo zip</a></li>
+  <li><a href="https://github.com/oSoWoSo/VUR">🔗git</a></li>
+  <li>⏭️</a></li>
+  <li><a href="CONTRIBUTING-cz.html">CONTRIBUTING-cz</a></li>
+  <li><a href="CONTRIBUTING.html">CONTRIBUTING</a></li>
+  <li><a href="Manual-cz.html">Manual-cz</a></li>
+  <li><a href="Manual.html">Manual</a></li>
+  <li><a href="README-cz.html" class="active">README-cz</a></li>
+</ul></nav>
+<header id="title-block-header">
+<h1 class="title">README-cz</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#kolekce-zdrojových-balíčků-xbps"
+id="toc-kolekce-zdrojových-balíčků-xbps">Kolekce zdrojových balíčků
+XBPS</a>
+<ul>
+<li><a href="#obsah" id="toc-obsah">Obsah</a></li>
+<li><a href="#požadavky" id="toc-požadavky">Požadavky</a></li>
+<li><a href="#rychlý-start" id="toc-rychlý-start">Rychlý start</a></li>
+<li><a href="#chroot-metody" id="toc-chroot-metody">chroot
+metody</a></li>
+<li><a href="#nainstalujte-bootstrap-balíčky"
+id="toc-nainstalujte-bootstrap-balíčky">Nainstalujte bootstrap
+balíčky</a></li>
+<li><a href="#konfigurace" id="toc-konfigurace">Konfigurace</a></li>
+<li><a href="#hierarchie-adresářů"
+id="toc-hierarchie-adresářů">Hierarchie adresářů</a></li>
+<li><a href="#stavební-balíčky" id="toc-stavební-balíčky">Stavební
+balíčky</a></li>
+<li><a href="#možnosti-sestavení-balíčku"
+id="toc-možnosti-sestavení-balíčku">Možnosti sestavení balíčku</a></li>
+<li><a href="#sdílení-a-podepisování-místních-úložišť"
+id="toc-sdílení-a-podepisování-místních-úložišť">Sdílení a podepisování
+místních úložišť</a></li>
+<li><a
+href="#opětovné-sestavení-a-přepsání-existujících-místních-balíčků"
+id="toc-opětovné-sestavení-a-přepsání-existujících-místních-balíčků">Opětovné
+sestavení a přepsání existujících místních balíčků</a></li>
+<li><a href="#povolení-distcc-pro-distribuovanou-kompilaci"
+id="toc-povolení-distcc-pro-distribuovanou-kompilaci">Povolení distcc
+pro distribuovanou kompilaci</a></li>
+<li><a href="#zrcadla-distfiles" id="toc-zrcadla-distfiles">Zrcadla
+Distfiles</a></li>
+<li><a href="#křížová-kompilace-balíčků-pro-cílovou-architekturu"
+id="toc-křížová-kompilace-balíčků-pro-cílovou-architekturu">Křížová
+kompilace balíčků pro cílovou architekturu</a></li>
+<li><a href="#použití-xbps-src-v-zahraniční-distribuci-linuxu"
+id="toc-použití-xbps-src-v-zahraniční-distribuci-linuxu">Použití
+xbps-src v zahraniční distribuci Linuxu</a></li>
+<li><a href="#předělat-masterdir" id="toc-předělat-masterdir">Předělat
+masterdir</a></li>
+<li><a href="#udržujte-svůj-masterdir-aktuální"
+id="toc-udržujte-svůj-masterdir-aktuální">Udržujte svůj masterdir
+aktuální</a></li>
+<li><a href="#vytváření-32bitových-balíčků-na-x86_64"
+id="toc-vytváření-32bitových-balíčků-na-x86_64">Vytváření 32bitových
+balíčků na x86_64</a></li>
+<li><a href="#nativní-vytváření-balíčků-pro-knihovnu-musl-c"
+id="toc-nativní-vytváření-balíčků-pro-knihovnu-musl-c">Nativní vytváření
+balíčků pro knihovnu musl C</a></li>
+<li><a href="#budování-prázdného-základního-systému-od-nuly"
+id="toc-budování-prázdného-základního-systému-od-nuly">Budování
+prázdného základního systému od nuly</a></li>
+</ul></li>
+</ul>
+</nav>
+<h2 id="kolekce-zdrojových-balíčků-xbps">Kolekce zdrojových balíčků
+XBPS</h2>
+<p>Toto úložiště obsahuje kolekci zdrojových balíčků XBPS pro sestavení
+binárních balíčků pro distribuci Void Linux.</p>
+<p>Zahrnutý skript <code>xbps-src</code> načte a zkompiluje zdrojové
+kódy a nainstaluje své soubory do <code>fake destdir</code> aby se
+vygenerovaly binární balíčky XBPS, které lze nainstalovat nebo se na ně
+lze dotazovat pomocí nástrojů <code>xbps-install(1)</code> a
+<code>xbps-query(1)</code> . .</p>
+<p>Obecný přehled o tom, jak přispívat, najdete v části <a
+href="./CONTRIBUTING.md">Přispívání</a> a podrobnosti o vytváření
+zdrojových balíčků najdete <a href="./Manual.md">v příručce</a> .</p>
+<h3 id="obsah">Obsah</h3>
+<ul>
+<li><a href="#requirements">Požadavky</a></li>
+<li><a href="#quick-start">Rychlý start</a></li>
+<li><a href="#chroot-methods">chroot metody</a></li>
+<li><a href="#install-bootstrap">Nainstalujte bootstrap balíčky</a></li>
+<li><a href="#configuration">Konfigurace</a></li>
+<li><a href="#directory-hierarchy">Hierarchie adresářů</a></li>
+<li><a href="#building-packages">Stavební balíčky</a></li>
+<li><a href="#build-options">Možnosti sestavení balíčku</a></li>
+<li><a href="#sharing-and-signing">Sdílení a podepisování místních
+úložišť</a></li>
+<li><a href="#rebuilding">Opětovné sestavení a přepsání existujících
+místních balíčků</a></li>
+<li><a href="#distcc">Povolení distcc pro distribuovanou
+kompilaci</a></li>
+<li><a href="#distfiles-mirrors">Zrcadla Distfiles</a></li>
+<li><a href="#cross-compiling">Křížová kompilace balíčků pro cílovou
+architekturu</a></li>
+<li><a href="#foreign">Použití xbps-src v zahraniční distribuci
+Linuxu</a></li>
+<li><a href="#remaking-masterdir">Předělat masterdir</a></li>
+<li><a href="#updating-masterdir">Udržujte svůj masterdir
+aktuální</a></li>
+<li><a href="#building-32bit">Vytváření 32bitových balíčků na
+x86_64</a></li>
+<li><a href="#building-for-musl">Nativní vytváření balíčků pro knihovnu
+musl C</a></li>
+<li><a href="#building-base-system">Budování prázdného základního
+systému od nuly</a></li>
+</ul>
+<h3 id="požadavky">Požadavky</h3>
+<ul>
+<li>GNU bash</li>
+<li>xbps &gt;= 0,56</li>
+<li>git(1) - pokud není nakonfigurováno, viz etc/defaults.conf</li>
+<li>běžné nástroje POSIX, které jsou standardně součástí téměř všech
+systémů UNIX</li>
+<li>curl(1) - vyžaduje <code>xbps-src update-check</code></li>
+</ul>
+<p>Pro bootstrapping ze zdrojového kódu navíc:</p>
+<ul>
+<li>flock(1) - util-linux</li>
+<li>bsdtar nebo GNU tar (v tomto pořadí preferencí)</li>
+<li>install(1) - GNU coreutils</li>
+<li>objcopy(1), objdump(1), strip(1): binutils</li>
+</ul>
+<p><code>xbps-src</code> vyžaduje <a href="#chroot-methods">obslužný
+program pro chroot</a> a svázání připojení existujících adresářů do
+<code>masterdir</code> , který se používá jako jeho hlavní
+<code>chroot</code> adresář. <code>xbps-src</code> podporuje více
+obslužných programů k provedení tohoto úkolu.</p>
+<blockquote>
+<p>POZNÁMKA: <code>xbps-src</code> již neumožňuje sestavení jako root.
+Použijte jednu z metod chroot.</p>
+</blockquote>
+<p><a name="quick-start"></a></p>
+<h3 id="rychlý-start">Rychlý start</h3>
+<p>Klonujte git repozitář <code>void-packages</code> :</p>
+<pre><code>$ git clone https://github.com/void-linux/void-packages.git
+$ cd void-packages</code></pre>
+<p>Bootstrapping z binárních balíčků se provede automaticky při prvním
+sestavení balíčku, ale lze jej provést ručně pomocí:</p>
+<pre><code>$ ./xbps-src binary-bootstrap</code></pre>
+<p>Sestavte balíček zadáním <code>pkg</code> a názvu balíčku:</p>
+<pre><code>$ ./xbps-src pkg &lt;package_name&gt;</code></pre>
+<p>Pomocí <code>./xbps-src -h</code> vypíšete všechny dostupné cíle a
+možnosti.</p>
+<p>Chcete-li sestavit balíčky označené jako 'omezené', upravte
+<code>etc/conf</code> :</p>
+<pre><code>$ echo XBPS_ALLOW_RESTRICTED=yes &gt;&gt; etc/conf</code></pre>
+<p>Po sestavení bude balíček dostupný v <code>hostdir/binpkgs</code>
+nebo v příslušném podadresáři (např.
+<code>hostdir/binpkgs/nonfree</code> ). Instalace balíčku:</p>
+<pre><code># xbps-install --repository hostdir/binpkgs &lt;package_name&gt;</code></pre>
+<p>Alternativně lze balíčky nainstalovat pomocí nástroje <code>xi</code>
+z balíčku <code>xtools</code> . <code>xi</code> bere v úvahu úložiště
+aktuálního pracovního adresáře.</p>
+<pre><code>$ xi &lt;package_name&gt;</code></pre>
+<p><a name="chroot-methods"></a></p>
+<h3 id="chroot-metody">chroot metody</h3>
+<h4 id="xbps-uunshare1-výchozí">xbps-uunshare(1) (výchozí)</h4>
+<p>Nástroj XBPS, který používá <code>user_namespaces(7)</code> (součást
+xbps, výchozí bez parametru <code>-t</code> ).</p>
+<p>Tento nástroj vyžaduje tyto možnosti jádra Linux:</p>
+<ul>
+<li>CONFIG_NAMESPACES</li>
+<li>CONFIG_IPC_NS</li>
+<li>CONFIG_UTS_NS</li>
+<li>CONFIG_USER_NS</li>
+</ul>
+<p>Toto je výchozí metoda, a pokud váš systém nepodporuje žádnou z
+požadovaných voleb jádra, selže s <code>EINVAL (Invalid argument)</code>
+.</p>
+<h4 id="xbps-uchroot1">xbps-uchroot(1)</h4>
+<p>Nástroj XBPS, který používá <code>namespaces</code> a musí být
+<code>setgid</code> (součást xbps).</p>
+<blockquote>
+<p>POZNÁMKA: Toto je jediná metoda, která implementuje funkci
+<code>xbps-src -t</code> , proto příznak ignoruje volbu provedenou v
+konfiguračních souborech a povolí <code>xbps-uchroot</code> .</p>
+</blockquote>
+<p>Tento nástroj vyžaduje tyto možnosti jádra Linux:</p>
+<ul>
+<li>CONFIG_NAMESPACES</li>
+<li>CONFIG_IPC_NS</li>
+<li>CONFIG_PID_NS</li>
+<li>CONFIG_UTS_NS</li>
+</ul>
+<p>Váš uživatel musí být přidán do speciální skupiny, aby mohl používat
+<code>xbps-uchroot(1)</code> a spustitelný soubor musí být
+<code>setgid</code> :</p>
+<pre><code># chown root:&lt;group&gt; xbps-uchroot
+# chmod 4750 xbps-uchroot
+# usermod -a -G &lt;group&gt; &lt;user&gt;</code></pre>
+<blockquote>
+<p>POZNÁMKA: ve výchozím nastavení byste to neměli dělat ručně, váš
+uživatel musí být členem skupiny <code>xbuilder</code> .</p>
+</blockquote>
+<p>Chcete-li to povolit:</p>
+<pre><code>$ cd void-packages
+$ echo XBPS_CHROOT_CMD=uchroot &gt;&gt; etc/conf</code></pre>
+<p>Pokud se z nějakého důvodu chybuje jako
+<code>ERROR clone (Operation not permitted)</code> , zkontrolujte, zda
+je váš uživatel členem požadované <code>group</code> a že nástroj
+<code>xbps-uchroot(1)</code> má správná oprávnění a vlastníka/skupinu,
+jak je vysvětleno výše.</p>
+<h4 id="bwrap-1">bwrap (1)</h4>
+<p>bubblewrap, sandboxingový nástroj pro neprivilegované uživatele,
+který používá uživatelské jmenné prostory nebo setuid. Viz <a
+href="https://github.com/containers/bubblewrap"><span>https://github.com/containers/bubblewrap</span></a>
+.</p>
+<h4 id="éterický">éterický</h4>
+<p>Zničí hostitelský systém, na kterém běží. Užitečné pouze pro
+jednorázové kontejnery, tj. docker (používá se s CI).</p>
+<p><a name="install-bootstrap"></a></p>
+<h3 id="nainstalujte-bootstrap-balíčky">Nainstalujte bootstrap
+balíčky</h3>
+<p>Existuje sada balíčků, které tvoří počáteční kontejner sestavení,
+nazývaný <code>bootstrap</code> . Tyto balíčky se instalují do
+<code>masterdir</code> za účelem vytvoření kontejneru.</p>
+<p>Primárním a doporučeným způsobem nastavení tohoto kontejneru je
+použití příkazu <code>binary-bootstrap</code> . Použije se již
+existující binární balíčky, buď ze vzdálených repozitářů
+<code>xbps</code> , nebo z vašeho lokálního repozitáře. To se provádí
+automaticky při sestavování balíčků, pokud neexistuje inicializovaný
+hlavní adresář pro hostitelskou architekturu.</p>
+<p>K dispozici je také příkaz <code>bootstrap</code> , který vytvoří
+všechny potřebné <code>bootstrap</code> balíčky od začátku. To se
+obvykle nedoporučuje, protože tyto balíčky jsou sestaveny pomocí
+toolchainu vašeho hostitelského systému a nejsou ani plně vybavené ani
+reprodukovatelné (váš hostitelský systém může ovlivnit sestavení), a
+proto by měly být použity pouze jako fáze 0 pro bootstraping nových Void
+systémů.</p>
+<p>Pokud se přesto rozhodnete použít <code>bootstrap</code> , použijte
+výsledný kontejner fáze 0 k opětovnému sestavení všech balíčků
+<code>bootstrap</code> , poté použijte <code>binary-bootstrap</code>
+(fáze 1) a znovu sestavte balíčky <code>bootstrap</code> (pro získání
+fáze 2 a poté znovu použijte <code>binary-bootstrap</code> ). Jakmile to
+uděláte, budete mít sadu <code>bootstrap</code> ekvivalentní použití
+<code>binary-bootstrap</code> .</p>
+<p>Také mějte na paměti, že <code>bootstrap</code> úplného zdroje je
+časově náročné a bude vyžadovat instalaci řady utilit ve vašem
+hostitelském systému, jako jsou <code>binutils</code> , <code>gcc</code>
+, <code>perl</code> , <code>texinfo</code> a další.</p>
+<h3 id="konfigurace">Konfigurace</h3>
+<p>Soubor <code>etc/defaults.conf</code> obsahuje možná nastavení, která
+lze přepsat pomocí konfiguračního souboru <code>etc/conf</code> pro
+obslužný program <code>xbps-src</code> ; pokud tento soubor neexistuje,
+pokusí se načíst konfigurační nastavení z
+<code>$XDG_CONFIG_HOME/xbps-src.conf</code> ,
+<code>~/.config/xbps-src.conf</code> , <code>~/.xbps-src.conf</code>
+.</p>
+<p>Pokud chcete upravit výchozí <code>CFLAGS</code> ,
+<code>CXXFLAGS</code> a <code>LDFLAGS</code> , nepřepisujte ty
+definované v <code>etc/defaults.conf</code> , nastavte je na
+<code>etc/conf</code> , tj.</p>
+<pre><code>$ echo &#39;XBPS_CFLAGS=&quot;your flags here&quot;&#39; &gt;&gt; etc/conf
+$ echo &#39;XBPS_LDFLAGS=&quot;your flags here&quot;&#39; &gt;&gt; etc/conf</code></pre>
+<p>Nativní a křížový kompilátor/linker příznaky jsou nastaveny pro
+architekturu v <code>common/build-profiles</code> a
+<code>common/cross-profiles</code> . V ideálním případě jsou tato
+nastavení ve výchozím nastavení dostatečně dobrá a není třeba nastavovat
+vlastní, pokud nevíte, co děláte.</p>
+<h4 id="virtuální-balíčky">Virtuální balíčky</h4>
+<p>Soubor <code>etc/defaults.virtual</code> obsahuje výchozí náhrady za
+virtuální balíčky, které se používají jako závislosti ve stromu
+zdrojových balíčků.</p>
+<p>Pokud chcete tyto náhrady přizpůsobit, zkopírujte
+<code>etc/defaults.virtual</code> do <code>etc/virtual</code> a upravte
+jej podle svých potřeb.</p>
+<p><a name="directory-hierarchy"></a></p>
+<h3 id="hierarchie-adresářů">Hierarchie adresářů</h3>
+<p>S výchozím konfiguračním souborem se používá následující hierarchie
+adresářů:</p>
+<pre><code>     /void-packages
+        |- common
+        |- etc
+        |- srcpkgs
+        |  |- xbps
+        |     |- template
+        |
+        |- hostdir
+        |  |- binpkgs ...
+        |  |- ccache ...
+        |  |- distcc-&lt;arch&gt; ...
+        |  |- repocache ...
+        |  |- sources ...
+        |
+        |- masterdir-&lt;arch&gt;
+        |  |- builddir -&gt; ...
+        |  |- destdir -&gt; ...
+        |  |- host -&gt; bind mounted from &lt;hostdir&gt;
+        |  |- void-packages -&gt; bind mounted from &lt;void-packages&gt;</code></pre>
+<p>Popis těchto adresářů je následující:</p>
+<ul>
+<li><code>masterdir-&lt;arch&gt;</code> : hlavní adresář, který má být
+použit jako rootfs k sestavení/instalaci balíčků.</li>
+<li><code>builddir</code> : k rozbalení tarballů se zdrojovými kódy a
+umístění balíčků.</li>
+<li><code>destdir</code> : k instalaci balíčků alias <strong>fake
+destdir</strong> .</li>
+<li><code>hostdir/ccache</code> : k ukládání dat ccache, pokud je
+povolena volba <code>XBPS_CCACHE</code> .</li>
+<li><code>hostdir/distcc-&lt;arch&gt;</code> : k ukládání dat distcc,
+pokud je povolena volba <code>XBPS_DISTCC</code> .</li>
+<li><code>hostdir/repocache</code> : k ukládání binárních balíčků ze
+vzdálených úložišť.</li>
+<li><code>hostdir/sources</code> : k uložení zdrojů balíčků.</li>
+<li><code>hostdir/binpkgs</code> : místní úložiště pro ukládání
+generovaných binárních balíčků.</li>
+</ul>
+<p><a name="building-packages"></a></p>
+<h3 id="stavební-balíčky">Stavební balíčky</h3>
+<p>Nejjednodušší forma sestavení balíčku se dosáhne spuštěním cíle
+<code>pkg</code> v <code>xbps-src</code> :</p>
+<pre><code>$ cd void-packages
+$ ./xbps-src pkg &lt;pkgname&gt;</code></pre>
+<p>Po vytvoření balíčku a jeho požadovaných závislostí budou binární
+balíčky vytvořeny a zaregistrovány ve výchozím místním úložišti na
+<code>hostdir/binpkgs</code> ; cestu k tomuto lokálnímu úložišti lze
+přidat do libovolného konfiguračního souboru xbps (viz xbps.d(5)) nebo
+je explicitně přidat pomocí cmdline, tj.</p>
+<pre><code>$ xbps-install --repository=hostdir/binpkgs ...
+$ xbps-query --repository=hostdir/binpkgs ...</code></pre>
+<p>Ve výchozím nastavení se <strong>xbps-src</strong> pokusí vyřešit
+závislosti balíčků v tomto pořadí:</p>
+<ul>
+<li>Pokud v místním úložišti existuje závislost, použijte ji (
+<code>hostdir/binpkgs</code> ).</li>
+<li>Pokud ve vzdáleném úložišti existuje závislost, použijte ji.</li>
+<li>Pokud ve zdrojovém balíčku existuje závislost, použijte ji.</li>
+</ul>
+<p>Použitím vzdálených úložišť je možné se zcela vyhnout použitím
+parametru <code>-N</code> .</p>
+<blockquote>
+<p>Výchozí místní úložiště může obsahovat více <em>dílčích
+repozitářů</em> : <code>debug</code> , <code>multilib</code> atd.</p>
+</blockquote>
+<p><a name="build-options"></a></p>
+<h3 id="možnosti-sestavení-balíčku">Možnosti sestavení balíčku</h3>
+<p>Podporované možnosti sestavení pro zdrojový balíček lze zobrazit
+pomocí <code>xbps-src show-options</code> :</p>
+<pre><code>$ ./xbps-src show-options foo</code></pre>
+<p>Možnosti sestavení lze povolit pomocí parametru <code>-o</code>
+<code>xbps-src</code> :</p>
+<pre><code>$ ./xbps-src -o option,option1 pkg foo</code></pre>
+<p>Možnosti sestavení lze zakázat jejich přidáním předponu
+<code>~</code> :</p>
+<pre><code>$ ./xbps-src -o ~option,~option1 pkg foo</code></pre>
+<p>Oba způsoby lze použít společně k povolení a/nebo zakázání více
+možností současně s <code>xbps-src</code> :</p>
+<pre><code>$ ./xbps-src -o option,~option1,~option2 pkg foo</code></pre>
+<p>Možnosti sestavení lze také zobrazit pro binární balíčky pomocí
+<code>xbps-query(1)</code> :</p>
+<pre><code>$ xbps-query -R --property=build-options foo</code></pre>
+<blockquote>
+<p>POZNÁMKA: Pokud vytvoříte balíček s vlastní možností a tento balíček
+je dostupný v oficiálním neplatném úložišti, aktualizace bude tyto
+možnosti ignorovat. Přepněte tento balíček do režimu <code>hold</code>
+pomocí <code>xbps-pkgdb(1)</code> , tj.
+<code>xbps-pkgdb -m hold foo</code> pro ignorování aktualizací pomocí
+<code>xbps-install -u</code> . Jakmile je balíček <code>hold</code> ,
+jediný způsob, jak jej aktualizovat, je explicitně jej deklarovat:
+<code>xbps-install -u foo</code> .</p>
+</blockquote>
+<p>Trvalé globální možnosti sestavení balíčku lze nastavit pomocí
+proměnné <code>XBPS_PKG_OPTIONS</code> v konfiguračním souboru
+<code>etc/conf</code> . Možnosti sestavení pro jednotlivé balíčky lze
+nastavit pomocí <code>XBPS_PKG_OPTIONS_&lt;pkgname&gt;</code> .</p>
+<blockquote>
+<p>POZNÁMKA: Pokud <code>pkgname</code> obsahuje <code>dashes</code> ,
+měly by být nahrazeny <code>underscores</code> , tj
+<code>XBPS_PKG_OPTIONS_xorg_server=opt</code> .</p>
+</blockquote>
+<p>Seznam podporovaných voleb sestavení balíčku a jeho popis je
+definován v souboru <code>common/options.description</code> nebo v
+souboru <code>template</code> .</p>
+<p><a name="sharing-and-signing"></a></p>
+<h3 id="sdílení-a-podepisování-místních-úložišť">Sdílení a podepisování
+místních úložišť</h3>
+<p>Chcete-li vzdáleně sdílet místní úložiště, je nutné jej podepsat a
+binární balíčky v něm uložené. Toho lze dosáhnout pomocí nástroje
+<code>xbps-rindex(1)</code> .</p>
+<p>Nejprve je třeba vytvořit klíč RSA pomocí <code>openssl(1)</code>
+nebo <code>ssh-keygen(1)</code> :</p>
+<pre><code>$ openssl genrsa -des3 -out privkey.pem 4096</code></pre>
+<p>nebo</p>
+<pre><code>$ ssh-keygen -t rsa -b 4096 -m PEM -f privkey.pem</code></pre>
+<blockquote>
+<p>xbps aktuálně přijímá pouze klíče RSA ve formátu PEM.</p>
+</blockquote>
+<p>Jakmile je soukromý klíč RSA připraven, můžete jej použít k
+inicializaci metadat úložiště:</p>
+<pre><code>$ xbps-rindex --sign --signedby &quot;I&#39;m Groot&quot; --privkey privkey.pem $PWD/hostdir/binpkgs</code></pre>
+<p>A pak udělejte podpis na balíček:</p>
+<pre><code>$ xbps-rindex --sign-pkg --privkey privkey.pem $PWD/hostdir/binpkgs/*.xbps</code></pre>
+<blockquote>
+<p>Pokud není --privkey nastaveno, výchozí je <code>~/.ssh/id_rsa</code>
+.</p>
+</blockquote>
+<p>Pokud byl klíč RSA chráněn přístupovou frází, budete ji muset zadat
+nebo ji nastavit pomocí proměnné prostředí <code>XBPS_PASSPHRASE</code>
+.</p>
+<p>Jakmile jsou binární balíčky podepsány, zkontrolujte, zda úložiště
+obsahuje příslušný <code>hex fingerprint</code> :</p>
+<pre><code>$ xbps-query --repository=hostdir/binpkgs -vL
+...</code></pre>
+<p>Pokaždé, když je vytvořen binární balíček, musí být vytvořen podpis
+balíčku pomocí <code>--sign-pkg</code> .</p>
+<blockquote>
+<p>Není možné podepsat úložiště pomocí více RSA klíčů.</p>
+</blockquote>
+<p>Pokud jsou podepsány balíčky v <code>hostdir/binpkgs</code> , klíč ve
+formátu <code>.plist</code> (importovaný xbps) lze umístit do
+<code>etc/repo-keys/</code> aby xbps-src nevyzval k importu tohoto
+klíče.</p>
+<p><a name="rebuilding"></a></p>
+<h3
+id="opětovné-sestavení-a-přepsání-existujících-místních-balíčků">Opětovné
+sestavení a přepsání existujících místních balíčků</h3>
+<p>Balíčky se při každém sestavení přepisují, aby bylo získání balíčku
+se změněnými možnostmi sestavení snadné. Aby xbps-src přeskočilo
+sestavení a zachovalo první sestavení balíčku s danou verzí a revizí,
+stejně jako v oficiálním neplatném repozitáři, nastavte
+<code>XBPS_PRESERVE_PKGS=yes</code> v souboru <code>etc/conf</code>
+.</p>
+<p>Přeinstalaci balíčku do cílového <code>rootdir</code> lze také snadno
+provést:</p>
+<pre><code>$ xbps-install --repository=/path/to/local/repo -yf xbps-0.25_1</code></pre>
+<p>Dvojité použití parametru <code>-f</code> přepíše konfigurační
+soubory.</p>
+<blockquote>
+<p>Vezměte prosím na vědomí, že <code>package expression</code> musí být
+správně definován, aby bylo možné balík explicitně vyzvednou z
+požadovaného úložiště.</p>
+</blockquote>
+<p><a name="distcc"></a></p>
+<h3 id="povolení-distcc-pro-distribuovanou-kompilaci">Povolení distcc
+pro distribuovanou kompilaci</h3>
+<p>Nastavte pracovníky (stroje, které budou kompilovat kód):</p>
+<pre><code># xbps-install -Sy distcc</code></pre>
+<p>Aktualizace whitelistu kompilátoru distcc</p>
+<pre><code># update-distcc-symlinks</code></pre>
+<p>Upravte konfiguraci tak, aby vaše místní síťové počítače mohly
+používat distcc (např. <code>192.168.2.0/24</code> ):</p>
+<pre><code># echo &quot;192.168.2.0/24&quot; &gt;&gt; /etc/distcc/clients.allow</code></pre>
+<p>Povolte a spusťte službu <code>distccd</code> :</p>
+<pre><code># ln -s /etc/sv/distccd /var/service</code></pre>
+<p>Nainstalujte distcc také na hostitele (stroj, který spouští
+xbps-src). Pokud nechcete používat hostitele jako pracovníka z jiných
+počítačů, není třeba upravovat konfiguraci.</p>
+<p>Na hostiteli nyní můžete povolit distcc v souboru
+<code>void-packages/etc/conf</code> :</p>
+<pre><code>XBPS_DISTCC=yes
+XBPS_DISTCC_HOSTS=&quot;localhost/2 --localslots_cpp=24 192.168.2.101/9 192.168.2.102/2&quot;
+XBPS_MAKEJOBS=16</code></pre>
+<p>Hodnoty příkladu předpokládají CPU localhost se 4 jádry, z nichž
+nejvýše 2 se používají pro úlohy kompilátoru. Počet slotů pro úlohy
+preprocesoru je nastaven na 24, aby bylo k dispozici dostatek
+předzpracovaných dat pro ostatní CPU ke kompilaci. Pracovník
+192.168.2.101 má CPU s 8 jádry a /9 pro počet úloh je saturující volba.
+Pracovník 192.168.2.102 je nastaven tak, aby spouštěl maximálně 2
+kompilační úlohy, aby byla jeho zátěž nízká, i když má CPU 4 jádra.
+Nastavení XBPS_MAKEJOBS je zvýšeno na 16, aby se zohlednil možný
+paralelismus (2 + 9 + 2 + určitá prodleva).</p>
+<p><a name="distfiles-mirrors"></a></p>
+<h3 id="zrcadla-distfiles">Zrcadla Distfiles</h3>
+<p>V etc/conf můžete volitelně definovat zrcadlo nebo seznam zrcadel pro
+vyhledávání souborů distfiles.</p>
+<pre><code>$ echo &#39;XBPS_DISTFILES_MIRROR=&quot;ftp://192.168.100.5/gentoo/distfiles&quot;&#39; &gt;&gt; etc/conf</code></pre>
+<p>Pokud má být prohledáno více než jedno zrcadlo, můžete buď zadat více
+adres URL oddělených mezerami, nebo přidat do proměnné takto</p>
+<pre><code>$ echo &#39;XBPS_DISTFILES_MIRROR+=&quot; https://sources.voidlinux.org/&quot;&#39; &gt;&gt; etc/conf</code></pre>
+<p>V tomto případě nezapomeňte za první dvojitou uvozovku vložit
+mezeru.</p>
+<p>Zrcadla jsou prohledána, aby distfiles vytvořily balíček, dokud
+kontrolní součet staženého souboru neodpovídá tomu, který je uveden v
+šabloně.</p>
+<p>Nakonec, pokud žádné zrcadlo nenese distfile, nebo v případě, že
+všechna stahování selhala při ověření kontrolního součtu, použije se
+původní umístění stahování.</p>
+<p>Pokud pro XBPS_CHROOT_CMD používáte <code>uchroot</code> , můžete
+také zadat místní cestu pomocí předpony <code>file://</code> nebo
+jednoduše absolutní cestu na hostiteli sestavení (např. /mnt/distfiles).
+Takto zadaná zrcadlová umístění jsou připojena do chrootového prostředí
+pod $XBPS_MASTERDIR a vyhledávají distfiles stejně jako vzdálená
+umístění.</p>
+<p><a name="cross-compiling"></a></p>
+<h3 id="křížová-kompilace-balíčků-pro-cílovou-architekturu">Křížová
+kompilace balíčků pro cílovou architekturu</h3>
+<p>V současné době může <code>xbps-src</code> křížit sestavení balíčků
+pro některé cílové architektury pomocí křížového kompilátoru.
+Podporovaný cíl je zobrazen pomocí <code>./xbps-src -h</code> .</p>
+<p>Pokud byl zdrojový balíček upraven tak, aby byl <strong>křížově
+sestavitelný,</strong> <code>xbps-src</code> automaticky sestaví binární
+balíčky pomocí jednoduchého příkazu:</p>
+<pre><code>$ ./xbps-src -a &lt;target&gt; pkg &lt;pkgname&gt;</code></pre>
+<p>Pokud sestavení z jakéhokoli důvodu selže, může to být problém nového
+sestavení nebo jednoduše proto, že nebylo upraveno pro <strong>křížovou
+kompilaci</strong> .</p>
+<p><a name="foreign"></a></p>
+<h3 id="použití-xbps-src-v-zahraniční-distribuci-linuxu">Použití
+xbps-src v zahraniční distribuci Linuxu</h3>
+<p>xbps-src lze použít v jakékoli nedávné distribuci Linuxu odpovídající
+architektuře CPU.</p>
+<p>Chcete-li použít xbps-src ve vaší distribuci Linuxu, postupujte podle
+následujících pokynů. Začněme stahovat statické binární soubory
+xbps:</p>
+<pre><code>$ wget http://repo-default.voidlinux.org/static/xbps-static-latest.&lt;arch&gt;-musl.tar.xz
+$ mkdir ~/XBPS
+$ tar xvf xbps-static-latest.&lt;arch&gt;-musl.tar.xz -C ~/XBPS
+$ export PATH=~/XBPS/usr/bin:$PATH</code></pre>
+<p>Pokud <code>xbps-uunshare</code> nefunguje kvůli nedostatku podpory
+<code>user_namespaces(7)</code> , zkuste jiné <a
+href="#chroot-methods">chroot metody</a> .</p>
+<p>Naklonujte <code>void-packages</code> git repozitář:</p>
+<pre><code>$ git clone https://github.com/void-linux/void-packages.git</code></pre>
+<p>a <code>xbps-src</code> by měl být plně funkční; volitelně spusťte
+proces <code>bootstrap</code> , tj.:</p>
+<pre><code>$ ./xbps-src binary-bootstrap</code></pre>
+<p>Výchozí masterdir je vytvořen v aktuálním pracovním adresáři, tj
+<code>void-packages/masterdir-&lt;arch&gt;</code> , kde
+<code>&lt;arch&gt;</code> pro výchozí masterdir je nativní architektura
+xbps.</p>
+<p><a name="remaking-masterdir"></a></p>
+<h3 id="předělat-masterdir">Předělat masterdir</h3>
+<p>Pokud z nějakého důvodu musíte aktualizovat xbps-src a cíl
+<code>bootstrap-update</code> nestačí, je možné znovu vytvořit masterdir
+pomocí dvou jednoduchých příkazů (všimněte si prosím, že
+<code>zap</code> udržuje vaše adresáře <code>ccache/distcc/host</code>
+nedotčené):</p>
+<pre><code>$ ./xbps-src zap
+$ ./xbps-src binary-bootstrap</code></pre>
+<p><a name="updating-masterdir"></a></p>
+<h3 id="udržujte-svůj-masterdir-aktuální">Udržujte svůj masterdir
+aktuální</h3>
+<p>Někdy musí být balíčky bootstrap aktualizovány na nejnovější
+dostupnou verzi v repozitářích, to se provádí pomocí cíle
+<code>bootstrap-update</code> :</p>
+<pre><code>$ ./xbps-src bootstrap-update</code></pre>
+<p><a name="building-32bit"></a></p>
+<h3 id="vytváření-32bitových-balíčků-na-x86_64">Vytváření 32bitových
+balíčků na x86_64</h3>
+<p>K sestavení 32bitových balíčků na x86_64 jsou k dispozici dva
+způsoby:</p>
+<ul>
+<li>nativní režim s 32bitovým masterdirem (doporučeno, používá se v
+oficiálním úložišti)</li>
+<li>režim křížové kompilace na <a href="#cross-compiling">cíl</a>
+i686</li>
+</ul>
+<p>Kanonický režim (nativní) potřebuje nový x86 <code>masterdir</code> ,
+který se vytvoří při sestavování balíčku pro i686:</p>
+<pre><code>$ ./xbps-src -A i686 ...</code></pre>
+<p><a name="building-for-musl"></a></p>
+<h3 id="nativní-vytváření-balíčků-pro-knihovnu-musl-c">Nativní vytváření
+balíčků pro knihovnu musl C</h3>
+<p>Kanonický způsob sestavování balíčků pro stejnou architekturu, ale s
+jinou knihovnou C, je pomocí vyhrazeného hlavního adresáře (masterdir) s
+použitím příznaku architektury hostitele <code>-A</code> . Pro sestavení
+pro x86_64-musl na systému glibc x86_64 použijte
+<code>-A x86_64-musl</code> ve volání <code>xbps-src</code> . Tím se
+vytvoří a nabootuje nový hlavní adresář s názvem
+<code>masterdir-x86_64-musl</code> , který bude použit, když je zadán
+<code>-A x86_64-musl</code> :</p>
+<pre><code>$ ./xbps-src -A x86_64-musl pkg ...</code></pre>
+<p><a name="building-base-system"></a></p>
+<h3 id="budování-prázdného-základního-systému-od-nuly">Budování
+prázdného základního systému od nuly</h3>
+<p>Chcete-li znovu sestavit všechny balíčky v <code>base-system</code>
+pro vaši nativní architekturu:</p>
+<pre><code>$ ./xbps-src -N pkg base-system</code></pre>
+<p>Je také možné křížově kompilovat vše od začátku:</p>
+<pre><code>$ ./xbps-src -a &lt;target&gt; -N pkg base-system</code></pre>
+<p>Po dokončení sestavení můžete zadat cestu k místnímu úložišti
+<code>void-mklive</code> , tj.</p>
+<pre><code># cd void-mklive
+# make
+# ./mklive.sh ... -r /path/to/hostdir/binpkgs</code></pre>
+<script>
+(function () {
+  function hexToRgb(hex) {
+    hex = hex.trim().replace(/^#/, '');
+    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+    const n = parseInt(hex, 16);
+    return [n >> 16 & 255, n >> 8 & 255, n & 255];
+  }
+
+  function clamp(v, min, max) {
+    return Math.min(Math.max(v, min), max);
+  }
+
+  function Color(r, g, b) {
+    this.r = r / 255;
+    this.g = g / 255;
+    this.b = b / 255;
+  }
+
+  Color.prototype.applyFilter = function (funcs) {
+    let [r, g, b] = [this.r * 255, this.g * 255, this.b * 255];
+
+    function multiply(matrix) {
+      const nr = clamp(r * matrix[0] + g * matrix[1] + b * matrix[2], 0, 255);
+      const ng = clamp(r * matrix[3] + g * matrix[4] + b * matrix[5], 0, 255);
+      const nb = clamp(r * matrix[6] + g * matrix[7] + b * matrix[8], 0, 255);
+      r = nr; g = ng; b = nb;
+    }
+
+    function hueRotate(angle) {
+      const a = angle / 180 * Math.PI;
+      const sin = Math.sin(a), cos = Math.cos(a);
+      multiply([
+        0.213 + cos*0.787 - sin*0.213, 0.715 - cos*0.715 - sin*0.715, 0.072 - cos*0.072 + sin*0.928,
+        0.213 - cos*0.213 + sin*0.143, 0.715 + cos*0.285 + sin*0.140, 0.072 - cos*0.072 - sin*0.283,
+        0.213 - cos*0.213 - sin*0.787, 0.715 - cos*0.715 + sin*0.715, 0.072 + cos*0.928 + sin*0.072,
+      ]);
+    }
+
+    function sepia(v) {
+      multiply([
+        0.393 + 0.607*(1-v), 0.769 - 0.769*(1-v), 0.189 - 0.189*(1-v),
+        0.349 - 0.349*(1-v), 0.686 + 0.314*(1-v), 0.168 - 0.168*(1-v),
+        0.272 - 0.272*(1-v), 0.534 - 0.534*(1-v), 0.131 + 0.869*(1-v),
+      ]);
+    }
+
+    function saturate(v) {
+      multiply([
+        0.213 + 0.787*v, 0.715 - 0.715*v, 0.072 - 0.072*v,
+        0.213 - 0.213*v, 0.715 + 0.285*v, 0.072 - 0.072*v,
+        0.213 - 0.213*v, 0.715 - 0.715*v, 0.072 + 0.928*v,
+      ]);
+    }
+
+    for (const [fn, val] of funcs) {
+      if (fn === 'invert')    { r = clamp((1-r/255)*255*val + r/255*255*(1-val),0,255); g = clamp((1-g/255)*255*val + g/255*255*(1-val),0,255); b = clamp((1-b/255)*255*val + b/255*255*(1-val),0,255); }
+      if (fn === 'sepia')     sepia(val);
+      if (fn === 'saturate')  saturate(val);
+      if (fn === 'hueRotate') hueRotate(val);
+      if (fn === 'brightness'){ r = clamp(r*val,0,255); g = clamp(g*val,0,255); b = clamp(b*val,0,255); }
+    }
+
+    return new Color(r, g, b);
+  };
+
+  function loss(result, target) {
+    return (
+      Math.pow(result.r*255 - target.r*255, 2) +
+      Math.pow(result.g*255 - target.g*255, 2) +
+      Math.pow(result.b*255 - target.b*255, 2)
+    );
+  }
+
+  function solve(target) {
+    function css(v) {
+      return [
+        ['invert',    clamp(v[0], 0, 1)],
+        ['sepia',     clamp(v[1], 0, 1)],
+        ['saturate',  clamp(v[2], 0, 20)],
+        ['hueRotate', clamp(v[3], 0, 360)],
+        ['brightness',clamp(v[4], 0, 10)],
+        ['brightness',clamp(v[5], 0, 10)],
+      ];
+    }
+
+    function score(v) {
+      return loss(new Color(0,0,0).applyFilter(css(v)), target);
+    }
+
+    let best = null, bestScore = Infinity;
+    for (let i = 0; i < 30; i++) {
+      let v = [Math.random(), Math.random(), Math.random()*10, Math.random()*360, Math.random()*2, Math.random()*2];
+      for (let step = 1; step > 0.0001; step *= 0.9) {
+        for (let j = 0; j < v.length; j++) {
+          const orig = v[j];
+          v[j] += step * (Math.random() > 0.5 ? 1 : -1);
+          const s = score(v);
+          if (s < bestScore) { bestScore = s; best = [...v]; }
+          else v[j] = orig;
+        }
+      }
+    }
+
+    const f = css(best);
+    return [
+      `invert(${(clamp(f[0][1],0,1)*100).toFixed(0)}%)`,
+      `sepia(${(clamp(f[1][1],0,1)*100).toFixed(0)}%)`,
+      `saturate(${(clamp(f[2][1],0,20)*100).toFixed(0)}%)`,
+      `hue-rotate(${clamp(f[3][1],0,360).toFixed(0)}deg)`,
+      `brightness(${(clamp(f[4][1],0,10)*100).toFixed(0)}%)`,
+      `brightness(${(clamp(f[5][1],0,10)*100).toFixed(0)}%)`,
+    ].join(' ');
+  }
+
+  // Cache solved filters per color so theme switching is instant
+  const cache = {};
+
+  function applyIconColor() {
+    const raw = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-icon').trim();
+    if (!raw) return false;
+
+    let rgb;
+    if (raw.startsWith('#')) {
+      rgb = hexToRgb(raw);
+    } else if (raw.startsWith('rgb')) {
+      rgb = raw.match(/\d+/g).map(Number).slice(0, 3);
+    } else {
+      return false;
+    }
+
+    const key = rgb.join(',');
+    if (!cache[key]) {
+      cache[key] = solve(new Color(...rgb));
+    }
+
+    document.documentElement.style.setProperty('--filter-icon', cache[key]);
+    return true;
+  }
+
+  function init() {
+    if (!applyIconColor()) return;
+
+    // Watch for data-theme attribute changes on <html> — re-apply immediately
+    new MutationObserver(function(mutations) {
+      for (const m of mutations) {
+        if (m.attributeName === 'data-theme') {
+          applyIconColor();
+          break;
+        }
+      }
+    }).observe(document.documentElement, { attributes: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+<script data-goatcounter="https://vur.gocounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<script src="https://giscus.app/client.js"
+        data-repo="osowoso/VUR"
+        data-repo-id="R_kgDOGNy3Og"
+        data-category="General"
+        data-category-id="DIC_kwDOGNy3Os4CBWcR"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="cs"
+        crossorigin="anonymous"
+        async></script>
+</body>
+</html>
