@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>CONTRIBUTING-cz</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+<script>
+  function toggleTheme(){
+    const html=document.documentElement;
+    const current=html.getAttribute("data-theme")||"dark";
+    const next=current==="dark"?"light":"dark";
+    html.setAttribute("data-theme",next);
+    localStorage.setItem("theme",next)
+  }
+  (function(){
+    const saved=localStorage.getItem("theme")||"dark";
+    document.documentElement.setAttribute("data-theme",saved)
+  })();
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toc = document.getElementById("TOC");
+    if (!toc) return;
+
+    // Add toc-title with toggle button
+    const titleEl = document.createElement("div");
+    titleEl.id = "toc-title";
+    titleEl.innerHTML = '<span>Contents</span><span id="toc-toggle-icon">◀</span>';
+    toc.insertBefore(titleEl, toc.firstChild);
+
+    // Wrap TOC + the rest of the content in .page-wrapper
+    const body = document.body;
+    const wrapper = document.createElement("div");
+    wrapper.className = "page-wrapper";
+
+    // Find all elements after <nav> (main nav menu)
+    const topNav = document.querySelector("body > nav");
+    const siblings = [];
+    let el = topNav ? topNav.nextElementSibling : body.firstElementChild;
+    while (el) {
+      siblings.push(el);
+      el = el.nextElementSibling;
+    }
+
+    siblings.forEach((s) => wrapper.appendChild(s));
+    body.appendChild(wrapper);
+
+    // Wrap main content (everything except TOC) in .main-content
+    const mainContent = document.createElement("div");
+    mainContent.className = "main-content";
+    Array.from(wrapper.children).forEach((child) => {
+      if (child.id !== "TOC") mainContent.appendChild(child);
+    });
+    wrapper.appendChild(mainContent);
+
+    // Collapsible toggle
+    const icon = document.getElementById("toc-toggle-icon");
+    const saved = localStorage.getItem("toc-collapsed");
+    if (saved === "true") {
+      toc.classList.add("collapsed");
+      icon.textContent = "▶";
+    }
+
+    titleEl.addEventListener("click", function () {
+      toc.classList.toggle("collapsed");
+      const isCollapsed = toc.classList.contains("collapsed");
+      icon.textContent = isCollapsed ? "▶" : "◀";
+      localStorage.setItem("toc-collapsed", isCollapsed);
+    });
+  });
+</script>
+<nav><ul>
+  <li><a href="https://osowoso.org">oSoWoSo</a></li>
+  <li>⏮️</a></li>
+  <li><a href="index.html">Home</a></li>
+  <li><a class="no-release" href="https://github.com/oSoWoSo/VUR/releases/latest">⏬ release</a></li>
+  <li><a href="https://github.com/oSoWoSo/VUR/archive/refs/heads/main.zip">📦repo zip</a></li>
+  <li><a href="https://github.com/oSoWoSo/VUR">🔗git</a></li>
+  <li>⏭️</a></li>
+  <li><a href="CONTRIBUTING-cz.html" class="active">CONTRIBUTING-cz</a></li>
+  <li><a href="CONTRIBUTING.html">CONTRIBUTING</a></li>
+  <li><a href="Manual-cz.html">Manual-cz</a></li>
+  <li><a href="Manual.html">Manual</a></li>
+  <li><a href="README-cz.html">README-cz</a></li>
+</ul></nav>
+<header id="title-block-header">
+<h1 class="title">CONTRIBUTING-cz</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#přispívání-do-void-balíčků"
+id="toc-přispívání-do-void-balíčků">Přispívání do void-balíčků</a>
+<ul>
+<li><a href="#požadavky-na-balíček"
+id="toc-požadavky-na-balíček">Požadavky na balíček</a></li>
+<li><a
+href="#vytvářejte-aktualizujte-a-upravujte-balíčky-ve-void-svépomocí"
+id="toc-vytvářejte-aktualizujte-a-upravujte-balíčky-ve-void-svépomocí">Vytvářejte,
+aktualizujte a upravujte balíčky ve Void svépomocí</a>
+<ul>
+<li><a href="#vytvoření-nové-šablony"
+id="toc-vytvoření-nové-šablony">Vytvoření nové šablony</a></li>
+<li><a href="#aktualizace-šablony"
+id="toc-aktualizace-šablony">Aktualizace šablony</a></li>
+<li><a href="#přijetí-šablony" id="toc-přijetí-šablony">Přijetí
+šablony</a></li>
+<li><a href="#osirotování-šablony"
+id="toc-osirotování-šablony">Osirotování šablony</a></li>
+<li><a href="#potvrzení-změn" id="toc-potvrzení-změn">Potvrzení
+změn</a></li>
+<li><a href="#spuštění-požadavku-na-stažení"
+id="toc-spuštění-požadavku-na-stažení">Spuštění požadavku na
+stažení</a></li>
+</ul></li>
+<li><a href="#testování-pull-requests"
+id="toc-testování-pull-requests">Testování Pull Requests</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="přispívání-do-void-balíčků">Přispívání do void-balíčků</h1>
+<p>void-packages jsou páteří distribuce Void Linux. Obsahují všechny
+definice pro sestavení balíčků ze zdroje.</p>
+<p>Tento dokument popisuje, jak můžete jako přispěvatel pomoci s
+přidáváním balíčků, opravováním chyb a přidáváním funkcí do
+void-balíčků.</p>
+<h2 id="požadavky-na-balíček">Požadavky na balíček</h2>
+<p>Aby mohl být software zahrnut do úložiště Void, musí splňovat alespoň
+jeden z následujících požadavků. Výjimky ze seznamu jsou možné a mohou
+být přijaty, ale jsou extrémně nepravděpodobné. Pokud si myslíte, že
+máte výjimku, začněte PR a argumentujte, proč je tento konkrétní
+software, i když nesplňuje žádné z následujících požadavků, dobrým
+kandidátem pro systém Void balíčků.</p>
+<ol type="1">
+<li><p><strong>Systém</strong> : Software by měl být instalován v rámci
+celého systému, nikoli na uživatele.</p></li>
+<li><p><strong>Kompilováno</strong> : Software musí být před použitím
+zkompilován, i když se jedná o software, který nepotřebuje celý
+systém.</p></li>
+<li><p><strong>Vyžadováno</strong> : Balíček vyžaduje jiný balíček v
+úložišti nebo čekající na zahrnutí.</p></li>
+</ol>
+<p>Zejména je velmi nepravděpodobné, že budou přijata nová témata.
+Jednoduché skripty shellu pravděpodobně nebudou přijaty, pokud nebudou
+poskytovat značnou hodnotu široké uživatelské základně. Nové fonty mohou
+být přijaty, pokud poskytují hodnotu nad rámec estetiky (např. obsahují
+glyfy pro skript, který chybí v již zabalených fontech). Balíčky
+související s kryptoměnami (peněženky, těžaři, uzly atd.) nejsou
+přijímány.</p>
+<p>Rozvětvení prohlížečů, včetně těch založených na Chromiu a Firefoxu,
+nejsou obecně přijímány. Takové vidlice vyžadují náročné opravy, údržbu
+a hodiny výstavby.</p>
+<p>Software je třeba používat ve verzi, kterou autoři oznámili jako
+připravenou k použití širokou veřejností – obvykle se nazývá verze. Beta
+verze, libovolné revize VCS, šablony využívající tip vývojové větve
+pořízené v době sestavení a vydání vytvořená správcem balíčku nebudou
+přijaty.</p>
+<h2
+id="vytvářejte-aktualizujte-a-upravujte-balíčky-ve-void-svépomocí">Vytvářejte,
+aktualizujte a upravujte balíčky ve Void svépomocí</h2>
+<p>Pokud opravdu chcete získat nový balíček nebo aktualizaci balíčku do
+Void Linuxu, doporučujeme vám přispět sami.</p>
+<p>Poskytujeme <a href="./Manual.md">obsáhlý manuál</a> , jak vytvářet
+nové balíčky. Existuje také <a href="./README.md">příručka pro
+xbps-src</a> , která se používá k vytváření souborů balíčků ze
+šablon.</p>
+<p>V této příručce předpokládáme, že máte základní znalosti o <a
+href="http://git-scm.org">git</a> , stejně jako <a
+href="http://github.com">o účtu GitHub</a> s <a
+href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh">nastaveným
+SSH</a> .</p>
+<p>Také byste měli <a
+href="https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address">nastavit
+e-mail</a> na svém účtu GitHub a v git, aby byly vaše commity správně
+spojeny s vaším účtem GitHub.</p>
+<p>Chcete-li začít, <a
+href="https://help.github.com/articles/fork-a-repo">rozvětvte</a>
+repozitář git void-linux <code>void-packages</code> na GitHubu a
+naklonujte jej:</p>
+<pre><code>$ git clone git@github.com:&lt;user&gt;/void-packages.git</code></pre>
+<p>Chcete-li, aby byl váš rozvětvený repozitář aktuální, nastavte
+<code>upstream</code> dálkové ovládání tak, aby načítalo nové změny:</p>
+<pre><code>$ git remote add upstream https://github.com/void-linux/void-packages.git
+$ git pull --rebase upstream master</code></pre>
+<p>To lze také provést pomocí nástroje <code>github-cli</code> :</p>
+<pre><code>$ gh repo fork void-linux/void-packages
+$ gh repo clone &lt;user&gt;/void-packages</code></pre>
+<p>Tím se automaticky nastaví <code>upstream</code> remote, takže
+<code>git pull --rebase upstream master</code> lze stále používat k
+udržování vaší vidlice aktuální.</p>
+<p>Důrazně se nedoporučuje používat k provádění změn webový editor
+GitHub, protože k úpravě a testování změn budete stejně muset naklonovat
+repo.</p>
+<p>Důrazně se nedoporučuje používat <code>master</code> větev vaší
+vidlice pro přispívání. Může to způsobit mnoho problémů s aktualizací
+vašeho požadavku na stažení (také nazývaného PR) a otevřením více PR
+najednou. Chcete-li vytvořit novou větev:</p>
+<pre><code>$ git checkout master -b &lt;a-descriptive-name&gt;</code></pre>
+<h3 id="vytvoření-nové-šablony">Vytvoření nové šablony</h3>
+<p>K vytvoření nových šablon můžete použít pomocný nástroj
+<code>xnew</code> z balíčku <a
+href="https://github.com/leahneukirchen/xtools">xtools</a> :</p>
+<pre><code>$ xnew pkgname subpkg1 subpkg2 ...</code></pre>
+<p>Šablony musí mít název
+<code>void-packages/srcpkgs/&lt;pkgname&gt;/template</code> , kde
+<code>pkgname</code> je stejný jako proměnná <code>pkgname</code> v
+šabloně.</p>
+<p>Chcete-li získat hlubší informace o obsahu souborů šablon, přečtěte
+si prosím <a href="./Manual.md">příručku</a> a nezapomeňte procházet
+existující soubory šablon v adresáři <code>srcpkgs</code> tohoto
+úložiště, kde najdete konkrétní příklady.</p>
+<h3 id="aktualizace-šablony">Aktualizace šablony</h3>
+<p>Aktualizace šablony bude minimálně sestávat ze změny
+<code>version</code> a <code>checksum</code> , pokud došlo ke změně
+upstream verze, a/nebo <code>revision</code> , pokud je potřeba změna
+specifická pro šablonu (např. oprava, oprava atd.). V závislosti na tom,
+jaké změny provedl upstream, mohou být nutné další změny šablony.</p>
+<p>Kontrolní součet lze automaticky aktualizovat pomocí pomocníka
+<code>xgensum</code> z balíčku <a
+href="https://github.com/leahneukirchen/xtools">xtools</a> :</p>
+<pre><code>$ xgensum -i &lt;pkgname&gt;</code></pre>
+<h3 id="přijetí-šablony">Přijetí šablony</h3>
+<p>Pokud je šablona osiřelá (spravuje <code>orphan@voidlinux.org</code>
+) nebo aktuální <code>maintainer</code> nepřispěl do Void déle než rok,
+může správce šablony převzít někdo jiný. Aby bylo zajištěno, že šablona
+dostane potřebnou péči, měli by uživatelé šablony být obeznámeni s
+balíčkem a měli by mít zavedenou historii příspěvků do Void. Ti, kteří
+přispěli několika aktualizacemi, zejména pro danou šablonu, jsou dobrými
+kandidáty na správu šablon.</p>
+<p>Při další změně je nejlepší šablonu přijmout. Při přijímání šablony
+přidejte své jméno nebo uživatelské jméno a e-mail do pole
+<code>maintainer</code> v šabloně a zmiňte přijetí ve zprávě odevzdání,
+například:</p>
+<pre><code>libfoo: update to 1.2.3, adopt.</code></pre>
+<h3 id="osirotování-šablony">Osirotování šablony</h3>
+<p>Pokud si již nepřejete udržovat šablonu, můžete se odebrat jako
+správce nastavením pole <code>maintainer</code> v šabloně na
+<code>Orphaned &lt;orphan@voidlinux.org&gt;</code> . Zpráva o odevzdání
+by to měla zmínit, například:</p>
+<pre><code>libfoo: orphan.</code></pre>
+<p>Při osamocení není nutné provádět další změny v šabloně a není nutné
+ani inkrementovat revizi (spouštět nové sestavení).</p>
+<h3 id="potvrzení-změn">Potvrzení změn</h3>
+<p>Po provedení změn zkontrolujte, zda se balíček úspěšně sestavil. Z
+adresáře nejvyšší úrovně vaší lokální kopie úložiště
+<code>void-packages</code> spusťte:</p>
+<pre><code>$ ./xbps-src pkg &lt;pkgname&gt;</code></pre>
+<p>Váš balíček se musí úspěšně sestavit alespoň pro x86, ale
+doporučujeme také vyzkoušet cross-build pro armv6l*, např.:</p>
+<pre><code>$ ./xbps-src -a armv6l pkg &lt;pkgname&gt;</code></pre>
+<p>Při sestavování pro <code>x86_64*</code> nebo <code>i686</code> se
+důrazně doporučuje sestavování s příznakem <code>-Q</code> nebo s
+<code>XBPS_CHECK_PKGS=yes</code> nastaveným v <code>etc/conf</code> (pro
+spuštění fáze kontroly). Také nové balíčky a aktualizace nebudou
+přijaty, pokud nebyly otestovány instalací a spuštěním balíčku.</p>
+<p>Až dokončíte práci na souboru šablony, zkontrolujte jej pomocí
+pomocníka <code>xlint</code> z balíčku <a
+href="https://github.com/leahneukirchen/xtools">xtools</a> :</p>
+<pre><code>$ xlint template</code></pre>
+<p>Pokud <code>xlint</code> hlásí nějaké problémy, vyřešte je před tím,
+než se zavážete.</p>
+<p>Jakmile provedete a ověříte změny v šabloně balíčku a/nebo jiných
+souborech, proveďte jedno potvrzení pro každý balíček (včetně všech změn
+v jeho dílčích balíčcích). Každá zpráva potvrzení by měla mít jeden z
+následujících formátů:</p>
+<ul>
+<li><p>pro nové balíčky použijte
+<code>New package: &lt;pkgname&gt;-&lt;version&gt;</code> ( <a
+href="https://github.com/void-linux/void-packages/commit/8ed8d41c40bf6a82cf006c7e207e05942c15bff8">příklad</a>
+).</p></li>
+<li><p>pro aktualizace balíčku použijte
+<code>&lt;pkgname&gt;: update to &lt;version&gt;.</code> ( <a
+href="https://github.com/void-linux/void-packages/commit/c92203f1d6f33026ae89f3e4c1012fb6450bbac1">příklad</a>
+).</p></li>
+<li><p>pro úpravy šablony bez změny verze použijte
+<code>&lt;pkgname&gt;: &lt;reason&gt;</code> ( <a
+href="https://github.com/void-linux/void-packages/commit/ff39c912d412717d17232de9564f659b037e95b5">příklad</a>
+).</p></li>
+<li><p>pro odstranění balíčku použijte
+<code>&lt;pkgname&gt;: remove package</code> a do těla odevzdání uveďte
+důvod odstranění ( <a
+href="https://github.com/void-linux/void-packages/commit/4322f923bdf5d4e0eb36738d4f4717d72d0a0ca4">příklad</a>
+).</p></li>
+<li><p>pro změny jakéhokoli jiného souboru použijte
+<code>&lt;filename&gt;: &lt;reason&gt;</code> ( <a
+href="https://github.com/void-linux/void-packages/commit/e00bea014c36a70d60acfa1758514b0c7cb0627d">příklad</a>
+, <a
+href="https://github.com/void-linux/void-packages/commit/93bf159ce10d8e474da5296e5bc98350d00c6c82">příklad</a>
+, <a
+href="https://github.com/void-linux/void-packages/commit/dc62938c67b66a7ff295eab541dc37b92fb9fb78">příklad</a>
+, <a
+href="https://github.com/void-linux/void-packages/commit/e52317e939d41090562cf8f8131a68772245bdde">příklad</a>
+)</p></li>
+</ul>
+<p>Pokud chcete své změny popsat podrobněji, vysvětlete to v těle
+potvrzení (oddělené od prvního řádku prázdným řádkem) ( <a
+href="https://github.com/void-linux/void-packages/commit/f1c45a502086ba1952f23ace9084a870ce437bc6">příklad</a>
+).</p>
+<p><code>xbump</code> , dostupný v balíčku <a
+href="https://github.com/leahneukirchen/xtools">xtools</a> , lze použít
+k potvrzení nového nebo aktualizovaného balíčku:</p>
+<pre><code>$ xbump &lt;pkgname&gt; &lt;git commit options&gt;</code></pre>
+<p><code>xrevbump</code> , dostupný také v balíčku <a
+href="https://github.com/leahneukirchen/xtools">xtools</a> , lze použít
+k provedení úpravy šablony pro balíček:</p>
+<pre><code>$ xrevbump &#39;&lt;message&gt;&#39; &lt;pkgnames...&gt;</code></pre>
+<p><code>xbump</code> a <code>xrevbump</code> použijí
+<code>git commit</code> k potvrzení změn s příslušnou zprávou odevzdání.
+Pro jemnější kontrolu nad odevzdáním lze konkrétní volby předat do
+<code>git commit</code> jejich přidáním za název balíčku.</p>
+<h3 id="spuštění-požadavku-na-stažení">Spuštění požadavku na
+stažení</h3>
+<p>Jakmile balíček úspěšně sestavíte, můžete <a
+href="https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request">vytvořit
+požadavek na stažení</a> . Žádosti o stažení jsou také známé jako
+PR.</p>
+<p>Většina požadavků na stažení by měla obsahovat pouze jeden balíček a
+závislosti, které ještě nejsou součástí void-packages.</p>
+<p>Pokud provádíte aktualizace balíčků obsahujících soname bump, musíte
+také aktualizovat <code>common/shlibs</code> a revbump všechny balíčky,
+které jsou závislé. Pro každý revbump balíčku by mělo existovat
+potvrzení a tyto potvrzení by měly být součástí stejného požadavku na
+stažení.</p>
+<p>Když ve svém požadavku na stažení provedete změny, <em>nezavírejte ho
+a znovu jej neotevírejte</em> . Místo toho stačí <a
+href="#review">vynutit git push</a> a přepsat všechny staré commity.
+Zavírání a otevírání vašich žádostí o stažení opakovaně spamuje správce
+Prázdnoty.</p>
+<h4 id="průběžná-integrace">Průběžná integrace</h4>
+<p>Žádosti o stažení jsou automaticky odesílány k testování kontinuální
+integrace (CI), aby se zajistilo, že se balíčky sestaví a projdou svými
+testy (na nativních sestaveních) na různých kombinacích knihovny C a
+architektury. Balíčky, které trvají déle než 120 minut nebo potřebují
+více než 14G úložiště k dokončení svého sestavení (například Firefox
+nebo linuxové jádro), selžou CI a měly by obsahovat
+<code>[ci skip]</code> v názvu nebo textu PR (pole komentáře, když PR se
+otevírá), aby nedošlo ke ztrátě času při vytváření CI. Použijte svůj
+nejlepší úsudek o době výstavby na základě vašich místních zkušeností se
+stavbou. Pokud při odesílání PR přeskočíte CI, sestavte a křížově
+sestavujte pro různé architektury lokálně, s glibc i musl, a
+poznamenejte si své místní výsledky v komentářích k PR. Ujistěte se, že
+pokrýváte 64bitové a 32bitové architektury.</p>
+<p>Pokud si všimnete selhání v CI, ke kterému nedošlo lokálně, je to
+pravděpodobně proto, že jste lokálně nespustili testy. K tomu použijte
+<code>./xbps-src -Q pkg &lt;package&gt;</code> . Některé testy nebudou
+fungovat v prostředí CI nebo vůbec a jejich šablony by měly tyto
+informace zakódovat pomocí proměnné <code>make_check</code> .</p>
+<p>Průběžná integrace také zkontroluje, zda šablony, které jste změnili,
+splňují naše pokyny. V tuto chvíli ne všechny balíčky splňují pravidla,
+takže pokud aktualizujete balíček, může hlásit chyby o místech, kterých
+jste se nedotkli. Neváhejte také opravit tyto chyby.</p>
+<h4 id="posouzení">Posouzení</h4>
+<p>Je možné (a běžné), že žádost o stažení bude obsahovat chyby nebo
+recenzenti požádají o další vylepšení. Recenzenti vaši žádost o stažení
+okomentují a upozorní na to, které změny jsou nutné, než bude možné
+žádost o stažení sloučit.</p>
+<p>Většina PR bude mít jediné potvrzení, jak je vidět <a
+href="#committing-your-changes">výše</a> , takže pokud potřebujete
+provést změny v potvrzení a již máte otevřený požadavek na stažení,
+můžete použít následující příkazy:</p>
+<pre><code>$ git add &lt;file&gt;
+$ git commit --amend
+$ git push -f</code></pre>
+<p>Výkonnější způsob úpravy odevzdání než použití
+<code>git commit --amend</code> je s <a
+href="https://git-scm.com/docs/git-rebase#_interactive_mode">git-rebase</a>
+, který vám umožňuje připojit se, změnit pořadí, změnit popis minulých
+odevzdání a další.</p>
+<p>Případně, pokud se vyskytnou problémy s vaší historií git, můžete
+vytvořit další větev a poslat ji do stávajícího PR:</p>
+<pre><code>$ git checkout master -b &lt;attempt2&gt;
+$ # do changes anew
+$ git push -f &lt;fork&gt; &lt;attempt2&gt;:&lt;branch-of-pr&gt;</code></pre>
+<h4 id="uzavření-požadavku-na-stažení">Uzavření požadavku na
+stažení</h4>
+<p>Jakmile použijete všechny požadované změny, recenzenti vaši žádost
+sloučí.</p>
+<p>Pokud se požadavek na stažení na několik dní stane neaktivním,
+recenzenti vás mohou nebo nemusí upozornit, když se ho chystají zavřít.
+Pokud zůstane neaktivní dále, bude uzavřen.</p>
+<p>Při revizi šablon se prosím zdržte dočasného uzavření požadavku na
+stažení. Místo toho zanechte komentář k PR s popisem toho, co je ještě
+potřeba dopracovat, <a
+href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/changing-the-stage-of-a-pull-request#converting-a-pull-request-to-a-draft">označte
+jej jako koncept</a> nebo k názvu PR přidejte „[WIP]“. Žádost o stažení
+zavřete, pouze pokud jste si jisti, že nechcete, aby byly zahrnuty vaše
+změny.</p>
+<h4 id="publikování-balíčku">Publikování balíčku</h4>
+<p>Jakmile recenzenti sloučí žádost o stažení, automaticky se spustí náš
+<a href="http://build.voidlinux.org">server sestavení</a> a sestaví
+všechny balíčky v žádosti o stažení pro všechny podporované platformy.
+Po dokončení jsou balíčky dostupné všem uživatelům Void Linuxu.</p>
+<h2 id="testování-pull-requests">Testování Pull Requests</h2>
+<p>I když je odpovědností tvůrce PR otestovat změny před jejich
+odesláním, jedna osoba nemůže otestovat všechny možnosti konfigurace,
+případy použití, hardware atd. Testování nových balíčků a aktualizací je
+vždy užitečné a je to skvělý způsob, jak začít s přispíváním. Nejprve <a
+href="https://github.com/void-linux/void-packages#quick-start">naklonujte
+úložiště,</a> pokud jste tak ještě neučinili. Poté se podívejte na
+žádost o stažení, buď pomocí <code>github-cli</code> :</p>
+<pre><code>$ gh pr checkout &lt;number&gt;</code></pre>
+<p>Nebo pomocí <code>git</code> :</p>
+<p>Pokud je vaše místní úložiště void-packages klonováno z vašeho forku,
+možná budete muset nejprve přidat hlavní úložiště jako vzdálené:</p>
+<pre><code>$ git remote add upstream https://github.com/void-linux/void-packages.git</code></pre>
+<p>Poté stáhněte a zkontrolujte PR (nahraďte <code>&lt;remote&gt;</code>
+buď <code>origin</code> , nebo <code>upstream</code> ):</p>
+<pre><code>$ git fetch &lt;remote&gt; pull/&lt;number&gt;/head:&lt;branch-name&gt;
+$ git checkout &lt;branch-name&gt;</code></pre>
+<p>Poté <a
+href="https://github.com/void-linux/void-packages#building-packages">sestavte
+a nainstalujte</a> balíček a otestujte jeho funkčnost.</p>
+<script>
+(function () {
+  function hexToRgb(hex) {
+    hex = hex.trim().replace(/^#/, '');
+    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+    const n = parseInt(hex, 16);
+    return [n >> 16 & 255, n >> 8 & 255, n & 255];
+  }
+
+  function clamp(v, min, max) {
+    return Math.min(Math.max(v, min), max);
+  }
+
+  function Color(r, g, b) {
+    this.r = r / 255;
+    this.g = g / 255;
+    this.b = b / 255;
+  }
+
+  Color.prototype.applyFilter = function (funcs) {
+    let [r, g, b] = [this.r * 255, this.g * 255, this.b * 255];
+
+    function multiply(matrix) {
+      const nr = clamp(r * matrix[0] + g * matrix[1] + b * matrix[2], 0, 255);
+      const ng = clamp(r * matrix[3] + g * matrix[4] + b * matrix[5], 0, 255);
+      const nb = clamp(r * matrix[6] + g * matrix[7] + b * matrix[8], 0, 255);
+      r = nr; g = ng; b = nb;
+    }
+
+    function hueRotate(angle) {
+      const a = angle / 180 * Math.PI;
+      const sin = Math.sin(a), cos = Math.cos(a);
+      multiply([
+        0.213 + cos*0.787 - sin*0.213, 0.715 - cos*0.715 - sin*0.715, 0.072 - cos*0.072 + sin*0.928,
+        0.213 - cos*0.213 + sin*0.143, 0.715 + cos*0.285 + sin*0.140, 0.072 - cos*0.072 - sin*0.283,
+        0.213 - cos*0.213 - sin*0.787, 0.715 - cos*0.715 + sin*0.715, 0.072 + cos*0.928 + sin*0.072,
+      ]);
+    }
+
+    function sepia(v) {
+      multiply([
+        0.393 + 0.607*(1-v), 0.769 - 0.769*(1-v), 0.189 - 0.189*(1-v),
+        0.349 - 0.349*(1-v), 0.686 + 0.314*(1-v), 0.168 - 0.168*(1-v),
+        0.272 - 0.272*(1-v), 0.534 - 0.534*(1-v), 0.131 + 0.869*(1-v),
+      ]);
+    }
+
+    function saturate(v) {
+      multiply([
+        0.213 + 0.787*v, 0.715 - 0.715*v, 0.072 - 0.072*v,
+        0.213 - 0.213*v, 0.715 + 0.285*v, 0.072 - 0.072*v,
+        0.213 - 0.213*v, 0.715 - 0.715*v, 0.072 + 0.928*v,
+      ]);
+    }
+
+    for (const [fn, val] of funcs) {
+      if (fn === 'invert')    { r = clamp((1-r/255)*255*val + r/255*255*(1-val),0,255); g = clamp((1-g/255)*255*val + g/255*255*(1-val),0,255); b = clamp((1-b/255)*255*val + b/255*255*(1-val),0,255); }
+      if (fn === 'sepia')     sepia(val);
+      if (fn === 'saturate')  saturate(val);
+      if (fn === 'hueRotate') hueRotate(val);
+      if (fn === 'brightness'){ r = clamp(r*val,0,255); g = clamp(g*val,0,255); b = clamp(b*val,0,255); }
+    }
+
+    return new Color(r, g, b);
+  };
+
+  function loss(result, target) {
+    return (
+      Math.pow(result.r*255 - target.r*255, 2) +
+      Math.pow(result.g*255 - target.g*255, 2) +
+      Math.pow(result.b*255 - target.b*255, 2)
+    );
+  }
+
+  function solve(target) {
+    function css(v) {
+      return [
+        ['invert',    clamp(v[0], 0, 1)],
+        ['sepia',     clamp(v[1], 0, 1)],
+        ['saturate',  clamp(v[2], 0, 20)],
+        ['hueRotate', clamp(v[3], 0, 360)],
+        ['brightness',clamp(v[4], 0, 10)],
+        ['brightness',clamp(v[5], 0, 10)],
+      ];
+    }
+
+    function score(v) {
+      return loss(new Color(0,0,0).applyFilter(css(v)), target);
+    }
+
+    let best = null, bestScore = Infinity;
+    for (let i = 0; i < 30; i++) {
+      let v = [Math.random(), Math.random(), Math.random()*10, Math.random()*360, Math.random()*2, Math.random()*2];
+      for (let step = 1; step > 0.0001; step *= 0.9) {
+        for (let j = 0; j < v.length; j++) {
+          const orig = v[j];
+          v[j] += step * (Math.random() > 0.5 ? 1 : -1);
+          const s = score(v);
+          if (s < bestScore) { bestScore = s; best = [...v]; }
+          else v[j] = orig;
+        }
+      }
+    }
+
+    const f = css(best);
+    return [
+      `invert(${(clamp(f[0][1],0,1)*100).toFixed(0)}%)`,
+      `sepia(${(clamp(f[1][1],0,1)*100).toFixed(0)}%)`,
+      `saturate(${(clamp(f[2][1],0,20)*100).toFixed(0)}%)`,
+      `hue-rotate(${clamp(f[3][1],0,360).toFixed(0)}deg)`,
+      `brightness(${(clamp(f[4][1],0,10)*100).toFixed(0)}%)`,
+      `brightness(${(clamp(f[5][1],0,10)*100).toFixed(0)}%)`,
+    ].join(' ');
+  }
+
+  // Cache solved filters per color so theme switching is instant
+  const cache = {};
+
+  function applyIconColor() {
+    const raw = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-icon').trim();
+    if (!raw) return false;
+
+    let rgb;
+    if (raw.startsWith('#')) {
+      rgb = hexToRgb(raw);
+    } else if (raw.startsWith('rgb')) {
+      rgb = raw.match(/\d+/g).map(Number).slice(0, 3);
+    } else {
+      return false;
+    }
+
+    const key = rgb.join(',');
+    if (!cache[key]) {
+      cache[key] = solve(new Color(...rgb));
+    }
+
+    document.documentElement.style.setProperty('--filter-icon', cache[key]);
+    return true;
+  }
+
+  function init() {
+    if (!applyIconColor()) return;
+
+    // Watch for data-theme attribute changes on <html> — re-apply immediately
+    new MutationObserver(function(mutations) {
+      for (const m of mutations) {
+        if (m.attributeName === 'data-theme') {
+          applyIconColor();
+          break;
+        }
+      }
+    }).observe(document.documentElement, { attributes: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+<script data-goatcounter="https://vur.gocounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<script src="https://giscus.app/client.js"
+        data-repo="osowoso/VUR"
+        data-repo-id="R_kgDOGNy3Og"
+        data-category="General"
+        data-category-id="DIC_kwDOGNy3Os4CBWcR"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="cs"
+        crossorigin="anonymous"
+        async></script>
+</body>
+</html>
