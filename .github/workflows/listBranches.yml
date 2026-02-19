@@ -2,11 +2,7 @@ name: Update branchList and syncBranch
 
 on:
   create:
-    branches:
-      - '**'
   delete:
-    branches:
-      - '**'
   push:
     branches:
       - VUR
@@ -14,11 +10,18 @@ on:
       - '.github/REST.yml'
       - '.github/START.yml'
   workflow_dispatch:
+
 permissions:
   contents: write
   actions: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   list-branches:
+    if: github.event.ref_type == 'branch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
