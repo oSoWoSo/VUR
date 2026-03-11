@@ -1,0 +1,19 @@
+# Template file for 'rustnet'
+pkgname=rustnet
+version=1.0.0
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config clang19"
+makedepends="elfutils-devel libpcap-devel"
+short_desc="Cross-platform network monitoring terminal UI tool built with Rust"
+maintainer="zenobit <zenobit@disroot.org>"
+license="Apache-2.0"
+homepage="https://github.com/domcyrus/rustnet"
+#changelog=""
+distfiles="https://github.com/domcyrus/rustnet/archive/refs/tags/v${version}.tar.gz"
+checksum=65030c42811889360cee9edb0e70da2f5d8dd90fb80554019e300629741b6875
+
+# eBPF compilation not available for cross-compilation to aarch64
+case "$XBPS_TARGET_MACHINE" in
+	aarch64*|armv*) broken="eBPF cross-compilation not supported" ;;
+esac
