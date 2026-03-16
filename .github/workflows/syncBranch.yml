@@ -55,12 +55,12 @@ on:
         - eww
         - exfatprogs
         - feature/autosync
+        - fix-rustnet-ci
         - fmt11+
         - freeplane
         - fzf
         - gama
         - gcompris
-        - gcompris-qt
         - geany
         - geany-editorconfig
         - gh-action
@@ -188,6 +188,7 @@ on:
         - scrcpy
         - shatteredPD
         - skate
+        - smc
         - soft-serve
         - spacefm
         - ssr
