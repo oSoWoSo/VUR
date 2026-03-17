@@ -62,7 +62,6 @@ on:
         - gama
         - gcompris
         - geany
-        - geany-editorconfig
         - gh-action
         - git-filter-repo
         - gitea
@@ -205,7 +204,6 @@ on:
         - tk
         - topgrade
         - tuisic
-        - tuxpaint
         - u/conky
         - u/mergerfs
         - u/moar
