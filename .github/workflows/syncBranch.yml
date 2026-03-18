@@ -45,7 +45,6 @@ on:
         - distrobox
         - distrohopper
         - dooble-qt6
-        - dotbot
         - easybashgui
         - easyeffects
         - easyeffects+fmt
