@@ -60,6 +60,7 @@ on:
         - gcompris
         - geany
         - gh-action
+        - gh-dash
         - git-filter-repo
         - gitea
         - gmrun
@@ -157,6 +158,7 @@ on:
         - octoxbps
         - oculante
         - omegat
+        - omniroute
         - opentyrian
         - opentyrian2000
         - paperde
@@ -179,7 +181,6 @@ on:
         - revert-47-wayshot
         - runkit
         - rust
-        - rustnet
         - sakura
         - scrcpy
         - shatteredPD

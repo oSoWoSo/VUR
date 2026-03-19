@@ -45,6 +45,7 @@ gama
 gcompris
 geany
 gh-action
+gh-dash
 git-filter-repo
 gitea
 gmrun
@@ -142,6 +143,7 @@ obmenu-generator
 octoxbps
 oculante
 omegat
+omniroute
 opentyrian
 opentyrian2000
 paperde
@@ -164,7 +166,6 @@ repo-sync/projekty/default
 revert-47-wayshot
 runkit
 rust
-rustnet
 sakura
 scrcpy
 shatteredPD
