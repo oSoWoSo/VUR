@@ -13,7 +13,6 @@ on:
         default: master
         required: true
         options:
-        - Hyprland
         - LACT
         - ROCm-SMI-LIB
         - Sphinx
@@ -185,8 +184,6 @@ on:
         - scrcpy
         - shatteredPD
         - skate
-        - smc
-        - soft-serve
         - spacefm
         - ssr
         - sync
