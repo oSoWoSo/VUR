@@ -37,7 +37,6 @@ on:
         - check-anywhere
         - chezmoi
         - conky
-        - cortile
         - crush
         - cs
         - desktop-file-utils
