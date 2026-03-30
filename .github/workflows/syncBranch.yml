@@ -21,6 +21,7 @@ on:
         - VUR
         - VUR-backup
         - WIP
+        - act
         - actions/checkupstream
         - ansicolor
         - auto-cpufreq
