@@ -189,7 +189,6 @@ on:
         - ssr
         - sync
         - tailscale
-        - tailspin
         - tcl
         - tere
         - terminator
