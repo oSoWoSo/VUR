@@ -48,8 +48,8 @@ jobs:
         env:
           token: ${{ secrets.TOKEN }}
         run: |
-          git config --global user.name "web-flow"
-          git config --global user.email "noreply@github.com"
+          git config --global user.name "oSoWoSo-bot"
+          git config --global user.email "osowoso@disroot.org"
           git status
           git add .github/branchList || echo "Nothing to add"
           git add .github/workflows/syncBranch.yml
