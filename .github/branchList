@@ -1,4 +1,5 @@
 LACT
+ROCm-SMI
 ROCm-SMI-LIB
 Sphinx
 SweetHome3D
@@ -21,6 +22,7 @@ calamares
 celluloid
 check-anywhere
 chezmoi
+clitest
 conky
 crush
 cs
