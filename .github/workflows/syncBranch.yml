@@ -432,9 +432,8 @@ jobs:
     - name: Continue rebase
       if: steps.check_conflict.outputs.conflict_detected == 'true'
       run: |
-        # Set git config for rebase continuation
-        git config user.name "GitHub Actions Bot"
-        git config user.email "actions@github.com"
+        git config --global user.name "oSoWoSo-bot"
+        git config --global user.email "osowoso@disroot.org"
         
         # Continue rebase
         GIT_EDITOR=true git rebase --continue || {
