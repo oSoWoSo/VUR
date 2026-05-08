@@ -1,11 +1,10 @@
 # Template file for 'rustnet'
 pkgname=rustnet
-version=1.2.0
+version=1.3.0
 revision=1
 archs="x86_64* aarch64*"
 build_style=cargo
-make_check_args="-- --skip test_ebpf"
-hostmakedepends="pkg-config clang elfutils-devel"
+hostmakedepends="pkg-config clang lld llvm cargo-auditable elfutils-devel"
 makedepends="libpcap-devel elfutils-devel zlib-devel"
 short_desc="Cross-platform network monitoring terminal UI tool built with Rust"
 maintainer="zenobit <zenobit@disroot.org>"
@@ -13,7 +12,7 @@ license="Apache-2.0"
 homepage="https://github.com/domcyrus/rustnet"
 changelog="https://raw.githubusercontent.com/domcyrus/rustnet/refs/heads/main/CHANGELOG.md"
 distfiles="https://github.com/domcyrus/rustnet/archive/refs/tags/v${version}.tar.gz"
-checksum=b91d41bc715f74453a8cd9ac2cd91e2b3808f01f959e8a92cb65c1f2f717312d
+checksum=258ea142f3ca04e45c33761eb28868a8d8afc62a3f9556a1d5b312e805905ce5
 
 _setup_env() {
 	# workaround the cc-rs mixing CFLAGS for host and target.
@@ -25,9 +24,22 @@ _setup_env() {
 	       CXXFLAGS_${RUST_TARGET//-/_}="${CXXFLAGS}" \
 	       LDFLAGS_${RUST_TARGET//-/_}="${LDFLAGS}" \
 	       CFLAGS="" CXXFLAGS="" LDFLAGS=""
+
+	export CC=clang
+	export AR=llvm-ar
+	export NM=llvm-nm
+	export RANLIB=llvm-ranlib
+	export RUSTFLAGS="-Clinker=${CC} -Clink-arg=-fuse-ld=lld"
+	export RUSTDOCFLAGS="${RUSTFLAGS}"
+	export CARGO_PROFILE_RELEASE_LTO=thin
+	export CARGO_PROFILE_RELEASE_CODEGEN_UNITS=1
 }
 
 pre_build() {
+	_setup_env
+}
+
+pre_check() {
 	_setup_env
 }
 
