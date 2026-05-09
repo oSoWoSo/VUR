@@ -45,7 +45,6 @@ fmt11+
 freeplane
 fzf
 gama
-gcompris
 geany
 gh-action
 gh-dash
@@ -166,6 +165,7 @@ repo-sync/projekty/default
 revert-47-wayshot
 runkit
 rust
+rustnet
 sakura
 scrcpy
 shatteredPD
