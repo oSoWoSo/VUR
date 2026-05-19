@@ -1,0 +1,39 @@
+# Template file for 'dashy'
+pkgname=dashy
+version=4.1.5
+revision=1
+hostmakedepends="nodejs yarn"
+depends="nodejs"
+short_desc="Self-hostable personal dashboard"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/Lissy93/dashy"
+distfiles="https://github.com/Lissy93/dashy/archive/refs/tags/${version}.tar.gz"
+checksum=94c10d1d92b86933758fbaa39f11eb948b0d20cc23dcd73425456dfdc6598a3c
+noverifyrdeps=yes
+system_accounts="_dashy"
+_dashy_homedir="/var/lib/dashy"
+make_dirs="/var/lib/dashy 0750 _dashy _dashy"
+
+do_build() {
+	yarn
+	NODE_OPTIONS=--openssl-legacy-provider yarn build
+	yarn install --production --prefer-offline
+}
+
+do_install() {
+	vmkdir usr/lib/dashy
+	vcopy dist usr/lib/dashy/
+	vcopy public usr/lib/dashy/
+	vcopy services usr/lib/dashy/
+	vcopy node_modules usr/lib/dashy/
+	vmkdir usr/lib/dashy/src
+	vcopy src/utils usr/lib/dashy/src/
+	vinstall server.js 644 usr/lib/dashy
+	vinstall package.json 644 usr/lib/dashy
+	vsconf user-data/conf.yml
+	cp ${FILESDIR}/dashy-bin dashy
+	vbin dashy
+	vsv dashy
+	vlicense LICENSE
+}

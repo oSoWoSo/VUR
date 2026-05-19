@@ -1,0 +1,9 @@
+#!/bin/sh
+export PORT="${PORT:-4000}"
+# Default to user-local dir (writable without root), /var/lib/dashy is for system service
+export USER_DATA_DIR="${USER_DATA_DIR:-${XDG_CONFIG_HOME:-${HOME}/.config}/dashy}"
+mkdir -p "${USER_DATA_DIR}"
+if [ ! -f "${USER_DATA_DIR}/conf.yml" ]; then
+	cp /usr/share/examples/dashy/conf.yml "${USER_DATA_DIR}/conf.yml"
+fi
+exec node /usr/lib/dashy/server.js "$@"

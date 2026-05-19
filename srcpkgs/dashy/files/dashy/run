@@ -1,0 +1,8 @@
+#!/bin/sh
+exec 2>&1
+# Initialize config as _dashy so the cp has write access to /var/lib/dashy
+if [ ! -f /var/lib/dashy/conf.yml ]; then
+	chpst -u _dashy cp /usr/share/examples/dashy/conf.yml /var/lib/dashy/conf.yml
+fi
+exec chpst -u _dashy env USER_DATA_DIR=/var/lib/dashy PORT=4000 \
+	node /usr/lib/dashy/server.js
