@@ -212,7 +212,7 @@ jobs:
       if: steps.check_conflict.outputs.conflict_detected == 'true'
       run: |
         git config --global user.name "oSoWoSo-bot"
-        git config --global user.email "osowoso@disroot.org"
+        git config --global user.email "mail@osowoso.org"
         
         # Continue rebase
         GIT_EDITOR=true git rebase --continue || {
