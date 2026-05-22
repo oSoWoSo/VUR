@@ -49,7 +49,7 @@ jobs:
           token: ${{ secrets.TOKEN }}
         run: |
           git config --global user.name "oSoWoSo-bot"
-          git config --global user.email "osowoso@disroot.org"
+          git config --global user.email "mail@osowoso.org"
           git status
           git add .github/branchList || echo "Nothing to add"
           git add .github/workflows/syncBranch.yml
