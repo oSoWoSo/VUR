@@ -25,6 +25,7 @@ clitest
 conky
 crush
 cs
+dashy
 desktop-file-utils
 discover
 distrobox
@@ -35,6 +36,7 @@ easyeffects
 easyeffects+fmt
 ebg
 elightenment
+email
 enlightenment
 eww
 exfatprogs
@@ -114,7 +116,6 @@ minikube
 mpg123
 mpv
 musescore
-mypkgs
 myxer
 n/fastfetch
 n/superfile
