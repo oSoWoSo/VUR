@@ -113,6 +113,7 @@ on:
         - linux
         - lite-xl
         - litexl
+        - llama
         - lokalize
         - lsp-plugins
         - lutris
