@@ -32,6 +32,7 @@ on:
         - btop
         - btop-rocm
         - bubbletea
+        - bun
         - calamares
         - celluloid
         - check-anywhere
@@ -46,6 +47,7 @@ on:
         - distrobox
         - distrohopper
         - dooble-qt6
+        - dotbot
         - easybashgui
         - easyeffects
         - easyeffects+fmt
@@ -57,7 +59,6 @@ on:
         - feature/autosync
         - fix-rustnet-ci
         - fmt11+
-        - freeplane
         - fzf
         - gama
         - geany
@@ -67,8 +68,10 @@ on:
         - gitea
         - gmrun
         - go
+        - godot
         - godot+
         - gpu-screen-recorder-gtk
+        - gradle
         - grsync
         - gum
         - gxkb
@@ -185,10 +188,12 @@ on:
         - scrcpy
         - shatteredPD
         - skate
+        - smc
         - spacefm
         - ssr
         - sync
         - tailscale
+        - tailspin
         - tcl
         - tere
         - terminator
