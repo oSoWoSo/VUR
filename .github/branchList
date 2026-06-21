@@ -17,6 +17,7 @@ botan
 btop
 btop-rocm
 bubbletea
+bun
 calamares
 celluloid
 check-anywhere
@@ -31,6 +32,7 @@ discover
 distrobox
 distrohopper
 dooble-qt6
+dotbot
 easybashgui
 easyeffects
 easyeffects+fmt
@@ -42,7 +44,6 @@ exfatprogs
 feature/autosync
 fix-rustnet-ci
 fmt11+
-freeplane
 fzf
 gama
 geany
@@ -52,8 +53,10 @@ git-filter-repo
 gitea
 gmrun
 go
+godot
 godot+
 gpu-screen-recorder-gtk
+gradle
 grsync
 gum
 gxkb
@@ -170,10 +173,12 @@ sakura
 scrcpy
 shatteredPD
 skate
+smc
 spacefm
 ssr
 sync
 tailscale
+tailspin
 tcl
 tere
 terminator
