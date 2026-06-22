@@ -32,7 +32,6 @@ discover
 distrobox
 distrohopper
 dooble-qt6
-dotbot
 easybashgui
 easyeffects
 easyeffects+fmt
@@ -168,17 +167,14 @@ repo-sync/projekty/default
 revert-47-wayshot
 runkit
 rust
-rustnet
 sakura
 scrcpy
 shatteredPD
 skate
-smc
 spacefm
 ssr
 sync
 tailscale
-tailspin
 tcl
 tere
 terminator
