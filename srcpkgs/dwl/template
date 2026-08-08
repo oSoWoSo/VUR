@@ -1,0 +1,38 @@
+# Template file for 'dwl'
+pkgname=dwl
+version=0.8
+revision=1
+build_style=gnu-makefile
+hostmakedepends="pkg-config wayland-devel"
+makedepends="
+ libinput-devel
+ wayland-devel
+ wayland-protocols
+ wlroots0.19-devel
+ libxkbcommon-devel
+ pixman-devel
+ libxcb-devel
+ xcb-util-wm-devel
+"
+short_desc="Dynamic window manager for Wayland"
+maintainer="oxqux <vladiman155@gmail.com>"
+license="MIT"
+homepage="https://codeberg.org/dwl/dwl"
+distfiles="https://codeberg.org/dwl/dwl/releases/download/v${version}/dwl-v${version}.tar.gz"
+checksum=ccc8bbb3fb66a7e6f0392693533ac9c8bd4e6283dd1f66992e68ec4d4a9cdee7
+
+do_build() {
+	cp ${FILESDIR}/config.h config.h
+
+	make CC=$CC PREFIX=/usr
+}
+
+do_install() {
+	make \
+		PREFIX=/usr \
+		DESTDIR=$DESTDIR \
+		install
+
+	vlicense LICENSE
+	vdoc README.md
+}
