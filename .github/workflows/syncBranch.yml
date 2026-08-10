@@ -67,7 +67,6 @@ on:
         - gitea
         - gmrun
         - go
-        - godot
         - godot+
         - gpu-screen-recorder-gtk
         - gradle
