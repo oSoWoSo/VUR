@@ -1,0 +1,18 @@
+# Template file for 'tiki'
+pkgname=tiki
+version=0.6.1
+revision=1
+build_style=go
+go_import_path="github.com/boolean-maybe/tiki"
+depends="git"
+checkdepends="${depends}"
+short_desc="Terminal Markdown-based shapeless workflow builder"
+maintainer="zenobit <zen@osowoso.org>"
+license="Apache-2.0"
+homepage="https://github.com/boolean-maybe/tiki"
+distfiles="https://github.com/boolean-maybe/tiki/archive/refs/tags/v${version}.tar.gz"
+checksum=c9a80bf800859a77cc6ba004e896917880b23b8fd280ac889de2482e6a26997b
+
+do_check() {
+	go test -v -race -coverprofile=coverage.out ./...
+}
