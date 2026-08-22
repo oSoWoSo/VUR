@@ -9,6 +9,7 @@ VUR-backup
 WIP
 actions/checkupstream
 ansicolor
+atuin
 auto-cpufreq
 awesome-appmenu
 azote
@@ -31,7 +32,9 @@ desktop-file-utils
 discover
 distrobox
 distrohopper
+dooble
 dooble-qt6
+drako
 easybashgui
 easyeffects
 easyeffects+fmt
@@ -49,6 +52,7 @@ gh-action
 gh-dash
 git-filter-repo
 gitea
+glow
 gmrun
 go
 godot+
@@ -158,6 +162,7 @@ tere
 test
 testing
 thunderbird
+tiki
 tips
 tk
 tuisic
