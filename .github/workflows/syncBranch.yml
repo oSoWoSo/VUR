@@ -24,6 +24,7 @@ on:
         - WIP
         - actions/checkupstream
         - ansicolor
+        - atuin
         - auto-cpufreq
         - awesome-appmenu
         - azote
@@ -46,7 +47,9 @@ on:
         - discover
         - distrobox
         - distrohopper
+        - dooble
         - dooble-qt6
+        - drako
         - easybashgui
         - easyeffects
         - easyeffects+fmt
@@ -64,6 +67,7 @@ on:
         - gh-dash
         - git-filter-repo
         - gitea
+        - glow
         - gmrun
         - go
         - godot+
@@ -173,6 +177,7 @@ on:
         - test
         - testing
         - thunderbird
+        - tiki
         - tips
         - tk
         - tuisic
