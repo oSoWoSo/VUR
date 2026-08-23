@@ -35,6 +35,7 @@ on:
         - bubbletea
         - bun
         - calamares
+        - caligula
         - celluloid
         - check-anywhere
         - chezmoi
@@ -47,7 +48,6 @@ on:
         - discover
         - distrobox
         - distrohopper
-        - dooble
         - dooble-qt6
         - drako
         - easybashgui
