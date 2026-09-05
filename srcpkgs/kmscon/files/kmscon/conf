@@ -1,0 +1,15 @@
+# kmscon runit service configuration
+#TTYS=tty2 tty3 tty4 tty6 # consoles to run on (space-separated)
+# KMSCON_OPTS=--font=ter-v16n  # additional kmscon options
+# ensure there isn't an agetty or getty service in this tty
+TTY=${PWD##*-}
+
+if [ "$TTY" = 1 ]; then
+	SWITCH_FLAG="--switchvt"
+	SWITCH_VT=1
+else
+	SWITCH_FLAG="--no-switchvt"
+	SWITCH_VT=0
+fi
+
+KMSCON_FLAGS="${SWITCH_FLAG}"

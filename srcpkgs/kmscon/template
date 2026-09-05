@@ -1,23 +1,31 @@
 # Template file for 'kmscon'
 pkgname=kmscon
-version=9.3.4
+version=10.0.3
 revision=1
 build_style=meson
 configure_args="-Dwerror=false -Ddocs=enabled"
-hostmakedepends="pkg-config docbook-xsl xkeyboard-config libxslt zlib-devel"
+hostmakedepends="pkg-config docbook-xsl xkeyboard-config libxslt zlib-devel cmake"
 makedepends="MesaLib-devel pango-devel libtsm-devel libxkbcommon-devel
- eudev-libudev-devel libdrm-devel libgbm-devel"
-depends="xkeyboard-config"
+ eudev-libudev-devel libdrm-devel libgbm-devel elogind-devel"
+depends="xkeyboard-config libtsm"
 checkdepends="check-devel"
 short_desc="Linux KMS/DRM based virtual Console Emulator"
-maintainer="Orphaned <orphan@voidlinux.org>"
+maintainer="zenobit <zen@osowoso.org>"
 license="MIT"
 homepage="https://github.com/kmscon/kmscon"
 changelog="https://raw.githubusercontent.com/kmscon/kmscon/refs/heads/main/NEWS.md"
 distfiles="https://github.com/kmscon/kmscon/archive/refs/tags/v${version}.tar.gz"
-checksum=19bbc315195abd5011861c90a0a92f88257869ebc07e30621f9d17d9a05b6e11
+checksum=4a0552d3cd3ba16df4fcff61f2b1431650bcd9e7ecabc03625ce52345b9c95c5
 
 lib32disabled=yes
+
+# cross-build fix: libdrm headers are at libdrm/drm_fourcc.h but code includes <drm/drm_fourcc.h>
+if [ -n "$CROSS_BUILD" ]; then
+	pre_build() {
+		mkdir -p "${XBPS_CROSS_BASE}/usr/include"
+		ln -srf "${XBPS_CROSS_BASE}/usr/include/libdrm" "${XBPS_CROSS_BASE}/usr/include/drm"
+	}
+fi
 
 if [ "$XBPS_CHECK_PKGS" ] && [ -z "$CROSS_BUILD" ]; then
 	configure_args+=" -Dtests=true"
@@ -27,4 +35,8 @@ fi
 
 post_install() {
 	vlicense COPYING
+	vsv kmscon
+	for f in 1 2 3 4 5 6; do
+		vsv kmscon-tty${f}
+	done
 }
