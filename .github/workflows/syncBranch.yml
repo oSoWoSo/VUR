@@ -51,7 +51,6 @@ on:
         - dooble-qt6
         - drako
         - easybashgui
-        - easyeffects
         - easyeffects+fmt
         - ebg
         - elightenment
@@ -101,6 +100,7 @@ on:
         - kde-material-you-colors
         - kirc
         - kitty
+        - kmscon
         - labwc-menu
         - lapce
         - lazycli
