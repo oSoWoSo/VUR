@@ -35,7 +35,6 @@ on:
         - bubbletea
         - bun
         - calamares
-        - caligula
         - celluloid
         - check-anywhere
         - chezmoi
