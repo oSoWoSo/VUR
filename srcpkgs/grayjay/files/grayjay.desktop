@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+
+Name=Grayjay
+Comment=Universal media aggregator
+Categories=AudioVideo;Player;
+
+Icon=grayjay
+Exec=grayjay
+Terminal=false
+StartupWMClass=cef
