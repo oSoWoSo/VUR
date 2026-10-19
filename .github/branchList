@@ -43,6 +43,7 @@ eww
 exfatprogs
 fix-rustnet-ci
 fmt11+
+fresh
 fzf
 gama
 geany
