@@ -1,6 +1,6 @@
 # Template file for 'designcraft'
 pkgname=designcraft
-version=0.7.1
+version=0.12.0
 revision=1
 #archs="i686 x86_64"
 #build_wrksrc=
@@ -13,7 +13,7 @@ maintainer="zenobit <zen@osowoso.org>"
 license="Apache-2.0, MIT"
 homepage="https://github.com/storytold/designcraft"
 distfiles="https://github.com/storytold/designcraft/archive/refs/tags/v${version}.tar.gz"
-checksum=395ecade50f8ff802ef2df347ed0a89667f7a3134ca94479cfe5235294f193c8
+checksum=0654543b8407b3229544235ced0a2ee0bea6f420c899ae10be08b51a9b3c8112
 
 do_install() {
 	# 1. Install application for Desktop and command line (CLI)

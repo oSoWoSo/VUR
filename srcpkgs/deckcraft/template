@@ -1,6 +1,6 @@
 # Template file for 'deckcraft'
 pkgname=deckcraft
-version=0.6.1
+version=0.10.0
 revision=1
 build_style=cargo
 make_build_args="-p deckcraft -p deckcraft-cli"
@@ -11,7 +11,7 @@ maintainer="zenobit <zen@osowoso.org>"
 license="Apache-2.0, MIT"
 homepage="https://github.com/storytold/deckcraft"
 distfiles="https://github.com/storytold/deckcraft/archive/refs/tags/v${version}.tar.gz"
-checksum=9eeaa29db8de6e33dd7e3edcf33983ecedfe515d2427e16db43befbcfc944800
+checksum=2240c7ee8fec7ff2425634d9b76a4f3fd332b67db543e865593dedf3d29a1bb0
 
 do_install() {
 	# 1. Install optimized binary deliverables directly from the build target

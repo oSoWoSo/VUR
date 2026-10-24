@@ -1,6 +1,6 @@
 # Template file for 'gridcraft'
 pkgname=gridcraft
-version=0.6.1
+version=0.11.1
 revision=1
 build_style=cargo
 make_build_args="-p gridcraft -p gridcraft-cli"
@@ -11,7 +11,7 @@ maintainer="zenobit <zen@osowoso.org>"
 license="Apache-2.0, MIT"
 homepage="https://github.com/storytold/gridcraft"
 distfiles="https://github.com/storytold/gridcraft/archive/refs/tags/v${version}.tar.gz"
-checksum=8c3997854e19d385aa00082e3f8de091ed4f65127be0b195cb826b3cb3083380
+checksum=18a7c49bfefc9a585243f1f8a5fcf6e055bf314c4b31fb938ebd9c3b02f4e5bd
 
 do_install() {
 	# 1. Install application binaries directly from target release (prevents double compilation)

@@ -1,6 +1,6 @@
 # Template file for 'lightcraft'
 pkgname=lightcraft
-version=0.7.1
+version=0.13.0
 revision=1
 build_style=cargo
 make_build_args="-p lightcraft -p lightcraft-cli"
@@ -11,7 +11,7 @@ maintainer="zenobit <zen@osowoso.org>"
 license="Apache-2.0, MIT"
 homepage="https://github.com/storytold/lightcraft"
 distfiles="https://github.com/storytold/lightcraft/archive/refs/tags/v${version}.tar.gz"
-checksum=03727146cbfce40de069d21fb9e1117223808ca9f04e903fef36360939d87606
+checksum=e53a5b91fe837d25cba273675694cb18abaabda78143d84cc0f61f2edc608da1
 
 do_install() {
 	# 1. Install application for Desktop and command line (CLI)

@@ -1,6 +1,6 @@
 # Template file for 'cadcraft'
 pkgname=cadcraft
-version=0.6.2
+version=0.12.0
 revision=1
 #archs="i686 x86_64"
 #build_wrksrc=
@@ -13,7 +13,7 @@ maintainer="zenobit <zen@osowoso.org>"
 license="Apache-2.0, MIT"
 homepage="https://github.com/storytold/cadcraft"
 distfiles="https://github.com/storytold/cadcraft/archive/refs/tags/v${version}.tar.gz"
-checksum=4582855972d4a112f838a67414204ba01e3acd178b3891cf5a15d767fa610e28
+checksum=374177d50bd52ee38d724956f823741e8ac5f7e469fba049df3f421882820868
 
 do_install() {
 	# 1. Install optimized application binaries
