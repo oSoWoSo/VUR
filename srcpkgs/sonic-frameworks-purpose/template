@@ -1,0 +1,37 @@
+# Template file for 'sonic-frameworks-purpose'
+pkgname=sonic-frameworks-purpose
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base qt6-declarative-host-tools
+ gettext accounts-qml-module sonic-frameworks-settings sonic-frameworks-data-models
+ sonic-frameworks-barcode sonic-frameworks-qml-bridge intltool"
+makedepends="qt6-declarative-devel sonic-frameworks-core-addons-devel sonic-frameworks-internationalization-devel
+ sonic-frameworks-quick-ui-devel sonic-frameworks-notifications-devel sonic-frameworks-io-devel
+ sonic-accounts-integration-devel libgomp-devel"
+depends="accounts-qml-module sonic-frameworks-barcode sonic-frameworks-qml-bridge sonic-frameworks-data-models"
+short_desc="Framework for providing abstractions to get the dev's purposes fulfilled"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-purpose"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-purpose/archive/refs/tags/${version}.tar.gz"
+checksum=d226ef5310101ae961c35733a6b71c792fcbe292a65c58bbca9f81e3cc2c25f7
+provides="kf6-purpose-${version}_${revision}"
+conflicts="kf6-purpose"
+replaces="kf6-purpose>=0"
+
+sonic-frameworks-purpose-devel_package() {
+	provides="kf6-purpose-devel-${version}_${revision}"
+	conflicts="kf6-purpose-devel"
+	replaces="kf6-purpose-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} sonic-frameworks-core-addons-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

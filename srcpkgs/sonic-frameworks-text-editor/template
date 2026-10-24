@@ -1,0 +1,38 @@
+# Template file for 'sonic-frameworks-text-editor'
+pkgname=sonic-frameworks-text-editor
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base sonic-frameworks-auth-tools
+ qt6-declarative-host-tools gettext sonic-frameworks-settings"
+makedepends="sonic-frameworks-archive-devel sonic-frameworks-auth-devel sonic-frameworks-settings-devel
+ sonic-frameworks-gui-addons-devel sonic-frameworks-internationalization-devel sonic-frameworks-io-devel sonic-frameworks-xml-gui-devel
+ sonic-frameworks-ui-components-devel sonic-frameworks-spell-check-devel sonic-frameworks-syntax-highlighting-devel
+ sonic-frameworks-text-widgets-devel qt6-speech-devel qt6-multimedia-devel
+ qt6-speech-plugin-flite qt6-speech-plugin-mock qt6-speech-plugin-speechd
+ editorconfig-devel"
+short_desc="Full text editor component"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-text-editor"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-text-editor/archive/refs/tags/${version}.tar.gz"
+checksum=b0ed0a0ca055e15fa222f38fde38d8b049c40e640d04490037fb072b64992c58
+provides="kf6-ktexteditor-${version}_${revision}"
+conflicts="kf6-ktexteditor"
+replaces="kf6-ktexteditor>=0"
+
+sonic-frameworks-text-editor-devel_package() {
+	provides="kf6-ktexteditor-devel-${version}_${revision}"
+	conflicts="kf6-ktexteditor-devel"
+	replaces="kf6-ktexteditor-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

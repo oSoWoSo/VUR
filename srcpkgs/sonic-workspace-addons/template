@@ -1,0 +1,30 @@
+# Template file for 'sonic-workspace-addons'
+pkgname=sonic-workspace-addons
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base qt6-tools pkg-config gettext
+ qt6-declarative-host-tools sonic-frameworks-settings-utils sonic-frameworks-package sonic-frameworks-auth-tools"
+makedepends="sonic-frameworks-qml-bridge-devel sonic-frameworks-holidays-devel sonic-frameworks-settings-devel sonic-frameworks-dbus-devel
+ sonic-frameworks-internationalization-devel sonic-frameworks-progress-ui-devel sonic-frameworks-purpose-devel sonic-frameworks-spell-check-devel sonic-frameworks-unit-conversion-devel
+ sonic-frameworks-addons-downloader-devel sonic-plasma5-support-library-devel qt6-qt5compat-devel sonic-frameworks-notifications-devel sonic-frameworks-app-info-devel
+ sonic-frameworks-xml-gui-devel qt6-declarative-private-devel qt6-quick3d-devel icu-devel sonic-frameworks-package-devel sonic-frameworks-settings-utils-devel
+ sonic-frameworks-svg-devel sonic-frameworks-data-models-devel sonic-frameworks-io-devel sonic-frameworks-quick-ui-devel sonic-frameworks-runner-devel
+ sonic-interface-libraries-devel sonic-frameworks-keybind-devel sonic-frameworks-auth-devel sonic-frameworks-core-addons-devel"
+depends="qt6-plugin-networkinformation qt6-location sonnet"
+short_desc="All kinds of addons to improve SonicDE experience"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-workspace-addons"
+distfiles="https://github.com/Sonic-DE/sonic-workspace-addons/archive/refs/tags/${version}.tar.gz"
+checksum=8dea587ca5528d60618caed972445afd94aef4a53bf2aa2e67d4fbf762400123
+provides="kdeplasma-addons-${version}_${revision}"
+conflicts="kdeplasma-addons"
+replaces="kdeplasma-addons>=0"
+
+if [ "$XBPS_WORDSIZE$XBPS_WORDSIZE" = "64$XBPS_TARGET_WORDSIZE" ]; then
+	makedepends+=" qt6-webengine-devel"
+fi

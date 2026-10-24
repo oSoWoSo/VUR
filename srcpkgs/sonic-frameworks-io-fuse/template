@@ -1,0 +1,18 @@
+# Template file for 'sonic-frameworks-io-fuse'
+pkgname=sonic-frameworks-io-fuse
+version=6.0.0
+revision=2
+build_style=cmake
+configure_args="-DQT_MAJOR_VERSION=6 -DBUILD_WITH_QT6=ON -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules pkg-config qt6-base sonic-frameworks-settings-devel"
+makedepends="base-devel cmake sonic-frameworks-cmake-modules qt6-base qt6-base-devel
+ sonic-frameworks-core-addons-devel sonic-frameworks-core-addons sonic-frameworks-io-devel fuse3 fuse3-devel"
+short_desc="FUSE Interface for Sonic Frameworks IO"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-io-fuse"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-io-fuse/archive/refs/tags/${version}.tar.gz"
+checksum=a6f414d9aec161f5071464dd46753b445c87b15653925362d5110a0c72f927a3
+provides="sonic-frameworks-io-fuse-${version}_${revision}"
+conflicts="sonic-frameworks-io-fuse"
+replaces="sonic-frameworks-io-fuse>=0"

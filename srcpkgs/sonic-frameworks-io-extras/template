@@ -1,0 +1,30 @@
+# Template file for 'sonic-frameworks-io-extras'
+pkgname=sonic-frameworks-io-extras
+version=26.08.2
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DWITH_LIBPROXY=ON -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules sonic-frameworks-doctools sonic-frameworks-core-addons
+ sonic-frameworks-io pkg-config gperf qt6-base qt6-tools gettext KDSoap sonic-frameworks-settings-utils"
+makedepends="qcoro-qt6-devel sonic-frameworks-archive-devel sonic-frameworks-settings-devel sonic-frameworks-settings-ui-devel
+ sonic-frameworks-dbus-devel sonic-frameworks-zeroconf-devel sonic-frameworks-internationalization-devel sonic-frameworks-device-integration-devel sonic-frameworks-syntax-highlighting-devel
+ sonic-frameworks-settings-utils-devel sonic-frameworks-text-widgets-devel sonic-frameworks-app-info-devel sonic-frameworks-widgets-addons-devel
+ sonic-activities-stats-devel phonon-devel samba-devel libssh-devel libmtp-devel libimobiledevice-devel
+ libplist-devel KDSoap-devel libtirpc-devel libopenexr-devel taglib-devel sonic-exiv2-library-devel libnfs-devel
+ libproxy-devel qt6-svg-devel qt6-base-private-devel sonic-frameworks-notifications-devel kdsoap-ws-discovery-client-devel
+ libstdc++-devel libXcursor-devel qt6-qt5compat-devel sonic-activities-devel sonic-frameworks-core-addons-devel
+ sonic-frameworks-doctools-devel sonic-frameworks-io-devel sonic-frameworks-gui-addons-devel"
+depends="ripgrep-all smbclient"
+short_desc="Extended I/O components for SonicDE frameworks (kio-extras replacement)"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-io-extras"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-io-extras/archive/refs/tags/${version}.tar.gz"
+checksum=e513ed748d190c2493fdf43dd6cde4934cc458d1fa17b9eb26ac5b26d039adf2
+provides="kio-extras-${version}_${revision}"
+conflicts="kio-extras"
+replaces="kio-extras>=0"
+
+CFLAGS="-D_GNU_SOURCE"

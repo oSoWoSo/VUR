@@ -1,0 +1,40 @@
+# Template file for 'sonic-ecco'
+pkgname=sonic-ecco
+version=26.08.2
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules python3 qt6-tools qt6-base
+ gettext sonic-frameworks-core-addons sonic-frameworks-settings sonic-frameworks-doctools
+ sonic-frameworks-settings-utils"
+makedepends="sonic-frameworks-file-search-devel sonic-frameworks-bookmarks-devel
+ sonic-frameworks-settings-utils-devel sonic-frameworks-autocomplete-devel
+ sonic-frameworks-settings-devel sonic-frameworks-core-addons-devel
+ sonic-frameworks-crash-handler-devel sonic-frameworks-dbus-devel
+ sonic-frameworks-doctools-devel sonic-frameworks-file-metadata-devel
+ sonic-frameworks-internationalization-devel sonic-frameworks-icon-themes-devel
+ sonic-frameworks-io-devel sonic-frameworks-addons-downloader-devel
+ sonic-frameworks-notifications-devel sonic-frameworks-ui-components-devel
+ sonic-frameworks-text-widgets-devel sonic-frameworks-user-feedback-devel
+ sonic-frameworks-windowsystem-devel sonic-frameworks-device-integration-devel
+ qt6-base-private-devel baloo-widgets-devel phonon-devel sonic-activities-devel"
+depends="sonic-frameworks-io-extras"
+short_desc="File manager for Sonic"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later OR GFDL-1.2-or-later"
+homepage="https://github.com/Sonic-DE/sonic-ecco"
+distfiles="https://github.com/Sonic-DE/sonic-ecco/archive/refs/tags/${version}.tar.gz"
+checksum=1829f62dfdd57b55c6b1ecb9a0278f0a61fb77748582f317009d39e0125c201d
+provides="dolphin-${version}_${revision}"
+conflicts="dolphin"
+replaces="dolphin>=0"
+
+if [ "$CROSS_BUILD" ]; then
+	LDFLAGS=" -Wl,-rpath-link,../bin"
+fi
+
+if [ "$XBPS_TARGET_LIBC" = "musl" ]; then
+	LDFLAGS="$LDFLAGS -Wl,-z,stack-size=0x200000"
+	makedepends+=" musl-fts-devel"
+fi

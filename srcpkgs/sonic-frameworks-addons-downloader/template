@@ -1,0 +1,35 @@
+# Template file for 'sonic-frameworks-addons-downloader'
+pkgname=sonic-frameworks-addons-downloader
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ qt6-declarative-host-tools gettext sonic-frameworks-settings sonic-frameworks-package"
+makedepends="sonic-frameworks-open-collab-devel sonic-frameworks-archive-devel sonic-frameworks-settings-devel
+ sonic-frameworks-core-addons-devel sonic-frameworks-internationalization-devel sonic-frameworks-package-devel
+ sonic-frameworks-widgets-addons-devel sonic-frameworks-feeds-devel"
+short_desc="Framework for downloading and sharing additional application data"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-addons-downloader"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-addons-downloader/archive/refs/tags/${version}.tar.gz"
+checksum=ea5a17622392b8d551a1948d400f82d78aaa018b030e6b1b7351605eae1de257
+provides="kf6-knewstuff-${version}_${revision}"
+conflicts="kf6-knewstuff"
+replaces="kf6-knewstuff>=0"
+
+sonic-frameworks-addons-downloader-devel_package() {
+	provides="kf6-knewstuff-devel-${version}_${revision}"
+	conflicts="kf6-knewstuff-devel"
+	replaces="kf6-knewstuff-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel
+	 sonic-frameworks-core-addons-devel sonic-frameworks-open-collab-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

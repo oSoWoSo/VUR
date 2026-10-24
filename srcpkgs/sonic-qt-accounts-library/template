@@ -1,0 +1,50 @@
+# Template file for 'sonic-qt-accounts-library'
+pkgname=sonic-qt-accounts-library
+version=1.17.2
+revision=2
+build_style=qmake
+configure_args="LIBDIR=/usr/lib .."
+hostmakedepends="pkg-config doxygen
+ qt6-base"
+makedepends="libaccounts-glib-devel qt6-base-devel"
+short_desc="Qt-based client library for the accounts database"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-qt-accounts-library"
+distfiles="https://github.com/Sonic-DE/sonic-qt-accounts-library/archive/refs/tags/${version}.tar.gz"
+checksum=6ab0a000dd494f52593f8233bba0643035ffbcacbd99c71947f20fe655f0ba55
+provides="libaccounts-qt-${version}_${revision}"
+conflicts="libaccounts-qt"
+replaces="libaccounts-qt>=0"
+
+post_extract() {
+	mkdir -p build-qt6
+}
+
+pre_configure() {
+	build_wrksrc="build-qt6"
+}
+
+do_build() {
+	make -C build-qt6 ${make_jobs}
+}
+
+do_install() {
+	make -C build-qt6 install DESTDIR=${DESTDIR} PREFIX=/usr \
+		INSTALL_ROOT=${DESTDIR} STRIP=true
+}
+
+sonic-qt-accounts-library-devel_package() {
+	provides="libaccounts-qt-devel-${version}_${revision}"
+	conflicts="libaccounts-qt-devel"
+	replaces="libaccounts-qt-devel>=0"
+	short_desc+=" - development files"
+	depends="qt6-base-devel libaccounts-qt6>=${version}_${revision}"
+	pkg_install() {
+		vmove usr/include/accounts-qt6
+		vmove usr/lib/libaccounts-qt6.so
+		vmove usr/lib/cmake/AccountsQt6
+		vmove usr/lib/pkgconfig/accounts-qt6.pc
+		vmove usr/share/doc
+	}
+}

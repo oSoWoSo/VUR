@@ -1,0 +1,22 @@
+# Template file for 'sonic-partition-manager'
+pkgname=sonic-partition-manager
+version=26.08.2
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="qt6-base-devel sonic-frameworks-doctools sonic-frameworks-settings qt6-base
+ sonic-frameworks-cmake-modules pkg-config gettext sonic-frameworks-core-addons"
+makedepends="qt6-base-devel sonic-frameworks-settings-devel kpmcore-devel sonic-frameworks-doctools-devel
+ sonic-frameworks-app-info-devel sonic-frameworks-io-devel sonic-frameworks-xml-gui-devel sonic-frameworks-icon-themes-devel
+ sonic-frameworks-settings-ui-devel sonic-frameworks-dbus-devel sonic-frameworks-crash-handler-devel"
+depends="hicolor-icon-theme"
+short_desc="Manage the disk devices, partitions and file systems on your computer"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-partition-manager"
+distfiles="https://github.com/Sonic-DE/sonic-partition-manager/archive/refs/tags/${version}.tar.gz"
+checksum=bd342fdf5277b91160f297242eb1eb3bdfbfafe04cc2450f7c9f91ad9bd1c100
+provides="partitionmanager-${version}_${revision}"
+conflicts="partitionmanager"
+replaces="partitionmanager>=0"

@@ -1,0 +1,30 @@
+# Template file for 'sonic-daemon'
+pkgname=sonic-daemon
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKF6_HOST_TOOLING=/usr/lib/cmake"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ sonic-frameworks-doctools sonic-frameworks-settings"
+makedepends="sonic-frameworks-settings-devel sonic-frameworks-core-addons-devel sonic-frameworks-crash-handler-devel
+ sonic-frameworks-dbus-devel sonic-frameworks-app-info-devel"
+short_desc="Central daemon of Sonic work spaces"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-daemon"
+distfiles="https://github.com/Sonic-DE/sonic-daemon/archive/refs/tags/${version}.tar.gz"
+checksum=b07d040a538fc95c470e9f905b393b8f56897887f70e79892b6735a2f7732303
+provides="kf6-kded-${version}_${revision}"
+conflicts="kf6-kded"
+replaces="kf6-kded>=0"
+
+sonic-daemon-devel_package() {
+	provides="kf6-kded-devel-${version}_${revision}"
+	conflicts="kf6-kded-devel"
+	replaces="kf6-kded-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/cmake
+	}
+}

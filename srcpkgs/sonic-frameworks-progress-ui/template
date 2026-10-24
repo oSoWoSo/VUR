@@ -1,0 +1,48 @@
+# Template file for 'sonic-frameworks-progress-ui'
+pkgname=sonic-frameworks-progress-ui
+version=6.31.0
+revision=1
+build_style=cmake
+_llvmver=21
+configure_args="$(vopt_bool python BUILD_PYTHON_BINDINGS)"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ $(vopt_if python "python3-build python3-setuptools shiboken6 llvm${_llvmver}")"
+makedepends="sonic-frameworks-core-addons-devel sonic-frameworks-notifications-devel
+ sonic-frameworks-widgets-addons-devel qt6-base-private-devel
+ $(vopt_if python 'libshiboken6-devel libpyside6-devel python3-devel')"
+short_desc="Widgets for showing progress of asynchronous jobs"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-progress-ui"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-progress-ui/archive/refs/tags/${version}.tar.gz"
+checksum=82a2d7957583ff741963d646caf7be7b89eae74bfa9a8bf7a3bef9e65e2fcac4
+provides="kf6-kjobwidgets-${version}_${revision}"
+conflicts="kf6-kjobwidgets"
+replaces="kf6-kjobwidgets>=0"
+
+build_options="python"
+build_options_default="python"
+
+if [ "$CROSS_BUILD" ]; then
+	configure_args+=" -DECM_SHIBOKEN_ARCH=$XBPS_CROSS_RUST_TARGET"
+	configure_args+=" -DSYSROOT_INCLUDE_DIRS=$XBPS_CROSS_BASE/usr/include"
+fi
+export LLVM_INSTALL_DIR=/usr/lib/llvm/${_llvmver}
+
+case "$XBPS_TARGET_MACHINE" in
+	arm*) configure_args+=" -DSHIBOKEN_GENERATOR_EXTRA_FLAGS=--clang-option=-mfloat-abi=hard" ;;
+esac
+
+sonic-frameworks-progress-ui-devel_package() {
+	provides="kf6-kjobwidgets-devel-${version}_${revision}"
+	conflicts="kf6-kjobwidgets-devel"
+	replaces="kf6-kjobwidgets-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel
+	 sonic-frameworks-core-addons-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

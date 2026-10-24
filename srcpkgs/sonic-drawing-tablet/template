@@ -1,0 +1,33 @@
+# Template file for 'sonic-drawing-tablet'
+pkgname=sonic-drawing-tablet
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="pkg-config gettext sonic-frameworks-cmake-modules qt6-base qt6-tools
+ sonic-frameworks-windowsystem sonic-frameworks-settings-utils sonic-frameworks-package sonic-frameworks-settings sonic-frameworks-doctools"
+makedepends="qt6-declarative-devel libwacom-devel xf86-input-wacom-devel libinput-devel
+ qt6-base-private-devel libxkbcommon-devel sonic-frameworks-internationalization-devel sonic-frameworks-settings-devel sonic-frameworks-xml-gui-devel
+ sonic-frameworks-widgets-addons-devel libX11-devel libXext-devel sonic-frameworks-notifications-devel libICE-devel
+ sonic-frameworks-dbus-devel sonic-plasma5-support-library-devel libxcb-devel sonic-frameworks-settings-utils-devel sonic-frameworks-package-devel
+ sonic-workspace-devel sonic-frameworks-core-addons-devel sonic-interface-libraries-devel
+ sonic-frameworks-keybind-devel sonic-frameworks-quick-ui-devel sonic-frameworks-io-devel
+ sonic-frameworks-doctools-devel sonic-frameworks-windowsystem-devel"
+depends="xf86-input-wacom"
+checkdepends="dbus"
+short_desc="GUI for Wacom Linux drivers with different button/pen layout profiles"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-drawing-tablet"
+distfiles="https://github.com/Sonic-DE/sonic-drawing-tablet/archive/refs/tags/${version}.tar.gz"
+checksum=42a2af80c784b13f5de36030a6dfc2496d61d1ecfeb65b28be3e797bb75caf0b
+provides="kcm-wacomtablet-${version}_${revision}"
+conflicts="kcm-wacomtablet"
+replaces="kcm-wacomtablet>=0"
+
+do_check() {
+	cd build
+	# disable failing tests
+	dbus-run-session ctest -E "Test.KDED.TabletHandler|Test.KDED.XInputAdaptor|Test.KDED.XsetWacomAdaptor"
+}

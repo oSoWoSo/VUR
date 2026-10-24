@@ -1,0 +1,31 @@
+# Template file for 'sonic-frameworks-quick-charts'
+pkgname=sonic-frameworks-quick-charts
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ qt6-declarative-host-tools qt6-shadertools SPIRV-Tools"
+makedepends="qt6-declarative-devel qt6-shadertools-devel"
+short_desc="QtQuick plugin providing high-performance charts"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-quick-charts"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-quick-charts/archive/refs/tags/${version}.tar.gz"
+checksum=45687be15c1845c91bbc1be75b3e1123578b2ee3d8fa8da9a9d8e3cf934f4820
+provides="kf6-kquickcharts-${version}_${revision}"
+conflicts="kf6-kquickcharts"
+replaces="kf6-kquickcharts>=0"
+
+sonic-frameworks-quick-charts-devel_package() {
+	provides="kf6-kquickcharts-devel-${version}_${revision}"
+	conflicts="kf6-kquickcharts-devel"
+	replaces="kf6-kquickcharts-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

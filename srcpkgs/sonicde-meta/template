@@ -1,0 +1,23 @@
+# Template file for 'sonicde-meta'
+pkgname=sonicde-meta
+version=6.8
+revision=1
+metapackage=yes
+depends="aurorae sonic-bluetooth-runtime sonic-silver sonic-silver-gtk flatpak-kcm
+ sonic-activity-manager-daemon sonic-terminal-tools sonic-gtk-theme-bridge
+ sonic-launcher-menu-edit sonic-pipewire sonic-rdp sonic-ssh-password-prompt
+ sonic-system-stats sonic-frameworks-keyring-pam sonic-write-daemon milou
+ ocean-sound-theme sonic-oxygen sonic-oxygen-sounds sonic-activities-stats
+ sonic-browser-integration sonic-disks sonic-firewall sonic-qt-theme-bridge
+ plasma-keyboard sonic-system-monitor sonic-win sonic-thunderbolt sonic-vault
+ sonic-polkit-agent powerdevil print-manager sonic-network-manager sonic-screen
+ sonic-audio-applet-pulse sonic-desktop-interface sddm-kcm sonic-silver-sddm
+ sonic-keybind-daemon sonic-activities sonic-system-info sonic-workspace-x11
+ sonic-workspace-addons sonic-daemon sonic-frameworks-quick-ui-addons
+ sonic-workspace-wallpapers sonic-oxygen-icons sonic-partition-manager
+ sonic-quick-image-editor sonic-system-log sonic-screenies systemsettings
+ sonic-dr-robotnik xdg-desktop-portal-sonicde"
+short_desc="Meta package for Sonic Desktop Environment (X11-focused KDE fork)"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE"

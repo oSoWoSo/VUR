@@ -1,0 +1,33 @@
+# Template file for 'sonic-night-light'
+pkgname=sonic-night-light
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="
+ -DBUILD_TESTING=OFF
+ -DCMAKE_INSTALL_LIBEXECDIR=lib
+"
+hostmakedepends="pkg-config qt6-tools qt6-base sonic-frameworks-cmake-modules sonic-frameworks-settings gettext"
+makedepends="qt6-base-devel qt6-position-devel sonic-frameworks-core-addons-devel sonic-frameworks-settings-devel
+ sonic-frameworks-dbus-devel sonic-frameworks-holidays-devel sonic-frameworks-internationalization-devel"
+short_desc="Helpers for scheduling the dark-light cycle"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-night-light"
+distfiles="https://github.com/Sonic-DE/sonic-night-light/archive/refs/tags/${version}.tar.gz"
+checksum=35efafd4780130043f645428d8ab42100300a212901fccd6e3d4996b11b44e86
+provides="knighttime-${version}_${revision}"
+conflicts="knighttime"
+replaces="knighttime>=0"
+
+sonic-night-light-devel_package() {
+	provides="knighttime-devel-${version}_${revision}"
+	replaces="knighttime-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

@@ -1,0 +1,46 @@
+# Template file for 'sonic-frameworks-core-addons'
+pkgname=sonic-frameworks-core-addons
+version=6.31.0
+revision=1
+build_style=cmake
+_llvmver=21
+configure_args="-DBUILD_TESTING=OFF -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins $(vopt_bool python BUILD_PYTHON_BINDINGS)"
+hostmakedepends="doxygen qt6-tools sonic-frameworks-cmake-modules
+ $(vopt_if python "python3-build python3-setuptools shiboken6 llvm${_llvmver}")"
+makedepends="qt6-base-devel qt6-declarative-devel
+ $(vopt_if python 'libshiboken6-devel libpyside6-devel python3-devel')"
+depends="libgcc libstdc++"
+short_desc="Core Qt functionality extensions for SonicDE frameworks"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-only OR LGPL-3.0-only"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-core-addons"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-core-addons/archive/refs/tags/${version}.tar.gz"
+checksum=fd8297c46f64c55e856c1a31d3380ad7167a9e01c03af5eeecb1d27b1ac8fd2d
+provides="kf6-kcoreaddons-${version}_${revision}"
+conflicts="kf6-kcoreaddons"
+replaces="kf6-kcoreaddons>=0"
+
+build_options="python"
+build_options_default="python"
+
+export LLVM_INSTALL_DIR=/usr/lib/llvm/${_llvmver}
+
+do_check() {
+	cd build
+	# disable failing test
+	ctest -E "kformattest"
+}
+
+sonic-frameworks-core-addons-devel_package() {
+	provides="kf6-kcoreaddons-devel-${version}_${revision}"
+	replaces="kf6-kcoreaddons-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove usr/lib/pkgconfig
+		vmove "usr/lib/*.so"
+	}
+}

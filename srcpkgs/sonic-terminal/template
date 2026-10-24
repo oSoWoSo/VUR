@@ -1,0 +1,31 @@
+# Template file for 'sonic-terminal'
+pkgname=sonic-terminal
+version=26.08.2
+revision=1
+build_style=cmake
+configure_args="-DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="pkg-config sonic-frameworks-cmake-modules qt6-base qt6-tools gettext
+ sonic-frameworks-doctools sonic-frameworks-settings dbus AppStream xorg-server-xvfb"
+makedepends="sonic-frameworks-addons-downloader-devel sonic-frameworks-notification-settings-devel sonic-frameworks-crash-handler-devel
+ sonic-frameworks-dbus-devel sonic-frameworks-bookmarks-devel sonic-frameworks-settings-devel
+ sonic-frameworks-settings-ui-devel sonic-frameworks-core-addons-devel sonic-frameworks-gui-addons-devel
+ sonic-frameworks-internationalization-devel sonic-frameworks-icon-themes-devel sonic-frameworks-io-devel sonic-frameworks-notifications-devel
+ sonic-frameworks-app-info-devel sonic-frameworks-widgets-addons-devel sonic-frameworks-windowsystem-devel
+ sonic-frameworks-xml-gui-devel sonic-frameworks-keybind-devel icu-devel sonic-frameworks-doctools-devel
+ sonic-frameworks-ui-components-devel sonic-frameworks-pseudo-terminal-devel sonic-frameworks-text-widgets-devel qt6-multimedia-devel"
+checkdepends="which"
+short_desc="Terminal emulator for SonicDE"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-terminal"
+distfiles="https://github.com/Sonic-DE/sonic-terminal/archive/refs/tags/${version}.tar.gz"
+checksum=f07a6ae2b1e0320d59e4c555c72a45143d2b00654344aaab3d39d11188f1caf2
+provides="konsole-${version}_${revision}"
+conflicts="konsole"
+replaces="konsole>=0"
+
+do_check() {
+	cd build
+	ctest -E "ScreenTest|Vt102EmulationTest|TerminalInterfaceTest"
+}

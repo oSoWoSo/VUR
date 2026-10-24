@@ -1,0 +1,25 @@
+# Template file for 'sonic-screenies'
+pkgname=sonic-screenies
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake"
+hostmakedepends="pkg-config sonic-frameworks-cmake-modules qt6-tools qt6-base qt6-declarative-host-tools
+ gettext sonic-frameworks-doctools sonic-frameworks-settings plasma-wayland-protocols"
+makedepends="qt6-base-private-devel qt6-declarative-devel qt6-multimedia-devel sonic-frameworks-core-addons-devel
+ sonic-frameworks-widgets-addons-devel sonic-frameworks-dbus-devel sonic-frameworks-notifications-devel
+ sonic-frameworks-settings-devel sonic-frameworks-internationalization-devel sonic-frameworks-io-devel
+ sonic-frameworks-windowsystem-devel sonic-frameworks-keybind-devel sonic-frameworks-xml-gui-devel
+ sonic-frameworks-gui-addons-devel sonic-frameworks-quick-ui-devel sonic-frameworks-status-notification-devel
+ sonic-frameworks-barcode-devel sonic-frameworks-crash-handler-devel sonic-quick-image-editor-devel
+ layer-shell-qt-devel sonic-pipewire-devel libopencv-devel sonic-frameworks-purpose-devel libxcb-devel
+ xcb-util-devel xcb-util-image-devel xcb-util-cursor-devel ffmpeg6-devel pulseaudio-devel tesseract-ocr-devel"
+short_desc="Screenshot capture utility"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-screenies"
+distfiles="https://github.com/Sonic-DE/sonic-screenies/archive/refs/tags/${version}.tar.gz"
+checksum=5af599240ce0bc4c6a3187fee57a3ee269edb03362646c7a6092bd9776d93a5d
+provides="spectacle-${version}_${revision}"
+conflicts="spectacle"
+replaces="spectacle>=0"

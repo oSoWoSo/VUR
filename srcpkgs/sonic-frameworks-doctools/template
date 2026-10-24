@@ -1,0 +1,40 @@
+# Template file for 'sonic-frameworks-doctools'
+pkgname=sonic-frameworks-doctools
+version=6.31.0
+revision=1
+build_style=cmake
+build_helper=qemu
+hostmakedepends="doxygen docbook-xml docbook-xsl qt6-tools qt6-base gettext perl perl-URI sonic-frameworks-cmake-modules"
+makedepends="libstdc++-devel libxml2-devel libxslt-devel sonic-frameworks-archive-devel sonic-frameworks-internationalization-devel qt6-base-devel"
+depends="docbook-xml docbook-xsl"
+short_desc="DocBook-based documentation generation tools for SonicDE frameworks"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-only OR LGPL-3.0-only"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-doctools"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-doctools/archive/refs/tags/${version}.tar.gz"
+checksum=5aa6352150a4ca25729512d4038df19b8dbd0de1c4b9d32d0efb5e678fcfcde8
+provides="kf6-kdoctools-${version}_${revision}"
+conflicts="kf6-kdoctools"
+replaces="kf6-kdoctools>=0"
+
+post_patch() {
+	vsed -i -e '
+		s;[$]{CMAKE_INSTALL_DATAROOTDIR};usr/share;
+		/find_path/s/$/ NO_CMAKE_FIND_ROOT_PATH/
+	' cmake/FindDocBookXML4.cmake cmake/FindDocBookXSL.cmake
+}
+
+sonic-frameworks-doctools-devel_package() {
+	provides="kf6-kdoctools-devel-${version}_${revision}"
+	replaces="kf6-kdoctools-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		mkdir -p "${DESTDIR}/usr/lib/cmake/KF6DocTools"
+		mv ${PKGDESTDIR}/usr/lib/cmake/KF6DocTools/KF6DocToolsTools* \
+			"${DESTDIR}/usr/lib/cmake/KF6DocTools"
+		vmove "usr/lib/*.so"
+	}
+}

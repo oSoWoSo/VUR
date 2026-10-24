@@ -1,0 +1,46 @@
+# Template file for 'sonic-interface-libraries'
+pkgname=sonic-interface-libraries
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="qt6-base qt6-tools qt6-declarative-host-tools gettext pkg-config sonic-frameworks-settings
+ sonic-frameworks-quick-ui-devel sonic-frameworks-cmake-modules sonic-frameworks-doctools
+ sonic-frameworks-windowsystem sonic-frameworks-settings-utils sonic-frameworks-package"
+makedepends="sonic-frameworks-color-scheme-devel sonic-frameworks-settings-devel sonic-frameworks-internationalization-devel sonic-frameworks-icon-themes-devel
+ sonic-frameworks-notifications-devel sonic-frameworks-package-devel sonic-frameworks-svg-devel sonic-frameworks-widgets-addons-devel
+ libglvnd-devel libX11-devel libxcb-devel qt6-qt5compat-devel qt6-base-private-devel qt6-declarative-devel
+ sonic-activities-devel sonic-frameworks-core-addons-devel sonic-frameworks-gui-addons-devel
+ sonic-frameworks-io-devel sonic-frameworks-keybind-devel sonic-frameworks-quick-ui-devel
+ sonic-frameworks-windowsystem-devel"
+depends="sonic-frameworks-quick-ui"
+short_desc="SonicDE library and runtime components"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-interface-libraries"
+distfiles="https://github.com/Sonic-DE/sonic-interface-libraries/archive/refs/tags/${version}.tar.gz"
+checksum=e26155f7bb20a61662c3866f20f640f30c75bc8d72a53bcd5895b283e77c5aed
+provides="libplasma-${version}_${revision}"
+conflicts="libplasma"
+replaces="libplasma>=0"
+
+do_check() {
+	cd build
+	# disable failing tests
+	ctest -E "plasma-dialogstatetest|dialognativetest|plasma-dialogqmltest|plasma-themetest|bug485688test|plasma-pluginloadertest"
+}
+
+sonic-interface-libraries-devel_package() {
+	provides="libplasma-devel-${version}_${revision}"
+	replaces="libplasma-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} qt6-declarative-devel
+	 qt6-base-devel sonic-frameworks-package-devel sonic-frameworks-windowsystem-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

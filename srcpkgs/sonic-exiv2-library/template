@@ -1,0 +1,30 @@
+# Template file for 'sonic-exiv2-library'
+pkgname=sonic-exiv2-library
+version=26.08.2
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DQT_MAJOR_VERSION=6"
+hostmakedepends="sonic-frameworks-cmake-modules pkg-config qt6-base qt6-tools"
+makedepends="qt6-base-devel exiv2-devel"
+short_desc="Wrapper around Exiv2 library to manipulate picture metadata"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-exiv2-library"
+distfiles="https://github.com/Sonic-DE/sonic-exiv2-library/archive/refs/tags/${version}.tar.gz"
+checksum=cc2135570f0649a5ec3e2d03663470674ae9822d50419cca97891d5f15a3cfb8
+provides="libkexiv2-${version}_${revision}"
+conflicts="libkexiv2"
+replaces="libkexiv2>=0"
+
+sonic-exiv2-library-devel_package() {
+	provides="libkexiv2-devel-${version}_${revision}"
+	conflicts="libkexiv2-devel"
+	replaces="libkexiv2-devel>=0"
+	short_desc+=" - development files"
+	depends="${sourcepkg}-${version}_${revision}"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

@@ -1,0 +1,31 @@
+# Template file for 'sonic-frameworks-pseudo-terminal'
+pkgname=sonic-frameworks-pseudo-terminal
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DUTEMPTER_EXECUTABLE=/usr/lib/utempter/utempter"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ gettext"
+makedepends="sonic-frameworks-core-addons-devel sonic-frameworks-internationalization-devel libutempter-devel"
+short_desc="Interfacing with pseudo terminal devices"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-pseudo-terminal"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-pseudo-terminal/archive/refs/tags/${version}.tar.gz"
+checksum=0f61ac7a05a5d0382ebdef8b694bd5e29025de3b83cddd7dae96ba3f043f903a
+provides="kf6-kpty-${version}_${revision}"
+conflicts="kf6-kpty"
+replaces="kf6-kpty>=0"
+
+sonic-frameworks-pseudo-terminal-devel_package() {
+	provides="kf6-kpty-devel-${version}_${revision}"
+	conflicts="kf6-kpty-devel"
+	replaces="kf6-kpty-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

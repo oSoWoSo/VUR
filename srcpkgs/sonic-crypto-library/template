@@ -1,0 +1,38 @@
+# Template file for 'sonic-crypto-library'
+pkgname=sonic-crypto-library
+version=2.3.12
+revision=1
+build_style=cmake
+configure_args="-DQT6=ON -DUSE_RELATIVE_PATHS=true"
+hostmakedepends="pkg-config ca-certificates qt6-tools qt6-base"
+makedepends="nss-devel libgcrypt-devel ca-certificates openssl-devel
+ qt6-base-devel qt6-qt5compat-devel botan-devel"
+depends="ca-certificates"
+short_desc="Qt Cryptographic Architecture"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-crypto-library"
+distfiles="https://github.com/Sonic-DE/sonic-crypto-library/archive/refs/tags/${version}.tar.gz"
+checksum=cde58f4f91dac58220a96fa9d96882f06ad1e7112eea93263bb32f169f7a5108
+provides="qca-qt6-${version}_${revision}"
+conflicts="qca-qt6"
+replaces="qca-qt6>=0"
+
+if [ "$XBPS_CHECK_PKGS" ]; then
+	configure_args+=" -DBUILD_TESTS=1"
+else
+	configure_args+=" -DBUILD_TESTS=0"
+fi
+
+sonic-crypto-library-devel_package() {
+	provides="qca-qt6-devel-${version}_${revision}"
+	conflicts="qca-qt6-devel"
+	replaces="qca-qt6-devel>=0"
+	depends="qt6-base-devel ${sourcepkg}-${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

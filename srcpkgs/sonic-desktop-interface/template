@@ -1,0 +1,40 @@
+# Template file for 'sonic-desktop-interface'
+pkgname=sonic-desktop-interface
+version=6.8.0.1
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="pkg-config gettext qt6-base qt6-shadertools qt6-tools qt6-declarative-host-tools intltool
+ sonic-frameworks-settings sonic-frameworks-settings-utils sonic-frameworks-package sonic-frameworks-doctools
+ sonic-frameworks-cmake-modules sonic-frameworks-auth-tools"
+makedepends="sonic-frameworks-file-search-devel sonic-frameworks-bookmarks-devel sonic-frameworks-settings-utils-devel
+ sonic-frameworks-text-codec-devel sonic-frameworks-autocomplete-devel  sonic-frameworks-settings-devel
+ sonic-frameworks-settings-ui-devel sonic-frameworks-crash-handler-devel sonic-frameworks-dbus-devel
+ sonic-frameworks-qml-bridge-devel sonic-frameworks-internationalization-devel sonic-frameworks-icon-themes-devel
+ sonic-frameworks-quick-ui-addons-devel sonic-frameworks-data-models-devel sonic-frameworks-data-views-devel
+ sonic-frameworks-progress-ui-devel sonic-frameworks-addons-downloader-devel sonic-frameworks-notifications-devel
+ sonic-frameworks-notification-settings-devel sonic-frameworks-package-devel sonic-pipewire-devel sonic-frameworks-svg-devel
+ sonic-frameworks-widgets-addons-devel sonic-frameworks-xml-gui-devel sonic-frameworks-app-info-devel libcanberra-devel
+ libwacom-devel libX11-devel libxcb-devel libXcursor-devel libXi-devel libxkbcommon-devel libxkbfile-devel sonic-activities-stats-devel
+ sonic-plasma5-support-library-devel qt6-shadertools-devel qt6-qt5compat-devel qt6-base-private-devel qt6-declarative-devel
+ qt6-svg-devel SDL2-devel sonic-frameworks-device-integration-devel sonic-activities-devel sonic-frameworks-auth-devel sonic-frameworks-core-addons-devel
+ sonic-frameworks-gui-addons-devel sonic-frameworks-io-devel sonic-frameworks-keybind-devel sonic-frameworks-open-collab-devel
+ sonic-frameworks-quick-ui-devel sonic-frameworks-runner-devel sonic-frameworks-windowsystem-devel sonic-interface-libraries-devel
+ sonic-system-monitor-library-devel sonic-win-devel sonic-workspace-devel sonic-frameworks-doctools-devel sonic-screenlocker-devel
+ sonic-frameworks-spell-check-devel eudev-libudev-devel xcb-util-keysyms-devel sonic-frameworks-quick-desktop-style-devel
+ sonic-accounts-integration-devel libaccounts-qt6-devel signon-plugin-oauth2 ibus-devel xf86-input-evdev-devel xf86-input-libinput-devel
+ xf86-input-synaptics-devel sonic-daemon-devel libglib-devel alsa-lib-devel xcb-util-image-devel"
+depends="sonic-launcher-menu-edit sonic-polkit-agent powerdevil systemsettings sonic-frameworks-quick-desktop-style
+ sonic-plasma5-support-library accountsservice sonic-system-stats xdg-user-dirs noto-fonts-emoji"
+short_desc="Sonic Desktop Interface"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-desktop-interface"
+distfiles="https://github.com/Sonic-DE/${pkgname}/archive/refs/tags/${version}.tar.gz"
+checksum=63a9da9c9a07e8b252ec195784fafbea462bb44d4ef9d629f123b0712ec2f510
+provides="plasma-desktop-${version}_${revision}"
+conflicts="plasma-desktop"
+replaces="plasma-desktop>=0"
+python_version=3

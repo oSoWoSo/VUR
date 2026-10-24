@@ -1,0 +1,34 @@
+# Template file for 'sonic-frameworks-qml-bridge'
+pkgname=sonic-frameworks-qml-bridge
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ qt6-declarative-host-tools gettext qt6-shadertools sonic-frameworks-settings"
+makedepends="sonic-frameworks-settings-devel sonic-frameworks-keybind-devel sonic-frameworks-internationalization-devel
+ sonic-frameworks-widgets-addons-devel sonic-frameworks-gui-addons-devel qt6-shadertools-devel
+ qt6-declarative-devel"
+short_desc="Integration of QML and Sonic work spaces"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-qml-bridge"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-qml-bridge/archive/refs/tags/${version}.tar.gz"
+checksum=ef004ec9fb7fddbdd35862f107024116aa87bdc4b7a6c4b4b377e9f05abbbda5
+provides="kf6-kdeclarative-${version}_${revision}"
+conflicts="kf6-kdeclarative"
+replaces="kf6-kdeclarative>=0"
+
+sonic-frameworks-qml-bridge-devel_package() {
+	provides="kf6-kdeclarative-devel-${version}_${revision}"
+	conflicts="kf6-kdeclarative-devel"
+	replaces="kf6-kdeclarative-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} sonic-frameworks-settings-devel
+	 qt6-declarative-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

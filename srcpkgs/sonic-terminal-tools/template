@@ -1,0 +1,29 @@
+# Template file for 'sonic-terminal-tools'
+pkgname=sonic-terminal-tools
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base qt6-tools gettext
+ sonic-frameworks-windowsystem sonic-frameworks-settings sonic-frameworks-settings-utils sonic-frameworks-doctools"
+makedepends="sonic-activities-devel sonic-frameworks-settings-utils-devel sonic-frameworks-root-shell-devel
+ qt6-svg-devel sonic-frameworks-settings-devel sonic-frameworks-icon-themes-devel sonic-frameworks-io-devel
+ sonic-frameworks-app-info-devel sonic-frameworks-windowsystem-devel sonic-frameworks-ui-components-devel
+ sonic-frameworks-core-addons-devel sonic-frameworks-widgets-addons-devel sonic-frameworks-doctools-devel
+ sonic-workspace-devel sonic-frameworks-internationalization-devel qt6-base-private-devel"
+depends="xdg-utils"
+short_desc="Tools based on Sonic Frameworks to better interact with the system"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-terminal-tools"
+distfiles="https://github.com/Sonic-DE/sonic-terminal-tools/archive/refs/tags/${version}.tar.gz"
+checksum=d91294df276e1bbcfdd540f8e5b203e03e59e1c4119ad5ae4dd9d96fc0e920a4
+provides="kde-cli-tools-${version}_${revision}"
+conflicts="kde-cli-tools"
+replaces="kde-cli-tools>=0"
+
+post_install() {
+	ln -sf ../libexec/kf6/kdesu ${DESTDIR}/usr/bin
+}

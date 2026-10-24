@@ -1,0 +1,36 @@
+# Template file for 'sonic-frameworks-quick-desktop-style'
+pkgname=sonic-frameworks-quick-desktop-style
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base pkg-config
+ qt6-declarative-host-tools sonic-frameworks-settings"
+makedepends="sonic-frameworks-color-scheme-devel sonic-frameworks-icon-themes-devel sonic-frameworks-quick-ui-devel
+ sonic-frameworks-settings-devel qt6-base-devel qt6-declarative-devel"
+short_desc="Qt Quick Controls 2: Desktop Style"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-quick-desktop-style"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-quick-desktop-style/archive/refs/tags/${version}.tar.gz"
+checksum=f6de96fcdddae6c1d737e6dc4143c89905eb7e48616e1e0114a834ae4d24a1e0
+provides="kf6-qqc2-desktop-style-${version}_${revision}"
+conflicts="kf6-qqc2-desktop-style"
+replaces="kf6-qqc2-desktop-style>=0"
+
+do_check() {
+	cd build
+	ctest -E "animationspeedmodifiertest|TextFieldContextMenuTest"
+}
+
+sonic-frameworks-quick-desktop-style-devel_package() {
+	provides="kf6-qqc2-desktop-style-devel-${version}_${revision}"
+	conflicts="kf6-qqc2-desktop-style-devel"
+	replaces="kf6-qqc2-desktop-style-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/cmake
+	}
+}

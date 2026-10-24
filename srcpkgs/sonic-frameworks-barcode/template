@@ -1,0 +1,32 @@
+# Template file for 'sonic-frameworks-barcode'
+pkgname=sonic-frameworks-barcode
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ qt6-declarative-host-tools"
+makedepends="qt6-declarative-devel qt6-multimedia-devel zxing-cpp-devel
+ libdmtx-devel qrencode-devel"
+short_desc="Barcode API to produce QRCode barcodes and DataMatrix barcodes"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-barcode"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-barcode/archive/refs/tags/${version}.tar.gz"
+checksum=bd42c7c6f7f50f5ef8fab24f70b84249436c906bfd1e536ff6db38278f463ba4
+provides="kf6-prison-${version}_${revision}"
+conflicts="kf6-prison"
+replaces="kf6-prison>=0"
+
+sonic-frameworks-barcode-devel_package() {
+	provides="kf6-prison-devel-${version}_${revision}"
+	conflicts="kf6-prison-devel"
+	replaces="kf6-prison-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

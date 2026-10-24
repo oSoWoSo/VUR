@@ -1,0 +1,38 @@
+# Template file for 'sonic-frameworks-app-info'
+pkgname=sonic-frameworks-app-info
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKF6_HOST_TOOLING=/usr/lib/cmake"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ gettext sonic-frameworks-doctools sonic-frameworks-settings"
+makedepends="sonic-frameworks-settings-devel sonic-frameworks-core-addons-devel sonic-frameworks-internationalization-devel
+ sonic-frameworks-doctools-devel"
+short_desc="Query info about installed applications and their associated file types"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-app-info"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-app-info/archive/refs/tags/${version}.tar.gz"
+checksum=e3ed13389fd05a544480ac73e5fc04198f353658278fa8645df680c81b364f06
+provides="kf6-kservice-${version}_${revision}"
+conflicts="kf6-kservice"
+replaces="kf6-kservice>=0"
+
+do_check() {
+	cd build
+	# tests fail on CI
+	ctest -E "ksycocatest|kapplicationtradertest|kservicetest|ksycocathreadtest|ksycoca_xdgdirstest"
+}
+
+sonic-frameworks-app-info-devel_package() {
+	provides="kf6-kservice-devel-${version}_${revision}"
+	conflicts="kf6-kservice-devel"
+	replaces="kf6-kservice-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

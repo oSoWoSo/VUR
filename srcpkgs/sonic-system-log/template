@@ -1,0 +1,25 @@
+# Template file for 'sonic-system-log'
+pkgname=sonic-system-log
+version=26.08.2
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DECM_MKSPECS_INSTALL_DIR=/usr/lib/qt6/mkspecs/modules"
+hostmakedepends="sonic-frameworks-cmake-modules gettext sonic-frameworks-settings sonic-frameworks-core-addons sonic-frameworks-doctools
+ pkg-config qt6-base qt6-tools"
+makedepends="sonic-frameworks-xml-gui-devel sonic-frameworks-core-addons-devel sonic-frameworks-widgets-addons-devel
+ sonic-frameworks-data-views-devel sonic-frameworks-io-devel sonic-frameworks-settings-devel sonic-frameworks-archive-devel
+ sonic-frameworks-internationalization-devel sonic-frameworks-autocomplete-devel sonic-frameworks-text-widgets-devel
+ sonic-frameworks-crash-handler-devel
+ libaudit-devel"
+short_desc="Sonic SystemLog Viewer"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-system-log"
+distfiles="https://github.com/Sonic-DE/sonic-system-log/archive/refs/tags/${version}.tar.gz"
+checksum=85180d7c8dfe50d6329bf4926a203f74d9ad47a4d9d3412d4255264c52d4be0f
+provides="ksystemlog-${version}_${revision}"
+conflicts="ksystemlog"
+replaces="ksystemlog>=0"

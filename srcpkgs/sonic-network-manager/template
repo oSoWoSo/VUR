@@ -1,0 +1,31 @@
+# Template file for 'sonic-network-manager'
+pkgname=sonic-network-manager
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ $(vopt_bool openconnect BUILD_OPENCONNECT)"
+hostmakedepends="sonic-frameworks-cmake-modules mobile-broadband-provider-info pkg-config
+ gettext qt6-declarative-host-tools qt6-base qt6-tools
+ sonic-frameworks-doctools sonic-frameworks-package sonic-frameworks-settings-utils"
+makedepends="sonic-workspace-devel sonic-frameworks-networkmanager-devel sonic-crypto-library-devel
+ sonic-frameworks-modemmanager-devel sonic-frameworks-device-integration-devel sonic-frameworks-doctools-devel
+ sonic-frameworks-package-devel sonic-frameworks-settings-utils-devel sonic-interface-libraries-devel
+ qt6-base-devel qt6-declarative-devel sonic-frameworks-color-scheme-devel sonic-frameworks-autocomplete-devel
+ sonic-frameworks-core-addons-devel sonic-frameworks-dbus-devel sonic-frameworks-io-devel sonic-frameworks-quick-ui-devel
+ sonic-frameworks-quick-ui-addons-devel sonic-frameworks-internationalization-devel sonic-frameworks-notifications-devel
+ sonic-frameworks-app-info-devel sonic-frameworks-keyring-devel sonic-frameworks-widgets-addons-devel sonic-frameworks-svg-devel
+ sonic-frameworks-windowsystem-devel sonic-frameworks-barcode-devel sonic-frameworks-quick-charts-devel NetworkManager-devel
+ qt6-base-private-devel qcoro-qt6-devel qtkeychain-qt6-devel libgomp-devel
+ $(vopt_if openconnect 'openconnect-devel qt6-webengine-devel')"
+depends="mobile-broadband-provider-info sonic-frameworks-quick-ui sonic-frameworks-barcode"
+short_desc="SonicDE applet written in QML for managing network connections"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-network-manager"
+distfiles="https://github.com/Sonic-DE/sonic-network-manager/archive/refs/tags/${version}.tar.gz"
+checksum=007a3fc1d0138d1648648fe5a2440d3c92d243ef12f9a53dd5185afd4e9de4bf
+provides="plasma-nm-${version}_${revision}"
+conflicts="plasma-nm"
+replaces="plasma-nm>=0"

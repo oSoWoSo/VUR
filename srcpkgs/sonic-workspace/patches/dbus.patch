@@ -1,0 +1,11 @@
+--- a/login-sessions/sonicde.desktop.cmake
++++ b/login-sessions/sonicde.desktop.cmake
+@@ -1,6 +1,6 @@
+ [Desktop Entry]
+ Type=XSession
+-Exec=${CMAKE_INSTALL_FULL_BINDIR}/startplasma-x11
++Exec=/usr/libexec/plasma-dbus-run-session-if-needed ${CMAKE_INSTALL_FULL_BINDIR}/startplasma-x11
+ TryExec=${CMAKE_INSTALL_FULL_BINDIR}/startplasma-x11
+ DesktopNames=KDE
+ Name=SonicDE
+ 

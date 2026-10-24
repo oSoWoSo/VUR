@@ -1,0 +1,24 @@
+# Template file for 'sonic-system-monitor'
+pkgname=sonic-system-monitor
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml"
+hostmakedepends="sonic-frameworks-cmake-modules gettext qt6-base qt6-tools sonic-frameworks-package
+ sonic-frameworks-settings sonic-frameworks-core-addons qt6-declarative-host-tools"
+makedepends="sonic-frameworks-quick-ui-devel sonic-system-monitor-library-devel sonic-frameworks-data-models-devel
+ sonic-frameworks-addons-downloader-devel sonic-frameworks-io-devel sonic-frameworks-dbus-devel sonic-frameworks-settings-devel
+ sonic-frameworks-windowsystem-devel sonic-frameworks-crash-handler-devel qt6-declarative-private-devel
+ sonic-frameworks-internationalization-devel sonic-frameworks-package-devel
+ sonic-frameworks-app-info-devel sonic-frameworks-keybind-devel sonic-frameworks-quick-ui-addons-devel"
+depends="sonic-frameworks-quick-ui sonic-frameworks-quick-desktop-style sonic-frameworks-quick-charts sonic-system-stats"
+short_desc="Application for monitoring system resources"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-system-monitor"
+distfiles="https://github.com/Sonic-DE/sonic-system-monitor/archive/refs/tags/${version}.tar.gz"
+checksum=c5871c654cedf848dd2f625d5b885805fc67c59ec21d7d8736a255ef1a18e921
+provides="plasma-systemmonitor-${version}_${revision}"
+conflicts="plasma-systemmonitor"
+replaces="plasma-systemmonitor>=0"

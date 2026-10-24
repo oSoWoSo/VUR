@@ -1,0 +1,29 @@
+# Template file for 'sonic-frameworks-feeds'
+pkgname=sonic-frameworks-feeds
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base"
+makedepends="sonic-frameworks-text-codec-devel"
+short_desc="RSS/Atom parser library"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-feeds"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-feeds/archive/refs/tags/${version}.tar.gz"
+checksum=ff56f827104d0c05f037f8b55123791c4c70fa65785dfcff7256f75a6bdde443
+provides="kf6-syndication-${version}_${revision}"
+conflicts="kf6-syndication"
+replaces="kf6-syndication>=0"
+
+sonic-frameworks-feeds-devel_package() {
+	provides="kf6-syndication-devel-${version}_${revision}"
+	conflicts="kf6-syndication-devel"
+	replaces="kf6-syndication-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

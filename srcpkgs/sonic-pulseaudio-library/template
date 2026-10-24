@@ -1,0 +1,32 @@
+# Template file for 'sonic-pulseaudio-library'
+pkgname=sonic-pulseaudio-library
+version=1.8.1
+revision=2
+build_style=cmake
+configure_args="-DBUILD_WITH_QT6=ON"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base qt6-tools
+ pkg-config AppStream"
+makedepends="qt6-declarative-devel pulseaudio-devel"
+short_desc="Qt bindings for Pulseaudio"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-pulseaudio-library"
+distfiles="https://github.com/Sonic-DE/sonic-pulseaudio-library/archive/refs/tags/${version}.tar.gz"
+checksum=846740f81b8e33de1fe03f1f31fb1c22bad1690075058f065dfd4108cd323e68
+provides="pulseaudio-qt-${version}_${revision}"
+conflicts="pulseaudio-qt"
+replaces="pulseaudio-qt>=0"
+
+sonic-pulseaudio-library-devel_package() {
+	provides="pulseaudio-qt-devel-${version}_${revision}"
+	conflicts="pulseaudio-qt-devel"
+	replaces="pulseaudio-qt-devel>=0"
+	short_desc+=" - development files"
+	depends="${makedepends} ${sourcepkg}>=${version}_${revision}"
+	pkg_install() {
+		vmove usr/lib/pkgconfig
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

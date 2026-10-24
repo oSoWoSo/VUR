@@ -1,0 +1,4 @@
+Optional dependencies:
+
+* `openconnect`for Cisco AnyConnect VPN support
+* `qt6-webengine` Cisco AnyConnect VPN authentication UI

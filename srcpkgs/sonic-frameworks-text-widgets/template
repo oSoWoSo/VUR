@@ -1,0 +1,32 @@
+# Template file for 'sonic-frameworks-text-widgets'
+pkgname=sonic-frameworks-text-widgets
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ gettext sonic-frameworks-settings"
+makedepends="sonic-frameworks-autocomplete-devel sonic-frameworks-settings-devel sonic-frameworks-settings-ui-devel
+ qt6-speech-devel qt6-multimedia-devel qt6-speech-plugin-flite
+ qt6-speech-plugin-mock qt6-speech-plugin-speechd sonic-frameworks-spell-check-devel"
+short_desc="Text editing widgets"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-text-widgets"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-text-widgets/archive/refs/tags/${version}.tar.gz"
+checksum=a93dae591de1a21ea6b3a71b6dd1e58cc49cb02a9116e92d3f42c5bfb38a7e08
+provides="kf6-ktextwidgets-${version}_${revision}"
+conflicts="kf6-ktextwidgets"
+replaces="kf6-ktextwidgets>=0"
+
+sonic-frameworks-text-widgets-devel_package() {
+	provides="kf6-ktextwidgets-devel-${version}_${revision}"
+	conflicts="kf6-ktextwidgets-devel"
+	replaces="kf6-ktextwidgets-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

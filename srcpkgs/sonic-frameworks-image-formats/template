@@ -1,0 +1,32 @@
+# Template file for 'sonic-frameworks-image-formats'
+pkgname=sonic-frameworks-image-formats
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKIMAGEFORMATS_HEIF=ON -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ pkg-config"
+makedepends="sonic-frameworks-archive-devel libopenexr-devel libheif-devel libraw-devel
+ libjxl-devel libavif-devel"
+short_desc="Plugins to allow QImage to support extra file formats"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-image-formats"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-image-formats/archive/refs/tags/${version}.tar.gz"
+checksum=01645074425dec983aa0e28673e5ed88845f5487b918adfa7a1b207831f9ed14
+provides="kf6-kimageformats-${version}_${revision}"
+conflicts="kf6-kimageformats"
+replaces="kf6-kimageformats>=0"
+
+do_check() {
+	cd build
+	exclude="kimageformats-read-xcf|kimageformats-read-psd|kimageformats-read-hej2"
+	case "$XBPS_TARGET_MACHINE" in
+		i686*) exclude+="|kimageformats-write-exr";;
+		*) ;;
+	esac
+
+	# disable failing tests
+	ctest -E "$exclude"
+}

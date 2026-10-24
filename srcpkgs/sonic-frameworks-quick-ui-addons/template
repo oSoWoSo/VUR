@@ -1,0 +1,38 @@
+# Template file for 'sonic-frameworks-quick-ui-addons'
+pkgname=sonic-frameworks-quick-ui-addons
+version=1.13.1
+revision=2
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DBUILD_TESTING=OFF -DBUILD_QCH=ON"
+hostmakedepends="sonic-frameworks-cmake-modules gettext qt6-base qt6-tools
+ qt6-declarative-host-tools sonic-frameworks-settings"
+makedepends="qt6-base-devel qt6-declarative-devel
+ sonic-frameworks-internationalization-devel sonic-frameworks-quick-ui-devel sonic-frameworks-settings-devel
+ sonic-frameworks-core-addons-devel sonic-frameworks-gui-addons-devel sonic-frameworks-color-scheme-devel
+ sonic-frameworks-crash-handler-devel sonic-frameworks-icon-themes-devel sonic-frameworks-keybind-devel
+ qt6-base-private-devel libgomp-devel"
+depends="sonic-frameworks-quick-ui sonic-frameworks-quick-desktop-style sonic-frameworks-settings sonic-frameworks-core-addons
+ sonic-frameworks-icon-themes sonic-frameworks-data-models sonic-frameworks-spell-check"
+short_desc="Add-ons for the Sonic quick ui framework"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-quick-ui-addons"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-quick-ui-addons/archive/refs/tags/${version}.tar.gz"
+checksum=6a0950b7d3fe75760883577d913aa96d78848676a741cc3fd34f8088228d3f1a
+provides="kirigami-addons-${version}_${revision}"
+conflicts="kirigami-addons"
+replaces="kirigami-addons>=0"
+
+sonic-frameworks-quick-ui-addons-devel_package() {
+	provides="kirigami-addons-devel-${version}_${revision}"
+	conflicts="kirigami-addons-devel"
+	replaces="kirigami-addons-devel>=0"
+	depends="qt6-base-devel ${sourcepkg}-${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

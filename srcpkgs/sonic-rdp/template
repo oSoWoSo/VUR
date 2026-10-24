@@ -1,0 +1,25 @@
+# Template file for 'sonic-rdp'
+pkgname=sonic-rdp
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DBUILD_PLASMA_SESSION=OFF"
+hostmakedepends="sonic-frameworks-cmake-modules pkg-config qt6-base gettext qt6-tools freerdp
+ sonic-frameworks-settings sonic-frameworks-settings-utils"
+makedepends="sonic-frameworks-settings-utils-devel sonic-frameworks-settings-devel sonic-frameworks-core-addons-devel
+ sonic-frameworks-internationalization-devel sonic-pipewire-devel sonic-frameworks-status-notification-devel
+ sonic-frameworks-dbus-devel sonic-frameworks-crash-handler-devel sonic-frameworks-gui-addons-devel pam-devel
+ sonic-frameworks-quick-ui-addons-devel qtkeychain-qt6-devel freerdp-devel qt6-declarative-devel libxkbcommon-devel
+ libxcb-devel pipewire-devel qt6-base-private-devel freerdp"
+short_desc="Library and examples for creating an RDP server"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-rdp-server"
+distfiles="https://github.com/Sonic-DE/sonic-rdp-server/archive/refs/tags/${version}.tar.gz"
+checksum=bfdd1c45199d1f61c5f2025d514c1dfb7799b08562ca1d663621b606e36e9c31
+provides="krdp-${version}_${revision}"
+conflicts="krdp"
+replaces="krdp>=0"

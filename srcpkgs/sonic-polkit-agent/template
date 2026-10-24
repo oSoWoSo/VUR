@@ -1,0 +1,20 @@
+# Template file for 'sonic-polkit-agent'
+pkgname=sonic-polkit-agent
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base qt6-tools gettext"
+makedepends="sonic-frameworks-crash-handler-devel sonic-frameworks-dbus-devel sonic-frameworks-icon-themes-devel
+ qt6-declarative-devel qt6-base-devel sonic-frameworks-internationalization-devel sonic-frameworks-core-addons-devel
+ sonic-frameworks-crash-handler-devel
+ sonic-frameworks-windowsystem-devel sonic-polkit-devel sonic-frameworks-notifications-devel"
+short_desc="Daemon providing a Polkit authentication UI for Sonic"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-polkit-agent"
+distfiles="https://github.com/Sonic-DE/sonic-polkit-agent/archive/refs/tags/${version}.tar.gz"
+checksum=2085cf4bbc40bc787191c9f53a635ce24530e384571f8a74374ac78d0c63f311
+provides="polkit-kde-agent-${version}_${revision}"
+conflicts="polkit-kde-agent"
+replaces="polkit-kde-agent>=0"

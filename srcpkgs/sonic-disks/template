@@ -1,0 +1,24 @@
+# Template file for 'sonic-disks'
+pkgname=sonic-disks
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base qt6-tools gettext
+ sonic-frameworks-settings sonic-frameworks-settings-utils sonic-frameworks-auth-tools"
+makedepends="qt6-base-devel sonic-interface-libraries-devel sonic-frameworks-settings-devel sonic-frameworks-settings-utils-devel
+ sonic-frameworks-notifications-devel sonic-frameworks-internationalization-devel sonic-frameworks-device-integration-devel sonic-frameworks-app-info-devel
+ libX11-devel libICE-devel sonic-frameworks-notifications-devel sonic-frameworks-dbus-devel
+ sonic-frameworks-core-addons-devel sonic-frameworks-io-devel sonic-frameworks-auth-devel"
+depends="smartmontools"
+short_desc="Monitors S.M.A.R.T. capable devices for imminent failure"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-disks"
+distfiles="https://github.com/Sonic-DE/sonic-disks/archive/refs/tags/${version}.tar.gz"
+checksum=fa757234b5af1c878566d48bde9880db02ac0afd2ae7d55f7058399165f7b4e5
+provides="plasma-disks-${version}_${revision}"
+conflicts="plasma-disks"
+replaces="plasma-disks>=0"

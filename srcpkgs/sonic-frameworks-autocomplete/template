@@ -1,0 +1,29 @@
+# Template file for 'sonic-frameworks-autocomplete'
+pkgname=sonic-frameworks-autocomplete
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base sonic-frameworks-settings"
+makedepends="sonic-frameworks-text-codec-devel sonic-frameworks-settings-devel sonic-frameworks-widgets-addons-devel"
+short_desc="Sonic completion framework"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-autocomplete"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-autocomplete/archive/refs/tags/${version}.tar.gz"
+checksum=74da7d7cba14724d231a3709f829f2a006c408e02722f8f17ab3a2d970a47a07
+provides="kf6-kcompletion-${version}_${revision}"
+conflicts="kf6-kcompletion"
+replaces="kf6-kcompletion>=0"
+
+sonic-frameworks-autocomplete-devel_package() {
+	provides="kf6-kcompletion-devel-${version}_${revision}"
+	conflicts="kf6-kcompletion-devel"
+	replaces="kf6-kcompletion-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

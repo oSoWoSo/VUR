@@ -1,0 +1,43 @@
+# Template file for 'sonic-login-manager'
+pkgname=sonic-login-manager
+version=6.8.0.2
+revision=1
+build_style=cmake
+configure_args=" -DKDE_INSTALL_LIBEXECDIR=libexec -DSPLIT_BUILD=ON
+ -DINSTALL_PAM_CONFIGURATION=OFF -DX_SERVER_EXECUTABLE=/usr/libexec/Xorg
+ -DDBUS_CONFIG_FILENAME=plasma_org.freedesktop.DisplayManager.conf
+ -DCMAKE_INSTALL_FULL_SYSCONFDIR=/etc -DCMAKE_INSTALL_SYSCONFDIR=/etc"
+hostmakedepends="pkg-config gettext qt6-tools qt6-base qt6-shadertools sonic-frameworks-cmake-modules xorg-server"
+makedepends="sonic-frameworks-settings-utils-devel sonic-frameworks-settings-devel sonic-frameworks-dbus-devel
+ sonic-frameworks-internationalization-devel sonic-frameworks-package-devel sonic-frameworks-app-info-devel
+ qt6-base-private-devel qt6-declarative-devel qt6-qt5compat-devel qt6-shadertools-devel pam-devel libXau-devel
+ xorg-server-devel sonic-frameworks-auth-devel sonic-frameworks-core-addons-devel sonic-frameworks-io-devel
+ sonic-frameworks-quick-ui-devel sonic-frameworks-windowsystem-devel sonic-interface-libraries-devel
+ sonic-frameworks-icon-themes-devel sonic-workspace-devel sonic-screen-library-devel layer-shell-qt-devel libcap-devel"
+depends="libelogind"
+short_desc="Sonic Login Manager"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-login-manager"
+distfiles="https://github.com/Sonic-DE/sonic-login-manager/archive/refs/tags/${version}.tar.gz"
+checksum=c96e6a1c467f1a64daef7d0f2cace544647fdce677b5b8ba074f159413cbe82a
+provides="plasma-login-manager-${version}_${revision}"
+system_groups="soniclogin"
+system_accounts="soniclogin"
+soniclogin_pgroup="soniclogin"
+make_dirs="/var/log/sonic 0755 root root
+ /run/soniclogin 0711 soniclogin soniclogin"
+
+post_install() {
+	if [ -d "${DESTDIR}/usr/etc" ]; then
+		vmkdir etc
+		cp -a "${DESTDIR}/usr/etc/." "${DESTDIR}/etc/"
+		rm -rf "${DESTDIR}/usr/etc"
+	fi	
+	rm -rf ${DESTDIR}/etc/dinit.d
+	rm -rf ${DESTDIR}/etc/init.d
+	rm -rf ${DESTDIR}/etc/runit
+	rm -rf ${DESTDIR}/etc/s6
+	rm -rf ${DESTDIR}/etc/logrotate.d
+	vsv soniclogin
+}

@@ -1,0 +1,40 @@
+# Template file for 'sonic-pipewire'
+pkgname=sonic-pipewire
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml"
+hostmakedepends="sonic-frameworks-cmake-modules gettext qt6-base qt6-tools pkg-config
+ pipewire qt6-declarative-host-tools plasma-wayland-protocols"
+makedepends="ffmpeg6-devel libva-devel libepoxy-devel pipewire-devel
+ qt6-declarative-devel qt6-base-private-devel sonic-frameworks-core-addons-devel
+ sonic-frameworks-internationalization-devel"
+depends="pipewire"
+short_desc="Components to use PipeWire in Qt projects"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-pipewire"
+distfiles="https://github.com/Sonic-DE/sonic-pipewire/archive/refs/tags/${version}.tar.gz"
+checksum=d062fb8b84b25fba8e6f52a6d1876118bf8ac7961972fa037f038eddc27767dc
+provides="kpipewire-${version}_${revision}"
+conflicts="kpipewire"
+replaces="kpipewire>=0"
+
+do_check() {
+	cd build
+	ctest -E "mediamonitortest"
+}
+
+sonic-pipewire-devel_package() {
+	provides="kpipewire-devel-${version}_${revision}"
+	conflicts="kpipewire-devel"
+	replaces="kpipewire-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision}
+	 qt6-base-devel pipewire-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

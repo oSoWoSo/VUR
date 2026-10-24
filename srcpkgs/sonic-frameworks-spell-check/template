@@ -1,0 +1,33 @@
+# Template file for 'sonic-frameworks-spell-check'
+pkgname=sonic-frameworks-spell-check
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_DESIGNERPLUGIN=ON
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base qt6-declarative-host-tools"
+makedepends="qt6-declarative-devel aspell-devel hunspell-devel qt6-tools-devel"
+short_desc="Multi-language spell checker"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-spell-check"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-spell-check/archive/refs/tags/${version}.tar.gz"
+checksum=147b9384d7d381741b7323d40233d8341c34aa91c52f5f5d0c92abf45fca8f1a
+provides="kf6-sonnet-${version}_${revision}"
+conflicts="kf6-sonnet"
+replaces="kf6-sonnet>=0"
+
+sonic-frameworks-spell-check-devel_package() {
+	provides="kf6-sonnet-devel-${version}_${revision}"
+	conflicts="kf6-sonnet-devel"
+	replaces="kf6-sonnet-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+		vmove usr/lib/qt6/plugins/designer
+	}
+}

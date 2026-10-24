@@ -1,0 +1,51 @@
+# Template file for 'sonic-frameworks-gui-addons'
+pkgname=sonic-frameworks-gui-addons
+version=6.31.0
+revision=1
+build_style=cmake
+_llvmver=21
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ $(vopt_bool python BUILD_PYTHON_BINDINGS)"
+hostmakedepends="doxygen qt6-tools qt6-base sonic-frameworks-cmake-modules
+ $(vopt_if python "shiboken6 python3-build python3-setuptools llvm${_llvmver}")
+ pkg-config qt6-declarative-host-tools"
+makedepends="libX11-devel qt6-declarative-devel qt6-base-private-devel
+ $(vopt_if python 'libshiboken6-devel libpyside6-devel python3-devel')"
+depends="sonic-frameworks-gui-addons-geo-uri-handler"
+short_desc="GUI helper components and utilities for SonicDE frameworks"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-only OR LGPL-3.0-only"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-gui-addons"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-gui-addons/archive/refs/tags/${version}.tar.gz"
+checksum=3b6b97b996b393ff693aa3f140c0dd31cb5fa8eca5e4695328cbc5b9824c000a
+provides="kf6-kguiaddons-${version}_${revision}"
+conflicts="kf6-kguiaddons"
+replaces="kf6-kguiaddons>=0"
+
+build_options="python"
+build_options_default="python"
+
+export LLVM_INSTALL_DIR=/usr/lib/llvm/${_llvmver}
+
+sonic-frameworks-gui-addons-geo-uri-handler_package() {
+	provides="kf6-kguiaddons-geo-uri-handler-${version}_${revision}"
+	replaces="kf6-kguiaddons-geo-uri-handler>=0"
+	short_desc+=" - Geo URI handler"
+	pkg_install() {
+		vmove usr/share/applications
+		vmove usr/bin/kde-geo-uri-handler
+	}
+}
+
+sonic-frameworks-gui-addons-devel_package() {
+	provides="kf6-kguiaddons-devel-${version}_${revision}"
+	replaces="kf6-kguiaddons-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/pkgconfig
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

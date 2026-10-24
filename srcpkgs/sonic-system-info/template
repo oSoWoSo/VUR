@@ -1,0 +1,28 @@
+# Template file for 'sonic-system-info'
+pkgname=sonic-system-info
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules pkg-config gettext qt6-tools qt6-base
+ qt6-concurrent qt6-plugin-odbc qt6-plugin-pgsql qt6-plugin-mysql qt6-plugin-sqlite
+ qt6-plugin-tls-openssl qt6-plugin-tls-qcertonly qt6-plugin-networkinformation
+ sonic-frameworks-doctools sonic-frameworks-package sonic-frameworks-settings-utils sonic-frameworks-settings sonic-frameworks-auth-tools
+ sonic-frameworks-auth-devel qt6-declarative-host-tools"
+makedepends="sonic-interface-libraries-devel sonic-frameworks-settings-utils-devel sonic-frameworks-auth-devel
+ qt6-base-private-devel libdrm-devel sonic-frameworks-io-devel sonic-frameworks-app-info-devel
+ sonic-frameworks-core-addons-devel qt6-declarative-private-devel glu-devel pciutils-devel
+ libraw1394-devel sonic-frameworks-device-integration-devel libdisplay-info-devel libusb-devel pulseaudio-devel Vulkan-Headers
+ fwupd-devel"
+depends="hwids systemsettings xdpyinfo"
+short_desc="System information tool for Sonic Desktop"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-system-info"
+distfiles="https://github.com/Sonic-DE/sonic-system-info/archive/refs/tags/${version}.tar.gz"
+checksum=2cb71d6190a618bd08180a12698db57a9cfc65dedf30121288dfc03a669dae6a
+provides="kinfocenter-${version}_${revision}"
+conflicts="kinfocenter"
+replaces="kinfocenter>=0"

@@ -1,0 +1,57 @@
+# Template file for 'sonic-frameworks-windowsystem'
+pkgname=sonic-frameworks-windowsystem
+version=6.31.0.1
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="doxygen qt6-tools qt6-base qt6-declarative-host-tools pkg-config sonic-frameworks-cmake-modules"
+makedepends="libstdc++-devel libX11-devel libxcb-devel libXfixes-devel xcb-util-keysyms-devel
+ qt6-base-private-devel qt6-declarative-devel"
+short_desc="Access to the windowing system (SonicDE framework fork)"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-only OR LGPL-3.0-only"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-windowsystem"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-windowsystem/archive/refs/tags/${version}.tar.gz"
+checksum=a289551299b5c756d9217aaa59c75b666b93ea774ae91887749ca803718f6eed
+provides="kf6-kwindowsystem-${version}_${revision}"
+conflicts="kf6-kwindowsystem"
+replaces="kf6-kwindowsystem>=0"
+
+post_install() {
+	sed -i -e 's:/usr/[a-z0-9-]*/usr/include;::' \
+		${DESTDIR}/usr/lib/cmake/*/*Targets.cmake
+}
+
+do_check() {
+	cd build
+	# disable failing tests
+	tests=("kwindowsystem-kmanagerselectiontest"
+		"kwindowsystem-kstartupinfo_unittest"
+		"kwindowsystem-kxmessages_unittest"
+		"kwindowsystem-kkeyserver_x11_unittest"
+		"kwindowsystem-kwindoweffectstest"
+		"kwindowsystem-kwindowinfox11test"
+		"kwindowsystem-kwindowsystemx11test"
+		"kwindowsystem-kwindowsystem_threadtest"
+		"kwindowsystem-netrootinfotestwm"
+		"kwindowsystem-netwininfotestclient"
+		"kwindowsystem-netwininfotestwm"
+		"kwindowsystem-kmanagerselectiontest"
+		"kwindowsystem-compositingenabled_test"
+		"kwindowsystem-compositingenabled_test")
+	ctest -E "($( echo ${tests[@]} | tr " " "|" ))"
+}
+
+sonic-frameworks-windowsystem-devel_package() {
+	provides="kf6-kwindowsystem-devel-${version}_${revision}"
+	replaces="kf6-kwindowsystem-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/pkgconfig
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

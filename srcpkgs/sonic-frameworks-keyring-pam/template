@@ -1,0 +1,18 @@
+# Template file for 'sonic-frameworks-keyring-pam'
+pkgname=sonic-frameworks-keyring-pam
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base qt6-tools pkg-config"
+makedepends="libgcrypt-devel pam-devel sonic-frameworks-keyring-devel"
+depends="socat pam"
+short_desc="PAM Integration for Sonic keyring"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-keyring-pam"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-keyring-pam/archive/refs/tags/${version}.tar.gz"
+checksum=37865ddaee414f40bcdf1ab4846eafb41fade3bb2604927e2d1e6a9c281d8c0d
+provides="kwallet-pam-${version}_${revision}"
+conflicts="kwallet-pam"
+replaces="kwallet-pam>=0"

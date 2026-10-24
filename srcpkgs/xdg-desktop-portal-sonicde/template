@@ -1,0 +1,31 @@
+# Template file for 'xdg-desktop-portal-sonicde'
+pkgname=xdg-desktop-portal-sonicde
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base qt6-tools gettext
+ qt6-declarative-host-tools pkg-config sonic-frameworks-settings"
+makedepends="qt6-base-devel qt6-declarative-devel sonic-frameworks-qml-bridge-devel sonic-frameworks-quick-ui-devel
+ sonic-frameworks-status-notification-devel sonic-interface-libraries-devel sonic-frameworks-keybind-devel
+ sonic-frameworks-crash-handler-devel sonic-frameworks-icon-themes-devel sonic-frameworks-core-addons-devel
+ sonic-frameworks-settings-devel sonic-frameworks-internationalization-devel sonic-frameworks-gui-addons-devel
+ qt6-base-private-devel qt6-declarative-devel sonic-frameworks-io-devel sonic-frameworks-notifications-devel
+ sonic-frameworks-app-info-devel sonic-frameworks-widgets-addons-devel sonic-frameworks-windowsystem-devel
+ libepoxy-devel pipewire-devel libglib-devel libgomp-devel libei-devel"
+depends="xdg-desktop-portal sonic-workspace"
+checkdepends="dbus python3-gobject"
+short_desc="Backend implementation for xdg-desktop-portal that is using Qt/Sonic"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Sonic-DE/xdg-desktop-portal-sonicde"
+distfiles="https://github.com/Sonic-DE/xdg-desktop-portal-sonicde/archive/refs/tags/${version}.tar.gz"
+checksum=55b22d3cecdca7bc018d972324aef052b0c8583b3cd86928fca6bc9f4cb798b3
+provides="xdg-desktop-portal-kde-${version}_${revision}"
+conflicts="xdg-desktop-portal-kde"
+replaces="xdg-desktop-portal-kde>=0"
+
+do_check() {
+	cd build
+	dbus-run-session ctest -E colorschemetest
+}

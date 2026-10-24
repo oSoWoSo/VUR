@@ -1,0 +1,35 @@
+# Template file for 'sonic-frameworks-quick-ui'
+pkgname=sonic-frameworks-quick-ui
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base qt6-shadertools qt6-declarative-host-tools doxygen"
+makedepends="qt6-declarative-private-devel qt6-shadertools-devel qt6-svg-devel qt6-base-private-devel libstdc++-devel libgomp-devel"
+short_desc="QtQuick component set for SonicDE frameworks"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-only OR LGPL-3.0-only"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-quick-ui"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-quick-ui/archive/refs/tags/${version}.tar.gz"
+checksum=46c2f384ef49940e13ba733cf6b05136894404f6f461de88ea63a9082a282b9c
+provides="kf6-kirigami-${version}_${revision}"
+conflicts="kf6-kirigami"
+replaces="kf6-kirigami>=0"
+
+post_install() {
+	rm ${DESTDIR}/usr/share/locale/ja/LC_MESSAGES/libkirigami2plugin_qt.qm
+}
+
+sonic-frameworks-quick-ui-devel_package() {
+	provides="kf6-kirigami-devel-${version}_${revision}"
+	replaces="kf6-kirigami-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel
+	 qt6-declarative-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

@@ -1,0 +1,37 @@
+# Template file for 'sonic-frameworks-runner'
+pkgname=sonic-frameworks-runner
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="sonic-frameworks-cmake-modules sonic-frameworks-doctools qt6-tools qt6-base
+ sonic-frameworks-settings gettext doxygen"
+makedepends="sonic-frameworks-settings-devel sonic-frameworks-internationalization-devel sonic-frameworks-data-models-devel libstdc++-devel qt6-base-private-devel
+ sonic-frameworks-windowsystem-devel sonic-frameworks-core-addons-devel"
+depends="sonic-frameworks-core-addons sonic-frameworks-windowsystem"
+checkdepends="dbus"
+short_desc="Framework for providing actions based on query strings (SonicDE runner)"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-only, LGPL-3.0-only"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-runner"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-runner/archive/refs/tags/${version}.tar.gz"
+checksum=16d64b45897bf598b9dc794f13c0329b1c72760c8549573e9c3e4d1745009f5d
+provides="kf6-krunner-${version}_${revision}"
+conflicts="kf6-krunner"
+replaces="kf6-krunner>=0"
+
+do_check() {
+	cd build
+	dbus-run-session ctest
+}
+
+sonic-frameworks-runner-devel_package() {
+	provides="kf6-krunner-devel-${version}_${revision}"
+	replaces="kf6-krunner-devel>=0"
+	depends="${makedepends//private-} ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

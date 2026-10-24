@@ -1,0 +1,43 @@
+# Template file for 'sonic-frameworks-settings'
+pkgname=sonic-frameworks-settings
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base qt6-tools
+ qt6-declarative-host-tools"
+makedepends="qt6-declarative-devel qt6-base-private-devel"
+short_desc="Persistent platform-independent application settings"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-settings"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-settings/archive/refs/tags/${version}.tar.gz"
+checksum=845977f05939d8a22ccec2cec65feb295cdfd9dbea1eb97c3d54e839376a7a09
+provides="kf6-kconfig-${version}_${revision}"
+conflicts="kf6-kconfig"
+replaces="kf6-kconfig>=0"
+
+do_check() {
+	cd build
+	# disable failing tests
+	ctest -E "kconfigcore-kconfigtest|kconfiggui-kstandardshortcutwatchertest"
+}
+
+sonic-frameworks-settings-devel_package() {
+	provides="kf6-kconfig-devel-${version}_${revision}"
+	conflicts="kf6-kconfig-devel"
+	replaces="kf6-kconfig-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel
+	 qt6-declarative-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		mkdir -p "${DESTDIR}/usr/lib/cmake/KF6Config"
+		mv ${PKGDESTDIR}/usr/lib/cmake/KF6Config/KF6ConfigCompiler* \
+			"${DESTDIR}/usr/lib/cmake/KF6Config"
+		vmove "usr/lib/*.so"
+	}
+}

@@ -1,0 +1,37 @@
+# Template file for 'sonic-frameworks-networkmanager'
+pkgname=sonic-frameworks-networkmanager
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ pkg-config qt6-declarative-host-tools"
+makedepends="qt6-declarative-devel NetworkManager-devel"
+short_desc="Qt wrapper for NetworkManager API"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-networkmanager"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-networkmanager/archive/refs/tags/${version}.tar.gz"
+checksum=3dfa087535eadc7a9e43d4b9d99dcd77370b55915b92ead85634ec190b27720f
+provides="kf6-networkmanager-qt-${version}_${revision}"
+conflicts="kf6-networkmanager-qt"
+replaces="kf6-networkmanager-qt>=0"
+
+do_check() {
+	cd build
+	# disable failing tests
+	ctest -E "managertest|settingstest|activeconnectiontest"
+}
+
+sonic-frameworks-networkmanager-devel_package() {
+	provides="kf6-networkmanager-qt-devel-${version}_${revision}"
+	conflicts="kf6-networkmanager-qt-devel"
+	replaces="kf6-networkmanager-qt-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

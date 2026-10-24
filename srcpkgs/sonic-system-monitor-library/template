@@ -1,0 +1,44 @@
+# Template file for 'sonic-system-monitor-library'
+pkgname=sonic-system-monitor-library
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules gettext pkg-config libcap-progs
+ qt6-tools qt6-base qt6-declarative-host-tools sonic-frameworks-package sonic-frameworks-settings
+ sonic-frameworks-auth-tools"
+makedepends="qt6-base-devel qt6-declarative-devel qt6-webchannel-devel
+ sonic-frameworks-settings-devel sonic-frameworks-internationalization-devel sonic-frameworks-auth-devel sonic-frameworks-app-info-devel
+ sonic-frameworks-package-devel sonic-frameworks-addons-downloader-devel sonic-frameworks-device-integration-devel libpcap-devel
+ libcap-devel libnl3-devel libsensors-devel libdrm-devel zlib-devel
+ qt6-base-private-devel sonic-frameworks-core-addons-devel"
+short_desc="Library to retrieve info on the current status of computer hardware"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-system-monitor-library"
+distfiles="https://github.com/Sonic-DE/sonic-system-monitor-library/archive/refs/tags/${version}.tar.gz"
+checksum=53064ab1fee29ce5fd0df56edab67cd77d13c2a551f350913d1d31a6b1d2cde1
+provides="libksysguard-${version}_${revision}"
+conflicts="libksysguard"
+replaces="libksysguard>=0"
+
+do_check() {
+	cd build
+	ctest -E "processdatamodeltest|cgrouptest"
+}
+
+sonic-system-monitor-library-devel_package() {
+	provides="libksysguard-devel-${version}_${revision}"
+	conflicts="libksysguard-devel"
+	replaces="libksysguard-devel>=0"
+	short_desc+=" - development"
+	depends="sonic-frameworks-internationalization-devel sonic-frameworks-settings-devel qt6-base-devel
+	 ${sourcepkg}>=${version}_${revision}"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

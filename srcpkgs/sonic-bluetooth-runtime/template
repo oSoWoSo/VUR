@@ -1,0 +1,24 @@
+# Template file for 'sonic-bluetooth-runtime'
+pkgname=sonic-bluetooth-runtime
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base qt6-tools gettext
+ qt6-declarative-host-tools sonic-frameworks-settings-utils sonic-frameworks-package"
+makedepends="sonic-frameworks-bluetooth-devel sonic-daemon-devel sonic-frameworks-widgets-addons-devel
+ sonic-frameworks-settings-utils-devel sonic-frameworks-core-addons-devel sonic-frameworks-dbus-devel
+ sonic-frameworks-internationalization-devel sonic-frameworks-progress-ui-devel sonic-frameworks-io-devel
+ sonic-frameworks-notifications-devel sonic-frameworks-app-info-devel sonic-frameworks-windowsystem-devel
+ sonic-frameworks-svg-devel sonic-frameworks-package-devel sonic-interface-libraries-devel qt6-declarative-devel"
+depends="sonic-frameworks-quick-ui"
+short_desc="Bluetooth capabilities for Sonic"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later, LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-bluetooth-runtime"
+distfiles="https://github.com/Sonic-DE/sonic-bluetooth-runtime/archive/refs/tags/${version}.tar.gz"
+checksum=766387d75bc9a4ccc889e0f3bbc9fb8e4700dc502088b33d49fb12ad7f513cb4
+provides="bluedevil-${version}_${revision}"
+conflicts="bluedevil"
+replaces="bluedevil>=0"

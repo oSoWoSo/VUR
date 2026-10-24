@@ -1,0 +1,23 @@
+# Template file for 'sonic-dr-robotnik'
+pkgname=sonic-dr-robotnik
+version=6.8.0.1
+revision=1
+build_style=cmake
+configure_args="-DCMAKE_DISABLE_FIND_PACKAGE_Systemd=ON -DBUILD_TESTING=OFF
+ -DKF6_HOST_TOOLING=/usr/lib/cmake -DWITH_PYTHON_VENDORING=OFF
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules pkg-config qt6-base gettext qt6-tools
+ python3 sonic-frameworks-settings sonic-frameworks-core-addons"
+makedepends="sonic-frameworks-internationalization-devel sonic-frameworks-core-addons-devel
+ sonic-frameworks-settings-devel sonic-frameworks-app-info-devel sonic-frameworks-progress-ui-devel
+ sonic-frameworks-io-devel sonic-frameworks-crash-handler-devel sonic-frameworks-widgets-addons-devel
+ sonic-frameworks-keyring-devel sonic-frameworks-notifications-devel sonic-frameworks-idle-tracker-devel
+ sonic-frameworks-windowsystem-devel sonic-frameworks-syntax-highlighting-devel
+ sonic-frameworks-status-notification-devel polkit-qt6-devel"
+depends="sonic-frameworks-quick-ui sonic-frameworks-data-models python3-psutil python3-sentry python3-pygdbmi"
+short_desc="Crash handler for Sonic software"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-dr-robotnik"
+distfiles="https://github.com/Sonic-DE/sonic-dr-robotnik/archive/refs/tags/${version}.tar.gz"
+checksum=e20edcfa970d81e706baf5d384db5363a62626b66ae7797c8527f41d0de7fe4d

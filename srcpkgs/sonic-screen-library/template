@@ -1,0 +1,32 @@
+# Template file for 'sonic-screen-library'
+pkgname=sonic-screen-library
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules pkg-config qt6-base qt6-tools"
+makedepends="qt6-base-devel libxcb-devel libXrandr-devel qt6-base-private-devel sonic-frameworks-settings-devel"
+short_desc="Screen management library for SonicDE Workspaces"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-screen-library"
+distfiles="https://github.com/Sonic-DE/sonic-screen-library/archive/refs/tags/${version}.tar.gz"
+checksum=70bb6cfa1e308883917a1c1b6c327d2fc3a35d6c1e18412e39d7a0dc86e27002
+conflicts="libkf6screen"
+provides="libkf6screen-${version}_${revision}"
+replaces="libkf6screen>=0"
+
+sonic-screen-library-devel_package() {
+	conflicts="libkf6screen-devel"
+	replaces="libkf6screen-devel>=0"
+	short_desc+=" - development"
+	depends="${sourcepkg}-${version}_${revision} qt6-base-devel"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove usr/lib/pkgconfig
+		vmove "usr/lib/*.so"
+	}
+}

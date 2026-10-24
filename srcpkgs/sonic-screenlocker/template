@@ -1,0 +1,45 @@
+# Template file for 'sonic-screenlocker'
+pkgname=sonic-screenlocker
+version=6.8.0.1
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules pkg-config qt6-base qt6-tools gettext
+ elogind sonic-frameworks-package sonic-frameworks-settings-utils sonic-frameworks-settings"
+makedepends="sonic-frameworks-settings-devel sonic-frameworks-crash-handler-devel sonic-frameworks-qml-bridge-devel sonic-frameworks-internationalization-devel
+ sonic-frameworks-idle-tracker-devel sonic-frameworks-notifications-devel sonic-frameworks-package-devel sonic-frameworks-svg-devel
+ sonic-frameworks-xml-gui-devel sonic-frameworks-settings-utils-devel sonic-frameworks-device-integration-devel libX11-devel libxcb-devel libXi-devel
+ pam-devel qt6-base-private-devel qt6-declarative-devel sonic-frameworks-core-addons-devel
+ sonic-frameworks-io-devel sonic-frameworks-keybind-devel sonic-frameworks-quick-ui-devel
+ sonic-frameworks-windowsystem-devel sonic-interface-libraries-devel sonic-screen-library-devel
+ xcb-util-keysyms-devel layer-shell-qt-devel"
+short_desc="Library and components for secure lock screen architecture"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-screenlocker"
+distfiles="https://github.com/Sonic-DE/sonic-screenlocker/archive/refs/tags/${version}.tar.gz"
+checksum=d75ac0e0c7fa3418bca923a65e90ce9383a5e3b2bc8a9c18cc38a40500e80101
+provides="kscreenlocker-${version}_${revision}"
+conflicts="kscreenlocker"
+replaces="kscreenlocker>=0"
+
+post_install() {
+	vinstall ${FILESDIR}/kde.pam 664 usr/lib/pam.d/kde
+	vinstall ${FILESDIR}/kde-fingerprint.pam 664 usr/lib/pam.d/kde-fingerprint
+	vinstall ${FILESDIR}/kde-smartcard.pam 664 usr/lib/pam.d/kde-smartcard
+}
+
+sonic-screenlocker-devel_package() {
+	provides="kscreenlocker-devel-${version}_${revision}"
+	conflicts="kscreenlocker-devel"
+	replaces="kscreenlocker-devel>=0"
+	short_desc+=" - development files"
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

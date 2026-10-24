@@ -1,0 +1,34 @@
+# Template file for 'sonic-activities'
+pkgname=sonic-activities
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base qt6-tools
+ qt6-declarative-host-tools sonic-frameworks-settings"
+makedepends="qt6-base-devel qt6-declarative-devel boost-headers sonic-frameworks-settings-devel
+ sonic-frameworks-core-addons-devel sonic-frameworks-windowsystem-devel"
+depends="qt6-plugin-sqlite"
+short_desc="Core activity management components for SonicDE"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-activities"
+distfiles="https://github.com/Sonic-DE/sonic-activities/archive/refs/tags/${version}.tar.gz"
+checksum=ae13996b4ab82e9b0eae6f39d45dddbed8d3e4cb4f5a2c8aa634a3099b5dbf0a
+provides="plasma-activities-${version}_${revision}"
+conflicts="plasma-activities"
+replaces="plasma-activities>=0"
+
+sonic-activities-devel_package() {
+	provides="plasma-activities-devel-${version}_${revision}"
+	replaces="plasma-activities-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/cmake
+		vmove usr/include
+		vmove usr/lib/pkgconfig
+		vmove "usr/lib/*.so"
+	}
+}

@@ -1,0 +1,50 @@
+# Template file for 'sonic-frameworks-sso'
+pkgname=sonic-frameworks-sso
+version=8.61.2.3
+revision=1
+build_style=qmake
+configure_args="LIBDIR=/usr/lib .."
+conf_files="/etc/signond.conf"
+hostmakedepends="pkg-config doxygen qt6-base qt5-qmake qt5-host-tools"
+makedepends="qt6-base-devel qt5-devel"
+short_desc="Daemon providing SSO over D-Bus for the gSSO framework"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-sso"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-sso/archive/refs/tags/${version}.tar.gz"
+checksum=34ba02f2fbaf13c075777401a2606a99889ace52d39356b4f2e787fc2d57e1a6
+provides="signond-${version}_${revision}"
+conflicts="signond"
+replaces="signond>=0"
+
+post_extract() {
+	mkdir -p build-qt5
+}
+
+pre_configure() {
+	build_wrksrc=build-qt5
+}
+
+do_build() {
+	make -C build-qt5 ${make_jobs}
+}
+
+do_install() {
+	make -C build-qt5 install DESTDIR=${DESTDIR} PREFIX=/usr \
+		INSTALL_ROOT=${DESTDIR} STRIP=true
+}
+
+sonic-frameworks-sso-devel_package() {
+	provides="signond-devel-${version}_${revision}"
+	conflicts="signond-devel"
+	replaces="signond-devel>=0"
+	short_desc+=" - development files"
+	depends="qt6-base-devel ${sourcepkg}>=${version}_${revision}"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/*.so
+		vmove usr/lib/pkgconfig
+		vmove usr/lib/*.a
+		vmove usr/lib/cmake
+	}
+}

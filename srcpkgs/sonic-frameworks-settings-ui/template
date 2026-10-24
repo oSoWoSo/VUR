@@ -1,0 +1,40 @@
+# Template file for 'sonic-frameworks-settings-ui'
+pkgname=sonic-frameworks-settings-ui
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKF6_HOST_TOOLING=/usr/lib/cmake"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ gettext sonic-frameworks-settings-devel"
+makedepends="sonic-frameworks-text-codec-devel sonic-frameworks-color-scheme-devel sonic-frameworks-settings-devel
+ sonic-frameworks-core-addons-devel sonic-frameworks-widgets-addons-devel qt6-base-private-devel"
+short_desc="Widgets for configuration dialogs"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-settings-ui"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-settings-ui/archive/refs/tags/${version}.tar.gz"
+checksum=a6a753a8333c6e32b890ccb6fd80f28b2a96885edfcacad7bf0596cc8ce15cb5
+provides="kf6-kconfigwidgets-${version}_${revision}"
+conflicts="kf6-kconfigwidgets"
+replaces="kf6-kconfigwidgets>=0"
+
+do_check() {
+	cd build
+	# disable failing tests
+	ctest -E "kstandardactiontest"
+}
+
+sonic-frameworks-settings-ui-devel_package() {
+	provides="kf6-kconfigwidgets-devel-${version}_${revision}"
+	conflicts="kf6-kconfigwidgets-devel"
+	replaces="kf6-kconfigwidgets-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} sonic-frameworks-text-codec-devel
+	 sonic-frameworks-settings-devel sonic-frameworks-widgets-addons-devel sonic-frameworks-color-scheme-devel
+	 qt6-base-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

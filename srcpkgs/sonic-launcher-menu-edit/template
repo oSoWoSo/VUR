@@ -1,0 +1,20 @@
+# Template file for 'sonic-launcher-menu-edit'
+pkgname=sonic-launcher-menu-edit
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DKF6_HOST_TOOLING=/usr/lib/cmake"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base qt6-tools gettext
+ sonic-frameworks-doctools sonic-frameworks-settings"
+makedepends="sonic-frameworks-spell-check-devel sonic-frameworks-io-devel sonic-frameworks-internationalization-devel
+ sonic-frameworks-icon-themes-devel sonic-frameworks-dbus-devel sonic-frameworks-keybind-devel
+ sonic-frameworks-xml-gui-devel sonic-frameworks-doctools-devel sonic-frameworks-crash-handler-devel"
+short_desc="Menu Editor for Sonic Workspaces"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-launcher-menu-edit"
+distfiles="https://github.com/Sonic-DE/sonic-launcher-menu-edit/archive/refs/tags/${version}.tar.gz"
+checksum=c5117e540825ba845218e838ef97e2a5096885b83b031f6c62412bfe18f8965d
+provides="kmenuedit-${version}_${revision}"
+conflicts="kmenuedit"
+replaces="kmenuedit>=0"

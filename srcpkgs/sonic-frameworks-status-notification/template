@@ -1,0 +1,47 @@
+# Template file for 'sonic-frameworks-status-notification'
+pkgname=sonic-frameworks-status-notification
+version=6.31.0
+revision=1
+build_style=cmake
+_llvmver=21
+configure_args="$(vopt_bool python BUILD_PYTHON_BINDINGS)"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ $(vopt_if python "python3-build python3-setuptools shiboken6 llvm${_llvmver}")"
+makedepends="sonic-frameworks-windowsystem-devel qt6-base-devel
+ $(vopt_if python 'libshiboken6-devel libpyside6-devel python3-devel')"
+short_desc="Implementation of Status Notifier Items"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-status-notification"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-status-notification/archive/refs/tags/${version}.tar.gz"
+checksum=6ea0443ea0fd30b9cd5a1f948461071d19b0b4d5b18bf86aa38a8ff4e85762ea
+provides="kf6-kstatusnotifieritem-${version}_${revision}"
+conflicts="kf6-kstatusnotifieritem"
+replaces="kf6-kstatusnotifieritem>=0"
+
+build_options="python"
+build_options_default="python"
+
+if [ "$CROSS_BUILD" ]; then
+	configure_args+=" -DECM_SHIBOKEN_ARCH=$XBPS_CROSS_RUST_TARGET"
+	configure_args+=" -DSYSROOT_INCLUDE_DIRS=$XBPS_CROSS_BASE/usr/include"
+fi
+export LLVM_INSTALL_DIR=/usr/lib/llvm/${_llvmver}
+
+case "$XBPS_TARGET_MACHINE" in
+	arm*) configure_args+=" -DSHIBOKEN_GENERATOR_EXTRA_FLAGS=--clang-option=-mfloat-abi=hard" ;;
+esac
+
+sonic-frameworks-status-notification-devel_package() {
+	provides="kf6-kstatusnotifieritem-devel-${version}_${revision}"
+	conflicts="kf6-kstatusnotifieritem-devel"
+	replaces="kf6-kstatusnotifieritem-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel
+	 sonic-frameworks-windowsystem-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

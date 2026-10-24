@@ -1,0 +1,31 @@
+# Template file for 'sonic-frameworks-dbus'
+pkgname=sonic-frameworks-dbus
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base "
+makedepends="qt6-base-private-devel"
+checkdepends="dbus"
+short_desc="KDE Convenience classes for DBus"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-dbus"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-dbus/archive/refs/tags/${version}.tar.gz"
+checksum=f7e5e76c05e73c4fd3e91d085e824a9b533d1135796e5fda0d22df5273af0b3b
+make_check_pre="dbus-run-session"
+provides="kf6-kdbusaddons-${version}_${revision}"
+conflicts="kf6-kdbusaddons"
+replaces="kf6-kdbusaddons>=0"
+
+sonic-frameworks-dbus-devel_package() {
+	provides="kf6-kdbusaddons-devel-${version}_${revision}"
+	conflicts="kf6-kdbusaddons-devel"
+	replaces="kf6-kdbusaddons-devel>=0"
+	depends="qt6-base-devel ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

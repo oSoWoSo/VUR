@@ -1,0 +1,29 @@
+# Template file for 'sonic-frameworks-crash-handler'
+pkgname=sonic-frameworks-crash-handler
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base "
+makedepends="sonic-frameworks-core-addons-devel"
+short_desc="Graceful handling of application crashes"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-crash-handler"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-crash-handler/archive/refs/tags/${version}.tar.gz"
+checksum=861cfef740bb6ba82bde263c4eefcc057652f37ed2bdac366b8f2c505396160c
+provides="kf6-kcrash-${version}_${revision}"
+conflicts="kf6-kcrash"
+replaces="kf6-kcrash>=0"
+
+sonic-frameworks-crash-handler-devel_package() {
+	provides="kf6-kcrash-devel-${version}_${revision}"
+	conflicts="kf6-kcrash-devel"
+	replaces="kf6-kcrash-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

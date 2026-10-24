@@ -1,0 +1,17 @@
+# Template file for 'sonic-write-daemon'
+pkgname=sonic-write-daemon
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules gettext kcoreaddons qt6-base qt6-tools"
+makedepends="sonic-frameworks-dbus-devel sonic-frameworks-notifications-devel sonic-frameworks-pseudo-terminal-devel"
+short_desc="Listen to traditional system notifications"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-write-daemon"
+distfiles="https://github.com/Sonic-DE/sonic-write-daemon/archive/refs/tags/${version}.tar.gz"
+checksum=bd29ccd2ae12ba0f460c22447c1ca494992887848aabc21663124c32047e19ad
+provides="kwrited-${version}_${revision}"
+conflicts="kwrited"
+replaces="kwrited>=0"

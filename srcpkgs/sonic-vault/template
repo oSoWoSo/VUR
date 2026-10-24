@@ -1,0 +1,21 @@
+# Template file for 'sonic-vault'
+pkgname=sonic-vault
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base qt6-tools
+ pkg-config gettext sonic-frameworks-settings sonic-frameworks-package"
+makedepends="sonic-interface-libraries-devel sonic-system-monitor-library-devel sonic-frameworks-dbus-devel
+ sonic-frameworks-io-devel sonic-frameworks-quick-ui-devel sonic-frameworks-app-info-devel sonic-activities-devel
+ sonic-frameworks-data-models-devel sonic-frameworks-networkmanager-devel"
+short_desc="Sonic applet and services for creating encrypted vaults"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-vault"
+distfiles="https://github.com/Sonic-DE/sonic-vault/archive/refs/tags/${version}.tar.gz"
+checksum=ecd87ea9cf23ce40864dac300d558e9eeb66fa6dd6c4c37d8f147df6e781e882
+provides="plasma-vault-${version}_${revision}"
+conflicts="plasma-vault"
+replaces="plasma-vault>=0"

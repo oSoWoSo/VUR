@@ -1,0 +1,34 @@
+# Template file for 'sonic-frameworks-svg'
+pkgname=sonic-frameworks-svg
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ qt6-declarative-host-tools sonic-frameworks-settings"
+makedepends="qt6-declarative-devel qt6-svg-devel sonic-frameworks-archive-devel
+ sonic-frameworks-settings-devel sonic-frameworks-color-scheme-devel sonic-frameworks-core-addons-devel
+ sonic-frameworks-quick-ui-devel"
+short_desc="Library for rendering SVG-based themes"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-svg"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-svg/archive/refs/tags/${version}.tar.gz"
+checksum=f691a555307f48f020c272480b75edde3f527457fbb1b0187bfbaf2347576f64
+provides="kf6-ksvg-${version}_${revision}"
+conflicts="kf6-ksvg"
+replaces="kf6-ksvg>=0"
+
+sonic-frameworks-svg-devel_package() {
+	provides="kf6-ksvg-devel-${version}_${revision}"
+	conflicts="kf6-ksvg-devel"
+	replaces="kf6-ksvg-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

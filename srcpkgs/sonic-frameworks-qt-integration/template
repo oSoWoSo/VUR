@@ -1,0 +1,38 @@
+# Template file for 'sonic-frameworks-qt-integration'
+pkgname=sonic-frameworks-qt-integration
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base gettext
+ sonic-frameworks-package sonic-frameworks-settings"
+makedepends="sonic-frameworks-color-scheme-devel sonic-frameworks-settings-devel
+ sonic-frameworks-internationalization-devel sonic-frameworks-icon-themes-devel
+ sonic-frameworks-addons-downloader-devel sonic-frameworks-notifications-devel
+ sonic-frameworks-widgets-addons-devel sonic-frameworks-package-devel"
+short_desc="Framework to integrate applications with a KDE Workspace"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-qt-integration"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-qt-integration/archive/refs/tags/${version}.tar.gz"
+checksum=5f6feb53310013f5a0daa7cef74732d4ae0ce57aae439a0ebe709d49de6134ae
+provides="kf6-frameworkintegration-${version}_${revision}"
+conflicts="kf6-frameworkintegration"
+replaces="kf6-frameworkintegration>=0"
+
+sonic-frameworks-qt-integration-devel_package() {
+	provides="kf6-frameworkintegration-devel-${version}_${revision}"
+	conflicts="kf6-frameworkintegration-devel"
+	replaces="kf6-frameworkintegration-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision}
+	 sonic-frameworks-color-scheme-devel sonic-frameworks-icon-themes-devel
+	 sonic-frameworks-widgets-addons-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

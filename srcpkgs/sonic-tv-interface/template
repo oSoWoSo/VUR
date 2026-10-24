@@ -1,0 +1,26 @@
+# Template file for 'sonic-tv-interface'
+pkgname=sonic-tv-interface
+version=6.8.0
+revision=1
+build_style=cmake
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base pkg-config qt6-declarative-host-tools
+ sonic-frameworks-package sonic-frameworks-settings sonic-frameworks-settings-utils gettext"
+makedepends="qt6-multimedia-devel qt6-declarative-private-devel qt6-webengine-devel qcoro-qt6-devel
+ plasma-wayland-protocols sonic-frameworks-bluetooth-devel sonic-frameworks-settings-utils-devel
+ sonic-frameworks-settings-devel sonic-frameworks-dbus-devel sonic-frameworks-keybind-devel
+ sonic-frameworks-internationalization-devel sonic-frameworks-icon-themes-devel sonic-frameworks-io-devel
+ sonic-frameworks-quick-ui-devel sonic-frameworks-notifications-devel sonic-frameworks-windowsystem-devel
+ sonic-frameworks-svg-devel sonic-interface-libraries-devel sonic-activities-devel sonic-activities-stats-devel
+ sonic-workspace-devel sonic-screen-library-devel SDL3-devel libcec-devel libgomp-devel"
+depends="sonic-win sonic-network-manager sonic-audio-applet-pulse sonic-terminal-tools sonic-screen milou
+ kdeconnect plasma-nano plasma-keyboard"
+short_desc="Interface for large screens such as TVs"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="GPL-2.0-or-later AND CC-BY-SA-4.0"
+homepage="https://github.com/Sonic-DE/sonic-tv-interface"
+distfiles="https://github.com/Sonic-DE/sonic-tv-interface/archive/refs/tags/${version}.tar.gz"
+checksum=143091666dba8d26ec286b43b8cc7fb469a744e9bab6bc81f785b1d9feb6b69d
+
+if [ "$XBPS_WORDSIZE$XBPS_WORDSIZE" != "64$XBPS_TARGET_WORDSIZE" ]; then
+	broken="no qt6-webengine"
+fi

@@ -1,0 +1,39 @@
+# Template file for 'sonic-frameworks-keyring'
+pkgname=sonic-frameworks-keyring
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKF6_HOST_TOOLING=/usr/lib/cmake"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ gettext sonic-frameworks-doctools sonic-frameworks-settings pkg-config"
+makedepends="sonic-frameworks-settings-devel sonic-frameworks-core-addons-devel sonic-frameworks-crash-handler-devel
+ sonic-frameworks-windowsystem-devel sonic-frameworks-color-scheme-devel sonic-frameworks-dbus-devel
+ sonic-frameworks-notifications-devel sonic-frameworks-widgets-addons-devel sonic-frameworks-doctools-devel
+ gpgmepp-devel sonic-crypto-library-devel libgcrypt-devel libsecret-devel"
+short_desc="Safe desktop-wide storage for passwords"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-keyring"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-keyring/archive/refs/tags/${version}.tar.gz"
+checksum=cb14ce3aa35193377834f8ffae19f934cee2da619432e7a3b5e84c3e53cdec4b
+provides="kf6-kwallet-${version}_${revision}"
+conflicts="kf6-kwallet"
+replaces="kf6-kwallet>=0"
+
+# https://bugs.kde.org/show_bug.cgi?id=509680 / https://github.com/void-linux/void-packages/issues/57348
+post_install() {
+	rm ${DESTDIR}/usr/share/dbus-1/services/org.freedesktop.impl.portal.desktop.kwallet.service
+}
+
+sonic-frameworks-keyring-devel_package() {
+	provides="kf6-kwallet-devel-${version}_${revision}"
+	conflicts="kf6-kwallet-devel"
+	replaces="kf6-kwallet-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

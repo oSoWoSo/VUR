@@ -1,0 +1,34 @@
+# Template file for 'sonic-frameworks-color-scheme'
+pkgname=sonic-frameworks-color-scheme
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base
+ sonic-frameworks-settings gettext"
+makedepends="sonic-frameworks-settings-devel sonic-frameworks-gui-addons-devel sonic-frameworks-internationalization-devel
+ qt6-base-private-devel"
+short_desc="Classes to read and interact with KColorScheme"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-color-scheme"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-color-scheme/archive/refs/tags/${version}.tar.gz"
+checksum=48d183f95f376d59404fa14811260c1a797b83fecf4050b10f9cf88d0b77f16e
+# transitive deps from sonic-frameworks-gui-addons, for build ordering
+makedepends+=" libpyside6-devel"
+provides="kf6-kcolorscheme-${version}_${revision}"
+conflicts="kf6-kcolorscheme"
+replaces="kf6-kcolorscheme>=0"
+
+sonic-frameworks-color-scheme-devel_package() {
+	provides="kf6-kcolorscheme-devel-${version}_${revision}"
+	conflicts="kf6-kcolorscheme-devel"
+	replaces="kf6-kcolorscheme-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision}
+	 sonic-frameworks-gui-addons-devel qt6-base-devel sonic-frameworks-internationalization-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

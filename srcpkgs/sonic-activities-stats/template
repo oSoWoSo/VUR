@@ -1,0 +1,31 @@
+# Template file for 'sonic-activities-stats'
+pkgname=sonic-activities-stats
+version=6.8.0
+revision=1
+build_style=cmake
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base qt6-tools sonic-frameworks-settings"
+makedepends="sonic-frameworks-settings-devel sonic-frameworks-core-addons-devel sonic-activities-devel
+ boost-headers"
+short_desc="Library for accessing the usage data collected by the activities system"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-activities-stats"
+distfiles="https://github.com/Sonic-DE/sonic-activities-stats/archive/refs/tags/${version}.tar.gz"
+checksum=57dfdb36c3410b89da143df982579a0f50a394b03de9408687083383991b89a8
+provides="plasma-activities-stats-${version}_${revision}"
+conflicts="plasma-activities-stats"
+replaces="plasma-activities-stats>=0"
+
+sonic-activities-stats-devel_package() {
+	provides="plasma-activities-stats-devel-${version}_${revision}"
+	conflicts="plasma-activities-stats-devel"
+	replaces="plasma-activities-stats-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/pkgconfig
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

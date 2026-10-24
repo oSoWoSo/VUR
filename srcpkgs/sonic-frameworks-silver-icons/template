@@ -1,0 +1,42 @@
+# Template file for 'sonic-frameworks-silver-icons'
+pkgname=sonic-frameworks-silver-icons
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DINSTALL_HOST_TOOLS=ON"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base qt6-tools python3-lxml libxml2"
+makedepends="qt6-base-devel"
+checkdepends="fdupes"
+short_desc="Silver icon theme"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-3.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-silver-icons"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-silver-icons/archive/refs/tags/${version}.tar.gz"
+checksum=58a61e6c1c2508848a8c3a8703c46a1024d7b087d5bd30ca6c15eebdd8f6c59a
+nostrip=yes
+
+if [ -z "$CROSS_BUILD" ]; then
+	configure_args+=" -DBINARY_ICONS_RESOURCE=ON"
+else
+	hostmakedepends+=" libbreeze-icons-devel"
+	configure_args+=" -DBINARY_ICONS_RESOURCE=OFF"
+fi
+
+sonic-frameworks-silver-icons-library_package() {
+	pkg_install() {
+		vmove "usr/lib/*.so.*"
+	}
+}
+
+sonic-frameworks-silver-icons-library-devel_package() {
+	depends="sonic-frameworks-silver-icons-library>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		if [ -z "$CROSS_BUILD" ]; then
+			vmove usr/bin
+		fi
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

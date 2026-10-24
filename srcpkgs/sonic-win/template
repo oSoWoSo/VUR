@@ -1,0 +1,46 @@
+# Template file for 'sonic-win'
+pkgname=sonic-win
+version=6.8.0
+revision=1
+build_style=cmake
+build_helper=qemu
+configure_args="-DBUILD_TESTING=OFF -DFORCE_CROSSCOMPILED_TOOLS=ON
+ -DKF6_HOST_TOOLING=/usr/lib/cmake -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="python3 gettext pkg-config libcap-progs qt6-base qt6-tools qt6-declarative-host-tools
+ sonic-frameworks-package sonic-frameworks-settings sonic-frameworks-settings-utils sonic-frameworks-windowsystem sonic-frameworks-auth-tools
+ sonic-frameworks-doctools sonic-frameworks-cmake-modules"
+makedepends="sonic-frameworks-settings-utils-devel sonic-frameworks-color-scheme-devel sonic-frameworks-settings-devel sonic-frameworks-crash-handler-devel
+ sonic-frameworks-qml-bridge-devel sonic-frameworks-internationalization-devel sonic-frameworks-data-models-devel sonic-frameworks-addons-downloader-devel
+ sonic-frameworks-notifications-devel sonic-frameworks-package-devel sonic-frameworks-quick-charts-devel sonic-frameworks-app-info-devel sonic-frameworks-svg-devel
+ sonic-frameworks-widgets-addons-devel sonic-frameworks-xml-gui-devel lcms2-devel libcanberra-devel libdisplay-info-devel libdrm-devel libepoxy-devel
+ libqaccessibilityclient-devel libX11-devel libxcb-devel libXi-devel libxkbcommon-devel qt6-qt5compat-devel qt6-base-private-devel qt6-declarative-devel
+ qt6-sensors-devel qt6-svg-devel qt6-tools-devel sonic-decoration-devel sonic-frameworks-idle-tracker-devel sonic-frameworks-dbus-devel sonic-frameworks-settings-ui-devel
+ sonic-activities-devel sonic-frameworks-auth-devel sonic-frameworks-core-addons-devel sonic-frameworks-gui-addons-devel sonic-frameworks-keybind-devel
+ sonic-frameworks-quick-ui-devel sonic-frameworks-windowsystem-devel sonic-interface-libraries-devel sonic-keybind-daemon-devel sonic-screenlocker-devel
+ sonic-frameworks-doctools-devel sonic-night-light-devel eudev-libudev-devel xcb-util-cursor-devel xcb-util-keysyms-devel xcb-util-wm-devel libcap-devel
+ freetype-devel fontconfig-devel libgbm-devel libei-devel elogind-devel libgomp-devel"
+depends="aurorae sonic-silver libxkbcommon-x11 sonic-frameworks-quick-ui"
+short_desc="KWin X11 fork with Sonic patches"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-win"
+distfiles="https://github.com/Sonic-DE/sonic-win/archive/refs/tags/${version}.tar.gz"
+checksum=2bf178b8c194c63593b7d68654a18ea0bfae5adb38f503353ba5844b3061074c
+makedepends+=" layer-shell-qt-devel sonic-screen-library-devel"
+provides="kwin-x11-${version}_${revision}"
+conflicts="kwin-x11"
+replaces="kwin-x11>=0"
+
+sonic-win-devel_package() {
+	provides="kwin-x11-devel-${version}_${revision}"
+	replaces="kwin-x11-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

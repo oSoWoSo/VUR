@@ -1,0 +1,24 @@
+# Template file for 'sonic-audio-applet-pulse'
+pkgname=sonic-audio-applet-pulse
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-frameworks-cmake-modules pkg-config qt6-base gettext qt6-tools
+ qt6-declarative-host-tools sonic-frameworks-settings sonic-frameworks-settings-utils sonic-frameworks-package sonic-frameworks-core-addons
+ sonic-frameworks-windowsystem sonic-frameworks-doctools"
+makedepends="sonic-frameworks-qml-bridge-devel sonic-frameworks-status-notification-devel sonic-frameworks-settings-utils-devel sonic-frameworks-svg-devel sonic-frameworks-dbus-devel sonic-frameworks-settings-devel
+ sonic-frameworks-internationalization-devel libglib-devel qt6-base-private-devel qt6-declarative-devel pulseaudio-devel libcanberra-devel sonic-pulseaudio-library-devel
+ sonic-interface-libraries-devel sonic-frameworks-doctools-devel sonic-frameworks-core-addons-devel sonic-frameworks-keybind-devel"
+depends="sonic-frameworks-data-models sound-theme-freedesktop sonic-frameworks-quick-ui"
+short_desc="SonicDE applet for audio volume management using PulseAudio"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-audio-applet-pulse"
+distfiles="https://github.com/Sonic-DE/sonic-audio-applet-pulse/archive/refs/tags/${version}.tar.gz"
+checksum=a4f8cdefc0dce1aa6df48178eafa159c81f7544996261ad4c6816092dd81c04a
+provides="plasma-pa-${version}_${revision}"
+conflicts="plasma-pa"
+replaces="plasma-pa>=0"

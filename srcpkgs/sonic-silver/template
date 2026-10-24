@@ -1,0 +1,19 @@
+# Template file for 'sonic-silver'
+pkgname=sonic-silver
+version=6.8.0.1
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DBUILD_QT5=OFF"
+hostmakedepends="sonic-frameworks-cmake-modules pkg-config gettext"
+makedepends="sonic-frameworks-settings-utils-devel sonic-frameworks-color-scheme-devel
+ sonic-frameworks-settings-devel sonic-frameworks-core-addons-devel sonic-decoration-devel
+ sonic-frameworks-gui-addons-devel sonic-frameworks-internationalization-devel sonic-frameworks-icon-themes-devel
+ sonic-frameworks-quick-ui-devel sonic-frameworks-widgets-addons-devel sonic-frameworks-windowsystem-devel
+ qt6-base-devel qt6-declarative-devel qt6-svg-devel"
+depends="sonic-frameworks-silver-icons hicolor-icon-theme sonic-frameworks-qt-integration xdg-utils"
+short_desc="Customizable theme for Sonic Desktop"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-silver"
+distfiles="https://github.com/Sonic-DE/sonic-silver/archive/refs/tags/${version}.tar.gz"
+checksum=5d66e71b0de0d3a264f3ca86bafeb99d759a40f13ed7a3531d2cceec7dfbd947

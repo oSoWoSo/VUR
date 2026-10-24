@@ -1,0 +1,16 @@
+# Template file for 'sonic-workspace-wallpapers'
+pkgname=sonic-workspace-wallpapers
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-base"
+short_desc="Additional wallpapers for the Sonic Workspace"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-workspace-wallpapers"
+distfiles="https://github.com/Sonic-DE/sonic-workspace-wallpapers/archive/refs/tags/${version}.tar.gz"
+checksum=43d598d82b51fb6fec062ee4576a7582302381008fff4ecaf2ba31f1f4657981
+provides="sonic-workspace-wallpapers-${version}_${revision}"
+conflicts="sonic-workspace-wallpapers"
+replaces="sonic-workspace-wallpapers>=0"

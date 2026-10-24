@@ -1,0 +1,26 @@
+# Template file for 'sonic-screen'
+pkgname=sonic-screen
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="pkg-config sonic-frameworks-cmake-modules qt6-base qt6-tools gettext
+ sonic-frameworks-settings-utils sonic-frameworks-package qt6-declarative-host-tools"
+makedepends="sonic-frameworks-xml-gui-devel sonic-frameworks-settings-utils-devel sonic-frameworks-settings-devel
+ sonic-frameworks-crash-handler-devel sonic-frameworks-dbus-devel sonic-frameworks-internationalization-devel
+ sonic-frameworks-svg-devel sonic-frameworks-package-devel sonic-frameworks-data-models-devel libX11-devel libxcb-devel
+ libXi-devel sonic-plasma5-support-library-devel qt6-base-private-devel qt6-declarative-devel qt6-sensors-devel
+ layer-shell-qt-devel sonic-frameworks-core-addons-devel sonic-frameworks-quick-ui-devel sonic-frameworks-windowsystem-devel
+ sonic-screen-library-devel sonic-interface-libraries-devel sonic-frameworks-app-info-devel"
+depends="sonic-frameworks-image-formats hicolor-icon-theme"
+short_desc="SonicDE screen management software"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-screen"
+distfiles="https://github.com/Sonic-DE/sonic-screen/archive/refs/tags/${version}.tar.gz"
+checksum=18b84570b7a1d40e43a0f2f91887814e14328a0f1a200b8d799aca56d10baefe
+provides="kscreen-${version}_${revision}"
+conflicts="kscreen"
+replaces="kscreen>=0"

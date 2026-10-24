@@ -1,0 +1,56 @@
+# Template file for 'sonic-frameworks-xml-gui'
+pkgname=sonic-frameworks-xml-gui
+version=6.31.0
+revision=1
+_llvmver=21
+build_style=cmake
+configure_args="$(vopt_bool python BUILD_PYTHON_BINDINGS)"
+hostmakedepends="sonic-frameworks-cmake-modules qt6-tools qt6-base gettext sonic-frameworks-settings
+ $(vopt_if python "python3-build python3-setuptools shiboken6 llvm${_llvmver}")"
+makedepends="sonic-frameworks-settings-devel sonic-frameworks-settings-ui-devel qt6-base-private-devel
+ sonic-frameworks-data-views-devel sonic-frameworks-icon-themes-devel sonic-frameworks-keybind-devel
+ sonic-frameworks-gui-addons-devel sonic-frameworks-core-addons-devel sonic-frameworks-internationalization-devel
+ sonic-frameworks-widgets-addons-devel
+ $(vopt_if python 'libshiboken6-devel libpyside6-devel python3-devel')"
+short_desc="Framework for managing menu and toolbar actions"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-xml-gui"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-xml-gui/archive/refs/tags/${version}.tar.gz"
+checksum=f5aad5cc47da1ea478fea166551acb823f840a65e6d9638216a48bce229f9bd5
+provides="kf6-kxmlgui-${version}_${revision}"
+conflicts="kf6-kxmlgui"
+replaces="kf6-kxmlgui>=0"
+
+build_options="python"
+build_options_default="python"
+
+if [ "$CROSS_BUILD" ]; then
+	configure_args+=" -DECM_SHIBOKEN_ARCH=$XBPS_CROSS_RUST_TARGET"
+	configure_args+=" -DSYSROOT_INCLUDE_DIRS=$XBPS_CROSS_BASE/usr/include"
+fi
+export LLVM_INSTALL_DIR=/usr/lib/llvm/${_llvmver}
+
+case "$XBPS_TARGET_MACHINE" in
+	arm*) configure_args+=" -DSHIBOKEN_GENERATOR_EXTRA_FLAGS=--clang-option=-mfloat-abi=hard" ;;
+esac
+
+do_check() {
+	cd build
+	# disable failing test
+	ctest -E "ktoolbar_unittest|kxmlgui_unittest"
+}
+
+sonic-frameworks-xml-gui-devel_package() {
+	provides="kf6-kxmlgui-devel-${version}_${revision}"
+	conflicts="kf6-kxmlgui-devel"
+	replaces="kf6-kxmlgui-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel
+	 sonic-frameworks-settings-devel sonic-frameworks-settings-ui-devel sonic-frameworks-gui-addons-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

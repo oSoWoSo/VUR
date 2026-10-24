@@ -1,0 +1,34 @@
+# Template file for 'sonic-frameworks-open-collab'
+pkgname=sonic-frameworks-open-collab
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="qt6-base qt6-tools sonic-frameworks-cmake-modules doxygen"
+makedepends="libstdc++-devel qt6-base-devel"
+short_desc="Qt library implementing Open Collaboration Services API (SonicDE fork)"
+maintainer="nerdyslacker <karyan40024@gmail.com>"
+license="LGPL-2.0-only OR LGPL-3.0-only"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-open-collab"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-open-collab/archive/refs/tags/${version}.tar.gz"
+checksum=b28dc33af4dbb035beb7fcf73f0fd427cb1768e2cd4fe29fa9c4dbb769c259b9
+provides="kf6-attica-${version}_${revision}"
+conflicts="kf6-attica"
+replaces="kf6-attica>=0"
+
+do_check() {
+	cd build
+	ctest -E "providertest"
+}
+
+sonic-frameworks-open-collab-devel_package() {
+	provides="kf6-attica-devel-${version}_${revision}"
+	replaces="kf6-attica-devel>=0"
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/pkgconfig
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
