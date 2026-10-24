@@ -1,0 +1,59 @@
+# Template for 'photocraft'
+pkgname=photocraft
+version=0.7.0
+revision=1
+build_style=cargo
+make_build_args="-p photocraft -p photocraft-cli"
+hostmakedepends="pkg-config"
+#makedepends="fontconfig-devel freetype-devel libX11-devel libXcursor-devel libXi-devel libXrandr-devel libxkbcommon-devel wayland-devel"
+short_desc="Open-source, clean-room reimplementation of Adobe Photoshop in pure Rust"
+maintainer="zenobit <zen@osowoso.org>"
+license="Apache-2.0, MIT"
+homepage="https://getartcraft.com/apps/photocraft"
+distfiles="https://github.com/storytold/photocraft/archive/refs/tags/v${version}.tar.gz"
+
+checksum="420bc64e3548579b1b255aed33be055be1688c3427f429dc5f1c28daf8639a2c"
+
+do_install() {
+	# 1. Install application binaries directly from target release (prevents double compilation)
+	vbin target/${RUST_TARGET}/release/photocraft
+	vbin target/${RUST_TARGET}/release/photocraft-cli
+
+	# 2. Install desktop shortcut, appstream metadata, and custom mime types
+	if [ -d "packaging/linux" ]; then
+		vinstall packaging/linux/ai.storyteller.photocraft.desktop 644 usr/share/applications
+		vinstall packaging/linux/ai.storyteller.photocraft.mime.xml 644 usr/share/mime/packages ai.storyteller.photocraft.xml
+		vinstall packaging/linux/ai.storyteller.photocraft.metainfo.xml.in 644 usr/share/metainfo ai.storyteller.photocraft.metainfo.xml
+	fi
+
+	# 3. Iterate over the standard hicolor icon paths and install them with the proper app ID name
+	local size
+	for size in 16x16 24x24 32x32 48x48 64x64 128x128 256x256 512x512; do
+		if [ -f "assets/app-icon/hicolor/${size}/apps/ai.storyteller.photocraft.png" ]; then
+			vinstall "assets/app-icon/hicolor/${size}/apps/ai.storyteller.photocraft.png" \
+				644 "usr/share/icons/hicolor/${size}/apps"
+		fi
+	done
+
+	if [ -f "assets/app-icon/hicolor/scalable/apps/ai.storyteller.photocraft.svg" ]; then
+		vinstall "assets/app-icon/hicolor/scalable/apps/ai.storyteller.photocraft.svg" \
+			644 "usr/share/icons/hicolor/scalable/apps"
+	fi
+
+	# 4. Install standard software licenses and the legal NOTICE file
+	vlicense LICENSE-APACHE
+	vlicense LICENSE-MIT
+	if [ -f "NOTICE" ]; then
+		vlicense NOTICE
+	fi
+
+	# 5. Extract and bundle technical Markdown documentation
+	if [ -d "docs" ]; then
+		local docfile
+		for docfile in docs/*.md; do
+			if [ -f "$docfile" ]; then
+				vdoc "$docfile"
+			fi
+		done
+	fi
+}

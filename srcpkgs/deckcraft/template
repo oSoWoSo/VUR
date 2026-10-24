@@ -1,0 +1,67 @@
+# Template file for 'deckcraft'
+pkgname=deckcraft
+version=0.6.1
+revision=1
+build_style=cargo
+make_build_args="-p deckcraft -p deckcraft-cli"
+hostmakedepends="pkg-config"
+makedepends="alsa-lib-devel"
+short_desc="Clean-room reimplementation of Microsoft PowerPoint in pure Rust"
+maintainer="zenobit <zen@osowoso.org>"
+license="Apache-2.0, MIT"
+homepage="https://github.com/storytold/deckcraft"
+distfiles="https://github.com/storytold/deckcraft/archive/refs/tags/v${version}.tar.gz"
+checksum=9eeaa29db8de6e33dd7e3edcf33983ecedfe515d2427e16db43befbcfc944800
+
+do_install() {
+	# 1. Install optimized binary deliverables directly from the build target
+	vbin target/${RUST_TARGET}/release/deckcraft
+	vbin target/${RUST_TARGET}/release/deckcraft-cli
+
+	# 2. Integrate standard desktop configuration entries, metadata, and MIME bindings
+	if [ -d "packaging/linux" ]; then
+		vinstall packaging/linux/ai.storyteller.deckcraft.desktop 644 usr/share/applications
+		vinstall packaging/linux/ai.storyteller.deckcraft.mime.xml 644 usr/share/mime/packages ai.storyteller.deckcraft.xml
+		vinstall packaging/linux/ai.storyteller.deckcraft.metainfo.xml.in 644 usr/share/metainfo ai.storyteller.deckcraft.metainfo.xml
+	fi
+
+	# 3. Process and install multi-resolution context assets into hicolor hierarchy
+	local size
+	for size in 16x16 24x24 32x32 48x48 64x64 128x128 256x256 512x512; do
+		if [ -f "assets/app-icon/hicolor/${size}/apps/ai.storyteller.deckcraft.png" ]; then
+			vinstall "assets/app-icon/hicolor/${size}/apps/ai.storyteller.deckcraft.png" \
+				644 "usr/share/icons/hicolor/${size}/apps"
+		fi
+	done
+
+	if [ -f "assets/app-icon/hicolor/scalable/apps/ai.storyteller.deckcraft.svg" ]; then
+		vinstall "assets/app-icon/hicolor/scalable/apps/ai.storyteller.deckcraft.svg" \
+			644 "usr/share/icons/hicolor/scalable/apps"
+	fi
+
+	# 4. Map upstream baseline core code licenses
+	vlicense LICENSE-APACHE
+	vlicense LICENSE-MIT
+	if [ -f "NOTICE" ]; then
+		vlicense NOTICE
+	fi
+
+	# 5. Extract, validate, and register embedded Open Font Licenses (OFL)
+	# This maps all fonts found in your repository or the source doc hierarchy
+	local ofl_license
+	for ofl_license in assets/fonts/OFL-*.txt docs/OFL-*.txt share/doc/deckcraft/OFL-*.txt; do
+		if [ -f "$ofl_license" ]; then
+			vlicense "$ofl_license"
+		fi
+	done
+
+	# 6. Synchronize general technical Markdown manuals
+	if [ -d "docs" ]; then
+		local docfile
+		for docfile in docs/*.md; do
+			if [ -f "$docfile" ]; then
+				vdoc "$docfile"
+			fi
+		done
+	fi
+}

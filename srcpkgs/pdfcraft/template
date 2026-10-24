@@ -1,0 +1,72 @@
+# Template file for 'pdfcraft'
+pkgname=pdfcraft
+version=0.7.1
+revision=1
+build_style=cargo
+make_build_args="-p pdfcraft -p pdfcraft-cli"
+hostmakedepends="pkg-config"
+# makedepends="fontconfig-devel freetype-devel libX11-devel libXcursor-devel libXi-devel libXrandr-devel libxkbcommon-devel wayland-devel"
+short_desc="PDF reader and editor written by scratch in pure Rust"
+maintainer="zenobit <zen@osowoso.org>"
+license="Apache-2.0, MIT"
+homepage="https://github.com/storytold/pdfcraft"
+distfiles="https://github.com/storytold/pdfcraft/archive/refs/tags/v${version}.tar.gz
+ https://ocrs-models.s3-accelerate.amazonaws.com/text-detection.rten>text-detection.rten
+ https://ocrs-models.s3-accelerate.amazonaws.com/text-recognition.rten>text-recognition.rten
+ https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt>LICENSE-OCRS-MODELS"
+
+checksum="a06fb8a7594e5e19e3d2be1df747714836e0baabbe156df09adf944c1b3e4961
+ f15cfb56bd02c4bf478a20343986504a1f01e1665c2b3a0ad66340f054b1b5ca
+ e484866d4cce403175bd8d00b128feb08ab42e208de30e42cd9889d8f1735a6e
+ 28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5"
+
+# Instruct XBPS-src to copy these files directly without attempting to uncompress them
+skip_extraction="text-detection.rten text-recognition.rten LICENSE-OCRS-MODELS"
+
+do_install() {
+	# 1. Install application for Desktop and command line (CLI)
+	vbin target/${RUST_TARGET}/release/pdfcraft
+	vbin target/${RUST_TARGET}/release/pdfcraft-cli
+
+	# 2. Install shortcut in menu (.desktop) and mime types
+	vinstall packaging/linux/ai.storyteller.pdfcraft.desktop 644 usr/share/applications
+	vinstall packaging/linux/ai.storyteller.pdfcraft.mime.xml 644 usr/share/mime/packages ai.storyteller.pdfcraft.xml
+	vinstall packaging/linux/ai.storyteller.pdfcraft.metainfo.xml.in 644 usr/share/metainfo ai.storyteller.pdfcraft.metainfo.xml
+
+	# 3. Iterate icons and install
+	local size
+	for size in 16x16 24x24 32x32 48x48 64x64 128x128 256x256 512x512; do
+		if [ -f "assets/app-icon/hicolor/${size}/apps/ai.storyteller.pdfcraft.png" ]; then
+			vinstall "assets/app-icon/hicolor/${size}/apps/ai.storyteller.pdfcraft.png" \
+				644 "usr/share/icons/hicolor/${size}/apps"
+		fi
+	done
+
+	if [ -f "assets/app-icon/hicolor/scalable/apps/ai.storyteller.pdfcraft.svg" ]; then
+		vinstall "assets/app-icon/hicolor/scalable/apps/ai.storyteller.pdfcraft.svg" \
+			644 "usr/share/icons/hicolor/scalable/apps"
+	fi
+
+	# 4. Install pre-fetched RTEN OCR neural models securely into the package share structure
+	vmkdir usr/share/pdfcraft/models
+	vinstall ${XBPS_SRCDISTDIR}/${pkgname}-${version}/text-detection.rten 644 usr/share/pdfcraft/models
+	vinstall ${XBPS_SRCDISTDIR}/${pkgname}-${version}/text-recognition.rten 644 usr/share/pdfcraft/models
+
+	# 5. Install licenses and legal NOTICE
+	vlicense ${XBPS_SRCDISTDIR}/${pkgname}-${version}/LICENSE-OCRS-MODELS
+	vlicense LICENSE-APACHE
+	vlicense LICENSE-MIT
+	if [ -f "NOTICE" ]; then
+		vlicense NOTICE
+	fi
+
+	# 6. Technical documentation in Markdown
+	if [ -d "docs" ]; then
+		local docfile
+		for docfile in docs/*.md; do
+			if [ -f "$docfile" ]; then
+				vdoc "$docfile"
+			fi
+		done
+	fi
+}

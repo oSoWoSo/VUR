@@ -1,0 +1,58 @@
+# Template file for 'soundcraft'
+pkgname=soundcraft
+version=0.6.1
+revision=1
+build_style=cargo
+make_build_args="-p soundcraft -p soundcraft-cli"
+hostmakedepends="pkg-config"
+makedepends="alsa-lib-devel"
+short_desc="Clean-room reimplementation of Avid Pro Tools in pure Rust"
+maintainer="zenobit <zen@osowoso.org>"
+license="Apache-2.0"
+homepage="https://github.com/storytold/soundcraft"
+distfiles="https://github.com/storytold/soundcraft/archive/refs/tags/v${version}.tar.gz"
+checksum=f5a1250a79096029cf5147aafb9bb0da53f57671844ae71abede5336cb0c33d8
+
+do_install() {
+	# 1. Install optimized application binaries directly from target release (prevents double compilation)
+	vbin target/${RUST_TARGET}/release/soundcraft
+	vbin target/${RUST_TARGET}/release/soundcraft-cli
+
+	# 2. Install desktop shortcut, appstream metadata, and custom mime types from upstream packaging
+	if [ -d "packaging/linux" ]; then
+		vinstall packaging/linux/ai.storyteller.soundcraft.desktop 644 usr/share/applications
+		vinstall packaging/linux/ai.storyteller.soundcraft.mime.xml 644 usr/share/mime/packages ai.storyteller.soundcraft.xml
+		vinstall packaging/linux/ai.storyteller.soundcraft.metainfo.xml.in 644 usr/share/metainfo ai.storyteller.soundcraft.metainfo.xml
+	fi
+
+	# 3. Iterate over the standard hicolor icon paths and install them with the proper app ID name
+	local size
+	for size in 16x16 24x24 32x32 48x48 64x64 128x128 256x256 512x512; do
+		if [ -f "assets/app-icon/hicolor/${size}/apps/ai.storyteller.soundcraft.png" ]; then
+			vinstall "assets/app-icon/hicolor/${size}/apps/ai.storyteller.soundcraft.png" \
+				644 "usr/share/icons/hicolor/${size}/apps"
+		fi
+	done
+
+	if [ -f "assets/app-icon/hicolor/scalable/apps/ai.storyteller.soundcraft.svg" ]; then
+		vinstall "assets/app-icon/hicolor/scalable/apps/ai.storyteller.soundcraft.svg" \
+			644 "usr/share/icons/hicolor/scalable/apps"
+	fi
+
+	# 4. Install standard software licenses and the legal NOTICE file
+	vlicense LICENSE-APACHE
+	vlicense LICENSE-MIT
+	if [ -f "NOTICE" ]; then
+		vlicense NOTICE
+	fi
+
+	# 5. Extract and bundle technical Markdown documentation
+	if [ -d "docs" ]; then
+		local docfile
+		for docfile in docs/*.md; do
+			if [ -f "$docfile" ]; then
+				vdoc "$docfile"
+			fi
+		done
+	fi
+}

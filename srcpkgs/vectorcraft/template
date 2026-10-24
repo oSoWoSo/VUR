@@ -1,0 +1,56 @@
+# Template file for 'vectorcraft'
+pkgname=vectorcraft
+version=0.10.0
+revision=1
+build_style=cargo
+make_build_args="-p vectorcraft -p vectorcraft-cli"
+hostmakedepends="pkg-config"
+#makedepends="fontconfig-devel freetype-devel libX11-devel libXcursor-devel libXi-devel libXrandr-devel libxkbcommon-devel wayland-devel"
+short_desc="Vector art tool written by scratch in pure Rust"
+maintainer="zenobit <zen@osowoso.org>"
+license="Apache-2.0, MIT"
+homepage="https://getartcraft.com/apps/vectorcraft"
+distfiles="https://github.com/storytold/vectorcraft/archive/refs/tags/v${version}.tar.gz"
+
+checksum="21e485ad77821e99389a8aa81bce28daa6791984f672f56767c40f7e8c78f5f5"
+
+do_install() {
+	# 1. Install application for Desktop and command line (CLI) 
+	vbin target/${RUST_TARGET}/release/vectorcraft
+	vbin target/${RUST_TARGET}/release/vectorcraft-cli
+
+	# 2. Install shortcut in menu (.desktop) and mime types
+	vinstall packaging/linux/ai.storyteller.vectorcraft.desktop 644 usr/share/applications
+	vinstall packaging/linux/ai.storyteller.vectorcraft.mime.xml 644 usr/share/mime/packages
+	vinstall packaging/linux/ai.storyteller.vectorcraft.metainfo.xml.in 644 usr/share/metainfo ai.storyteller.vectorcraft.metainfo.xml
+
+	# 3. Iterate icons and install
+	local size
+	for size in 16x16 24x24 32x32 48x48 64x64 128x128 256x256 512x512; do
+		if [ -f "assets/app-icon/hicolor/${size}/apps/ai.storyteller.vectorcraft.png" ]; then
+			vinstall "assets/app-icon/hicolor/${size}/apps/ai.storyteller.vectorcraft.png" \
+				644 "usr/share/icons/hicolor/${size}/apps"
+		fi
+	done
+
+	if [ -f "assets/app-icon/hicolor/scalable/apps/ai.storyteller.vectorcraft.svg" ]; then
+		vinstall "assets/app-icon/hicolor/scalable/apps/ai.storyteller.vectorcraft.svg" \
+			644 "usr/share/icons/hicolor/scalable/apps"
+	fi
+
+	# 4. Install licenses
+	vlicense LICENSE-APACHE
+	vlicense LICENSE-MIT
+
+	# 5. Technical documentation in Markdown
+	local docfile
+	for docfile in docs/*.md; do
+		if [ -f "$docfile" ]; then
+			vdoc "$docfile"
+		fi
+	done
+
+	# 6. Examples
+	vmkdir usr/share/vectorcraft/examples
+	vcopy "examples/*" usr/share/vectorcraft/examples
+}

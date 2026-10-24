@@ -1,0 +1,60 @@
+# Template file for 'designcraft'
+pkgname=designcraft
+version=0.7.1
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=cargo
+make_build_args="-p designcraft -p designcraft-cli"
+hostmakedepends="pkg-config"
+#makedepends="fontconfig-devel freetype-devel libX11-devel libXcursor-devel libXi-devel libXrandr-devel libxkbcommon-devel wayland-devel"
+short_desc="Page and layout design editor written by scratch in pure Rust"
+maintainer="zenobit <zen@osowoso.org>"
+license="Apache-2.0, MIT"
+homepage="https://github.com/storytold/designcraft"
+distfiles="https://github.com/storytold/designcraft/archive/refs/tags/v${version}.tar.gz"
+checksum=395ecade50f8ff802ef2df347ed0a89667f7a3134ca94479cfe5235294f193c8
+
+do_install() {
+	# 1. Install application for Desktop and command line (CLI)
+	vbin target/${RUST_TARGET}/release/designcraft
+	vbin target/${RUST_TARGET}/release/designcraft-cli
+
+	# 2. Install shortcut in menu (.desktop) and mime types from upstream packaging
+	if [ -d "packaging/linux" ]; then
+		vinstall packaging/linux/ai.storyteller.designcraft.desktop 644 usr/share/applications
+		vinstall packaging/linux/ai.storyteller.designcraft.mime.xml 644 usr/share/mime/packages ai.storyteller.designcraft.xml
+		vinstall packaging/linux/ai.storyteller.designcraft.metainfo.xml.in 644 usr/share/metainfo ai.storyteller.designcraft.metainfo.xml
+	fi
+
+	# 3. Iterate icons and install complete hicolor multi-resolution tree
+	local size
+	for size in 16x16 24x24 32x32 48x48 64x64 128x128 256x256 512x512; do
+		if [ -f "assets/app-icon/hicolor/${size}/apps/ai.storyteller.designcraft.png" ]; then
+			vinstall "assets/app-icon/hicolor/${size}/apps/ai.storyteller.designcraft.png" \
+				644 "usr/share/icons/hicolor/${size}/apps"
+		fi
+	done
+
+	if [ -f "assets/app-icon/hicolor/scalable/apps/ai.storyteller.designcraft.svg" ]; then
+		vinstall "assets/app-icon/hicolor/scalable/apps/ai.storyteller.designcraft.svg" \
+			644 "usr/share/icons/hicolor/scalable/apps"
+	fi
+
+	# 4. Install licenses and legal NOTICE
+	vlicense LICENSE-APACHE
+	vlicense LICENSE-MIT
+	if [ -f "NOTICE" ]; then
+		vlicense NOTICE
+	fi
+
+	# 5. Technical documentation in Markdown
+	if [ -d "docs" ]; then
+		local docfile
+		for docfile in docs/*.md; do
+			if [ -f "$docfile" ]; then
+				vdoc "$docfile"
+			fi
+		done
+	fi
+}
