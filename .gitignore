@@ -33,3 +33,5 @@ etc/repo-keys
 !/web-create
 !/web-deploy
 !/lib.sh
+
+!/bump.sh
