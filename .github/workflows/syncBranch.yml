@@ -14,6 +14,8 @@ on:
         required: true
         options:
         - LACT
+        - OCO/1st
+        - OCO/umbriel-git
         - ROCm-SMI
         - ROCm-SMI-LIB
         - Sphinx
@@ -24,6 +26,7 @@ on:
         - WIP
         - actions/checkupstream
         - ansicolor
+        - artcraft
         - atuin
         - auto-cpufreq
         - awesome-appmenu
@@ -101,6 +104,7 @@ on:
         - kde-material-you-colors
         - kirc
         - kitty
+        - kmscon
         - labwc-menu
         - lapce
         - lazycli
@@ -169,6 +173,7 @@ on:
         - shatteredPD
         - skate
         - soft-serve
+        - sonicde
         - spacefm
         - sync
         - tailscale
