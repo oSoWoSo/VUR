@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Name=Brave Origin
+GenericName=Web Browser
+Comment=Browse the web
+Exec=brave-origin %U
+Terminal=false
+Icon=brave-origin
+Type=Application
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;
+StartupWMClass=Brave-browser

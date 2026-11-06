@@ -1,0 +1,171 @@
+# Template file for 'brave-browser-bin'
+pkgname=brave-browser-bin
+version=1.99.55
+revision=1
+archs="x86_64 aarch64"
+hostmakedepends="unzip"
+depends="desktop-file-utils hicolor-icon-theme hwids xdg-utils"
+short_desc="One of the most private browsers built on top off Chromium project"
+maintainer="zenobit <zen@osowoso.org>"
+license="MPL-2.0"
+homepage="https://www.brave.com/"
+changelog="https://raw.githubusercontent.com/brave/brave-browser/refs/heads/master/CHANGELOG_DESKTOP.md"
+distfiles="https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser-${version}-linux-amd64.zip
+ https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser-${version}-linux-arm64.zip
+ https://github.com/brave/brave-browser/releases/download/v${version}/brave-origin-${version}-linux-amd64.zip
+ https://github.com/brave/brave-browser/releases/download/v${version}/brave-origin-${version}-linux-arm64.zip"
+checksum="ace5409dfb5a6238e3c09576fab56ef76d31e00ed6d62f10d0b41685ab3fe200
+ 1b542c83474770a94606e03e4a57536d586b905a22861a3440095729f388e7fc
+ 9d0e39e4020bfdf7aafc51308017d440ec009f8f3bbd91b67876b0d65a55505d
+ 6000e3cbc78ef4a1683d59c2b2a1d8d58749aabb288e0c083f29241971f1a31d"
+replaces="brave-browser-arm-bin>=0"
+skip_extraction=yes
+nostrip=yes
+nopie=yes
+noshlibprovides=yes
+
+do_extract() {
+	case "$XBPS_TARGET_MACHINE" in
+		x86_64) _use="amd64" ;;
+		aarch64) _use="arm64" ;;
+	esac
+	mkdir -p brave origin
+	#unzip ${XBPS_SRCDISTDIR}/${pkgname}-${version}/brave-browser-${version}-linux-${_use}.zip
+	#unzip ${XBPS_SRCDISTDIR}/${pkgname}-${version}/brave-origin-${version}-linux-${_use}.zip
+	vextract -C brave ${XBPS_SRCDISTDIR}/${pkgname}-${version}/brave-browser-${version}-linux-${_use}.zip
+	vextract -C origin ${XBPS_SRCDISTDIR}/${pkgname}-${version}/brave-origin-${version}-linux-${_use}.zip
+}
+
+do_install() {
+	# Brave Browser
+	cd brave
+
+	vbin ${FILESDIR}/brave
+	vlicense LICENSE
+
+	vmkdir opt/brave
+	for f in brave \
+		brave-browser \
+		chrome-management-service \
+		chrome-sandbox \
+		chrome_crashpad_handler \
+		brave_100_percent.pak \
+		brave_200_percent.pak \
+		brave_resources.pak \
+		chrome_100_percent.pak \
+		chrome_200_percent.pak \
+		default-app-block \
+		icudtl.dat \
+		libqt5_shim.so \
+		libqt6_shim.so \
+		libvk_swiftshader.so \
+		libvulkan.so.1 \
+		resources.pak \
+		v8_context_snapshot.bin \
+		vk_swiftshader_icd.json \
+		MEIPreload \
+		resources \
+		apparmor.d \
+		locales; do
+			vcopy "$f" opt/brave || echo "No $f in source"
+	done
+
+	chmod 755 "${DESTDIR}/opt/brave/brave"
+	chmod 755 "${DESTDIR}/opt/brave/brave-browser"
+	chmod 755 "${DESTDIR}/opt/brave/chrome-sandbox"
+	chmod 755 "${DESTDIR}/opt/brave/chrome_crashpad_handler"
+	chmod 755 "${DESTDIR}/opt/brave/chrome-management-service"
+
+	for size in 16 24 32 48 64 128 256; do
+		vinstall product_logo_${size}.png 644 \
+			usr/share/icons/hicolor/${size}x${size}/apps brave-browser.png
+	done
+
+	vinstall ${FILESDIR}/brave-browser.desktop 644 usr/share/applications
+
+	# Brave Origin
+	cd ../origin
+
+	vbin ${FILESDIR}/brave-origin
+	vlicense LICENSE LICENSE-origin
+
+	vmkdir opt/brave-origin
+	for f in brave \
+		brave-origin \
+		chrome-management-service \
+		chrome-sandbox \
+		chrome_crashpad_handler \
+		brave_100_percent.pak \
+		brave_200_percent.pak \
+		brave_resources.pak \
+		chrome_100_percent.pak \
+		chrome_200_percent.pak \
+		default-app-block \
+		icudtl.dat \
+		libqt5_shim.so \
+		libqt6_shim.so \
+		libvk_swiftshader.so \
+		libvulkan.so.1 \
+		resources.pak \
+		v8_context_snapshot.bin \
+		vk_swiftshader_icd.json \
+		MEIPreload \
+		resources \
+		apparmor.d \
+		locales; do
+			vcopy $f opt/brave-origin || echo "No $f in source"
+	done
+
+	chmod 755 "${DESTDIR}/opt/brave-origin/brave"
+	chmod 755 "${DESTDIR}/opt/brave-origin/brave-origin"
+	chmod 755 "${DESTDIR}/opt/brave-origin/chrome-sandbox"
+	chmod 755 "${DESTDIR}/opt/brave-origin/chrome_crashpad_handler"
+	chmod 755 "${DESTDIR}/opt/brave-origin/chrome-management-service"
+
+	for size in 16 24 32 48 64 128 256; do
+		vinstall product_logo_${size}.png 644 usr/share/icons/hicolor/${size}x${size}/apps brave-origin.png
+	done
+
+	vinstall ${FILESDIR}/brave-origin.desktop 644 usr/share/applications
+}
+
+brave-origin-bin_package() {
+	short_desc+=" - minimalist version"
+	pkg_install() {
+		vmove opt/brave-origin
+		for size in 16 24 32 48 64 128 256; do
+			vmove usr/share/icons/hicolor/${size}x${size}/apps/brave-origin.png
+		done
+		vmove usr/share/applications/brave-origin.desktop
+		vmove usr/bin/brave-origin
+		vlicense ${DESTDIR}/usr/share/licenses/brave-browser-bin/LICENSE-origin LICENSE
+	}
+}
+
+brave-browser-bin-qt5_package() {
+	short_desc+=" - Qt5 integration"
+	pkg_install() {
+		vmove opt/brave/libqt5_shim.so
+	}
+}
+
+brave-browser-bin-qt6_package() {
+	short_desc+=" - Qt6 integration"
+	pkg_install() {
+		vmove opt/brave/libqt6_shim.so
+	}
+}
+
+brave-origin-bin-qt5_package() {
+	short_desc+=" - minimalist version - Qt5 integration"
+	pkg_install() {
+		vmove opt/brave-origin/libqt5_shim.so
+	}
+}
+
+brave-origin-bin-qt6_package() {
+	short_desc+=" - minimalist version - Qt6 integration"
+	pkg_install() {
+		vmove opt/brave-origin/libqt6_shim.so
+	}
+}
