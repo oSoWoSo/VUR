@@ -1,0 +1,43 @@
+# Template file for 'dux-shell'
+pkgname=dux-shell
+version=2.1.0
+revision=1
+build_style=go
+build_helper=qemu
+build_wrksrc="core"
+go_import_path="github.com/duxlabs-dev/dux-shell/core"
+go_package="${go_import_path}/cmd/dms"
+go_build_tags="distro_binary"
+go_ldflags="-X main.Version=${version}"
+hostmakedepends="make tar"
+depends="quickshell+ accountsservice dux-gop matugen dbus elogind mesa-dri dux-qml-common"
+short_desc="Dux Shell — Material 3 desktop shell for Wayland"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/duxlabs-dev/dux-shell"
+changelog="https://github.com/duxlabs-dev/dux-shell/releases"
+distfiles="https://github.com/duxlabs-dev/dux-shell/archive/refs/tags/v${version}.tar.gz"
+checksum=0df73c2cf4ce79ab5152b88c71fdb2180f9e0f410342e39d6ab0c3fec9488254
+replaces="DankMaterialShell>=0"
+
+post_install() {
+	cd ..
+	vinstall assets/dms-open.desktop 644 usr/share/applications
+	vinstall assets/dev.duxlabs.shell.desktop 644 usr/share/applications
+	vinstall assets/dev.duxlabs.shell.notepad.desktop 644 usr/share/applications
+	vinstall assets/dev.duxlabs.shell.svg 644 usr/share/icons/hicolor/scalable/apps
+
+	for shell in bash fish zsh; do
+		vtargetrun ${DESTDIR}/usr/bin/dms completion ${shell} > ${pkgname}.${shell}
+		vcompletion ${pkgname}.${shell} ${shell}
+	done
+
+	vlicense LICENSE
+}
+
+DankMaterialShell_package() {
+	metapackage=yes
+	short_desc="Renamed to dux-shell (transitional dummy package)"
+	depends="${sourcepkg}>=${version}_${revision}"
+	reverts="1.6.1"
+}
