@@ -1,0 +1,54 @@
+# Template file for 'dux-files'
+pkgname=dux-files
+version=2.1.1
+revision=1
+build_style=go
+build_helper=qemu
+build_wrksrc="core"
+go_import_path="github.com/duxlabs-dev/dux-files/core"
+go_package="${go_import_path}/cmd/dfiles"
+#go_build_tags="withshell"
+go_ldflags="-X main.Version=${version}"
+depends="quickshell+ qt6-declarative dux-qml-common"
+short_desc="File manager for the Dux Labs desktop"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/duxlabs-dev/dux-files"
+changelog="https://github.com/duxlabs-dev/dux-files/releases"
+distfiles="https://github.com/duxlabs-dev/dux-files/archive/refs/tags/v${version}.tar.gz>dux-files.tar.gz"
+checksum=400c2f2fb3b88ae793535f81ca1e528686814991a7096a74c28488842280534c
+
+# The test suite binds a fake IPC socket under $TMPDIR via t.TempDir()
+# (test name up to 63 chars + 10-digit random salt -> 73-char dir).
+# Keep the AF_UNIX sun_path (107 usable bytes) from overflowing:
+# /host/tmp -> '/host/tmp/<73>/001/danksearch-<pid>.sock' is up to 111
+# bytes (bind: invalid argument); /host is at most 107.
+pre_check() {
+        mkdir -p /host
+        export TMPDIR=/host
+}
+
+post_install() {
+	# Desktop integration (UI isn't embedded in the binary! QML install?)
+	cd ..
+	vmkdir usr/share/quickshell/dfiles
+	for q in ../quickshell/*; do
+		[ "$(basename "$q")" = "DCommon" ] && continue
+		[ -e "$q" ] || [ -L "$q" ] || continue
+		vcopy "$q" usr/share/quickshell/dfiles
+	done
+	vinstall assets/dev.duxlabs.files.desktop 644 usr/share/applications
+	vinstall assets/dev.duxlabs.files.svg 644 usr/share/icons/hicolor/scalable/apps
+	vinstall assets/dev.duxlabs.files.metainfo.xml 644 usr/share/metainfo
+	vinstall assets/dev.duxlabs.files.policy 644 usr/share/polkit-1/actions
+	vinstall assets/dbus/dev.duxlabs.files.FileManager1.service 644 usr/share/dbus-1/services
+	vinstall assets/dbus/org.freedesktop.impl.portal.desktop.dfiles.service 644 usr/share/dbus-1/services
+	vinstall assets/portal/dfiles.portal 644 usr/share/xdg-desktop-portal/portals
+
+	for shell in bash fish zsh; do
+		vtargetrun ${DESTDIR}/usr/bin/dfiles completion ${shell} > ${pkgname}.${shell}
+		vcompletion ${pkgname}.${shell} ${shell}
+	done
+
+	vlicense LICENSE
+}
