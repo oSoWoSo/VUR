@@ -1,4 +1,5 @@
 LACT
+OCO/1st
 ROCm-SMI
 ROCm-SMI-LIB
 Sphinx
@@ -9,6 +10,7 @@ VUR-backup
 WIP
 actions/checkupstream
 ansicolor
+artcraft
 atuin
 auto-cpufreq
 awesome-appmenu
@@ -155,6 +157,7 @@ sakura
 shatteredPD
 skate
 soft-serve
+sonicde
 spacefm
 sync
 tailscale
