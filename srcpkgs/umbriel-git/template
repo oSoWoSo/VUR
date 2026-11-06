@@ -1,0 +1,37 @@
+# Template file for 'umbriel-git'
+pkgname=umbriel-git
+version=0.1.0.2026114
+revision=1
+_commit=4c9859f829d711be3695cfde9204e95f82747b70
+build_style=meson
+hostmakedepends="pkgconf wayland-devel cmake"
+makedepends="wlroots0.20-devel wayland-devel wayland-protocols libxkbcommon-devel
+ libinput-devel pixman-devel cairo-devel pango-devel libdrm-devel
+ libdisplay-info-devel eudev-libudev-devel libxcb-devel xcb-util-wm-devel
+ libglvnd-devel libgbm-devel lcms2-devel tomlplusplus-devel
+ json-c++ libei-devel"
+depends="xorg-server-xwayland virtual?font:sans-serif"
+short_desc="Wayland compositor built on wlroots"
+maintainer="Coolllyn <leanhduc673@gmail.com>"
+license="MIT"
+homepage="https://github.com/noctalia-dev/umbriel"
+distfiles="https://github.com/noctalia-dev/umbriel/archive/${_commit}.tar.gz"
+checksum=6bc680384030ee2e3b8587db45b3dac6419487e5039089894bc329ec2ae8bd0e
+
+if [ "$XBPS_TARGET_LIBC" = glibc ]; then
+	makedepends+=" jemalloc-devel"
+	configure_args+=" -Djemalloc=enabled"
+else
+	configure_args+=" -Djemalloc=disabled"
+fi
+
+if [ "$XBPS_CHECK_PKGS" ]; then
+	configure_args+=" -Dtests=enabled"
+else
+	configure_args+=" -Dtests=disabled"
+fi
+
+post_install() {
+	vlicense LICENSE
+	vlicense umbrielfx/LICENSE umbrielfx.LICENSE
+}
