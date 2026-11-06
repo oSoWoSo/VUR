@@ -1,0 +1,18 @@
+# Template file for 'dux-gop'
+pkgname=dux-gop
+version=2.1.0
+revision=1
+build_style=go
+go_import_path="github.com/duxlabs-dev/dux-gop"
+go_package="${go_import_path}/cmd/dgop"
+go_ldflags="-X main.Version=${version}"
+short_desc="API and CLI for system and process monitoring from Dux Labs"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/duxlabs-dev/dux-gop"
+distfiles="https://github.com/duxlabs-dev/dux-gop/archive/refs/tags/v${version}.tar.gz"
+checksum=141dbd1972ef149a6efce962a4741ddab5000c8813e245fb9b28b92f1c2b0bc6
+
+post_install() {
+	vlicense LICENSE
+}
