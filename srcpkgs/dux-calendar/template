@@ -1,0 +1,42 @@
+# Template file for 'dux-calendar'
+pkgname=dux-calendar
+version=2.1.0
+revision=2
+build_style=go
+build_helper=qemu
+build_wrksrc="core"
+go_import_path="github.com/duxlabs-dev/dux-calendar/core"
+go_package="${go_import_path}/cmd/dcal"
+go_ldflags="-X main.Version=${version}"
+depends="quickshell+ libsecret qt6-declarative"
+short_desc="Calendar app that brings your calendars together in one place"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/duxlabs-dev/dux-calendar"
+changelog="https://github.com/duxlabs-dev/dux-calendar/releases"
+distfiles="https://github.com/duxlabs-dev/dux-calendar/archive/refs/tags/v${version}.tar.gz"
+checksum=3dc36a1fdeb5420eef327e95f142d0b97038d445525e65bf01a75658eb507f18
+replaces="dankcalendar>=0"
+
+post_install() {
+	vmkdir usr/share/quickshell/dcal
+	for q in ../quickshell/*; do
+		vcopy "$q" usr/share/quickshell/dcal
+	done
+	vinstall ../assets/dev.duxlabs.calendar.desktop 644 usr/share/applications
+	vinstall ../assets/dev.duxlabs.calendar.metainfo.xml 644 usr/share/metainfo
+	vinstall ../quickshell/assets/dankcalendar-tray.svg 644 usr/share/icons/hicolor/scalable/apps
+	vinstall ../assets/dev.duxlabs.calendar.svg 644 usr/share/icons/hicolor/scalable/apps
+	vlicense ../LICENSE
+	for shell in bash zsh fish; do
+		vtargetrun $DESTDIR/usr/bin/dcal completion ${shell} > dcal.${shell}
+		vcompletion dcal.${shell} ${shell}
+	done
+}
+
+dankcalendar_package() {
+	metapackage=yes
+	short_desc="Renamed to dux-calendar (transitional dummy package)"
+	depends="${sourcepkg}>=${version}_${revision}"
+	reverts="1.6.1"
+}
