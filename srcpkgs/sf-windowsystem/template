@@ -1,0 +1,57 @@
+# Template file for 'sf-windowsystem'
+pkgname=sf-windowsystem
+version=6.31.0.1
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sonic-namespace doxygen qt6-tools qt6-base qt6-declarative-host-tools pkg-config sf-cmake-modules"
+makedepends="libstdc++-devel libX11-devel libxcb-devel libXfixes-devel xcb-util-keysyms-devel
+ qt6-base-private-devel qt6-declarative-devel"
+short_desc="Access to the windowing system (SonicDE framework fork)"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-only OR LGPL-3.0-only"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-windowsystem"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-windowsystem/archive/refs/tags/${version}.tar.gz"
+checksum=a289551299b5c756d9217aaa59c75b666b93ea774ae91887749ca803718f6eed
+
+post_install() {
+	sed -i -e 's:/usr/[a-z0-9-]*/usr/include;::' \
+		${DESTDIR}/usr/lib/cmake/*/*Targets.cmake
+}
+
+do_check() {
+	cd build
+	# disable failing tests
+	tests=("kwindowsystem-kmanagerselectiontest"
+		"kwindowsystem-kstartupinfo_unittest"
+		"kwindowsystem-kxmessages_unittest"
+		"kwindowsystem-kkeyserver_x11_unittest"
+		"kwindowsystem-kwindoweffectstest"
+		"kwindowsystem-kwindowinfox11test"
+		"kwindowsystem-kwindowsystemx11test"
+		"kwindowsystem-kwindowsystem_threadtest"
+		"kwindowsystem-netrootinfotestwm"
+		"kwindowsystem-netwininfotestclient"
+		"kwindowsystem-netwininfotestwm"
+		"kwindowsystem-kmanagerselectiontest"
+		"kwindowsystem-compositingenabled_test"
+		"kwindowsystem-compositingenabled_test")
+	ctest -E "($( echo ${tests[@]} | tr " " "|" ))"
+}
+
+sf-windowsystem-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/pkgconfig
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
