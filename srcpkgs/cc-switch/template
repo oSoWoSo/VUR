@@ -1,0 +1,68 @@
+# Template file for 'cc-switch'
+pkgname=cc-switch
+version=4.0.25
+revision=1
+archs="x86_64* aarch64*"
+build_helper="rust"
+hostmakedepends="nodejs cargo python3 xdg-utils pnpm pkg-config"
+makedepends="glib-devel cairo-devel gdk-pixbuf-devel gtk+3-devel pango-devel libwebkit2gtk41-devel libsoup3-devel libsecret-devel openssl-devel rust-std"
+depends="glib cairo gdk-pixbuf gtk+3 pango libwebkit2gtk41 libsoup3 libsecret openssl"
+short_desc="Assistant for Claude Code, Codex, OpenCode, OpenClaw & Gemini CLI"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/farion1231/cc-switch"
+distfiles="https://github.com/farion1231/cc-switch/archive/refs/tags/v${version}.tar.gz"
+checksum=fc22d2eaf51c508d3dfa720e894b65ceb2e8e3b2cabf1b919fbffed152764e6a
+
+_setup_env() {
+	if [ -n "$CROSS_BUILD" ]; then
+		export CARGO_BUILD_TARGET="$RUST_TARGET"
+		export PKG_CONFIG_ALLOW_CROSS=1
+		export BINDGEN_EXTRA_CLANG_ARGS+=" --sysroot=${XBPS_CROSS_BASE}"
+		export CFLAGS_${RUST_BUILD//-/_}="${CFLAGS_host}" \
+		 CXXFLAGS_${RUST_BUILD//-/_}="${CXXFLAGS_host}" \
+		 LDFLAGS_${RUST_BUILD//-/_}="${LDFLAGS_host}" \
+		 CFLAGS_${RUST_TARGET//-/_}="${CFLAGS}" \
+		 CXXFLAGS_${RUST_TARGET//-/_}="${CXXFLAGS}" \
+		 LDFLAGS_${RUST_TARGET//-/_}="${LDFLAGS}" \
+		 CFLAGS="" CXXFLAGS="" LDFLAGS=""
+	fi
+}
+
+pre_build() {
+	pnpm install --frozen-lockfile --ignore-scripts
+	if [ -n "$CROSS_BUILD" ]; then
+		_setup_env
+		cargo fetch --locked --target ${RUST_TARGET} --manifest-path src-tauri/Cargo.toml
+	fi
+}
+
+do_build() {
+	if [ -n "$CROSS_BUILD" ]; then
+		_setup_env
+		pnpm run build:renderer
+		cargo build --release --locked --target ${RUST_TARGET} --manifest-path src-tauri/Cargo.toml
+	else
+		pnpm tauri build --no-bundle --ci
+	fi
+}
+
+do_check() {
+	pnpm exec vitest run --testTimeout=15000 --minWorkers=1 --maxWorkers=2
+}
+
+do_install() {
+	for size in 32 64 128; do
+		vmkdir usr/share/icons/hicolor/${size}x${size}/apps
+		vinstall src-tauri/icons/${size}x${size}.png 644 usr/share/icons/hicolor/${size}x${size}/apps com.ccswitch.desktop.png
+	done
+	vmkdir usr/share/applications
+	vinstall flatpak/com.ccswitch.desktop.desktop 644 usr/share/applications com.ccswitch.desktop.desktop
+
+	local _targetpath="src-tauri/target"
+	if [ -n "$CROSS_BUILD" ]; then
+		_targetpath="${_targetpath}/${RUST_TARGET}"
+	fi
+	vbin ${_targetpath}/release/cc-switch
+	vlicense LICENSE
+}
