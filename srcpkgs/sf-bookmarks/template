@@ -1,0 +1,30 @@
+# Template file for 'sf-bookmarks'
+pkgname=sf-bookmarks
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="sonic-namespace sf-cmake-modules qt6-tools qt6-base sf-settings"
+makedepends="sf-settings-devel qt6-base-devel sf-core-addons-devel
+ sf-widgets-addons-devel"
+short_desc="Bookmarks management library"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-bookmarks"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-bookmarks/archive/refs/tags/${version}.tar.gz"
+checksum=218f4643bb1663c07324334f10927bab900a5e5b39b8ea937059b95b3c66ba8c
+
+sf-bookmarks-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision}
+	 sf-widgets-addons-devel qt6-base-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
