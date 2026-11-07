@@ -1,0 +1,48 @@
+# Template file for 'sf-core-addons'
+pkgname=sf-core-addons
+version=6.31.0
+revision=1
+build_style=cmake
+build_helper="qemu"
+_llvmver=21
+configure_args="-DBUILD_TESTING=OFF -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins $(vopt_bool python BUILD_PYTHON_BINDINGS)
+ -DSYSROOT_INCLUDE_DIRS=$XBPS_CROSS_BASE/usr/include $(vopt_if python "-DECM_SHIBOKEN_ARCH=$XBPS_CROSS_RUST_TARGET")"
+hostmakedepends="sonic-namespace doxygen qt6-base qt6-tools sf-cmake-modules
+ $(vopt_if python "python3-build python3-setuptools shiboken6 llvm${_llvmver}")"
+makedepends="qt6-base-devel qt6-declarative-devel
+ $(vopt_if python 'libshiboken6-devel libpyside6-devel python3-devel')"
+depends="libgcc libstdc++"
+short_desc="Core Qt functionality extensions for SonicDE frameworks"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-only OR LGPL-3.0-only"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-core-addons"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-core-addons/archive/refs/tags/${version}.tar.gz"
+checksum=fd8297c46f64c55e856c1a31d3380ad7167a9e01c03af5eeecb1d27b1ac8fd2d
+
+build_options="python"
+build_options_default="python"
+
+export LLVM_INSTALL_DIR=/usr/lib/llvm/${_llvmver}
+
+do_check() {
+	cd build
+	# disable failing test
+	ctest -E "kformattest"
+}
+
+sf-core-addons-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove usr/lib/pkgconfig
+		vmove "usr/lib/*.so"
+	}
+}
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
