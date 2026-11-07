@@ -1,0 +1,33 @@
+# Template file for 'sf-color-scheme'
+pkgname=sf-color-scheme
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="sonic-namespace sf-cmake-modules qt6-tools qt6-base
+ sf-settings gettext"
+makedepends="sf-settings-devel sf-gui-addons-devel sf-internationalization-devel
+ qt6-base-private-devel"
+short_desc="Classes to read and interact with KColorScheme"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-color-scheme"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-color-scheme/archive/refs/tags/${version}.tar.gz"
+checksum=48d183f95f376d59404fa14811260c1a797b83fecf4050b10f9cf88d0b77f16e
+# transitive deps from sf-gui-addons, for build ordering
+makedepends+=" libpyside6-devel"
+
+sf-color-scheme-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision}
+	 sf-gui-addons-devel qt6-base-devel sf-internationalization-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
