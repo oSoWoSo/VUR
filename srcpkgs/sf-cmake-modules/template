@@ -1,0 +1,28 @@
+# Template file for 'sf-cmake-modules'
+pkgname=sf-cmake-modules
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DCMAKE_INSTALL_PREFIX=/usr -DBUILD_MAN_DOCS=ON
+ -DBUILD_HTML_DOCS=OFF -DBUILD_QTHELP_DOCS=OFF -DBUILD_TESTING=ON"
+hostmakedepends="cmake sonic-namespace extra-cmake-modules python3-requests qt5 qt6-base qt6-tools"
+makedepends="qt5-devel qt5-tools-devel qt5-declarative-devel"
+depends="cmake"
+short_desc="Extended CMake modules and build utilities for SonicDE frameworks"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-cmake-modules"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-cmake-modules/archive/refs/tags/${version}.tar.gz"
+checksum=5b38480d00cfce6a86537a6a7581103e9973161627c49cd97a06c9824cb5e69e
+provides="extra-cmake-modules-${version}_${revision}"
+conflicts="extra-cmake-modules"
+replaces="extra-cmake-modules>=0"
+
+do_check() {
+	cd build
+	ctest -E "KDEFetchTranslations"
+}
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}

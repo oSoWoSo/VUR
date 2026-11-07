@@ -1,0 +1,17 @@
+--- a/modules/ECMGeneratePythonBindings.cmake
++++ b/modules/ECMGeneratePythonBindings.cmake
+@@ -136,0 +137,14 @@
++    if (DEFINED SYSROOT_INCLUDE_DIRS)
++        list(APPEND shiboken_options --include-paths=${SYSROOT_INCLUDE_DIRS})
++    endif()
++    list(APPEND shiboken_options ${SHIBOKEN_GENERATOR_EXTRA_FLAGS})
++    if(DEFINED ECM_SHIBOKEN_ARCH)
++        list(APPEND shiboken_options "--arch=${ECM_SHIBOKEN_ARCH}")
++    elseif(CMAKE_CROSSCOMPILING)
++        list(APPEND shiboken_options "--arch=${CMAKE_SYSTEM_PROCESSOR}")
++    endif()
++    if(CMAKE_CROSSCOMPILING)
++        list(APPEND shiboken_options
++            "--platform=${CMAKE_SYSTEM_NAME}"
++            "--compiler-path=${CMAKE_CXX_COMPILER}")
++    endif()
