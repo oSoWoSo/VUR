@@ -1,0 +1,31 @@
+# Template file for 'sf-dbus'
+pkgname=sf-dbus
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="sonic-namespace sf-cmake-modules qt6-tools qt6-base "
+makedepends="qt6-base-private-devel"
+checkdepends="dbus"
+short_desc="KDE Convenience classes for DBus"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-dbus"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-dbus/archive/refs/tags/${version}.tar.gz"
+checksum=f7e5e76c05e73c4fd3e91d085e824a9b533d1135796e5fda0d22df5273af0b3b
+make_check_pre="dbus-run-session"
+
+sf-dbus-devel_package() {
+	depends="qt6-base-devel ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+	sed -i 's/setOrganizationDomain("kde.org")/setOrganizationDomain("sf.org")/' autotests/kdbussimpleservice.cpp
+}
