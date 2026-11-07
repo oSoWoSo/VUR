@@ -1,0 +1,8 @@
+# Runtime VT number comes from the kmscon-ttyN service directory.
+TTY=${PWD##*-tty}
+
+case "$TTY" in
+	1) KMSCON_FLAGS="--switchvt --font-engine=unifont --font-size=16" ;;
+	2|3|4|5|6) KMSCON_FLAGS="--no-switchvt --font-engine=unifont --font-size=16" ;;
+	*) echo "kmscon: cannot determine VT from service directory: $PWD" >&2; exit 1 ;;
+esac
