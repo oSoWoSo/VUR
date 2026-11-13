@@ -1,0 +1,37 @@
+# Template file for 'sf-io-extras'
+pkgname=sf-io-extras
+version=26.08.2
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DWITH_LIBPROXY=ON -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="gettext gperf KDSoap pkg-config qt6-base qt6-tools
+ sf-cmake-modules sf-core-addons sf-doctools sf-io sf-settings-utils sonic-namespace"
+makedepends="KDSoap-devel kdsoap-ws-discovery-client-devel libimobiledevice-devel
+ libmtp-devel libnfs-devel libopenexr-devel libplist-devel libproxy-devel
+ libssh-devel libstdc++-devel libtirpc-devel libXcursor-devel phonon-devel
+ qcoro-qt6-devel qt6-base-private-devel qt6-qt5compat-devel qt6-svg-devel samba-devel
+ sf-app-info-devel sf-archive-devel sf-core-addons-devel sf-dbus-devel
+ sf-device-integration-devel sf-doctools-devel sf-gui-addons-devel
+ sf-internationalization-devel sf-io-devel sf-notifications-devel sf-settings-devel
+ sf-settings-ui-devel sf-settings-utils-devel sf-syntax-highlighting-devel
+ sf-text-widgets-devel sf-widgets-addons-devel sf-zeroconf-devel taglib-devel
+ sonic-activities-devel sonic-activities-stats-devel sonic-exiv2-library-devel"
+depends="ripgrep-all smbclient"
+short_desc="Extended I/O components for SonicDE frameworks (kio-extras replacement)"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-io-extras"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-io-extras/archive/refs/tags/${version}.tar.gz"
+checksum=e513ed748d190c2493fdf43dd6cde4934cc458d1fa17b9eb26ac5b26d039adf2
+provides="kio-extras-${version}_${revision}"
+conflicts="kio-extras"
+replaces="kio-extras>=0"
+
+CFLAGS="-D_GNU_SOURCE"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
