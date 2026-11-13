@@ -1,0 +1,51 @@
+# Template file for 'sonic-screenlocker'
+pkgname=sonic-screenlocker
+version=6.8.0.2
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sf-cmake-modules pkg-config qt6-base qt6-tools gettext
+ elogind sf-package sf-settings-utils sf-settings sonic-namespace"
+makedepends="sf-settings-devel sf-crash-handler-devel sf-qml-bridge-devel
+ sf-internationalization-devel sf-idle-tracker-devel sf-notifications-devel
+ sf-package-devel sf-svg-devel sf-xml-gui-devel sf-settings-utils-devel
+ sf-device-integration-devel libX11-devel libxcb-devel libXi-devel
+ pam-devel qt6-base-private-devel qt6-declarative-devel sf-core-addons-devel
+ sf-io-devel sf-keybind-devel sf-quick-ui-devel sf-windowsystem-devel
+ sonic-interface-libraries-devel sonic-screen-library-devel
+ xcb-util-keysyms-devel layer-shell-qt-devel"
+short_desc="Library and components for secure lock screen architecture"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-screenlocker"
+distfiles="https://github.com/Sonic-DE/sonic-screenlocker/archive/refs/tags/${version}.tar.gz"
+checksum=32b190a21a5ca2e7d8d2c90068de9a69839d46ac557d78a5067dfd471a1f67a9
+provides="kscreenlocker-${version}_${revision}"
+conflicts="kscreenlocker"
+replaces="kscreenlocker>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+post_install() {
+	vinstall ${FILESDIR}/kde.pam 664 usr/lib/pam.d/kde
+	vinstall ${FILESDIR}/kde-fingerprint.pam 664 usr/lib/pam.d/kde-fingerprint
+	vinstall ${FILESDIR}/kde-smartcard.pam 664 usr/lib/pam.d/kde-smartcard
+}
+
+sonic-screenlocker-devel_package() {
+	provides="kscreenlocker-devel-${version}_${revision}"
+	conflicts="kscreenlocker-devel"
+	replaces="kscreenlocker-devel>=0"
+	short_desc+=" - development files"
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
