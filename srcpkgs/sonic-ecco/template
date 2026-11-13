@@ -1,0 +1,45 @@
+# Template file for 'sonic-ecco'
+pkgname=sonic-ecco
+version=26.08.2
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sf-cmake-modules python3 qt6-tools qt6-base
+ gettext sf-core-addons sf-settings sf-doctools
+ sf-settings-utils sonic-namespace"
+makedepends="sf-file-search-devel sf-bookmarks-devel
+ sf-settings-utils-devel sf-autocomplete-devel
+ sf-settings-devel sf-core-addons-devel
+ sf-crash-handler-devel sf-dbus-devel
+ sf-doctools-devel sf-file-metadata-devel
+ sf-internationalization-devel sf-icon-themes-devel
+ sf-io-devel sf-addons-downloader-devel
+ sf-notifications-devel sf-ui-components-devel
+ sf-text-widgets-devel sf-user-feedback-devel
+ sf-windowsystem-devel sf-device-integration-devel
+ qt6-base-private-devel baloo-widgets-devel phonon-devel sonic-activities-devel"
+depends="sf-io-extras"
+short_desc="File manager for Sonic"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-2.0-or-later OR GFDL-1.2-or-later"
+homepage="https://github.com/Sonic-DE/sonic-ecco"
+distfiles="https://github.com/Sonic-DE/sonic-ecco/archive/refs/tags/${version}.tar.gz"
+checksum=1829f62dfdd57b55c6b1ecb9a0278f0a61fb77748582f317009d39e0125c201d
+provides="dolphin-${version}_${revision}"
+conflicts="dolphin"
+replaces="dolphin>=0"
+
+if [ "$CROSS_BUILD" ]; then
+	LDFLAGS=" -Wl,-rpath-link,../bin"
+fi
+
+if [ "$XBPS_TARGET_LIBC" = "musl" ]; then
+	LDFLAGS="$LDFLAGS -Wl,-z,stack-size=0x200000"
+	makedepends+=" musl-fts-devel"
+fi
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
