@@ -1,0 +1,30 @@
+# Template file for 'sf-idle-tracker'
+pkgname=sf-idle-tracker
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="pkg-config plasma-wayland-protocols qt6-base qt6-tools sf-cmake-modules sonic-namespace"
+makedepends="libXScrnSaver-devel qt6-base-private-devel"
+short_desc="Framework for detection and notification of device idle time"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-idle-tracker"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-idle-tracker/archive/refs/tags/${version}.tar.gz"
+checksum=91bcd85f10b690083413695c3199fd53ecf7c7a55266be508a18d528946a8ec4
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-idle-tracker-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
