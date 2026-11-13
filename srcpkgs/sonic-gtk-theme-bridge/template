@@ -1,0 +1,25 @@
+# Template file for 'sonic-gtk-theme-bridge'
+pkgname=sonic-gtk-theme-bridge
+version=6.8.0.1
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="gettext pkg-config qt6-base qt6-tools sassc sf-cmake-modules sf-core-addons sf-settings sonic-namespace xsettingsd"
+makedepends="gsettings-desktop-schemas-devel gtk+3-devel libglib-devel qt6-base-devel qt6-svg-devel sf-addons-downloader-devel sf-color-scheme-devel sf-dbus-devel sf-gui-addons-devel sf-settings-devel sf-settings-utils-devel sf-windowsystem-devel sonic-decoration-devel"
+depends="gsettings-desktop-schemas sonic-terminal-tools xsettingsd"
+short_desc="Syncs Sonic settings to GTK applications"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-gtk-theme-bridge"
+distfiles="https://github.com/Sonic-DE/sonic-gtk-theme-bridge/archive/refs/tags/${version}.tar.gz"
+checksum=dea2e85998f683fc4a73e51860254787813a3f70128c498285690c5ae5c86ade
+provides="kde-gtk-config-${version}_${revision}"
+conflicts="kde-gtk-config"
+replaces="kde-gtk-config>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
