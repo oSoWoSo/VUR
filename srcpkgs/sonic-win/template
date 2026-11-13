@@ -1,0 +1,57 @@
+# Template file for 'sonic-win'
+pkgname=sonic-win
+version=6.8.0.2
+revision=1
+build_style=cmake
+build_helper=qemu
+configure_args="-DBUILD_TESTING=OFF -DFORCE_CROSSCOMPILED_TOOLS=ON
+ -DSF6_HOST_TOOLING=/usr/lib/cmake -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="python3 gettext pkg-config libcap-progs qt6-base qt6-tools
+ qt6-declarative-host-tools sf-package sf-settings sf-settings-utils
+ sf-windowsystem sf-auth-tools sf-doctools sf-cmake-modules sonic-namespace"
+makedepends="sf-settings-utils-devel sf-color-scheme-devel sf-settings-devel
+ sf-crash-handler-devel sf-qml-bridge-devel sf-internationalization-devel
+ sf-data-models-devel sf-addons-downloader-devel sf-notifications-devel
+ sf-package-devel sf-quick-charts-devel sf-app-info-devel sf-svg-devel
+ sf-widgets-addons-devel sf-xml-gui-devel lcms2-devel libcanberra-devel
+ libdisplay-info-devel libdrm-devel libepoxy-devel libqaccessibilityclient-devel
+ libX11-devel libxcb-devel libXi-devel libxkbcommon-devel qt6-qt5compat-devel
+ qt6-base-private-devel qt6-declarative-devel qt6-sensors-devel qt6-svg-devel
+ qt6-tools-devel sonic-decoration-devel sf-idle-tracker-devel sf-dbus-devel
+ sf-settings-ui-devel sonic-activities-devel sf-auth-devel sf-core-addons-devel
+ sf-gui-addons-devel sf-keybind-devel sf-quick-ui-devel sf-windowsystem-devel
+ sonic-interface-libraries-devel sonic-keybind-daemon-devel
+ sonic-screenlocker-devel sf-doctools-devel sonic-night-light-devel
+ eudev-libudev-devel xcb-util-cursor-devel xcb-util-keysyms-devel
+ xcb-util-wm-devel libcap-devel freetype-devel fontconfig-devel libgbm-devel
+ libei-devel elogind-devel libgomp-devel"
+depends="aurorae sonic-silver libxkbcommon-x11 sf-quick-ui"
+short_desc="KWin X11 fork with Sonic patches"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-win"
+distfiles="https://github.com/Sonic-DE/sonic-win/archive/refs/tags/${version}.tar.gz"
+checksum=fcd4d0165b415a0e47e664d8d227967c8c5726bbee37c2716eedd2228651a8e8
+makedepends+=" layer-shell-qt-devel sonic-screen-library-devel"
+provides="kwin-x11-${version}_${revision}"
+conflicts="kwin-x11"
+replaces="kwin-x11>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sonic-win-devel_package() {
+	provides="kwin-x11-devel-${version}_${revision}"
+	replaces="kwin-x11-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
