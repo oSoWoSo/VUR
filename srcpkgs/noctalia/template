@@ -1,0 +1,55 @@
+# Template file for 'noctalia'
+pkgname=noctalia
+version=5.5.0
+revision=1
+build_style=meson
+build_helper=qemu
+make_check_args="--print-errorlogs"
+hostmakedepends="pkgconf wayland-devel"
+makedepends="cairo-devel fontconfig-devel freetype-devel harfbuzz-devel json-c++
+ libcurl-devel libepoxy-devel libglib-devel libglvnd-devel libical-devel
+ libjxl-devel libmd4c-devel libqalculate-devel librsvg-devel libsecret-devel
+ libsndfile-devel libsodium-devel libwebp-devel libxkbcommon-devel libxml2-devel
+ pam-devel pango-devel pipewire-devel polkit-devel sdbus-c++-devel stb
+ tomlplusplus-devel wayland-devel wayland-protocols wireplumber-devel"
+depends="git sound-theme-freedesktop libheif"
+checkdepends="git dejavu-fonts-ttf dbus openssl python3"
+short_desc="Sleek, customizable desktop shell crafted for Wayland"
+maintainer="Coolllyn <leanhduc673@gmail.com>"
+license="MIT AND Apache-2.0"
+homepage="https://noctalia.dev"
+changelog="https://noctalia.dev/changelogs/v${version}"
+distfiles="https://github.com/noctalia-dev/noctalia/archive/refs/tags/v${version}.tar.gz"
+checksum="f3fe8a1f1d4306280413e04f934400b787dba212d296d97dfd638bcb55c78262"
+
+if [ "$XBPS_TARGET_LIBC" = glibc ]; then
+	makedepends+=" jemalloc-devel"
+	configure_args+=" -Djemalloc=enabled"
+else
+	configure_args+=" -Djemalloc=disabled"
+fi
+
+if [ "$XBPS_CHECK_PKGS" ]; then
+	configure_args+=" -Dtests=enabled"
+else
+	configure_args+=" -Dtests=disabled"
+fi
+
+pre_configure() {
+	vsed -i src/app/git_revision.h.in -e "s/@VCS_TAG@/${version}_${revision}/g"
+}
+
+post_install() {
+	vlicense LICENSE
+	vlicense third_party/fzy/LICENSE fzy.LICENSE
+	vlicense lib/third_party/wuffs/LICENSE-MIT wuffs.LICENSE
+	vlicense third_party/luau/LICENSE.txt luau.LICENSE
+	vlicense third_party/luau/lua_LICENSE.txt luau.lua.LICENSE
+	vlicense lib/assets/fonts/tabler-icons-license.txt tabler-icons.LICENSE
+	vsconf example.toml
+
+	for shell in bash fish zsh; do
+		vtargetrun ${DESTDIR}/usr/bin/noctalia completions ${shell} > noctalia.${shell}
+		vcompletion noctalia.${shell} ${shell}
+	done
+}

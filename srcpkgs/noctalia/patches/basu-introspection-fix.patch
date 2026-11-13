@@ -1,0 +1,22 @@
+--- a/tests/notification_reply_integration_test.cpp
++++ b/tests/notification_reply_integration_test.cpp
+@@ -65,8 +65,17 @@
+
+   TEST_CHECK(drainUntil(bus, [&] { return introDone.load(); }));
+   TEST_CHECK(introXml.contains(R"(<signal name="NotificationReplied">)"));
+-  TEST_CHECK(introXml.contains(R"(<arg type="u" name="id"/>)"));
+-  TEST_CHECK(introXml.contains(R"(<arg type="s" name="text"/>)"));
++  // sd-bus implementations older than v242 (e.g. basu on Void Linux) never emit
++  // argument names in introspection XML, and sdbus-c++ only fills vtable arg
++  // names when built against libsystemd >= 242. Validate the (uint32, string)
++  // signature inside the NotificationReplied signal body, with or without names.
++  const auto sigStart = introXml.find(R"(<signal name="NotificationReplied">)");
++  TEST_CHECK(sigStart != std::string::npos);
++  const auto sigEnd = introXml.find(R"(</signal>)", sigStart);
++  TEST_CHECK(sigEnd != std::string::npos);
++  const std::string signalBody = introXml.substr(sigStart, sigEnd - sigStart);
++  TEST_CHECK(signalBody.contains(R"(<arg type="u" name="id"/>)") || signalBody.contains(R"(<arg type="u"/>)"));
++  TEST_CHECK(signalBody.contains(R"(<arg type="s" name="text"/>)") || signalBody.contains(R"(<arg type="s"/>)"));
+
+   // Register signal listeners on both clients
+   std::atomic<bool> client1Replied{false};
