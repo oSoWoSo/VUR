@@ -1,0 +1,39 @@
+# Template file for 'sonic-keybind-daemon'
+pkgname=sonic-keybind-daemon
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="qt6-base qt6-tools sf-cmake-modules sf-settings sonic-namespace"
+makedepends="libX11-devel libxcb-devel qt6-base-private-devel sf-app-info-devel sf-core-addons-devel sf-crash-handler-devel sf-dbus-devel sf-io-devel sf-keybind-devel sf-progress-ui-devel sf-settings-devel sf-windowsystem-devel xcb-util-keysyms-devel"
+short_desc="Daemon providing global keyboard shortcut functionality for SonicDE"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-keybind-daemon"
+distfiles="https://github.com/Sonic-DE/sonic-keybind-daemon/archive/refs/tags/${version}.tar.gz"
+checksum=f4aa25e127791fcc788b7d54ca437090aa19d2d17582225aae26d383ad9358da
+provides="kglobalacceld-${version}_${revision}"
+conflicts="kglobalacceld"
+replaces="kglobalacceld>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+do_check() {
+	cd build
+	ctest -E "shortcutstest|migrateconfigtest|allowlisttest"
+}
+
+sonic-keybind-daemon-devel_package() {
+	provides="kglobalacceld-devel-${version}_${revision}"
+	replaces="kglobalacceld-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+	}
+}
