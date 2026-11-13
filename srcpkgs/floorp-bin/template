@@ -1,0 +1,27 @@
+# Template file for 'floorp-bin'
+pkgname=floorp-bin
+version=12.21.1
+revision=1
+archs="x86_64 aarch64"
+short_desc="Browser built for keeping the Open, Private and Sustainable Web alive"
+maintainer="zenobit <zen@osowoso.org>"
+license="MPL-2.0"
+homepage="https://github.com/Floorp-Projects/Floorp"
+distfiles="https://github.com/Floorp-Projects/Floorp/releases/download/v${version}/floorp-linux-aarch64.tar.xz
+ https://github.com/Floorp-Projects/Floorp/releases/download/v${version}/floorp-linux-x86_64.tar.xz"
+checksum="e199206a5bc662dbfa05e0abeda1ad3a8d256681950b91ccef1e397a30bb46dc
+ 7dcedcbfef747819153b0b9c541a9c1f4f4965b0720f16d5d237d39b0c30d613"
+
+do_extract() {
+	vextract "${XBPS_SRCDISTDIR}/${pkgname}-${version}/floorp-linux-${XBPS_TARGET_MACHINE}.tar.xz"
+}
+
+do_install() {
+	vbin "${FILESDIR}/floorp"
+	vmkdir usr/lib/floorp
+	vcopy * usr/lib/floorp
+	vinstall "${FILESDIR}/floorp.desktop" 644 usr/share/applications
+	for size in 16 32 48 64 128; do
+		vinstall browser/chrome/icons/default/default${size}.png 644 usr/share/icons/hicolor/${size}x${size}/apps floorp.png
+	done
+}
