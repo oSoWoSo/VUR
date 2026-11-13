@@ -1,0 +1,50 @@
+# Template file for 'sonic-interface-libraries'
+pkgname=sonic-interface-libraries
+version=6.8.0.1
+revision=1
+build_style=cmake
+configure_args="-DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="gettext pkg-config qt6-base qt6-declarative-host-tools qt6-tools
+ sf-cmake-modules sf-doctools sf-package sf-quick-ui-devel sf-settings
+ sf-settings-utils sf-windowsystem sonic-namespace"
+makedepends="libglvnd-devel libX11-devel libxcb-devel qt6-base-private-devel
+ qt6-declarative-devel qt6-qt5compat-devel sf-color-scheme-devel
+ sf-core-addons-devel sf-gui-addons-devel sf-icon-themes-devel
+ sf-internationalization-devel sf-io-devel sf-keybind-devel sf-notifications-devel
+ sf-package-devel sf-quick-ui-devel sf-settings-devel sf-svg-devel
+ sf-widgets-addons-devel sf-windowsystem-devel sonic-activities-devel"
+depends="sf-quick-ui"
+short_desc="SonicDE library and runtime components"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-interface-libraries"
+distfiles="https://github.com/Sonic-DE/sonic-interface-libraries/archive/refs/tags/${version}.tar.gz"
+checksum=fbe21ba114af62b024045dd62fa461e1d904c1ad97b3a47bb559f84fea0ba41c
+provides="libplasma-${version}_${revision}"
+conflicts="libplasma"
+replaces="libplasma>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+do_check() {
+	cd build
+	# disable failing tests
+	ctest -E "plasma-dialogstatetest|dialognativetest|plasma-dialogqmltest|plasma-themetest|bug485688test|plasma-pluginloadertest|applettest"
+}
+
+sonic-interface-libraries-devel_package() {
+	provides="libplasma-devel-${version}_${revision}"
+	replaces="libplasma-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel qt6-declarative-devel sf-package-devel sf-windowsystem-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
