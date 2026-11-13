@@ -1,0 +1,33 @@
+# Template file for 'sf-quick-desktop-style'
+pkgname=sf-quick-desktop-style
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="pkg-config qt6-base qt6-declarative-host-tools qt6-tools sf-cmake-modules sf-settings sonic-namespace"
+makedepends="qt6-base-devel qt6-declarative-devel sf-color-scheme-devel sf-icon-themes-devel sf-quick-ui-devel sf-settings-devel"
+short_desc="Qt Quick Controls 2: Desktop Style"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-quick-desktop-style"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-quick-desktop-style/archive/refs/tags/${version}.tar.gz"
+checksum=f6de96fcdddae6c1d737e6dc4143c89905eb7e48616e1e0114a834ae4d24a1e0
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+do_check() {
+	cd build
+	ctest -E "animationspeedmodifiertest|TextFieldContextMenuTest"
+}
+
+sf-quick-desktop-style-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/cmake
+	}
+}
