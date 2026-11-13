@@ -1,0 +1,25 @@
+# Template file for 'sonic-ssh-password-prompt'
+pkgname=sonic-ssh-password-prompt
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DSF6_HOST_TOOLING=/usr/lib/cmake -DBUILD_QT5=OFF"
+hostmakedepends="sf-cmake-modules qt6-base qt6-tools gettext sf-doctools sonic-namespace"
+makedepends="sf-keyring-devel sf-doctools-devel sf-settings-utils-devel
+ sf-windowsystem-devel sf-icon-themes-devel sonic-decoration-devel
+ qtkeychain-qt6-devel qt6-svg-devel"
+short_desc="Ssh-add helper for QtKeychain"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-ssh-password-prompt"
+distfiles="https://github.com/Sonic-DE/sonic-ssh-password-prompt/archive/refs/tags/${version}.tar.gz"
+checksum=5b0ab24ae6a44f4d2622c1f77a873f0ecb0e2b9bb83d8a69df78ad227807c8c4
+alternatives="ssh-askpass:/usr/libexec/ssh-askpass:/usr/bin/ksshaskpass"
+provides="ksshaskpass-${version}_${revision}"
+conflicts="ksshaskpass"
+replaces="ksshaskpass>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
