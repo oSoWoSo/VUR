@@ -1,0 +1,35 @@
+# Template file for 'sf-runner'
+pkgname=sf-runner
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="doxygen gettext qt6-base qt6-tools sf-cmake-modules sf-doctools sf-settings sonic-namespace"
+makedepends="libstdc++-devel qt6-base-private-devel sf-core-addons-devel sf-data-models-devel sf-internationalization-devel sf-settings-devel sf-windowsystem-devel"
+depends="sf-core-addons sf-windowsystem"
+checkdepends="dbus"
+short_desc="Framework for providing actions based on query strings (SonicDE runner)"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-only, LGPL-3.0-only"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-runner"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-runner/archive/refs/tags/${version}.tar.gz"
+checksum=16d64b45897bf598b9dc794f13c0329b1c72760c8549573e9c3e4d1745009f5d
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+do_check() {
+	cd build
+	dbus-run-session ctest
+}
+
+sf-runner-devel_package() {
+	depends="${makedepends//private-} ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
