@@ -3,7 +3,7 @@ pkgname=sonic-visualiser
 version=4.5.2
 revision=5
 build_style=meson
-hostmakedepends="pkg-config capnproto-devel qt5-host-tools"
+hostmakedepends="capnproto-devel pkg-config qt5-host-tools sonic-namespace"
 makedepends="capnproto-devel jack-devel libfishsound-devel libid3tag-devel
  liblo-devel liblrdf-devel libmad-devel liboggz-devel libsamplerate-devel
  opusfile-devel portaudio-devel pulseaudio-devel qt5-svg-devel rubberband-devel
@@ -15,3 +15,8 @@ homepage="https://www.sonicvisualiser.org/"
 changelog="https://raw.githubusercontent.com/sonic-visualiser/sonic-visualiser/default/CHANGELOG"
 distfiles="https://github.com/sonic-visualiser/sonic-visualiser/releases/download/sv_v${version}/sonic-visualiser-${version}.tar.gz"
 checksum=0816e1ba9e3f97af495ece2554186bccad1cf47090ff8a13f1d08322212db487
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
