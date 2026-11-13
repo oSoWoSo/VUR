@@ -1,0 +1,30 @@
+# Template file for 'sonic-system-log'
+pkgname=sonic-system-log
+version=26.08.2
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DECM_MKSPECS_INSTALL_DIR=/usr/lib/qt6/mkspecs/modules"
+hostmakedepends="sf-cmake-modules gettext sf-settings sf-core-addons sf-doctools
+ pkg-config qt6-base qt6-tools sonic-namespace"
+makedepends="sf-xml-gui-devel sf-core-addons-devel sf-widgets-addons-devel
+ sf-data-views-devel sf-io-devel sf-settings-devel sf-archive-devel
+ sf-internationalization-devel sf-autocomplete-devel sf-text-widgets-devel
+ sf-crash-handler-devel
+ libaudit-devel"
+short_desc="Sonic SystemLog Viewer"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-system-log"
+distfiles="https://github.com/Sonic-DE/sonic-system-log/archive/refs/tags/${version}.tar.gz"
+checksum=85180d7c8dfe50d6329bf4926a203f74d9ad47a4d9d3412d4255264c52d4be0f
+provides="ksystemlog-${version}_${revision}"
+conflicts="ksystemlog"
+replaces="ksystemlog>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
