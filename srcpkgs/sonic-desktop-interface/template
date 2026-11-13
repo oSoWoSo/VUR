@@ -1,0 +1,51 @@
+# Template file for 'sonic-desktop-interface'
+pkgname=sonic-desktop-interface
+version=6.8.0.3
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="gettext intltool pkg-config qt6-base qt6-declarative-host-tools
+ qt6-shadertools qt6-tools sf-auth-tools sf-cmake-modules sf-doctools sf-package
+ sf-settings sf-settings-utils sonic-namespace"
+makedepends="alsa-lib-devel eudev-libudev-devel ibus-devel libaccounts-qt6-devel
+ libcanberra-devel libglib-devel libwacom-devel libX11-devel libxcb-devel
+ libXcursor-devel libXi-devel libxkbcommon-devel libxkbfile-devel
+ qt6-base-private-devel qt6-declarative-devel qt6-qt5compat-devel
+ qt6-shadertools-devel qt6-svg-devel SDL2-devel sf-addons-downloader-devel
+ sf-app-info-devel sf-auth-devel sf-autocomplete-devel sf-bookmarks-devel
+ sf-core-addons-devel sf-crash-handler-devel sf-data-models-devel
+ sf-data-views-devel sf-dbus-devel sf-device-integration-devel sf-doctools-devel
+ sf-file-search-devel sf-gui-addons-devel sf-icon-themes-devel
+ sf-internationalization-devel sf-io-devel sf-keybind-devel
+ sf-notification-settings-devel sf-notifications-devel sf-open-collab-devel
+ sf-package-devel sf-progress-ui-devel sf-qml-bridge-devel
+ sf-quick-desktop-style-devel sf-quick-ui-addons-devel sf-quick-ui-devel
+ sf-runner-devel sf-settings-devel sf-settings-ui-devel sf-settings-utils-devel
+ sf-spell-check-devel sf-svg-devel sf-text-codec-devel sf-widgets-addons-devel
+ sf-windowsystem-devel sf-xml-gui-devel signon-plugin-oauth2
+ sonic-accounts-integration-devel sonic-activities-devel
+ sonic-activities-stats-devel sonic-daemon-devel sonic-interface-libraries-devel
+ sonic-pipewire-devel sonic-plasma5-support-library-devel
+ sonic-screenlocker-devel sonic-system-monitor-library-devel sonic-win-devel
+ sonic-workspace-devel xcb-util-image-devel xcb-util-keysyms-devel
+ xf86-input-evdev-devel xf86-input-libinput-devel xf86-input-synaptics-devel"
+depends="accountsservice noto-fonts-emoji powerdevil sf-quick-desktop-style
+ sonic-launcher-menu-edit sonic-plasma5-support-library sonic-polkit-agent
+ sonic-system-stats systemsettings xdg-user-dirs"
+short_desc="Sonic Desktop Interface"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-desktop-interface"
+distfiles="https://github.com/Sonic-DE/${pkgname}/archive/refs/tags/${version}.tar.gz"
+checksum=fa79b80cb7d7e55484b40c498ccc9d39a794c62029b72182dc3b1973be5be211
+provides="plasma-desktop-${version}_${revision}"
+conflicts="plasma-desktop"
+replaces="plasma-desktop>=0"
+python_version=3
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
