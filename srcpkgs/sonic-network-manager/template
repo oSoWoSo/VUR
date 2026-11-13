@@ -1,0 +1,36 @@
+# Template file for 'sonic-network-manager'
+pkgname=sonic-network-manager
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ $(vopt_bool openconnect BUILD_OPENCONNECT)"
+hostmakedepends="sf-cmake-modules mobile-broadband-provider-info pkg-config
+ gettext qt6-declarative-host-tools qt6-base qt6-tools
+ sf-doctools sf-package sf-settings-utils sonic-namespace"
+makedepends="sonic-workspace-devel sf-networkmanager-devel sonic-crypto-library-devel
+ sf-modemmanager-devel sf-device-integration-devel sf-doctools-devel
+ sf-package-devel sf-settings-utils-devel sonic-interface-libraries-devel
+ qt6-base-devel qt6-declarative-devel sf-color-scheme-devel sf-autocomplete-devel
+ sf-core-addons-devel sf-dbus-devel sf-io-devel sf-quick-ui-devel
+ sf-quick-ui-addons-devel sf-internationalization-devel sf-notifications-devel
+ sf-app-info-devel sf-keyring-devel sf-widgets-addons-devel sf-svg-devel
+ sf-windowsystem-devel sf-barcode-devel sf-quick-charts-devel NetworkManager-devel
+ qt6-base-private-devel qcoro-qt6-devel qtkeychain-qt6-devel libgomp-devel
+ $(vopt_if openconnect 'openconnect-devel qt6-webengine-devel')"
+depends="mobile-broadband-provider-info sf-quick-ui sf-barcode"
+short_desc="SonicDE applet written in QML for managing network connections"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-network-manager"
+distfiles="https://github.com/Sonic-DE/sonic-network-manager/archive/refs/tags/${version}.tar.gz"
+checksum=007a3fc1d0138d1648648fe5a2440d3c92d243ef12f9a53dd5185afd4e9de4bf
+provides="plasma-nm-${version}_${revision}"
+conflicts="plasma-nm"
+replaces="plasma-nm>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
