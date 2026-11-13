@@ -1,0 +1,29 @@
+# Template file for 'sonic-oxygen'
+pkgname=sonic-oxygen
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DBUILD_QT5=OFF
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DSF6_HOST_TOOLING=/usr/lib/cmake"
+hostmakedepends="sf-cmake-modules pkg-config qt6-base qt6-tools gettext
+ sf-windowsystem sf-settings-utils sf-package sonic-namespace"
+makedepends="qt6-base-private-devel qt6-declarative-devel sf-internationalization-devel
+ sf-quick-ui-devel sf-settings-utils-devel sf-settings-devel
+ sf-core-addons-devel sf-gui-addons-devel sf-widgets-addons-devel
+ sf-app-info-devel sf-autocomplete-devel sf-windowsystem-devel
+ sonic-decoration-devel sonic-interface-libraries-devel sf-qt-integration-devel"
+short_desc="Classic style for Qt and Sonic applications"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-oxygen"
+distfiles="https://github.com/Sonic-DE/sonic-oxygen/archive/refs/tags/${version}.tar.gz"
+checksum=e90f4020e7247d2d12774b795fe6cdcd0ee6c58ec44745f54fa950da26a140b7
+provides="oxygen-${version}_${revision}"
+conflicts="oxygen"
+replaces="oxygen>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
