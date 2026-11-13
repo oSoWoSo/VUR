@@ -1,0 +1,20 @@
+# Template file for 'sonic-oxygen-sounds'
+pkgname=sonic-oxygen-sounds
+version=6.8.0
+revision=1
+build_style=cmake
+hostmakedepends="qt6-base sf-cmake-modules sonic-namespace"
+short_desc="Oxygen Sound Theme"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-3.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-oxygen-sounds"
+distfiles="https://github.com/Sonic-DE/sonic-oxygen-sounds/archive/refs/tags/${version}.tar.gz"
+checksum=b3efc535da0d1061c245051606da0c301581c4758df6ffd008e8ae44e0f9ede9
+provides="oxygen-sounds-${version}_${revision}"
+conflicts="oxygen-sounds"
+replaces="oxygen-sounds>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
