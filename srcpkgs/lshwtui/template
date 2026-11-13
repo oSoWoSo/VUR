@@ -1,0 +1,18 @@
+# Template file for 'lshwtui'
+pkgname=lshwtui
+version=0.2.0
+revision=1
+build_style=go
+go_import_path="lshwtui"
+go_ldflags="-X main.version=${version}"
+hostmakedepends="go"
+depends="lshw"
+short_desc="VIM motion inspired detailed hardware details explorer"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/susamn/lshwtui"
+distfiles="https://github.com/susamn/lshwtui/archive/refs/tags/v${version}.tar.gz"
+checksum=ee3cc49ae32abf0b94601142c265b2cba7e6fd8a5ffc8a713bf3243190a0b793
+post_install() {
+	vlicense LICENSE
+}
