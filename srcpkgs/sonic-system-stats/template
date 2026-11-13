@@ -1,0 +1,29 @@
+# Template file for 'sonic-system-stats'
+pkgname=sonic-system-stats
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="gettext pkg-config qt6-base qt6-tools sf-cmake-modules sf-settings sonic-namespace"
+makedepends="libnl3-devel libsensors-devel sf-crash-handler-devel sf-dbus-devel sf-device-integration-devel sf-io-devel sf-networkmanager-devel sonic-system-monitor-library-devel"
+short_desc="Plugin based system monitoring daemon"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-system-stats"
+distfiles="https://github.com/Sonic-DE/sonic-system-stats/archive/refs/tags/${version}.tar.gz"
+checksum=e627e2242ad46659f4cb776c55f8ec59d6a1af3103dc8b210ac9eb1abe01833c
+provides="ksystemstats-${version}_${revision}"
+conflicts="ksystemstats"
+replaces="ksystemstats>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+do_check() {
+	cd build
+	ctest -E "ksystemstatstest"
+}
