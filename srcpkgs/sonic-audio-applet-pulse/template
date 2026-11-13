@@ -1,0 +1,31 @@
+# Template file for 'sonic-audio-applet-pulse'
+pkgname=sonic-audio-applet-pulse
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sf-cmake-modules pkg-config qt6-base gettext qt6-tools
+ qt6-declarative-host-tools sf-settings sf-settings-utils sf-package sf-core-addons
+ sf-windowsystem sf-doctools sonic-namespace"
+makedepends="sf-qml-bridge-devel sf-status-notification-devel sf-settings-utils-devel
+ sf-svg-devel sf-dbus-devel sf-settings-devel sf-internationalization-devel
+ libglib-devel qt6-base-private-devel qt6-declarative-devel pulseaudio-devel
+ libcanberra-devel sonic-pulseaudio-library-devel sonic-interface-libraries-devel
+ sf-doctools-devel sf-core-addons-devel sf-keybind-devel"
+depends="sf-data-models sound-theme-freedesktop sf-quick-ui"
+short_desc="SonicDE applet for audio volume management using PulseAudio"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-audio-applet-pulse"
+distfiles="https://github.com/Sonic-DE/sonic-audio-applet-pulse/archive/refs/tags/${version}.tar.gz"
+checksum=a4f8cdefc0dce1aa6df48178eafa159c81f7544996261ad4c6816092dd81c04a
+provides="plasma-pa-${version}_${revision}"
+conflicts="plasma-pa"
+replaces="plasma-pa>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
