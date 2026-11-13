@@ -1,0 +1,32 @@
+# Template file for 'sonic-screenies'
+pkgname=sonic-screenies
+version=6.8.0.1
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DSF6_HOST_TOOLING=/usr/lib/cmake"
+hostmakedepends="gettext pkg-config plasma-wayland-protocols qt6-base
+ qt6-declarative-host-tools qt6-tools sf-cmake-modules sf-doctools
+ sf-settings sonic-namespace"
+makedepends="ffmpeg6-devel layer-shell-qt-devel libopencv-devel libxcb-devel
+ pulseaudio-devel qt6-base-private-devel qt6-declarative-devel
+ qt6-multimedia-devel sf-barcode-devel sf-core-addons-devel
+ sf-crash-handler-devel sf-dbus-devel sf-gui-addons-devel
+ sf-internationalization-devel sf-io-devel sf-keybind-devel
+ sf-notifications-devel sf-purpose-devel sf-quick-ui-devel sf-settings-devel
+ sf-status-notification-devel sf-widgets-addons-devel sf-windowsystem-devel
+ sf-xml-gui-devel sonic-pipewire-devel sonic-quick-image-editor-devel
+ tesseract-ocr-devel xcb-util-cursor-devel xcb-util-devel xcb-util-image-devel"
+short_desc="Screenshot capture utility"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-screenies"
+distfiles="https://github.com/Sonic-DE/sonic-screenies/archive/refs/tags/${version}.tar.gz"
+checksum=5be14a1dea67a4f197795dcdcd9ab85622090f4914ae66df5290f1badd201b65
+provides="spectacle-${version}_${revision}"
+conflicts="spectacle"
+replaces="spectacle>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
