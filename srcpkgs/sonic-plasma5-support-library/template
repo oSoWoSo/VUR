@@ -1,0 +1,41 @@
+# Template file for 'sonic-plasma5-support-library'
+pkgname=sonic-plasma5-support-library
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="gettext pkg-config qt6-base qt6-declarative-host-tools qt6-tools sf-cmake-modules sf-settings sonic-namespace"
+makedepends="libglib-devel qt6-base-private-devel qt6-declarative-devel sf-app-info-devel sf-core-addons-devel sf-device-integration-devel sf-gui-addons-devel sf-holidays-devel sf-idle-tracker-devel sf-internationalization-devel sf-io-devel sf-io-devel sf-networkmanager-devel sf-notifications-devel sf-settings-devel sf-unit-conversion-devel sonic-activities-devel sonic-system-monitor-library-devel"
+short_desc="Support components for porting from KF5/Qt5 to KF6/Qt6"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-plasma5-support-library"
+distfiles="https://github.com/Sonic-DE/sonic-plasma5-support-library/archive/refs/tags/${version}.tar.gz"
+checksum=e9b1a99fe2123129dffe9864c20ff1bc1552a4f93fa6b725bc9361f74011a20f
+provides="plasma5support-${version}_${revision}"
+conflicts="plasma5support"
+replaces="plasma5support>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+do_check() {
+	cd build
+	ctest -E "pluginloadertest"
+}
+
+sonic-plasma5-support-library-devel_package() {
+	provides="plasma5support-devel-${version}_${revision}"
+	conflicts="plasma5support-devel"
+	replaces="plasma5support-devel>=0"
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
