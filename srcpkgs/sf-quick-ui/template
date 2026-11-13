@@ -1,0 +1,37 @@
+# Template file for 'sf-quick-ui'
+pkgname=sf-quick-ui
+version=6.31.0.2
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="doxygen qt6-base qt6-declarative-host-tools qt6-shadertools
+ qt6-tools sf-cmake-modules sonic-namespace"
+makedepends="libgomp-devel libstdc++-devel qt6-base-private-devel
+ qt6-declarative-private-devel qt6-shadertools-devel qt6-svg-devel"
+short_desc="QtQuick component set for SonicDE frameworks"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-only OR LGPL-3.0-only"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-quick-ui"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-quick-ui/archive/refs/tags/${version}.tar.gz"
+checksum=c9a9aff7aed0027ed2d43f4ba1253d87506c879cbb1f527b86ad45c3ed272f35
+provides="kf6-kirigami-${version}_${revision}"
+conflicts="kf6-kirigami"
+replaces="kf6-kirigami>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-quick-ui-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel qt6-declarative-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
+
+nocross="target dependency transaction unresolvable (cross-build)"
