@@ -1,0 +1,29 @@
+# Template file for 'sonic-bluetooth-runtime'
+pkgname=sonic-bluetooth-runtime
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sf-cmake-modules qt6-base qt6-tools gettext
+ qt6-declarative-host-tools sf-settings-utils sf-package sonic-namespace"
+makedepends="sf-bluetooth-devel sonic-daemon-devel sf-widgets-addons-devel
+ sf-settings-utils-devel sf-core-addons-devel sf-dbus-devel
+ sf-internationalization-devel sf-progress-ui-devel sf-io-devel
+ sf-notifications-devel sf-app-info-devel sf-windowsystem-devel
+ sf-svg-devel sf-package-devel sonic-interface-libraries-devel qt6-declarative-devel"
+depends="sf-quick-ui"
+short_desc="Bluetooth capabilities for Sonic"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-2.0-or-later, LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-bluetooth-runtime"
+distfiles="https://github.com/Sonic-DE/sonic-bluetooth-runtime/archive/refs/tags/${version}.tar.gz"
+checksum=766387d75bc9a4ccc889e0f3bbc9fb8e4700dc502088b33d49fb12ad7f513cb4
+provides="bluedevil-${version}_${revision}"
+conflicts="bluedevil"
+replaces="bluedevil>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
