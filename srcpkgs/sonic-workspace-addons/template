@@ -1,0 +1,35 @@
+# Template file for 'sonic-workspace-addons'
+pkgname=sonic-workspace-addons
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sf-cmake-modules qt6-base qt6-tools pkg-config gettext
+ qt6-declarative-host-tools sf-settings-utils sf-package sf-auth-tools sonic-namespace"
+makedepends="sf-qml-bridge-devel sf-holidays-devel sf-settings-devel sf-dbus-devel
+ sf-internationalization-devel sf-progress-ui-devel sf-purpose-devel sf-spell-check-devel sf-unit-conversion-devel
+ sf-addons-downloader-devel sonic-plasma5-support-library-devel qt6-qt5compat-devel sf-notifications-devel sf-app-info-devel
+ sf-xml-gui-devel qt6-declarative-private-devel qt6-quick3d-devel icu-devel sf-package-devel sf-settings-utils-devel
+ sf-svg-devel sf-data-models-devel sf-io-devel sf-quick-ui-devel sf-runner-devel
+ sonic-interface-libraries-devel sf-keybind-devel sf-auth-devel sf-core-addons-devel"
+depends="qt6-plugin-networkinformation qt6-location sonnet"
+short_desc="All kinds of addons to improve SonicDE experience"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-workspace-addons"
+distfiles="https://github.com/Sonic-DE/sonic-workspace-addons/archive/refs/tags/${version}.tar.gz"
+checksum=8dea587ca5528d60618caed972445afd94aef4a53bf2aa2e67d4fbf762400123
+provides="kdeplasma-addons-${version}_${revision}"
+conflicts="kdeplasma-addons"
+replaces="kdeplasma-addons>=0"
+
+if [ "$XBPS_WORDSIZE$XBPS_WORDSIZE" = "64$XBPS_TARGET_WORDSIZE" ]; then
+	makedepends+=" qt6-webengine-devel"
+fi
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
