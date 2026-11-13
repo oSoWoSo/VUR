@@ -1,0 +1,28 @@
+# Template file for 'sf-zeroconf'
+pkgname=sf-zeroconf
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="qt6-base qt6-tools sf-cmake-modules sonic-namespace"
+makedepends="qt6-base-devel"
+short_desc="Network service discovery using Zeroconf"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-zeroconf"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-zeroconf/archive/refs/tags/${version}.tar.gz"
+checksum=0a1ef3b175833c75f9d43c3cbece8adba1111735c660f59985643c725a377bd7
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-zeroconf-devel_package() {
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
