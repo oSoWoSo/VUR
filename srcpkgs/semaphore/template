@@ -1,0 +1,20 @@
+# Template file for 'semaphore'
+pkgname=semaphore
+version=2.20.24
+revision=1
+build_style=go
+go_import_path="github.com/semaphoreui/semaphore"
+go_package="github.com/semaphoreui/semaphore/cli"
+checkdepends="git openssh"
+short_desc="Modern UI and powerful API for your tools"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/semaphoreui/semaphore"
+distfiles="https://github.com/semaphoreui/semaphore/archive/refs/tags/v${version}.tar.gz"
+checksum=f408e9410f316385fe624c994cb9a398b0eac2ece1bc5cb728c553205d9da928
+
+do_install() {
+	cli=$(find "${GOPATH}/bin" -name cli -type f -print -quit)
+	vbin "$cli" semaphore
+	vlicense LICENSE
+}
