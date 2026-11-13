@@ -1,0 +1,28 @@
+# Template file for 'sonic-dr-robotnik'
+pkgname=sonic-dr-robotnik
+version=6.8.0.1
+revision=1
+build_style=cmake
+configure_args="-DCMAKE_DISABLE_FIND_PACKAGE_Systemd=ON -DBUILD_TESTING=OFF
+ -DSF6_HOST_TOOLING=/usr/lib/cmake -DWITH_PYTHON_VENDORING=OFF
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sf-cmake-modules pkg-config qt6-base gettext qt6-tools
+ python3 sf-settings sf-core-addons sonic-namespace"
+makedepends="sf-internationalization-devel sf-core-addons-devel
+ sf-settings-devel sf-app-info-devel sf-progress-ui-devel
+ sf-io-devel sf-crash-handler-devel sf-widgets-addons-devel
+ sf-keyring-devel sf-notifications-devel sf-idle-tracker-devel
+ sf-windowsystem-devel sf-syntax-highlighting-devel
+ sf-status-notification-devel polkit-qt6-devel"
+depends="sf-quick-ui sf-data-models python3-psutil python3-sentry python3-pygdbmi"
+short_desc="Crash handler for Sonic software"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-dr-robotnik"
+distfiles="https://github.com/Sonic-DE/sonic-dr-robotnik/archive/refs/tags/${version}.tar.gz"
+checksum=e20edcfa970d81e706baf5d384db5363a62626b66ae7797c8527f41d0de7fe4d
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
