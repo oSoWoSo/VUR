@@ -1,0 +1,45 @@
+# Template file for 'sf-settings'
+pkgname=sf-settings
+version=6.31.0.1
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="qt6-base qt6-declarative-host-tools qt6-tools sf-cmake-modules sonic-namespace"
+makedepends="qt6-base-private-devel qt6-declarative-devel"
+short_desc="Persistent platform-independent application settings"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-settings"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-settings/archive/refs/tags/${version}.tar.gz"
+checksum=dd88e19e5112ea0416e01bee942edf73592ebc93b212cd36d88e4d8446c8d67f
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+do_check() {
+	cd build
+	# disable failing tests
+	ctest -E "kconfigcore-kconfigtest|kconfiggui-kstandardshortcutwatchertest|kconfigcore-dbussanitizertest"
+}
+
+sf-settings-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel qt6-declarative-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		mkdir -p "${DESTDIR}/usr/lib/cmake/SF6Config"
+		mv ${PKGDESTDIR}/usr/lib/cmake/SF6Config/SF6ConfigCompiler* \
+			"${DESTDIR}/usr/lib/cmake/SF6Config"
+		vmove "usr/lib/*.so"
+	}
+}
