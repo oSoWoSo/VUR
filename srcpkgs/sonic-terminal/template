@@ -1,0 +1,36 @@
+# Template file for 'sonic-terminal'
+pkgname=sonic-terminal
+version=26.08.2
+revision=1
+build_style=cmake
+configure_args="-DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="pkg-config sf-cmake-modules qt6-base qt6-tools gettext
+ sf-doctools sf-settings dbus AppStream xorg-server-xvfb sonic-namespace"
+makedepends="sf-addons-downloader-devel sf-notification-settings-devel sf-crash-handler-devel
+ sf-dbus-devel sf-bookmarks-devel sf-settings-devel
+ sf-settings-ui-devel sf-core-addons-devel sf-gui-addons-devel
+ sf-internationalization-devel sf-icon-themes-devel sf-io-devel sf-notifications-devel
+ sf-app-info-devel sf-widgets-addons-devel sf-windowsystem-devel
+ sf-xml-gui-devel sf-keybind-devel icu-devel sf-doctools-devel
+ sf-ui-components-devel sf-pseudo-terminal-devel sf-text-widgets-devel qt6-multimedia-devel"
+checkdepends="which"
+short_desc="Terminal emulator for SonicDE"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-terminal"
+distfiles="https://github.com/Sonic-DE/sonic-terminal/archive/refs/tags/${version}.tar.gz"
+checksum=f07a6ae2b1e0320d59e4c555c72a45143d2b00654344aaab3d39d11188f1caf2
+provides="konsole-${version}_${revision}"
+conflicts="konsole"
+replaces="konsole>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+do_check() {
+	cd build
+	ctest -E "ScreenTest|Vt102EmulationTest|TerminalInterfaceTest"
+}
