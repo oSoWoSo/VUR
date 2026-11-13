@@ -1,0 +1,29 @@
+# Template file for 'sf-qml-bridge'
+pkgname=sf-qml-bridge
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml"
+hostmakedepends="gettext qt6-base qt6-declarative-host-tools qt6-shadertools qt6-tools sf-cmake-modules sf-settings sonic-namespace"
+makedepends="qt6-declarative-devel qt6-shadertools-devel sf-gui-addons-devel sf-internationalization-devel sf-keybind-devel sf-settings-devel sf-widgets-addons-devel"
+short_desc="Integration of QML and Sonic work spaces"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-qml-bridge"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-qml-bridge/archive/refs/tags/${version}.tar.gz"
+checksum=ef004ec9fb7fddbdd35862f107024116aa87bdc4b7a6c4b4b377e9f05abbbda5
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-qml-bridge-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} qt6-declarative-devel sf-settings-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
