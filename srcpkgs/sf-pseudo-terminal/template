@@ -1,0 +1,29 @@
+# Template file for 'sf-pseudo-terminal'
+pkgname=sf-pseudo-terminal
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DUTEMPTER_EXECUTABLE=/usr/lib/utempter/utempter"
+hostmakedepends="gettext qt6-base qt6-tools sf-cmake-modules sonic-namespace"
+makedepends="libutempter-devel sf-core-addons-devel sf-internationalization-devel"
+short_desc="Interfacing with pseudo terminal devices"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-pseudo-terminal"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-pseudo-terminal/archive/refs/tags/${version}.tar.gz"
+checksum=0f61ac7a05a5d0382ebdef8b694bd5e29025de3b83cddd7dae96ba3f043f903a
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-pseudo-terminal-devel_package() {
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
