@@ -1,0 +1,77 @@
+From: void-linux packaging <void@osowoso.org>
+Date: Sun, 27 Sep 2026 12:00:00 +0200
+Subject: [PATCH] tests: fix test-rpc-multi-server flakiness
+
+The test derives its listening ports from the script PID as
+40000 + ($$ % 10000), which places them squarely inside the default
+Linux ephemeral port range (net.ipv4.ip_local_port_range, typically
+32768-60999). An outbound connection can be assigned one of those two
+ports, and since ggml-rpc-server binds without SO_REUSEADDR the server
+exits and the readiness probe spins for its full 30 second timeout.
+
+Worse, that failure is invisible: the script runs under `set -euo
+pipefail` and calls wait_for_port bare, so a non-zero return aborts the
+script before the "invalid data ptr" check that is the only code path
+that ever prints server-a.log/server-b.log. The logs are then removed by
+the cleanup trap, so a real server crash is reported as a bare 30 second
+timeout with no output.
+
+Pick a base below the ephemeral floor, skip any base already in use, and
+dump the server logs on every failure path.
+
+--- a/tests/test-rpc-multi-server.sh	2026-09-27 18:20:57.364402581 +0200
++++ b/tests/test-rpc-multi-server.sh	2026-09-27 18:21:17.675062963 +0200
+@@ -3,8 +3,25 @@
+ 
+ server=$1
+ client=$2
+-port_a=$((40000 + $$ % 10000))
+-port_b=$((port_a + 1))
++
++# Keep the test ports clear of the kernel ephemeral port range
++# (net.ipv4.ip_local_port_range, typically 32768-60999) so that an outbound
++# connection cannot steal them, and skip any base that is already in use.
++port_taken() {
++    local port=$1
++    (exec 3<>"/dev/tcp/127.0.0.1/$port") 2>/dev/null && return 0
++    return 1
++}
++
++base=$((20000 + ($$ % 9000)))
++for _ in {1..100}; do
++    if ! port_taken "$base" && ! port_taken "$((base + 1))"; then
++        break
++    fi
++    base=$((base + 2))
++done
++port_a=$base
++port_b=$((base + 1))
+ endpoint_a="127.0.0.1:${port_a}"
+ endpoint_b="127.0.0.1:${port_b}"
+ test_dir=$(mktemp -d)
+@@ -32,10 +49,22 @@
+ pid_a=$!
+ "$server" --device CPU --host 127.0.0.1 --port "$port_b" >"$test_dir/server-b.log" 2>&1 &
+ pid_b=$!
+-wait_for_port "$port_a"
+-wait_for_port "$port_b"
+ 
+-"$client" "$endpoint_a" "$endpoint_b"
++dump_logs() {
++    for f in "$test_dir"/server-*.log; do
++        [ -f "$f" ] || continue
++        echo "===== $f =====" >&2
++        cat "$f" >&2
++    done
++}
++
++if ! wait_for_port "$port_a" || ! wait_for_port "$port_b"; then
++    echo "rpc servers did not become ready (ports $port_a/$port_b)" >&2
++    dump_logs
++    exit 1
++fi
++
++"$client" "$endpoint_a" "$endpoint_b" || { dump_logs; exit 1; }
+ 
+ if grep -q "invalid data ptr" "$test_dir/server-b.log"; then
+     cat "$test_dir/server-b.log"

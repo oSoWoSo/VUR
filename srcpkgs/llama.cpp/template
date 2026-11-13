@@ -1,0 +1,48 @@
+# Template file for 'llama.cpp'
+pkgname=llama.cpp
+version=0.9.0
+revision=1
+build_style=cmake
+configure_args="-DGGML_NATIVE=OFF -DGGML_VULKAN=ON -DGGML_BLAS=ON
+ -DGGML_BLAS_VENDOR=OpenBLAS -DGGML_OPENCL=ON -DGGML_RPC=ON -DLLAMA_OPENSSL=ON -DGGML_CPU_ALLVARIANTS=ON -DLLAA_BUILD_TOOLS=ON"
+hostmakedepends="nodejs pkg-config shaderc"
+makedepends="openssl-devel libgomp-devel openblas-devel ocl-icd-devel OpenCL-Headers
+ libcurl-devel vulkan-loader-devel SPIRV-Headers libgomp"
+checkdepends="python3-Jinja2"
+short_desc="LLM inference in C/C++"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/ggml-org/llama.cpp"
+distfiles="https://github.com/ggml-org/llama.cpp/archive/refs/tags/v${version}.tar.gz
+ https://huggingface.co/ggml-org/models/resolve/main/tinyllamas/stories15M-q4_0.gguf"
+checksum="5d0f1aaf55fd8629c29a55e81b7cb63b80239f83c33a580963071204896836a8
+ 66967fbece6dbe97886593fdbb73589584927e29119ec31f08090732d1861739"
+# The test fixtures download this model over HTTP, but cmake's file(DOWNLOAD)
+# cannot follow the redirect huggingface.co replies with. Pre-seed it instead,
+# file(DOWNLOAD) skips fetching when the file already matches EXPECTED_HASH.
+skip_extraction="stories15M-q4_0.gguf"
+replaces="llama-cpp>=0"
+
+case $ARCH in
+	aarch64) configure_args+=" -DGGML_CPU_KLEIDIAI=ON" ;;
+esac
+
+post_install() {
+	vlicense LICENSE
+}
+
+pre_check() {
+	mkdir -p ${cmake_builddir:-build}/tinyllamas
+	cp -f ${XBPS_SRCDISTDIR}/${sourcepkg}-${version}/stories15M-q4_0.gguf \
+		${cmake_builddir:-build}/tinyllamas/
+}
+
+do_check() {
+	cd ${cmake_builddir:-build}
+
+	# test-conversion-fp8 requires numpy/torch/safetensors (unpackaged)
+	_exclude='test-conversion-fp8'
+	# test-llama-context segfaults on musl after all cases pass
+	[ "$XBPS_TARGET_LIBC" = musl ] && _exclude="$_exclude|test-llama-context"
+	ctest -E "$_exclude"
+}

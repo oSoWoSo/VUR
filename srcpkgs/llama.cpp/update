@@ -1,0 +1,4 @@
+# The /tags and /releases HTML pages only ever show the rolling bNNNN build
+# tags, so the vX.Y.Z releases have to be listed via the API instead.
+site="https://api.github.com/repos/ggml-org/llama.cpp/tags"
+pattern='"name":\s*"v\K[0-9]+\.[0-9]+\.[0-9]+'
