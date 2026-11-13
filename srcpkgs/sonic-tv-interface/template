@@ -1,0 +1,23 @@
+# Template file for 'sonic-tv-interface'
+pkgname=sonic-tv-interface
+version=6.8.0
+revision=3
+build_style=cmake
+hostmakedepends="gettext pkg-config qt6-base qt6-declarative-host-tools sf-cmake-modules sf-package sf-settings sf-settings-utils sonic-namespace"
+makedepends="libcec-devel libgomp-devel plasma-wayland-protocols qcoro-qt6-devel qt6-declarative-private-devel qt6-multimedia-devel qt6-webengine-devel SDL3-devel sf-bluetooth-devel sf-dbus-devel sf-icon-themes-devel sf-internationalization-devel sf-io-devel sf-keybind-devel sf-notifications-devel sf-quick-ui-devel sf-settings-devel sf-settings-utils-devel sf-svg-devel sf-windowsystem-devel sonic-activities-devel sonic-activities-stats-devel sonic-interface-libraries-devel sonic-screen-library-devel sonic-workspace-devel"
+depends="kdeconnect milou plasma-keyboard plasma-nano sonic-audio-applet-pulse sonic-network-manager sonic-screen sonic-terminal-tools sonic-win"
+short_desc="Interface for large screens such as TVs"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-2.0-or-later AND CC-BY-SA-4.0"
+homepage="https://github.com/Sonic-DE/sonic-tv-interface"
+distfiles="https://github.com/Sonic-DE/sonic-tv-interface/archive/refs/tags/${version}.tar.gz"
+checksum=143091666dba8d26ec286b43b8cc7fb469a744e9bab6bc81f785b1d9feb6b69d
+
+if [ "$XBPS_WORDSIZE$XBPS_WORDSIZE" != "64$XBPS_TARGET_WORDSIZE" ]; then
+	broken="no qt6-webengine"
+fi
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
