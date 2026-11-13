@@ -1,0 +1,33 @@
+# Template file for 'sonic-decoration'
+pkgname=sonic-decoration
+version=6.8.2
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=ON"
+hostmakedepends="gettext qt6-base qt6-tools sf-cmake-modules sonic-namespace"
+makedepends="sf-core-addons-devel sf-internationalization-devel"
+short_desc="Plugin based library to create window decorations"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-decoration"
+distfiles="https://github.com/Sonic-DE/sonic-decoration/archive/refs/tags/${version}.tar.gz"
+checksum=12af0b1814eb2c392c7545dc3082a1b2f5244b02a531ab8f25f0bff548bab031
+provides="kf6-kdecoration-${version}_${revision}"
+conflicts="kf6-kdecoration"
+replaces="kf6-kdecoration>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sonic-decoration-devel_package() {
+	conflicts="kdecoration-devel>=0"
+	depends="${makedepends} ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
