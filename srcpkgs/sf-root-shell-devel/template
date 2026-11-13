@@ -1,0 +1,29 @@
+# Template file for 'sf-root-shell'
+pkgname=sf-root-shell
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="gettext qt6-base qt6-tools sf-cmake-modules sf-settings sonic-namespace"
+makedepends="qt6-base-private-devel sf-core-addons-devel sf-internationalization-devel sf-pseudo-terminal-devel sf-settings-devel"
+short_desc="User interface for running shell commands with root privileges"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-root-shell"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-root-shell/archive/refs/tags/${version}.tar.gz"
+checksum=9f233f88160c91d7c4e8c14fe1f241b49f54b174a8324eba3fcead12d1348c69
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-root-shell-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel sf-pseudo-terminal-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
