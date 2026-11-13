@@ -1,0 +1,23 @@
+# Template file for 'sonic-browser-integration'
+pkgname=sonic-browser-integration
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="gettext qt6-base qt6-tools sf-cmake-modules sf-settings sonic-namespace"
+makedepends="qt6-base-devel sf-app-info-devel sf-core-addons-devel sf-crash-handler-devel sf-dbus-devel sf-file-metadata-devel sf-internationalization-devel sf-io-devel sf-notifications-devel sf-progress-ui-devel sf-purpose-devel sf-runner-devel sf-settings-devel sf-status-notification-devel sonic-activities-devel sonic-workspace-devel"
+short_desc="Components necessary to integrate browsers into the Sonic Desktop"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-browser-integration"
+distfiles="https://github.com/Sonic-DE/sonic-browser-integration/archive/refs/tags/${version}.tar.gz"
+checksum=bcea627846cac1f046bb1df6de6e3802ba28bccdae26ea8107dc5b5af769299f
+provides="plasma-browser-integration-${version}_${revision}"
+conflicts="plasma-browser-integration"
+replaces="plasma-browser-integration>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
