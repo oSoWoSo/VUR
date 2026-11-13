@@ -1,0 +1,21 @@
+# Template file for 'sonic-breeze-sddm'
+pkgname=sonic-breeze-sddm
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="sf-cmake-modules pkg-config gettext qt6-base
+ qt6-shadertools qt6-tools qt6-declarative-host-tools sonic-namespace"
+short_desc="Breeze SDDM theme"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-breeze-sddm"
+distfiles="https://github.com/Sonic-DE/sonic-breeze-sddm/archive/refs/tags/${version}.tar.gz"
+checksum=3d65892246d009bebb33059f12217bb36101cb91f79371496330ddb98e913cd6
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
