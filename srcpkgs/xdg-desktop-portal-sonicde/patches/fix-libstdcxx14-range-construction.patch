@@ -1,0 +1,35 @@
+From: Void Linux
+Subject: [PATCH] autotests: avoid C++23 container range construction
+
+GCC 14's libstdc++ does not yet implement the C++23 container-compatible
+range constructor (P1206R7). Populate the vector with the C++20 ranges
+algorithm instead.
+
+---
+ autotests/settingsportaltest.cpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/autotests/settingsportaltest.cpp b/autotests/settingsportaltest.cpp
+index 76e9732..d70d5d3 100644
+--- a/autotests/settingsportaltest.cpp
++++ b/autotests/settingsportaltest.cpp
+@@ -14,6 +14,7 @@
+ #include <KConfigGroup>
+ 
+ #include <algorithm>
++#include <iterator>
+ #include <ranges>
+ #include <utility>
+ #include <vector>
+@@ -83,7 +84,8 @@ private Q_SLOTS:
+         auto filtered = settings.keys() | std::views::filter([](const QString &key) {
+                             return key.startsWith(u"org.kde.kdeglobals"_s);
+                         });
+-        std::vector<QString> kdeglobals(std::from_range, filtered);
++        std::vector<QString> kdeglobals;
++        std::ranges::copy(filtered, std::back_inserter(kdeglobals));
+         QCOMPARE_NE(kdeglobals, std::vector<QString>());
+ 
+         const auto settings2 = portal.ReadAll({});
+-- 
+2.51.0
