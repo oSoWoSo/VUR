@@ -1,0 +1,33 @@
+# Template file for 'edit'
+pkgname=edit
+version=2.0.0
+revision=1
+build_style=cargo
+make_install_args="--path crates/edit"
+checkdepends="pkgconf libzstd-devel libicu78"
+short_desc="Simple editor for simple needs"
+maintainer="Coolllyn <leanhduc673@gmail.com>"
+license="MIT"
+homepage="https://github.com/microsoft/edit"
+changelog="https://github.com/microsoft/edit/releases"
+distfiles="https://github.com/microsoft/edit/archive/refs/tags/v${version}.tar.gz"
+checksum=f35da309c5f3d92b10e5c4b2267e4d5e29d809b2aa460e80326b11f7feba72a5
+replaces="msedit>=0"
+
+export EDIT_CFG_ICUUC_SONAME=libicuuc.so.78
+export EDIT_CFG_ICUI18N_SONAME=libicui18n.so.78
+export EDIT_CFG_ICU_RENAMING_VERSION=78
+
+post_install() {
+	mv ${DESTDIR}/usr/bin/edit ${DESTDIR}/usr/bin/msedit
+	vman assets/manpage/edit.1
+	vinstall assets/com.microsoft.edit.desktop 644 usr/share/applications
+	vinstall assets/edit.svg 644 usr/share/icons/hicolor/scalable/apps
+	vlicense LICENSE
+}
+
+msedit_package() {
+	metapackage=yes
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" (transitional dummy package)"
+}
