@@ -1,0 +1,29 @@
+# Template file for 'sf-barcode'
+pkgname=sf-barcode
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml"
+hostmakedepends="qt6-base qt6-declarative-host-tools qt6-tools sf-cmake-modules sonic-namespace"
+makedepends="libdmtx-devel qrencode-devel qt6-declarative-devel qt6-multimedia-devel zxing-cpp-devel"
+short_desc="Barcode API to produce QRCode barcodes and DataMatrix barcodes"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-barcode"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-barcode/archive/refs/tags/${version}.tar.gz"
+checksum=bd42c7c6f7f50f5ef8fab24f70b84249436c906bfd1e536ff6db38278f463ba4
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-barcode-devel_package() {
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
