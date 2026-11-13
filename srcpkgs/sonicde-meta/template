@@ -1,0 +1,16 @@
+# Template file for 'sonicde-meta'
+pkgname=sonicde-meta
+version=6.8
+revision=1
+metapackage=yes
+hostmakedepends="sonic-namespace"
+depends="aurorae flatpak-kcm milou ocean-sound-theme plasma-keyboard powerdevil print-manager sddm-kcm sf-keyring-pam sf-quick-ui-addons sonic-activities sonic-activities-stats sonic-activity-manager-daemon sonic-audio-applet-pulse sonic-bluetooth-runtime sonic-browser-integration sonic-daemon sonic-desktop-interface sonic-disks sonic-dr-robotnik sonic-firewall sonic-gtk-theme-bridge sonic-keybind-daemon sonic-launcher-menu-edit sonic-network-manager sonic-oxygen sonic-oxygen-icons sonic-oxygen-sounds sonic-partition-manager sonic-pipewire sonic-polkit-agent sonic-qt-theme-bridge sonic-quick-image-editor sonic-rdp sonic-screen sonic-screenies sonic-silver sonic-silver-gtk sonic-silver-sddm sonic-ssh-password-prompt sonic-system-info sonic-system-log sonic-system-monitor sonic-system-stats sonic-terminal-tools sonic-thunderbolt sonic-vault sonic-win sonic-workspace-addons sonic-workspace-wallpapers sonic-workspace-x11 sonic-write-daemon systemsettings xdg-desktop-portal-sonicde"
+short_desc="Meta package for Sonic Desktop Environment (X11-focused KDE fork)"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
