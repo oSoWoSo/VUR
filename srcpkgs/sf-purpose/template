@@ -1,0 +1,36 @@
+# Template file for 'sf-purpose'
+pkgname=sf-purpose
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="accounts-qml-module gettext intltool qt6-base
+ qt6-declarative-host-tools qt6-tools sf-barcode sf-cmake-modules
+ sf-data-models sf-qml-bridge sf-settings sonic-namespace"
+makedepends="libgomp-devel qt6-declarative-devel sf-core-addons-devel
+ sf-internationalization-devel sf-io-devel sf-notifications-devel
+ sf-quick-ui-devel sonic-accounts-integration-devel"
+depends="accounts-qml-module sf-barcode sf-data-models sf-qml-bridge"
+short_desc="Framework for providing abstractions to get the dev's purposes fulfilled"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-purpose"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-purpose/archive/refs/tags/${version}.tar.gz"
+checksum=d226ef5310101ae961c35733a6b71c792fcbe292a65c58bbca9f81e3cc2c25f7
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-purpose-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} sf-core-addons-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
