@@ -1,0 +1,28 @@
+# Template file for 'sf-notification-settings'
+pkgname=sf-notification-settings
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="gettext qt6-base qt6-tools sf-cmake-modules sf-settings sonic-namespace"
+makedepends="libcanberra-devel qt6-base-devel sf-autocomplete-devel sf-internationalization-devel sf-io-devel sf-notifications-devel sf-settings-devel sf-xml-gui-devel"
+short_desc="Configuration dialog for desktop notification"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-notification-settings"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-notification-settings/archive/refs/tags/${version}.tar.gz"
+checksum=54c64f9725f1a7cded36da2328a83aaa4b34720fed32ea786c3022343c03f150
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-notification-settings-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
