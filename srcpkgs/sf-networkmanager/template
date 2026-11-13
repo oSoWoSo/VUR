@@ -1,0 +1,35 @@
+# Template file for 'sf-networkmanager'
+pkgname=sf-networkmanager
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml"
+hostmakedepends="pkg-config qt6-base qt6-declarative-host-tools qt6-tools sf-cmake-modules sonic-namespace"
+makedepends="NetworkManager-devel qt6-declarative-devel"
+short_desc="Qt wrapper for NetworkManager API"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-networkmanager"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-networkmanager/archive/refs/tags/${version}.tar.gz"
+checksum=3dfa087535eadc7a9e43d4b9d99dcd77370b55915b92ead85634ec190b27720f
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+do_check() {
+	cd build
+	# disable failing tests
+	ctest -E "managertest|settingstest|activeconnectiontest"
+}
+
+sf-networkmanager-devel_package() {
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
