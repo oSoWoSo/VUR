@@ -1,0 +1,27 @@
+# Template file for 'sonic-partition-manager'
+pkgname=sonic-partition-manager
+version=26.08.2
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="sf-doctools sf-settings qt6-base
+ sf-cmake-modules pkg-config gettext sf-core-addons sonic-namespace"
+makedepends="qt6-base-devel sf-settings-devel kpmcore-devel sf-doctools-devel
+ sf-app-info-devel sf-io-devel sf-xml-gui-devel sf-icon-themes-devel
+ sf-settings-ui-devel sf-dbus-devel sf-crash-handler-devel"
+depends="hicolor-icon-theme"
+short_desc="Manage the disk devices, partitions and file systems on your computer"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-partition-manager"
+distfiles="https://github.com/Sonic-DE/sonic-partition-manager/archive/refs/tags/${version}.tar.gz"
+checksum=bd342fdf5277b91160f297242eb1eb3bdfbfafe04cc2450f7c9f91ad9bd1c100
+provides="partitionmanager-${version}_${revision}"
+conflicts="partitionmanager"
+replaces="partitionmanager>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
