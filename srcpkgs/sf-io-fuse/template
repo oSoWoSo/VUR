@@ -1,0 +1,22 @@
+# Template file for 'sf-io-fuse'
+pkgname=sf-io-fuse
+version=6.0.0
+revision=2
+build_style=cmake
+configure_args="-DQT_MAJOR_VERSION=6 -DBUILD_WITH_QT6=ON -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="pkg-config qt6-base sf-cmake-modules sf-settings-devel sonic-namespace"
+makedepends="base-devel cmake fuse3 fuse3-devel qt6-base qt6-base-devel sf-cmake-modules sf-core-addons sf-core-addons-devel sf-io-devel"
+short_desc="FUSE Interface for Sonic Frameworks IO"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-io-fuse"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-io-fuse/archive/refs/tags/${version}.tar.gz"
+checksum=a6f414d9aec161f5071464dd46753b445c87b15653925362d5110a0c72f927a3
+provides="sf-io-fuse-${version}_${revision}"
+conflicts="sf-io-fuse"
+replaces="sf-io-fuse>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
