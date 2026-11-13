@@ -1,0 +1,49 @@
+# Template file for 'sf-silver-icons'
+pkgname=sf-silver-icons
+version=6.31.0.2
+revision=1
+build_style=cmake
+configure_args="-DINSTALL_HOST_TOOLS=ON"
+hostmakedepends="libxml2 python3-lxml qt6-base qt6-tools sf-cmake-modules sonic-namespace"
+makedepends="qt6-base-devel"
+checkdepends="fdupes"
+short_desc="Silver icon theme"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-3.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-silver-icons"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-silver-icons/archive/refs/tags/${version}.tar.gz"
+checksum=8e38205e317f2ec5cded6300eb39b2aeba4d2f04db22b575a04947fb4436099d
+nostrip=yes
+
+if [ -z "$CROSS_BUILD" ]; then
+	configure_args+=" -DBINARY_ICONS_RESOURCE=ON"
+else
+	hostmakedepends+=" libbreeze-icons-devel"
+	configure_args+=" -DBINARY_ICONS_RESOURCE=OFF"
+fi
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+	# Only create aliases whose ultimate target was resized.
+	vsed -i -e 's|if not os.path.exists(file_destination):|if os.path.exists(os.path.realpath(path).replace(input_dir, output_dir, 1).replace("/22/", "/24/")) and not os.path.exists(file_destination):|' tools/generate-24px-versions.py
+}
+
+sf-silver-icons-library_package() {
+	pkg_install() {
+		vmove "usr/lib/*.so.*"
+	}
+}
+
+sf-silver-icons-library-devel_package() {
+	depends="sf-silver-icons-library>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		if [ -z "$CROSS_BUILD" ]; then
+			vmove usr/bin
+		fi
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
