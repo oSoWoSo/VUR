@@ -1,0 +1,17 @@
+# Template file for 'fnt'
+pkgname=fnt
+version=1.9.2
+revision=1
+build_style=gnu-makefile
+make_install_args="ZCOMPDIR=/usr/share/zsh/site-functions"
+depends="bash curl"
+short_desc="Apt for fonts, the missing font manager for macOS/linux"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/alexmyczko/fnt"
+distfiles="https://github.com/alexmyczko/fnt/archive/refs/tags/${version}.tar.gz"
+checksum=a3c4c17bb891d773dbf6cccb9479d8d436bb83d4c3d57d7e333a8db8cb9f11b4
+
+post_install() {
+	vlicense LICENSE
+}
