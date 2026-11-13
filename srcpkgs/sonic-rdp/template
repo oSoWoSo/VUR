@@ -1,0 +1,31 @@
+# Template file for 'sonic-rdp'
+pkgname=sonic-rdp
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DBUILD_PLASMA_SESSION=OFF"
+hostmakedepends="sf-cmake-modules pkg-config qt6-base gettext qt6-tools freerdp
+ sf-settings sf-settings-utils sonic-namespace"
+makedepends="sf-settings-utils-devel sf-settings-devel sf-core-addons-devel
+ sf-internationalization-devel sonic-pipewire-devel sf-status-notification-devel
+ sf-dbus-devel sf-crash-handler-devel sf-gui-addons-devel pam-devel
+ sf-quick-ui-addons-devel qtkeychain-qt6-devel freerdp-devel
+ qt6-declarative-devel libxkbcommon-devel libxcb-devel pipewire-devel
+ qt6-base-private-devel freerdp"
+short_desc="Library and examples for creating an RDP server"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-rdp-server"
+distfiles="https://github.com/Sonic-DE/sonic-rdp-server/archive/refs/tags/${version}.tar.gz"
+checksum=bfdd1c45199d1f61c5f2025d514c1dfb7799b08562ca1d663621b606e36e9c31
+provides="krdp-${version}_${revision}"
+conflicts="krdp"
+replaces="krdp>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}

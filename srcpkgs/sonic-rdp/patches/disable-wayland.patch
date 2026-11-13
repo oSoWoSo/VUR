@@ -1,0 +1,36 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -36,7 +36,11 @@
+ option(BUILD_EXAMPLES "Build example applications" ON)
+ option(BUILD_PLASMA_SESSION "Build support for Plasma Screencasting extensions" ON)
+ 
+-find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED Core Quick Gui Network DBus WaylandClient Qml)
++find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED Core Quick Gui Network DBus Qml)
++
++if(BUILD_PLASMA_SESSION)
++    find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED WaylandClient)
++endif()
+ 
+ if (Qt6Gui_VERSION VERSION_GREATER_EQUAL "6.10.0")
+     find_package(Qt6GuiPrivate ${QT_MIN_VERSION} REQUIRED NO_MODULE)
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -61,7 +61,6 @@
+     Qt::Gui
+     Qt::Network
+     Qt::DBus
+-    Qt::WaylandClient
+     Qt::GuiPrivate
+ 
+     freerdp
+@@ -78,6 +77,10 @@
+     XKB::XKB
+ )
+ 
++if(BUILD_PLASMA_SESSION)
++    target_link_libraries(KRdp PUBLIC Qt::WaylandClient)
++endif()
++
+ set_target_properties(KRdp PROPERTIES
+     VERSION ${PROJECT_VERSION}
+     SOVERSION ${PROJECT_VERSION_MAJOR}
