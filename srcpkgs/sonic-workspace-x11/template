@@ -1,0 +1,92 @@
+# Template file for 'sonic-workspace'
+pkgname=sonic-workspace
+version=6.8.0.4
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DGLIBC_LOCALE_GEN=OFF -DKDE_INSTALL_LIBEXECDIR=libexec
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins -DSF6_HOST_TOOLING=/usr/lib/cmake"
+hostmakedepends="gettext iso-codes pkg-config qt6-base qt6-declarative-host-tools
+ qt6-shadertools qt6-tools sf-auth-tools sf-cmake-modules sf-doctools sf-package
+ sf-settings sf-settings-utils sf-windowsystem sonic-namespace SPIRV-Tools"
+makedepends="accountsservice-devel AppStream-qt-devel dbus-devel elogind-devel
+ eudev-libudev-devel fontconfig-devel freetype-devel icu-devel libcanberra-devel
+ libglib-devel libgomp-devel libICE-devel libqalculate-devel libSM-devel
+ libX11-devel libXau-devel libxcb-devel libXcursor-devel
+ libXfixes-devel libXft-devel libXtst-devel NetworkManager-devel phonon-devel
+ qcoro-qt6-devel qt6-base-private-devel qt6-declarative-devel qt6-location-devel
+ qt6-position-devel qt6-qt5compat-devel qt6-shadertools-devel qt6-svg-devel
+ qt6-tools-devel qt6-virtualkeyboard-devel sf-addons-downloader-devel
+ sf-app-info-devel sf-archive-devel sf-auth-devel sf-autocomplete-devel
+ sf-barcode-devel sf-bookmarks-devel sf-color-scheme-devel sf-core-addons-devel
+ sf-crash-handler-devel sf-data-models-devel sf-dbus-devel
+ sf-device-integration-devel sf-doctools-devel sf-file-search-devel
+ sf-gui-addons-devel sf-holidays-devel sf-icon-themes-devel sf-idle-tracker-devel
+ sf-internationalization-devel sf-io-devel sf-keybind-devel sf-keyring-devel
+ sf-networkmanager-devel sf-notification-settings-devel sf-notifications-devel
+ sf-package-devel sf-progress-ui-devel sf-qml-bridge-devel sf-quick-charts-devel
+ sf-quick-ui-addons-devel sf-quick-ui-devel sf-root-shell-devel sf-runner-devel
+ sf-settings-devel sf-settings-ui-devel sf-settings-utils-devel
+ sf-status-notification-devel sf-svg-devel sf-text-editor-devel
+ sf-text-widgets-devel sf-ui-components-devel sf-unit-conversion-devel
+ sf-user-feedback-devel sf-widgets-addons-devel sf-windowsystem-devel
+ sf-xml-gui-devel sonic-activities-devel sonic-activities-stats-devel
+ sonic-daemon-devel sonic-exiv2-library-devel sonic-interface-libraries-devel
+ sonic-night-light-devel sonic-pipewire-devel sonic-plasma5-support-library-devel
+ sonic-polkit-devel sonic-screen-library-devel sonic-screenlocker-devel
+ sonic-system-monitor-library-devel sonic-win-devel xcb-util-cursor-devel
+ xcb-util-devel xcb-util-image-devel zlib-devel"
+case "$XBPS_TARGET_LIBC" in
+	glibc) makedepends+=" libxcrypt-devel";;
+esac
+depends="iso-codes milou ocean-sound-theme sf-io-extras sf-io-fuse
+ sonic-activity-manager-daemon sonic-qt-theme-bridge sonic-system-stats
+ xdg-user-dirs xmessage xrdb"
+short_desc="Sonic Plasma Workspace (X11-focused)"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-workspace"
+distfiles="https://github.com/Sonic-DE/sonic-workspace/archive/refs/tags/${version}.tar.gz"
+checksum=7101b124adc183d7dab4e6af9e04afd7f224f76c48ea80274874f055641ad187
+provides="plasma-workspace-${version}_${revision}"
+conflicts="plasma-workspace"
+replaces="plasma-workspace>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sonic-workspace-library_package() {
+	provides="kworkspace-${version}_${revision}"
+	conflicts="kworkspace"
+	replaces="kworkspace>=0"
+	short_desc="Sonic Workspace Library for KF6"
+	pkg_install() {
+		vmove "usr/lib/libkworkspace6.so.6*"
+	}
+}
+
+sonic-workspace-x11_package() {
+	short_desc+=" - X11 Session"
+	depends="sonic-workspace"
+	provides="plasma-workspace-x11-${version}_${revision}"
+	conflicts="plasma-workspace-x11"
+	replaces="plasma-workspace-x11>=0"
+	pkg_install() {
+		vmkdir usr/share/xsessions
+		vmove usr/share/xsessions/sonicde.desktop
+	}
+}
+
+sonic-workspace-devel_package() {
+	provides="plasma-workspace-devel-${version}_${revision}"
+	conflicts="plasma-workspace-devel"
+	replaces="plasma-workspace-devel>=0"
+	short_desc+=" - development files"
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel qt6-declarative-devel sf-data-models-devel sonic-workspace-library>=${version}_${revision}"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+	}
+}
