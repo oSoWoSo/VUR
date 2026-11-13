@@ -1,0 +1,39 @@
+# Template file for 'opencode2'
+pkgname=opencode2
+version=2.2.7
+revision=1
+archs="x86_64 aarch64"
+hostmakedepends="bun nodejs python3 git"
+depends="ripgrep"
+short_desc="Open source AI coding agent"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/anomalyco/opencode"
+distfiles="https://github.com/anomalyco/opencode/archive/refs/tags/v${version}.tar.gz"
+checksum=493e29d872f1cd9604ef3de609f0278e093c0f8066719e4166efc6544d16f34d
+nostrip_files="/usr/bin/opencode"
+nopie_files="/usr/bin/opencode"
+nocross="opencode build uses process.arch"
+conflicts="opencode>=0"
+
+do_build() {
+	export OPENCODE_VERSION="${version}"
+	export OPENCODE_INSTALL_DIR=/usr/bin
+	export VITE_CONFIG_NATIVE_IGNORE_WARNING=true
+	bun install --frozen-lockfile --ignore-scripts
+	bun run --cwd packages/cli build -- --single --skip-install
+}
+
+do_install() {
+	local _ARCH
+	case "$XBPS_TARGET_MACHINE" in
+		x86_64) _ARCH="x64" ;;
+		aarch64) _ARCH="arm64" ;;
+	esac
+	vbin packages/cli/dist/cli-linux-${_ARCH}/bin/opencode
+	for shell in bash fish zsh; do
+		"${DESTDIR}/usr/bin/opencode" --completions ${shell} > opencode.${shell}
+		vcompletion opencode.${shell} ${shell}
+	done
+	vlicense LICENSE
+}
