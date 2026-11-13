@@ -1,0 +1,24 @@
+# Template file for 'sonic-breeze'
+pkgname=sonic-breeze
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DBUILD_QT5=OFF
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="gettext qt6-base qt6-tools sassc sf-cmake-modules sf-settings sf-settings-utils-devel sonic-namespace"
+makedepends="fftw-devel python3-cairo-devel qt6-svg-devel sf-color-scheme-devel sf-core-addons-devel sf-gui-addons-devel sf-icon-themes-devel sf-internationalization-devel sf-qt-integration-devel sf-quick-ui-devel sf-settings-devel sf-settings-utils-devel sf-windowsystem-devel sonic-decoration-devel"
+depends="sf-silver-icons"
+short_desc="Artwork, styles and assets for the Silver visual style of Sonic Desktop"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-breeze"
+distfiles="https://github.com/Sonic-DE/sonic-breeze/archive/refs/tags/${version}.tar.gz"
+checksum=cc66d45f6830bf502dfb4c82ca7ee9369498a41a677d6dfb6ba860299b325e18
+provides="breeze-${version}_${revision} breeze-icons-${version}_${revision}"
+conflicts="breeze breeze-qt6 breeze-icons"
+replaces="breeze>=0 breeze-qt6>=0 breeze-icons>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
