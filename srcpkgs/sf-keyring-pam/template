@@ -1,0 +1,23 @@
+# Template file for 'sf-keyring-pam'
+pkgname=sf-keyring-pam
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="pkg-config qt6-base qt6-tools sf-cmake-modules sonic-namespace"
+makedepends="libgcrypt-devel pam-devel sf-keyring-devel"
+depends="pam socat"
+short_desc="PAM Integration for Sonic keyring"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-keyring-pam"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-keyring-pam/archive/refs/tags/${version}.tar.gz"
+checksum=37865ddaee414f40bcdf1ab4846eafb41fade3bb2604927e2d1e6a9c281d8c0d
+provides="kwallet-pam-${version}_${revision}"
+conflicts="kwallet-pam"
+replaces="kwallet-pam>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
