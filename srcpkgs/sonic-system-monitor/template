@@ -1,0 +1,29 @@
+# Template file for 'sonic-system-monitor'
+pkgname=sonic-system-monitor
+version=6.8.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING=OFF -DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml"
+hostmakedepends="sf-cmake-modules gettext qt6-base qt6-tools sf-package
+ sf-settings sf-core-addons qt6-declarative-host-tools sonic-namespace"
+makedepends="sf-quick-ui-devel sonic-system-monitor-library-devel sf-data-models-devel
+ sf-addons-downloader-devel sf-io-devel sf-dbus-devel sf-settings-devel
+ sf-windowsystem-devel sf-crash-handler-devel qt6-declarative-private-devel
+ sf-internationalization-devel sf-package-devel
+ sf-app-info-devel sf-keybind-devel sf-quick-ui-addons-devel"
+depends="sf-quick-ui sf-quick-desktop-style sf-quick-charts sonic-system-stats"
+short_desc="Application for monitoring system resources"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-system-monitor"
+distfiles="https://github.com/Sonic-DE/sonic-system-monitor/archive/refs/tags/${version}.tar.gz"
+checksum=c5871c654cedf848dd2f625d5b885805fc67c59ec21d7d8736a255ef1a18e921
+provides="plasma-systemmonitor-${version}_${revision}"
+conflicts="plasma-systemmonitor"
+replaces="plasma-systemmonitor>=0"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
