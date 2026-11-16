@@ -1,0 +1,19 @@
+# Template file for 'umu-launcher'
+pkgname=umu-launcher
+version=1.4.4
+revision=1
+depends="python3"
+short_desc="Unified launcher for Windows games on Linux (Proton via Steam Runtime)"
+maintainer="nobody <mail@odysseylinux.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/Open-Wine-Components/umu-launcher"
+distfiles="https://github.com/Open-Wine-Components/umu-launcher/releases/download/${version}/umu-launcher-${version}-zipapp.tar"
+checksum=eb590691841f7fad3fc3ad8fd5db4ccb87849fe7948e62b28ece7a4ee48cc851
+create_wrksrc=yes
+python_version=3
+
+do_install() {
+	# repack the official zipapp: umu-run is a self-contained Python archive,
+	# install it in /usr/bin where Bottles finds it via shutil.which("umu-run")
+	vbin umu/umu-run
+}

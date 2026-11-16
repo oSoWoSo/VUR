@@ -1,0 +1,39 @@
+Remove the remaining runtime sandbox gates.
+Several views bail out early when not running under a sandbox, leaving
+the UI non-functional on native installs. Upstream now also accepts a
+cpak container; Odyssey disables the check entirely.
+
+--- a/bottles/frontend/views/new_bottle_dialog.py
++++ b/bottles/frontend/views/new_bottle_dialog.py
+@@ -94,8 +94,6 @@
+         # common variables and references
+         self.window = GtkUtils.get_parent_window()
+-        if not self.window or (
+-            not is_cpak() and not Xdp.Portal.running_under_sandbox()
+-        ):
++        if not self.window:  # Odyssey: sandbox gate disabled (ODY-166)
+             return
+ 
+         self.app = self.window.get_application()
+--- a/bottles/frontend/views/list.py
++++ b/bottles/frontend/views/list.py
+@@ -130,7 +130,7 @@
+ 
+     def run_executable(self, *_args):
+         """Display file dialog for executable"""
+-        if not is_cpak() and not Xdp.Portal.running_under_sandbox():
++        if False:  # Odyssey: sandbox gate disabled (ODY-166)
+             return
+ 
+         def set_path(_dialog, response):
+--- a/bottles/frontend/views/bottle_preferences.py
++++ b/bottles/frontend/views/bottle_preferences.py
+@@ -185,7 +185,7 @@
+                 )
+             )
+ 
+-        if not is_cpak() and not Xdp.Portal.running_under_sandbox():
++        if False:  # Odyssey: sandbox gate disabled (ODY-166)
+             return
+ 
+         _not_available = _("This feature is unavailable on your system.")
