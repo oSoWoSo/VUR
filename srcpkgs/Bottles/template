@@ -1,0 +1,36 @@
+# Template file for 'Bottles'
+pkgname=Bottles
+version=67.6
+revision=1
+archs="x86_64*"
+build_style=meson
+hostmakedepends="pkg-config gettext glib-devel blueprint-compiler
+ desktop-file-utils AppStream gtk-update-icon-cache python3-gobject"
+makedepends="gtk4-devel libadwaita-devel python3-gobject"
+#depends="gtk4 libadwaita python3-gobject python3-cairo python3-yaml python3-curl
+# python3-chardet python3-requests python3-Markdown python3-icoextract
+# python3-patool python3-pathvalidate python3-orjson python3-charset-normalizer
+# python3-idna python3-urllib3 python3-certifi python3-pefile python3-yara
+# dconf cabextract p7zip gtksourceview5 libportal-gtk4 vkbasalt-cli libunwind
+# freetype fontconfig fvs2"
+short_desc="Run Windows software and games on Linux"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-only"
+homepage="https://usebottles.com"
+distfiles="https://github.com/bottlesdevs/Bottles/archive/refs/tags/${version}.tar.gz"
+checksum=42bab50a8b127ef8de528450426087c814fd5b2bdb35296eca244b736eb13940
+
+# Multilib/umu-launcher are only available on glibc x86_64.
+case "$XBPS_TARGET_MACHINE" in
+	x86_64)
+		depends+=" libunwind-32bit freetype-32bit fontconfig-32bit umu-launcher"
+		;;
+esac
+
+post_patch() {
+	# ODY-166: The sandbox gate patch has already broken window.py once
+	# (orphaned parentheses -> IndentationError) and ended up in the repo because
+	# Meson doesn't compile .py files. Here, the build fails immediately if a patch
+	# leaves the source code in a state where it cannot be compiled.
+	python3 -m compileall -q bottles/frontend >/dev/null
+}

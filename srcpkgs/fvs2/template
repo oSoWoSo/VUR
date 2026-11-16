@@ -1,0 +1,18 @@
+# Template file for 'fvs2'
+pkgname=fvs2
+version=0.11.0
+revision=1
+build_style=go
+go_import_path="github.com/fvs-lab/fvs2"
+go_package="./cmd/fvs2"
+checkdepends="git"
+short_desc="Fused Versioned Storage"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/fvs-lab/fvs2"
+distfiles="https://github.com/fvs-lab/fvs2/archive/refs/tags/v${version}.tar.gz"
+checksum=1dc0c1cf3343f7ef69f48f2f08bec31d4994f714f87a6c09f157be8e4144e7fa
+
+post_install() {
+	vlicense LICENSE
+}

@@ -1,0 +1,18 @@
+# Template file for 'umu-launcher'
+pkgname=umu-launcher
+version=1.4.4
+revision=2
+archs="x86_64"
+depends="python3 zstd bubblewrap"
+short_desc="Unified launcher for Windows games on Linux (Proton via UMU)"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/Open-Wine-Components/umu-launcher"
+distfiles="https://github.com/Open-Wine-Components/umu-launcher/releases/download/${version}/umu-launcher-${version}-zipapp.tar"
+checksum=eb590691841f7fad3fc3ad8fd5db4ccb87849fe7948e62b28ece7a4ee48cc851
+create_wrksrc=yes
+
+# Repack the official zipapp: reproducibility validates packaging, not upstream source.
+do_install() {
+	vbin umu/umu-run
+}

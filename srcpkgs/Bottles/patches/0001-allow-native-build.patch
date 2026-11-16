@@ -1,0 +1,20 @@
+Allow building outside of Flatpak.
+
+Upstream gates the build on the presence of /.flatpak-info, which only
+exists inside a Flatpak sandbox, to discourage native packaging. The
+runtime code already supports native execution as the default branch of
+every FLATPAK_ID check, so this build-time gate is artificial. Remove it.
+
+--- a/bottles/frontend/meson.build
++++ b/bottles/frontend/meson.build
+@@ -23,10 +23,6 @@ params_file = configure_file(
+ 
+ fs = import('fs')
+ 
+-if not fs.is_file('/' + '.flatpak-info')
+-  error('file does not exist')
+-endif
+-
+ bottles_sources = [
+   '__init__.py',
+   'main.py',

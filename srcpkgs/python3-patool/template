@@ -1,0 +1,12 @@
+# Template file for 'python3-patool'
+pkgname=python3-patool
+version=4.1.0
+revision=1
+build_style=python3-pep517
+hostmakedepends="python3-setuptools"
+short_desc="Patool is a portable command line archive file manager"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/wummel/patool"
+distfiles="https://github.com/wummel/patool/archive/refs/tags/${version}.tar.gz"
+checksum=9b82099d41afa9544c776ba723a2a7aff3a948a209ac9f6b1343433182798a5f
