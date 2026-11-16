@@ -1,0 +1,38 @@
+--- a/internal/session/hook_peer_test.go	2026-11-14 17:28:45.000000000 +0000
++++ b/internal/session/hook_peer_test.go	2026-11-14 23:38:00.528918704 +0000
+@@ -27,6 +27,10 @@
+ 	// The trailing : keeps sh from running sleep in its own place, so
+ 	// sleep is a child of the shell.
+ 	shell := exec.Command("sh", "-c", "sleep 30; :")
++	// Start the shell in its own session. In a PID namespace getsid(2)
++	// answers 0 for a process whose session leader lives outside the
++	// namespace, which the session-based ownership probes below cannot use.
++	shell.SysProcAttr = &syscall.SysProcAttr{Setsid: true}
+ 	if err := shell.Start(); err != nil {
+ 		t.Fatal(err)
+ 	}
+@@ -131,10 +135,23 @@
+ 		}
+ 	}
+ 
+-	// Both processes end by their own pids.
++	// Both processes end by their own pids. Kill the sleep first and let its
++	// shell reap it: killing the shell at once would orphan the sleep into a
++	// zombie, and inside a PID namespace the init that inherits it is slow to
++	// reap, so the pid-reuse checks below would see the sleep still there.
+ 	if err := syscall.Kill(b, syscall.SIGKILL); err != nil {
+ 		t.Fatal(err)
+ 	}
++	deadline = time.Now().Add(10 * time.Second)
++	for {
++		if st, ok := procinfo.StartTime(b); !ok || st != bStart {
++			break
++		}
++		if time.Now().After(deadline) {
++			t.Fatalf("the sleep %d was never reaped by its shell", b)
++		}
++		time.Sleep(5 * time.Millisecond)
++	}
+ 	if err := shell.Process.Kill(); err != nil {
+ 		t.Logf("the shell had ended: %v", err)
+ 	}

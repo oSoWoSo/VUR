@@ -1,0 +1,21 @@
+--- a/internal/session/queue_parts_test.go
++++ b/internal/session/queue_parts_test.go
+@@ -119,6 +119,7 @@ func TestALargeQueuedPasteIsTypedAsAFile(t *testing.T) {
+ 	res := result(t, callP(c, t, "queue-prompt", map[string]any{"session": "work", "window": b, "parts": []map[string]any{
+-		{"kind": "text", "text": "echo see "},
++		{"kind": "text", "text": "echo 'see "},
+ 		{"kind": "paste", "text": block, "n": 1},
++		{"kind": "text", "text": "'"},
+ 	}}))
+-	if res["parts"] != float64(2) {
+-		t.Errorf("the reply says %v parts were read, want 2", res["parts"])
++	if res["parts"] != float64(3) {
++		t.Errorf("the reply says %v parts were read, want 3", res["parts"])
+@@ -268,5 +269,6 @@ func TestAQueuedImageIsWrittenWhenTyped(t *testing.T) {
+ 	png := testPNG("screenshot")
+ 	result(t, callP(c, t, "queue-prompt", map[string]any{"session": "work", "window": b, "parts": []map[string]any{
+-		{"kind": "text", "text": "echo see "},
++		{"kind": "text", "text": "echo 'see "},
+ 		{"kind": "image", "data": png, "n": 1},
++		{"kind": "text", "text": "'"},
+ 	}}))

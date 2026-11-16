@@ -1,0 +1,25 @@
+# Template file for 'tuios'
+pkgname=tuios
+version=0.13.3
+revision=1
+build_style=go
+build_helper=qemu
+go_import_path="github.com/Gaurav-Gosain/tuios"
+go_package="./cmd/tuios"
+make_check_args="-skip=TestBoardSortsALongColumnByItsKeys/budget|TestKeystrokeFrameBudget" # wall-time budgets flaky on slow CI runners
+hostmakedepends="git"
+short_desc="Terminal UI OS (Terminal Multiplexer)"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/Gaurav-Gosain/tuios"
+distfiles="https://github.com/Gaurav-Gosain/tuios/archive/refs/tags/v${version}.tar.gz"
+checksum=26ffb34240cc273eb7d0f3b6ee5a9a124c7c4a947f39fb22877ca2f93a539d73
+
+post_install() {
+	vlicense LICENSE
+	f=$(find "$GOPATH/bin" -name $pkgname)
+	for shell in bash fish zsh; do
+		vtargetrun "$f" completion "$shell" > "completion.$shell"
+		vcompletion "completion.$shell" "$shell"
+	done
+}

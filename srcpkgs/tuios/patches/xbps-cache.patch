@@ -1,0 +1,9 @@
+--- a/internal/app/module_source_test.go
++++ b/internal/app/module_source_test.go
+@@ -24,7 +24,7 @@ func moduleSource(t testing.TB) (*token.FileSet, map[string]*ast.File) {
+ 	root := moduleRoot(t)
+ 	fset := token.NewFileSet()
+ 	files := map[string]*ast.File{}
+-	skip := map[string]bool{".git": true, ".ghostty-vt": true, "node_modules": true, "vendor": true, "docs": true, ".claude": true}
++	skip := map[string]bool{".git": true, ".ghostty-vt": true, "node_modules": true, "vendor": true, "docs": true, ".claude": true, "_build-tuios-xbps": true}
+ 	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
