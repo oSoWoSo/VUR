@@ -1,0 +1,16 @@
+Disable the runtime sandbox gate.
+Upstream refuses to start outside a Flatpak/container sandbox, showing a
+blocking dialog and quitting. Odyssey ships Bottles natively, so the
+gate is disabled unconditionally.
+
+--- a/bottles/frontend/windows/window.py
++++ b/bottles/frontend/windows/window.py
+@@ -139,7 +139,7 @@
+             manager.set_color_scheme(Adw.ColorScheme.FORCE_DARK)
+ 
+         # Be VERY explicit that non-sandboxed environments are unsupported
+-        if not os.environ.get("CPAK_CONTAINER_ID") and not Xdp.Portal.running_under_sandbox():
++        if False:  # Odyssey: native build supported, sandbox gate disabled
+ 
+             def response(dialog, response, *args):
+                 if response == "close":
