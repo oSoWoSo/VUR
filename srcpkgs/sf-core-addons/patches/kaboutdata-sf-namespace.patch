@@ -1,0 +1,14 @@
+--- a/src/lib/kaboutdata.cpp
++++ b/src/lib/kaboutdata.cpp
+@@ -679,6 +679,11 @@
+     std::reverse(hostComponents.begin(), hostComponents.end());
+     hostComponents.append(_componentName);
+ 
++    // SF6: kde.org organization domain maps to the org.sf namespace
++    if (d->organizationDomain == QStringLiteral("kde.org") && hostComponents.size() >= 2) {
++        hostComponents[1] = QStringLiteral("sf");
++    }
++
+     d->desktopFileName = hostComponents.join(dotChar);
+ }
+ 

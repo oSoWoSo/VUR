@@ -1,0 +1,35 @@
+# Template file for 'sf-settings-utils'
+pkgname=sf-settings-utils
+version=6.31.0
+revision=1
+build_style=cmake
+build_helper=qemu
+configure_args="-DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="gettext qt6-base qt6-declarative-host-tools qt6-tools
+ sf-cmake-modules sf-settings sonic-namespace"
+makedepends="qt6-declarative-devel qt6-declarative-private-devel sf-core-addons-devel sf-io-devel
+ sf-quick-ui-devel sf-settings-devel sf-settings-ui-devel sf-xml-gui-devel"
+checkdepends="sf-quick-ui"
+short_desc="Utilities for Sonic System Settings modules"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-settings-utils"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-settings-utils/archive/refs/tags/${version}.tar.gz"
+checksum=e682d1e3ce25ac66d991161afa319b24b5bda413a20050c8efd76a61625653ef
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-settings-utils-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} qt6-declarative-devel sf-core-addons-devel sf-settings-ui-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

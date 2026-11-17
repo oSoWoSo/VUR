@@ -1,0 +1,29 @@
+# Template file for 'sf-keybind'
+pkgname=sf-keybind
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="doxygen qt6-base qt6-declarative-host-tools qt6-tools sf-cmake-modules sonic-namespace"
+makedepends="libstdc++-devel qt6-base-private-devel qt6-declarative-devel"
+short_desc="Global workspace shortcut system for SonicDE"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-only OR LGPL-3.0-only"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-keybind"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-keybind/archive/refs/tags/${version}.tar.gz"
+checksum=e72b6843ec8661a1694f7868077d658dbfb5a7890c52482a8c2d99094da6e148
+nocross="target dependency transaction unresolvable (glibc shlibs)"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-keybind-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

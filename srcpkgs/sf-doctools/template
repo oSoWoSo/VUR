@@ -1,0 +1,46 @@
+# Template file for 'sf-doctools'
+pkgname=sf-doctools
+version=6.31.0.1
+revision=1
+build_style=cmake
+build_helper=qemu
+configure_args="-DCMAKE_INSTALL_LIBDIR=lib -DKDE_INSTALL_LIBDIR=lib
+ -DDocBookXML4_DTD_DIR=/usr/share/xml/docbook/4.5 -DDocBookXSL_DIR=/usr/share/xsl/docbook"
+hostmakedepends="docbook-xml docbook-xsl doxygen gettext perl perl-URI qt6-base
+ qt6-tools sf-cmake-modules sonic-namespace"
+makedepends="libxml2-devel libxslt-devel qt6-base-devel sf-archive-devel
+ sf-internationalization-devel sf-logging-devel"
+depends="docbook-xml docbook-xsl"
+short_desc="DocBook-based documentation generation tools for SonicDE frameworks"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-only OR LGPL-3.0-only"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-doctools"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-doctools/archive/refs/tags/${version}.tar.gz"
+checksum=2eee0a6bf0061ee0dc0859b5ca9ca8531aa5af4fb8629ab29fbc3263bc511fc5
+
+if [ "$XBPS_TARGET_LIBC" = "musl" ]; then
+	makedepends+=" eudev-libudev-devel"
+fi
+
+post_patch() {
+	vsed -i -e '
+		s;[$]{CMAKE_INSTALL_DATAROOTDIR};usr/share;
+		/find_path/s/$/ NO_CMAKE_FIND_ROOT_PATH/
+	' cmake/FindDocBookXML4.cmake cmake/FindDocBookXSL.cmake
+
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-doctools-devel_package() {
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		mkdir -p "${DESTDIR}/usr/lib/cmake/SF6DocTools"
+		mv ${PKGDESTDIR}/usr/lib/cmake/SF6DocTools/SF6DocToolsTools* \
+			"${DESTDIR}/usr/lib/cmake/SF6DocTools"
+		vmove "usr/lib/*.so"
+	}
+}

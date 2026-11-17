@@ -1,0 +1,52 @@
+# Template file for 'sf-io'
+pkgname=sf-io
+version=6.31.0.1
+revision=2
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DSF6_HOST_TOOLING=/usr/lib/cmake
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="doxygen gettext qt6-base qt6-tools sf-auth-tools sf-cmake-modules
+ sf-doctools sonic-namespace"
+makedepends="acl-devel libstdc++-devel libxml2-devel libxslt-devel
+ qt6-base-private-devel qt6-qt5compat-devel qt6-tools-devel sf-app-info-devel
+ sf-archive-devel sf-autocomplete-devel sf-bookmarks-devel sf-color-scheme-devel
+ sf-core-addons-devel sf-crash-handler-devel sf-data-views-devel sf-dbus-devel
+ sf-device-integration-devel sf-doctools-devel sf-gui-addons-devel
+ sf-icon-themes-devel sf-internationalization-devel sf-keyring-devel
+ sf-progress-ui-devel sf-settings-devel sf-widgets-addons-devel
+ sf-windowsystem-devel sonic-daemon-devel"
+depends="util-linux-libs"
+short_desc="Resource and network access abstraction layer for SonicDE"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-only OR LGPL-3.0-only"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-io"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-io/archive/refs/tags/${version}.tar.gz"
+checksum=62f3100d733a5fc11d655fbb23ad3ed5b00f6bff9ec56b89e51f230af9360826
+nocross="target dependency transaction unresolvable (glibc shlibs)"
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+do_check() {
+	cd build
+	# disable failing tests (container/environment dependent)
+	ctest -E "kioworkers-testtrash|kioworkers-testtrashdirnotify|kiocore-kacltest|kiocore-kmountpointtest|kiocore-deletejobtest|kiocore-deleteortrashjobtest|kiocore-jobtest|kiocore-kfileitemtest|kiogui-openurljobtest|kiogui-commandlauncherjob_servicetest|kiowidgets-dropjobtest|kiowidgets-fileundomanagertest|kiowidgets-kdirmodeltest|kiofilewidgets-kfilewidgettest|kiofilewidgets-knewfilemenutest|kiofilewidgets-kfileplacesmodeltest|kiofilewidgets-kdirlistertest"
+}
+
+sf-io-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel sf-app-info-devel
+	 sf-autocomplete-devel sf-bookmarks-devel sf-data-views-devel
+	 sf-device-integration-devel sf-progress-ui-devel sf-widgets-addons-devel
+	 sf-windowsystem-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/libSF6KIO*.so"
+		vmove usr/share/doc
+	}
+}

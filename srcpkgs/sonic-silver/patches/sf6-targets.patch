@@ -1,0 +1,68 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -55,7 +55,7 @@
+ 
+ 
+         find_package(KF6FrameworkIntegration ${KF6_MIN_VERSION} CONFIG )
+-        set_package_properties(KF${QT_MAJOR_VERSION}FrameworkIntegration PROPERTIES
++        set_package_properties(SF${QT_MAJOR_VERSION}FrameworkIntegration PROPERTIES
+             DESCRIPTION "KF6 Framework Integration"
+             URL "https://projects.kde.org/projects/frameworks/frameworkintegration"
+             TYPE OPTIONAL
+--- a/kstyle/CMakeLists.txt
++++ b/kstyle/CMakeLists.txt
+@@ -76,17 +76,17 @@
+ if( SILVER_HAVE_QTQUICK )
+     target_link_libraries(silver${QT_MAJOR_VERSION}
+         Qt${QT_MAJOR_VERSION}::Quick
+-        KF${QT_MAJOR_VERSION}::CoreAddons
++        SF${QT_MAJOR_VERSION}::CoreAddons
+     )
+ endif()
+ 
+ target_link_libraries(silver${QT_MAJOR_VERSION}
+-    KF${QT_MAJOR_VERSION}::CoreAddons
+-    KF${QT_MAJOR_VERSION}::ConfigCore
+-    KF${QT_MAJOR_VERSION}::ConfigGui
+-    KF${QT_MAJOR_VERSION}::GuiAddons
+-    KF${QT_MAJOR_VERSION}::IconThemes
+-    KF${QT_MAJOR_VERSION}::WindowSystem
++    SF${QT_MAJOR_VERSION}::CoreAddons
++    SF${QT_MAJOR_VERSION}::ConfigCore
++    SF${QT_MAJOR_VERSION}::ConfigGui
++    SF${QT_MAJOR_VERSION}::GuiAddons
++    SF${QT_MAJOR_VERSION}::IconThemes
++    SF${QT_MAJOR_VERSION}::WindowSystem
+ )
+ 
+ target_link_libraries(silver6 KF6::ColorScheme Sonic::Logging)
+@@ -97,8 +97,8 @@
+ 
+ target_link_libraries(silver${QT_MAJOR_VERSION} silvercommon${QT_MAJOR_VERSION})
+ 
+-if(KF${QT_MAJOR_VERSION}FrameworkIntegration_FOUND)
+-    target_link_libraries(silver${QT_MAJOR_VERSION} KF${QT_MAJOR_VERSION}::Style)
++if(SF${QT_MAJOR_VERSION}FrameworkIntegration_FOUND)
++    target_link_libraries(silver${QT_MAJOR_VERSION} SF${QT_MAJOR_VERSION}::Style)
+ endif()
+ 
+ if (WIN32)
+--- a/libbreezecommon/CMakeLists.txt
++++ b/libbreezecommon/CMakeLists.txt
+@@ -45,11 +45,11 @@
+         Qt${QT_MAJOR_VERSION}::Gui
+         Qt${QT_MAJOR_VERSION}::Widgets
+ 
+-        KF${QT_MAJOR_VERSION}::GuiAddons
+-        KF${QT_MAJOR_VERSION}::ConfigCore
+-        KF${QT_MAJOR_VERSION}::ConfigGui
+-        KF${QT_MAJOR_VERSION}::IconThemes
+-        KF${QT_MAJOR_VERSION}::I18n)
++        SF${QT_MAJOR_VERSION}::GuiAddons
++        SF${QT_MAJOR_VERSION}::ConfigCore
++        SF${QT_MAJOR_VERSION}::ConfigGui
++        SF${QT_MAJOR_VERSION}::IconThemes
++        SF${QT_MAJOR_VERSION}::I18n)
+ 
+ if(HAVE_QTDBUS)
+     target_link_libraries(silvercommon${QT_MAJOR_VERSION}

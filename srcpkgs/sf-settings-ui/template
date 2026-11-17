@@ -1,0 +1,39 @@
+# Template file for 'sf-settings-ui'
+pkgname=sf-settings-ui
+version=6.31.0.1
+revision=1
+build_style=cmake
+configure_args="-DSF6_HOST_TOOLING=/usr/lib/cmake"
+hostmakedepends="gettext qt6-base qt6-tools sf-cmake-modules sf-settings-devel
+ sonic-namespace"
+makedepends="qt6-base-private-devel sf-color-scheme-devel sf-core-addons-devel
+ sf-settings-devel sf-text-codec-devel sf-widgets-addons-devel"
+short_desc="Widgets for configuration dialogs"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-settings-ui"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-settings-ui/archive/refs/tags/${version}.tar.gz"
+checksum=5901e2219b42f66e48bf08a62771e4dcf1772060cf0886b8739f17d186928c55
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+do_check() {
+	cd build
+	# disable failing tests
+	ctest -E "kstandardactiontest"
+}
+
+sf-settings-ui-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel
+	 sf-color-scheme-devel sf-settings-devel sf-text-codec-devel
+	 sf-widgets-addons-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

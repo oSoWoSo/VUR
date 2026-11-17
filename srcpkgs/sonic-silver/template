@@ -1,0 +1,24 @@
+# Template file for 'sonic-silver'
+pkgname=sonic-silver
+version=6.8.2
+revision=2
+build_style=cmake
+configure_args="-DBUILD_TESTING=ON -DBUILD_QT5=OFF"
+hostmakedepends="gettext pkg-config sf-cmake-modules sonic-namespace"
+makedepends="qt6-base-devel qt6-declarative-devel qt6-svg-devel
+ sf-color-scheme-devel sf-core-addons-devel sf-gui-addons-devel
+ sf-icon-themes-devel sf-internationalization-devel sf-logging-devel
+ sf-quick-ui-devel sf-settings-devel sf-settings-utils-devel
+ sf-widgets-addons-devel sf-windowsystem-devel sonic-decoration-devel"
+depends="sf-silver-icons hicolor-icon-theme sf-qt-integration xdg-utils"
+short_desc="Customizable theme for Sonic Desktop"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE/sonic-silver"
+distfiles="https://github.com/Sonic-DE/sonic-silver/archive/refs/tags/${version}.tar.gz"
+checksum=70e0575ab8d0336befa5ba4b427e3b78c7b262f1e6b203121dfb8b6f1d02d4e3
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}

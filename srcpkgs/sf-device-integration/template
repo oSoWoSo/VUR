@@ -1,0 +1,29 @@
+# Template file for 'sf-device-integration'
+pkgname=sf-device-integration
+version=6.31.0
+revision=1
+build_style=cmake
+hostmakedepends="flex pkg-config qt6-base qt6-tools sf-cmake-modules sonic-namespace"
+makedepends="libimobiledevice-devel libmount-devel libplist-devel qt6-base-devel"
+depends="media-player-info udisks2 upower"
+short_desc="Hardware integration and detection"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-device-integration"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-device-integration/archive/refs/tags/${version}.tar.gz"
+checksum=099c1a79b2d35a43fa4b06a176d8bd1d3d613ed9c50370c83bffb6771443b6d3
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-device-integration-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

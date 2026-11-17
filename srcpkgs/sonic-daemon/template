@@ -1,0 +1,29 @@
+# Template file for 'sonic-daemon'
+pkgname=sonic-daemon
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DSF6_HOST_TOOLING=/usr/lib/cmake"
+hostmakedepends="sf-cmake-modules qt6-tools qt6-base sf-doctools sf-settings
+ sonic-namespace"
+makedepends="sf-settings-devel sf-core-addons-devel sf-crash-handler-devel
+ sf-dbus-devel sf-app-info-devel"
+short_desc="Central daemon of Sonic work spaces"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-daemon"
+distfiles="https://github.com/Sonic-DE/sonic-daemon/archive/refs/tags/${version}.tar.gz"
+checksum=b07d040a538fc95c470e9f905b393b8f56897887f70e79892b6735a2f7732303
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sonic-daemon-devel_package() {
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/lib/cmake
+	}
+}

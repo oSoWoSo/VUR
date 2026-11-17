@@ -1,0 +1,13 @@
+# Template file for 'sonic-namespace'
+pkgname=sonic-namespace
+version=1
+revision=3
+depends="python3"
+short_desc="SonicDE namespace transformation helper for package builds"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.0-or-later"
+homepage="https://github.com/Sonic-DE"
+
+do_install() {
+	vinstall ${FILESDIR}/sonic-namespace.sh 0644 usr/libexec/sonic-namespace
+}

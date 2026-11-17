@@ -1,0 +1,31 @@
+# Template file for 'sf-qt-integration'
+pkgname=sf-qt-integration
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins
+ -DKDE_INSTALL_LIBEXECDIR=libexec"
+hostmakedepends="gettext qt6-base qt6-tools sf-cmake-modules sf-package sf-settings sonic-namespace"
+makedepends="sf-addons-downloader-devel sf-color-scheme-devel sf-icon-themes-devel sf-internationalization-devel sf-notifications-devel sf-package-devel sf-settings-devel sf-widgets-addons-devel"
+short_desc="Framework to integrate applications with a KDE Workspace"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-qt-integration"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-qt-integration/archive/refs/tags/${version}.tar.gz"
+checksum=5f6feb53310013f5a0daa7cef74732d4ae0ce57aae439a0ebe709d49de6134ae
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-qt-integration-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} sf-color-scheme-devel sf-icon-themes-devel sf-widgets-addons-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

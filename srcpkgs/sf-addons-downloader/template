@@ -1,0 +1,34 @@
+# Template file for 'sf-addons-downloader'
+pkgname=sf-addons-downloader
+version=6.31.0
+revision=1
+build_style=cmake
+configure_args="-DKDE_INSTALL_QMLDIR=lib/qt6/qml
+ -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins"
+hostmakedepends="gettext qt6-base qt6-declarative-host-tools qt6-tools
+ sf-cmake-modules sf-package sf-settings sonic-namespace"
+makedepends="sf-open-collab-devel sf-archive-devel sf-settings-devel
+ sf-core-addons-devel sf-internationalization-devel sf-package-devel
+ sf-widgets-addons-devel sf-feeds-devel qt6-declarative-private-devel"
+short_desc="Framework for downloading and sharing additional application data"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-addons-downloader"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-addons-downloader/archive/refs/tags/${version}.tar.gz"
+checksum=ea5a17622392b8d551a1948d400f82d78aaa018b030e6b1b7351605eae1de257
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-addons-downloader-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} qt6-base-devel
+	 sf-core-addons-devel sf-open-collab-devel"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}

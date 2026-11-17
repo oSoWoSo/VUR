@@ -1,0 +1,28 @@
+# Template file for 'sf-autocomplete'
+pkgname=sf-autocomplete
+version=6.31.0.1
+revision=1
+build_style=cmake
+hostmakedepends="qt6-base qt6-tools sf-cmake-modules sf-settings sonic-namespace"
+makedepends="sf-settings-devel sf-text-codec-devel sf-widgets-addons-devel"
+short_desc="Sonic completion framework"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-2.1-or-later"
+homepage="https://github.com/Sonic-DE/sonic-frameworks-autocomplete"
+distfiles="https://github.com/Sonic-DE/sonic-frameworks-autocomplete/archive/refs/tags/${version}.tar.gz"
+checksum=50888a865ec5844fc49248ed3ca60e9ed51d43f04b790f8707fe726af6243c54
+
+post_patch() {
+	. /usr/libexec/sonic-namespace/sonic-namespace.sh
+	sonic_namespace_patch
+}
+
+sf-autocomplete-devel_package() {
+	depends="$makedepends ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/cmake
+		vmove "usr/lib/*.so"
+	}
+}
