@@ -1,0 +1,47 @@
+# Template file for 'hyprsysteminfo'
+pkgname=hyprsysteminfo
+version=0.2.0
+revision=5
+build_style=cmake
+configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr"
+hostmakedepends="pkg-config qt6-base qt6-declarative-devel"
+makedepends="aquamarine-devel
+ abseil-cpp-devel
+ cairo-devel
+ file-devel
+ glaze7
+ hyprland-qt-support
+ hyprtoolkit-devel
+ hyprutils-devel
+ iniparser-devel
+ libdrm-devel
+ libgbm-devel
+ libglvnd-devel
+ libheif-devel
+ libjpeg-turbo-devel
+ libjxl-devel
+ libpng-devel
+ librsvg-devel
+ libwebp-devel
+ libxkbcommon-devel
+ pango-devel
+ pciutils-devel
+ pixman-devel
+ qt6-base-devel
+ qt6-base-private-devel
+ qt6-declarative-devel
+ qt6-declarative-private-devel
+ qt6-tools-devel
+ qt6-wayland-devel
+ qt6-wayland-private-devel
+ wayland-devel"
+short_desc="Tiny qt6/qml application to display system informations"
+maintainer="zenobit <zen@osowoso.org>"
+license="BSD-3-Clause"
+homepage="https://github.com/hyprwm/hyprsysteminfo"
+distfiles="https://github.com/hyprwm/hyprsysteminfo/archive/refs/tags/v${version}.tar.gz"
+checksum=4f875e7e986deeda35c05090b59f11f3b5802cac8863dafcc6e8251ea37530b1
+
+post_install() {
+	vlicense LICENSE
+}

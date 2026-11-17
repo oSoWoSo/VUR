@@ -1,0 +1,31 @@
+Fix the build on musl
+
+glibc's <sys/un.h> includes <string.h>, so strncpy() happens to be declared
+here, while musl's <sys/un.h> does not - include <cstring> explicitly, like
+src/main.cpp already does.
+
+glibc's <sys/sysinfo.h> does not define `struct sysinfo` itself, it only pulls
+in <linux/kernel.h> for the types; musl's does define it. Including
+<linux/sysinfo.h> on top of that defines `struct sysinfo` twice on musl. The
+kernel header is not needed, everything used here (uptime, totalram, freeram,
+bufferram, mem_unit) is provided by <sys/sysinfo.h>.
+--- a/src/utils/HyprlandIPC.cpp
++++ b/src/utils/HyprlandIPC.cpp
+@@ -7,6 +7,7 @@
+ #include <sys/un.h>
+ #include <unistd.h>
+
++#include <cstring>
+ #include <format>
+
+ #include <hyprutils/memory/Casts.hpp>
+--- a/src/utils/SystemInfo.cpp
++++ b/src/utils/SystemInfo.cpp
+@@ -17,7 +17,6 @@
+ #include <pwd.h>
+ #include <sys/types.h>
+ #include <sys/sysinfo.h>
+-#include <linux/sysinfo.h>
+ #include <unistd.h>
+ #include <glob.h>
+ #include <pci/pci.h>

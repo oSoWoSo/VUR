@@ -1,0 +1,14 @@
+# Fix C++26 append_range not supported by GCC 14
+# Replace with explicit for-loop using emplace_back.
+
+--- a/src/config/WallpaperMatcher.cpp	2026-09-19 23:11:44.130041733 +0200
++++ b/src/config/WallpaperMatcher.cpp	2026-09-19 23:11:44.132071300 +0200
+@@ -26,7 +26,7 @@
+     }
+ 
+     std::erase_if(m_settings, [&s](const auto& e) { return std::ranges::any_of(s, [&e](const auto& el) { return el.monitor == e.monitor; }); });
+-    m_settings.append_range(std::move(s));
++    for (auto& item : s) { m_settings.emplace_back(std::move(item)); }
+     recalcStates();
+ }
+ 

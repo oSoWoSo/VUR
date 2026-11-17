@@ -1,0 +1,20 @@
+# Template file for 'glaze7'
+pkgname=glaze7
+# 7.2.0 for Hyprland
+version=7.2.0
+revision=1
+build_style=cmake
+configure_args="-DBUILD_TESTING:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release -Dglaze_ENABLE_FUZZING:BOOL=OFF"
+hostmakedepends="pkg-config"
+#makedepends="openssl-devel libsanitizer-devel"
+short_desc="Extremely fast, in memory, JSON and interface library for modern C++"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/stephenberry/glaze"
+distfiles="https://github.com/stephenberry/glaze/archive/refs/tags/v${version}.tar.gz"
+checksum=17dba19ae63ae48f94994f00d49d5cb3c8f1306db1046c534c4828662490b7d4
+conflicts="glaze>=0"
+
+post_install() {
+	vlicense LICENSE
+}

@@ -1,0 +1,15 @@
+# Template file for 'hyprlang'
+pkgname=hyprlang
+version=0.6.8
+revision=4
+build_style=cmake
+configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr"
+hostmakedepends="pkg-config"
+makedepends="hyprutils-devel"
+short_desc="Official implementation library for the hypr config language"
+maintainer="zenobit <zen@osowoso.org>"
+license="LGPL-3.0-only"
+homepage="https://github.com/hyprwm/hyprlang"
+changelog="https://github.com/hyprwm/hyprlang/releases"
+distfiles="https://github.com/hyprwm/hyprlang/archive/refs/tags/v${version}.tar.gz"
+checksum=d10a0778b646e04d83e8b90cc0f764fb96958c01a15c3c0678d95a40fc647ed5

@@ -4659,7 +4659,6 @@ libngtcp2_crypto_ossl.so.0 ngtcp2-1.13.0_1
 libprom.so prometheus-client-c-0.1.3_1
 libqlementine.so.1 qlementine-1.2.2_1
 libdatovka.so.8 libdatovka-0.7.0_1
-libhyprutils.so.10 hyprutils-0.11.0_1
 libblake3.so.0 libblake3-1.8.2_1
 libsexp.so.1 sfsexp-1.4.1_1
 libeot.so.0 libeot-0.01_1
@@ -4692,3 +4691,11 @@ libcpptrace.so.1 cpptrace-1.0.4_1
 libcgif.so.0 cgif-0.5.3_1
 libdsk.so.5 libdsk-1.5.22_1
 libblend2d.so libblend2d-0.21.2_1
+libaquamarine.so.15 aquamarine-0.16.0_1
+libhyprcursor.so.0 hyprcursor-0.1.13_1
+libhyprgraphics.so.5 hyprgraphics-0.6.0_1
+libhyprlang.so.2 hyprlang-0.6.4_2
+libhyprtoolkit.so.6 hyprtoolkit-0.6.0_1
+libhyprutils.so.13 hyprutils-0.14.2_1
+libhyprwire.so.3 hyprwire-0.3.1_2
+libspng.so.0 libspng-0.7.4_1

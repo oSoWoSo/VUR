@@ -1,0 +1,19 @@
+# Template file for 'hyprcursor'
+pkgname=hyprcursor
+version=0.1.14
+revision=1
+build_style=cmake
+configure_args="--no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=/usr"
+hostmakedepends="pkg-config"
+makedepends="cairo-devel hyprlang librsvg-devel libzip-devel tomlplusplus-devel"
+short_desc="Hyprland cursor format, library and utilities"
+maintainer="zenobit <zen@osowoso.org>"
+license="BSD-3-Clause"
+homepage="https://github.com/hyprwm/hyprcursor"
+distfiles="https://github.com/hyprwm/hyprcursor/archive/refs/tags/v${version}.tar.gz"
+checksum=f835995a1225ab169723d5e4e7510e31231dbb3048c4da6de6f6a51794e4cb38
+make_check=no # Themes innacesible
+
+post_install() {
+	vlicense LICENSE
+}
