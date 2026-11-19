@@ -1,0 +1,25 @@
+# Template file for 'hister'
+pkgname=hister
+version=0.22.0
+revision=1
+build_style=go
+go_import_path="github.com/asciimoo/hister"
+hostmakedepends="nodejs"
+short_desc="Your own search engine"
+maintainer="zenobit <zen@osowoso.org>"
+license="AGPL-3.0-only"
+homepage="https://github.com/asciimoo/hister"
+changelog="https://raw.githubusercontent.com/asciimoo/hister/refs/heads/master/CHANGELOG.md"
+distfiles="https://github.com/asciimoo/hister/archive/refs/tags/v${version}.tar.gz"
+checksum=e78fe5fb2d8c612f06104605aa234c8840eab0f14146829757706b59258c0154
+
+do_build() {
+	./manage.sh build
+}
+
+post_install() {
+	vbin hister
+	vdoc README.md
+	vdoc SECURITY.md
+	vlicense LICENSE
+}
