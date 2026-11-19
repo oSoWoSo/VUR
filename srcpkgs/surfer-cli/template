@@ -1,0 +1,66 @@
+# Template file for 'surfer-cli'
+pkgname=surfer-cli
+version=7.4.2
+revision=1
+hostmakedepends="nodejs python3"
+depends="nodejs"
+short_desc="Command line interface for surfer"
+maintainer="zenobit <zen@osoweso.org>"
+license="AGPL-3.0-only"
+homepage="https://github.com/cloudron-io/surfer"
+distfiles="https://github.com/cloudron-io/surfer/archive/refs/tags/v${version}.tar.gz"
+checksum=cce63bc9ea658299d1fbfe95286dd7885128ace72d43f549873f857fe7edf7cc
+
+export npm_config_audit=false
+export npm_config_fund=false
+export npm_config_loglevel=error
+export npm_config_update_notifier=false
+
+# libc infix as better-sqlite3 spells it in its prebuilds/ dirs,
+# i.e. prebuilds/<linux|linuxmusl>-<arch>.node
+_node_libc() {
+	case "${XBPS_TARGET_LIBC}" in
+		musl) echo "musl-" ;;
+		*) echo "-" ;;
+	esac
+}
+
+# nodejs arch string as npm spells it
+_node_arch() {
+	case "${XBPS_TARGET_MACHINE}" in
+		x86_64*) echo x64 ;;
+		aarch64*) echo arm64 ;;
+		*) node -p "process.arch" ;;
+	esac
+}
+
+post_patch() {
+	# cli/package.json lags a release behind on every tag
+	vsed -i -e "s/\"version\": \"[0-9.]*\"/\"version\": \"${version}\"/" \
+		cli/package.json
+}
+
+do_configure() {
+	# npm insists on a writable HOME for its cache
+	export HOME="${WRKDIR}/.home"
+	export npm_config_cache="${HOME}/.npm"
+	mkdir -p "${HOME}"
+}
+
+do_build() {
+	local _arch="${_node_arch}"
+	cd cli
+	npm install --omit=dev --ignore-scripts --os=linux --cpu="${_arch}"
+}
+
+do_install() {
+	local _clidir="usr/lib/surfer/cli"
+	local _mod
+	npm prune --omit=dev
+	vmkdir "${_clidir}"
+	vcopy "cli/*.js" "${_clidir}"
+	vcopy cli/node_modules "${_clidir}"
+	vinstall cli/package.json 644 "${_clidir}"
+	vbin ${FILESDIR}/surfer
+	vlicense LICENSE
+}
