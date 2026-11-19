@@ -1,0 +1,16 @@
+# Template file for 'forgejo-runner'
+pkgname=forgejo-runner
+version=13.2.2
+revision=1
+build_style=go
+go_import_path="code.forgejo.org/forgejo/runner/v13"
+hostmakedepends="go git"
+#checkdepends="docker"
+short_desc="Continuous integration for Forgejo"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-or-later"
+homepage="https://code.forgejo.org/forgejo/runner"
+changelog="https://code.forgejo.org/forgejo/runner/raw/branch/main/RELEASE-NOTES.md"
+distfiles="https://code.forgejo.org/forgejo/runner/archive/v${version}.tar.gz"
+checksum=81af58eeba53154c7d69f1ecf4501d7d04cf61b3d4fe31373f5e74fd7ea2a927
+make_check=no # Investigating

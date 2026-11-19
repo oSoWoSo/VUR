@@ -1,0 +1,2 @@
+site="https://code.forgejo.org/api/v1/repos/forgejo/runner/tags"
+pattern='"name":"v\K[\d.]+(?=")'
