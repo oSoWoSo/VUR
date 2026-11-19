@@ -1,0 +1,2 @@
+site="https://services.gradle.org/versions/9"
+pattern='"version"\s*:\s*"\K9\.[0-9]+(?:\.[0-9]+)*(?=")'
