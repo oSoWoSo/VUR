@@ -1,0 +1,3 @@
+site="https://github.com/imputnet/helium-linux/releases/latest"
+pattern='\d+\.\d+\.\d+\.\d+(?=")'
+ignore="*1.75*"
