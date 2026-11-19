@@ -1,0 +1,35 @@
+# Template file for 'librewolf-bin'
+pkgname=librewolf-bin
+version=160.0.1.1
+revision=1
+_distver="${version%.*}-${version##*.}"
+archs="x86_64 aarch64"
+short_desc="Community-maintained fork of Firefox focused on privacy and security"
+maintainer="zenobit <zen@osowoso.org>"
+license="MPL-2.0"
+homepage="https://librewolf.net"
+distfiles="https://dl.librewolf.net/librewolf/${_distver}/librewolf-${_distver}-linux-x86_64-package.tar.xz
+ https://dl.librewolf.net/librewolf/${_distver}/librewolf-${_distver}-linux-arm64-package.tar.xz"
+checksum="07ab4fc73f401764890eb5c87dd7b5815c7783b1c7378ea789ca1330d362209b
+ 54899b6d58d9bc79d1a3f92bf3e0fae3f9af964e256b36a201cb36366d15820a"
+conflicts="librewolf"
+#shlib_provides="libonnxruntime.so.1"
+nostrip=yes
+
+do_extract() {
+	local archiv
+	case "$XBPS_TARGET_MACHINE" in
+		x86_64) archiv="librewolf-${_distver}-linux-x86_64-package.tar.xz" ;;
+		aarch64) archiv="librewolf-${_distver}-linux-arm64-package.tar.xz" ;;
+	esac
+	vextract "${XBPS_SRCDISTDIR}/${pkgname}-${version}/${archiv}"
+}
+
+do_install() {
+	vmkdir usr/lib/librewolf
+	vcopy "*" usr/lib/librewolf
+	vmkdir usr/share/applications
+	vcopy "${FILESDIR}/librewolf.desktop" usr/share/applications
+	vinstall browser/chrome/icons/default/default128.png 644 usr/share/pixmaps librewolf.png
+	vbin "${FILESDIR}/librewolf"
+}
