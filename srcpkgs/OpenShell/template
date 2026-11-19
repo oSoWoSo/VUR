@@ -1,0 +1,62 @@
+# Template file for 'OpenShell'
+pkgname=OpenShell
+version=0.1.9
+revision=1
+build_style=cargo
+# sqlite-devel on host: sqlx-macros is a proc-macro loaded by rustc on the
+# build host and links host libsqlite3 even when cross-compiling
+hostmakedepends="pkg-config sqlite-devel"
+makedepends="libzstd-devel sqlite-devel z3-devel"
+checkdepends="git e2fsprogs tar"
+short_desc="OpenShell is the safe, private runtime for autonomous AI agents"
+maintainer="zenobit <zen@osowoso.org>"
+license="Apache-2.0"
+homepage="https://github.com/NVIDIA/OpenShell"
+distfiles="https://github.com/NVIDIA/OpenShell/archive/refs/tags/v${version}.tar.gz"
+checksum=b23e5620f6cef35f0f72932a054d97fa0bd8f8f4ef4e7c9c90a293e17b9790d6
+
+# Tests need seccomp/DBus/container runtimes; musl test code doesn't compile
+# (upstream libc::ioctl/msghdr type mismatch); prover z3 tests flaky in xbps-src
+make_check=no
+# aws-lc-sys's build script probes the host compiler with cc-rs, which reads
+# the global CFLAGS; on cross builds those carry target -march flags the host
+# gcc rejects. Move them to CFLAGS_<target> where cc-rs reads them for the
+# cross compiler, and clear the global CFLAGS for the host build tools.
+is_cross_build() {
+	local _hostarch _target="${RUST_TARGET}"
+	[ -n "$_target" ] || return 1
+	case "$(uname -m)" in
+		x86_64)  _hostarch=x86_64 ;;
+		aarch64) _hostarch=aarch64 ;;
+		i*86)    _hostarch=i686 ;;
+		*)       return 1 ;;
+	esac
+	[ "${_target%%-*}" != "$_hostarch" ]
+}
+
+fix_host_cflags() {
+	if is_cross_build; then
+		export "CFLAGS_${RUST_TARGET//-/_}"="${CFLAGS:-}"
+		unset CFLAGS
+	fi
+}
+
+do_build() {
+	fix_host_cflags
+	cargo build --release --target "${RUST_TARGET}" -p openshell-gateway --no-default-features --features defaults-without-telemetry
+	cargo build --release --target "${RUST_TARGET}" -p openshell-sandbox
+	cargo build --release --target "${RUST_TARGET}" -p openshell-driver-vm --no-default-features --features defaults-without-telemetry
+}
+
+pre_check() {
+	# oci_workspace tests use /tmp and require it to be world traversable
+	chmod 1777 /tmp
+}
+
+do_install() {
+	fix_host_cflags
+	local -a _args=(install --target "${RUST_TARGET}" --root "${DESTDIR}/usr" --offline --locked)
+	cargo "${_args[@]}" --path crates/openshell-gateway --no-default-features --features defaults-without-telemetry
+	cargo "${_args[@]}" --path crates/openshell-sandbox
+	cargo "${_args[@]}" --path crates/openshell-driver-vm --no-default-features --features defaults-without-telemetry
+}
