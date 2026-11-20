@@ -1,0 +1,75 @@
+# Template file for 'pi'
+pkgname=pi
+version=1.6.0
+revision=1
+hostmakedepends="nodejs jq"
+depends="nodejs fd ripgrep"
+short_desc="AI agent toolkit: unified LLM API, agent loop, TUI, coding agent CLI"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/earendil-works/pi"
+distfiles="https://registry.npmjs.org/@earendil-works/pi-coding-agent/-/pi-coding-agent-${version}.tgz
+ https://raw.githubusercontent.com/earendil-works/pi/v${version}/LICENSE"
+checksum="85d5de404e019e850c90ee9ac6dc6c16240da122fdce0314895608164030336b
+ 0457f5bcec3b3b211605dfb5d1a49042fd638f3686a410fe099c24a25af13c48"
+skip_extraction="LICENSE"
+nostrip_files="esbuild linux-platform-x11.node"
+
+export npm_config_audit=false
+export npm_config_fund=false
+export npm_config_loglevel=error
+export npm_config_update_notifier=false
+
+_node_arch() {
+	case "$XBPS_TARGET_MACHINE" in
+		x86_64*) echo x64 ;;
+		i686*) echo ia32 ;;
+		aarch64*) echo arm64 ;;
+		armv7*|armv6*) echo arm ;;
+		ppc64le*) echo ppc64 ;;
+		riscv64*) echo riscv64 ;;
+		*) node -p "process.arch" ;;
+	esac
+}
+
+do_build() {
+	jq 'del(.devDependencies)' package.json > package.json.tmp
+	mv package.json.tmp package.json
+	npm install --omit=dev --include=optional --os=linux --cpu="$(_node_arch)"
+
+	local _arch="$(_node_arch)"
+	local _prebuild
+	for _prebuild in node_modules/@earendil-works/pi-tui/native/*/prebuilds/*; do
+		case "${_prebuild##*/}" in
+		linux-${_arch}) ;;
+		*) rm -rf "${_prebuild}" ;;
+		esac
+	done
+	local _esbuild_lib="node_modules/esbuild" _esbuild_bin
+	_esbuild_bin="node_modules/@esbuild/linux-${_arch}/bin/esbuild"
+	if [ -f "${_esbuild_bin}" ] && \
+	   ! cmp -s "${_esbuild_bin}" "${_esbuild_lib}/bin/esbuild"; then
+		rm -f "${_esbuild_lib}/bin/esbuild"
+		cp -f "${_esbuild_bin}" "${_esbuild_lib}/bin/esbuild"
+		if ls "${_esbuild_lib}"/lib/downloaded-@esbuild-*-esbuild >/dev/null 2>&1; then
+			rm -f "${_esbuild_lib}"/lib/downloaded-@esbuild-*-esbuild
+			cp -f "${_esbuild_bin}" \
+				"${_esbuild_lib}/lib/downloaded-@esbuild-linux-${_arch}-esbuild"
+		fi
+	fi
+}
+
+do_install() {
+	local _libdir="usr/lib/${pkgname}"
+	vmkdir "${_libdir}"
+	vcopy dist "${_libdir}"
+	vcopy docs "${_libdir}"
+	vcopy examples "${_libdir}"
+	vcopy node_modules "${_libdir}"
+	vinstall package.json 644 "${_libdir}"
+	vbin "${FILESDIR}/pi"
+}
+
+post_install() {
+	vlicense "${XBPS_SRCDISTDIR}/${pkgname}-${version}/LICENSE"
+}
