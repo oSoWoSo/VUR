@@ -1,0 +1,13 @@
+#!/bin/sh
+exec 2>&1
+export NODE_ENV=production
+export HOST=0.0.0.0
+export PORT=4000
+export USER_DATA_DIR=/var/lib/dashy
+
+# Seed the config as _dashy on first start; /var/lib/dashy is its homedir.
+if [ ! -f /var/lib/dashy/conf.yml ]; then
+	chpst -u _dashy cp /usr/share/examples/dashy/conf.yml /var/lib/dashy/conf.yml
+fi
+
+exec chpst -u _dashy node /usr/lib/dashy/server.js

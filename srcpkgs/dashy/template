@@ -1,0 +1,73 @@
+# Template file for 'dashy'
+pkgname=dashy
+version=4.9.20
+revision=1
+hostmakedepends="nodejs yarn"
+depends="nodejs"
+short_desc="Feature-rich, self-hostable dashboard for your services"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://dashy.to"
+changelog="https://github.com/Lissy93/dashy/releases/tag/${version}"
+distfiles="https://github.com/Lissy93/dashy/archive/refs/tags/${version}.tar.gz"
+checksum=1c8a2e08e03390d992ebb6e3ec827a2d8fb91475d2b31fb8b4879e6fdbafce5c
+system_accounts="_dashy"
+_dashy_homedir="/var/lib/dashy"
+_dashy_descr="Dashy dashboard service user"
+make_dirs="/var/lib/dashy 0750 _dashy _dashy"
+
+do_build() {
+	yarn install --frozen-lockfile --network-timeout 600000
+	yarn build
+
+	mkdir _runtime
+	cp yarn.lock _runtime
+	node -e '
+		const fs = require("fs");
+		const pkg = JSON.parse(fs.readFileSync("package.json"));
+		delete pkg.devDependencies;
+		fs.writeFileSync("_runtime/package.json", JSON.stringify(pkg, null, 2));
+	'
+	(cd _runtime && yarn install --frozen-lockfile --network-timeout 600000)
+	rm -rf node_modules
+	mv _runtime/node_modules node_modules
+	rm -rf _runtime
+}
+
+do_check() {
+	local _port=4099 _i
+	USER_DATA_DIR="${wrksrc}/user-data" PORT="${_port}" HOST=127.0.0.1 \
+		node server.js >check.log 2>&1 &
+	_pid=$!
+	trap 'kill ${_pid} 2>/dev/null' RETURN
+	for _i in $(seq 1 30); do
+		if node -e "
+			fetch('http://127.0.0.1:${_port}/system-info')
+				.then((r) => r.json())
+				.then((j) => process.exit(j && j.meta ? 0 : 1))
+				.catch(() => process.exit(1));
+		" 2>/dev/null; then
+			return 0
+		fi
+		sleep 1
+	done
+	msg_red "$pkgver: server did not answer on port ${_port}\n"
+	cat check.log
+	return 1
+}
+
+do_install() {
+	vmkdir usr/lib/dashy
+	vcopy dist usr/lib/dashy/
+	vcopy public usr/lib/dashy/
+	vcopy services usr/lib/dashy/
+	vcopy node_modules usr/lib/dashy/
+	vmkdir usr/lib/dashy/src/utils/config
+	vcopy src/utils/config/ConfigSchema.json usr/lib/dashy/src/utils/config/
+	vinstall server.js 644 usr/lib/dashy
+	vinstall package.json 644 usr/lib/dashy
+	vbin ${FILESDIR}/dashy-bin dashy
+	vsconf user-data/conf.yml
+	vsv dashy
+	vlicense LICENSE
+}
