@@ -1,0 +1,8 @@
+#!/bin/sh
+exec 2>&1
+[ ! -r ./conf ] || . ./conf
+export HOME=/var/lib/opencode
+cd "${OPENCODE_DIRECTORY:-/var/lib/opencode}" || exit 1
+exec chpst -u _opencode:_opencode opencode serve \
+	--hostname "${OPENCODE_HOSTNAME:-127.0.0.1}" \
+	--port "${OPENCODE_PORT:-4096}"
