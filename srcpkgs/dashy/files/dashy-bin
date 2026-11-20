@@ -1,0 +1,17 @@
+#!/bin/sh
+export NODE_ENV="${NODE_ENV:-production}"
+export PORT="${PORT:-4000}"
+export HOST="${HOST:-127.0.0.1}"
+export USER_DATA_DIR="${USER_DATA_DIR:-${XDG_CONFIG_HOME:-${HOME}/.config}/dashy}"
+mkdir -p "${USER_DATA_DIR}" || {
+	echo "dashy: cannot create ${USER_DATA_DIR}" >&2
+	exit 1
+}
+if [ ! -f "${USER_DATA_DIR}/conf.yml" ]; then
+	cp /usr/share/examples/dashy/conf.yml "${USER_DATA_DIR}/conf.yml" || {
+		echo "dashy: cannot seed ${USER_DATA_DIR}/conf.yml" >&2
+		exit 1
+	}
+fi
+
+exec node /usr/lib/dashy/server.js "$@"
