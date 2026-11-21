@@ -1,0 +1,46 @@
+# Template file for 'SysMan'
+pkgname=SysMan
+version=0.026
+revision=1
+build_style=gnu-makefile
+build_helper=go
+hostmakedepends="go pkg-config"
+makedepends="wayland-devel libxkbcommon-devel libX11-devel libglvnd-devel
+ libXcursor-devel libXrandr-devel libXinerama-devel libXi-devel libXxf86vm-devel"
+short_desc="System Manager"
+maintainer="zenobit <zen@osowoso.org>"
+license="AGPL-3.0-only"
+homepage="https://codeberg.org/oSoWoSo/SysMan"
+distfiles="https://codeberg.org/oSoWoSo/SysMan/archive/v${version}.tar.gz"
+checksum=2be68addc0c99dfeb44fb35743c4d20b3c59ad76cac39ecfb0b8cc960e7a456b
+conflicts=SysMan-tui
+
+do_build() {
+	make build
+}
+
+do_check() {
+	make test
+}
+
+do_install() {
+	export PREFIX=/usr
+	export DESTDIR="$DESTDIR/"
+	make install
+}
+
+post_install() {
+	vbin build/infman
+	vbin build/pkgman
+	vbin build/serman
+	vbin build/srcman
+	vbin build/ugsman
+	vbin build/vmsman
+	vbin build/sysman
+	vmkdir usr/share/SysMan
+	vcopy build/lang usr/share/SysMan
+}
+
+post_install() {
+	vlicense LICENSE
+}
