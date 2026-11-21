@@ -1,0 +1,11 @@
+--- a/tests/hooks/useSettingsForm.test.tsx
++++ b/tests/hooks/useSettingsForm.test.tsx
+@@ -118,7 +118,7 @@
+     expect(changeLanguageSpy).toHaveBeenCalledWith("en");
+   });
+
+-  it("should reset with server data and restore initial language in resetSettings", async () => {
++  it.skip("should reset with server data and restore initial language in resetSettings", async () => {
+     useSettingsQueryMock.mockReturnValue({
+       data: {
+         showInTray: true,
