@@ -1,0 +1,27 @@
+# Template file for 'void-hardware-assistant-git'
+pkgname=void-hardware-assistant-git
+version=0.0.0
+revision=1
+_commit=6fb315b0ae52d6c6c76c89b7b32f1f6abaed2211
+archs="x86_64 aarch64"
+depends="python3-gobject gtk4 libadwaita pciutils python3-cups cups avahi nss-mdns dbus polkit"
+short_desc="Modern GTK4 setup tool for Void Linux"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-2.0-only"
+homepage="https://codeberg.org/pinguin-tv/void_hardware_assistent"
+distfiles="https://codeberg.org/pinguin-tv/void_hardware_assistent/archive/${_commit}.tar.gz"
+checksum=951f69f0f9970cf2cf35f20732366aa37470f9a139ae2512a9cafea3abd9cd99
+replaces="void-hardwaremanager-git>=0"
+
+do_install() {
+	vbin void_hardware_assistent_modern.py void-hardware-assistant
+	vinstall ${FILESDIR}/void-hardware-assistant.desktop 644 usr/share/applications org.void.hardwaremanager.desktop
+	vinstall driver.png 644 usr/share/pixmaps void-hardware-assistant.png
+	vdoc README.md
+}
+
+void-hardwaremanager-git_package() {
+	metapackage=yes
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" (transitional dummy package)"
+}
