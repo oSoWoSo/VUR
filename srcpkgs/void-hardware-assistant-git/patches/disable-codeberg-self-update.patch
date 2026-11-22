@@ -1,0 +1,180 @@
+--- a/void_hardware_assistent_modern.py
++++ b/void_hardware_assistent_modern.py
+@@ -58,13 +58,6 @@
+     widget.set_subtitle(GLib.markup_escape_text(str(text)))
+ 
+ APP_ID = "org.void.hardwaremanager"
+-# Nur dieses Codeberg-Repository ist als Update-Quelle zugelassen.
+-UPDATE_REPOSITORY = "https://codeberg.org/pinguin-tv/void_hardware_assistent"
+-UPDATE_ARCHIVE_URL = UPDATE_REPOSITORY + "/archive/main.tar.gz"
+-UPDATE_TARGET = "/usr/local/bin/void-hardwaremanager"
+-# Unterstützte Einstiegspunkte im Repository (bevorzugt Root-Verzeichnis).
+-UPDATE_ENTRYPOINTS = ("void_hardware_assistent_modern.py", "driver.py", "void-hardwaremanager")
+-
+ # ==========================================
+ # GPU & SYSTEM SETTINGS / TRANSLATIONS
+ # ==========================================
+@@ -640,11 +633,6 @@
+         if hasattr(self, 'group_doc'): set_plain_title(self.group_doc, t(self.lang, "GRP_DOCS"))
+         if hasattr(self, 'group_tuning'): set_plain_title(self.group_tuning, t(self.lang, "GRP_TUNING"))
+         if hasattr(self, 'group_sys_apps'): set_plain_title(self.group_sys_apps, t(self.lang, "GRP_SYS"))
+-        if hasattr(self, 'group_update'): set_plain_title(self.group_update, t(self.lang, "GRP_APP_UPDATE"))
+-        if hasattr(self, 'btn_update_app'): self.btn_update_app.set_label(t(self.lang, "BTN_UPDATE_LABEL"))
+-        if hasattr(self, 'row_update'):
+-            set_plain_title(self.row_update, t(self.lang, "ROW_UPDATE_TITLE"))
+-            set_plain_subtitle(self.row_update, t(self.lang, "ROW_UPDATE_SUB"))
+ 
+ 
+         # Kachelstatus ebenfalls in der gewählten Sprache anzeigen.
+@@ -2579,19 +2567,6 @@
+         self._add_apps_to_group(self.group_sys_apps, apps_sys)
+         box.append(self.group_sys_apps)
+ 
+-        # Sektion 4: Update
+-        self.group_update = self._make_tile_group(title=t(self.lang, "GRP_APP_UPDATE"))
+-        self.row_update = plain_action_row(title=t(self.lang, "ROW_UPDATE_TITLE"), subtitle=t(self.lang, "ROW_UPDATE_SUB"))
+-        self.row_update.add_prefix(Gtk.Image.new_from_icon_name("system-software-update-symbolic"))
+-
+-        self.btn_update_app = Gtk.Button(label=t(self.lang, "BTN_UPDATE_LABEL"), valign=Gtk.Align.CENTER)
+-        self.btn_update_app.add_css_class("suggested-action")
+-        self.btn_update_app.connect("clicked", self.on_app_update_clicked)
+-        self.row_update.add_suffix(self.btn_update_app)
+-
+-        self.group_update.add(self.row_update)
+-        box.append(self.group_update)
+-
+         self.add_bottom_decoration(box, "system-search-symbolic", "applications-system-symbolic")
+         scrolled.set_child(box)
+         return scrolled
+@@ -2723,131 +2698,6 @@
+             self.show_toast("Einrichtung fehlgeschlagen. IPP Everywhere ist ggf. nicht unterstützt.")
+ 
+     # ==========================================
+-    # APP-UPDATE LOGIK
+-    # ==========================================
+-
+-    def on_app_update_clicked(self, btn):
+-        """Read-only Download und Validierung, noch keine Systemänderung."""
+-        if getattr(self, "_app_update_busy", False):
+-            self.show_toast("Ein App-Update läuft bereits.")
+-            return
+-        self._app_update_busy = True
+-        btn.set_sensitive(False)
+-        btn.set_label("Lade von Codeberg …")
+-        self._append_log("App-Update: Lade ausschließlich " + UPDATE_ARCHIVE_URL)
+-        threading.Thread(target=self.thread_app_update, args=(btn,), daemon=True).start()
+-
+-    def _finish_app_update(self, btn, message, success=False):
+-        self._app_update_busy = False
+-        btn.set_sensitive(True)
+-        btn.set_label(t(self.lang, "BTN_UPDATE_LABEL"))
+-        self._append_log(message)
+-        self.show_toast(message)
+-        return GLib.SOURCE_REMOVE
+-
+-    def thread_app_update(self, btn):
+-        """Holt das main-Archiv und liest genau ein geprüftes Python-Programm daraus."""
+-        try:
+-            req = urllib.request.Request(UPDATE_ARCHIVE_URL, headers={"User-Agent": "VoidHardwareAssistant/1.0"})
+-            # Begrenzte Download-Größe gegen riesige oder falsche Antworten.
+-            with urllib.request.urlopen(req, timeout=20) as response:
+-                if response.geturl().split("/", 3)[:3] != ["https:", "", "codeberg.org"]:
+-                    raise ValueError("Download wurde auf einen anderen Host umgeleitet.")
+-                data = response.read(12 * 1024 * 1024 + 1)
+-                if len(data) > 12 * 1024 * 1024:
+-                    raise ValueError("Repository-Archiv ist zu groß (>12 MiB).")
+-            with tarfile.open(fileobj=io.BytesIO(data), mode="r:gz") as archive:
+-                matches = {}
+-                for member in archive.getmembers():
+-                    # Keine Archivdateien entpacken oder Links verfolgen.
+-                    if not member.isfile() or member.size > 2 * 1024 * 1024:
+-                        continue
+-                    # Codeberg: <repo>/-Pfad im Archiv; nur Root-Dateien zulassen.
+-                    components = member.name.strip("/").split("/")
+-                    if len(components) != 2 or components[-1] not in UPDATE_ENTRYPOINTS:
+-                        continue
+-                    handle = archive.extractfile(member)
+-                    if handle is None:
+-                        continue
+-                    matches[components[-1]] = handle.read(2 * 1024 * 1024 + 1)
+-                selected = next((filename for filename in UPDATE_ENTRYPOINTS if filename in matches), None)
+-                if not selected:
+-                    raise ValueError("Keine passende Programmdatei im Repository-Stamm gefunden (" + ", ".join(UPDATE_ENTRYPOINTS) + ").")
+-                raw = matches[selected]
+-                if len(raw) > 2 * 1024 * 1024 or not raw.startswith(b"#!"):
+-                    raise ValueError("Die heruntergeladene Datei ist kein unterstütztes ausführbares Python-Skript.")
+-                source = raw.decode("utf-8-sig")
+-                if "python" not in source.splitlines()[0].lower():
+-                    raise ValueError("Die Programmdatei hat keinen Python-Shebang.")
+-                compile(source, selected, "exec")
+-                if "gi.require_version" not in source or "HardwareManagerApp" not in source:
+-                    raise ValueError("Die Programmdatei scheint nicht der Void Hardware Assistent zu sein.")
+-            digest = hashlib.sha256(raw).hexdigest()
+-            # Ein privates temporäres Verzeichnis bleibt bis zur Bestätigung erhalten.
+-            temp_dir = tempfile.TemporaryDirectory(prefix="void-hardware-update-")
+-            staged = Path(temp_dir.name) / "void-hardwaremanager"
+-            staged.write_bytes(raw)
+-            staged.chmod(0o600)
+-            GLib.idle_add(self._confirm_app_update, btn, temp_dir, str(staged), selected, digest)
+-        except Exception as exc:
+-            GLib.idle_add(self._finish_app_update, btn, "App-Update abgebrochen: " + str(exc))
+-
+-    def _confirm_app_update(self, btn, temp_dir, staged, selected, digest):
+-        """UI-Dialog: Installation nur nach aktiver Zustimmung."""
+-        self._append_log("App-Update bereit: " + selected + " · SHA-256 " + digest)
+-        btn.set_label("Bestätigung …")
+-        dialog = Adw.MessageDialog.new(
+-            self.win, "App-Update bestätigen",
+-            "Die heruntergeladene Programmdatei ersetzt die installierte Version. "
+-            "Bitte sicherstellen, dass das Codeberg-Repository den gewünschten aktuellen Code enthält."
+-        )
+-        dialog.add_response("cancel", "Abbrechen")
+-        dialog.add_response("install", "Datei ersetzen")
+-        dialog.set_response_appearance("install", Adw.ResponseAppearance.SUGGESTED)
+-        dialog.set_default_response("cancel")
+-        dialog.set_close_response("cancel")
+-        details = Gtk.Label(
+-            label="Quelle: " + UPDATE_REPOSITORY + "\n" +
+-                  "Datei im Repository: " + selected + "\n" +
+-                  "Ziel: " + UPDATE_TARGET + "\n" +
+-                  "SHA-256: " + digest + "\n" +
+-                  "Nur diese eine ausführbare Datei wird ersetzt.",
+-            wrap=True, selectable=True, xalign=0
+-        )
+-        dialog.set_extra_child(details)
+-
+-        def on_response(_dialog, response):
+-            if response != "install":
+-                temp_dir.cleanup()
+-                self._finish_app_update(btn, "App-Update vom Benutzer abgebrochen.")
+-                return
+-            btn.set_label("Installiere …")
+-            threading.Thread(target=self._install_app_update,
+-                             args=(btn, temp_dir, staged), daemon=True).start()
+-
+-        dialog.connect("response", on_response)
+-        dialog.present()
+-        return GLib.SOURCE_REMOVE
+-
+-    def _install_app_update(self, btn, temp_dir, staged):
+-        try:
+-            # Kein Shell-Aufruf: pkexec fordert Rechte an, install setzt Berechtigungen.
+-            result = subprocess.run(
+-                ["pkexec", "install", "-m", "0755", "--", staged, UPDATE_TARGET],
+-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+-                text=True, errors="replace", timeout=120,
+-            )
+-            if result.returncode == 0:
+-                message = "App-Update installiert. Bitte die Anwendung neu starten."
+-            else:
+-                message = "App-Update fehlgeschlagen (Exit-Code " + str(result.returncode) + "). " + (result.stdout or "")[-500:]
+-        except Exception as exc:
+-            message = "App-Update fehlgeschlagen: " + str(exc)
+-        finally:
+-            temp_dir.cleanup()
+-        GLib.idle_add(self._finish_app_update, btn, message)
+-
+-    # ==========================================
+     # HEADER MENÜS
+     # ==========================================
+ 

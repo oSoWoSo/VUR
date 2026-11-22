@@ -1,0 +1,12 @@
+Set a default window icon matching the packaged desktop entry.
+
+--- a/void_hardware_assistent_modern.py
++++ b/void_hardware_assistent_modern.py
+@@ -449,6 +449,7 @@
+ class HardwareManagerApp(Adw.Application):
+     def __init__(self):
+         super().__init__(application_id=APP_ID)
++        Gtk.Window.set_default_icon_name("void-hardware-assistant")
+ 
+         self.win = None
+         self.toast_overlay = None

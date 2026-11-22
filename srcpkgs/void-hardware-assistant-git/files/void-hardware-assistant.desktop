@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=Void Hardware Assistant
+Name[de]=Void Hardware Assistent
+Name[en]=Void Hardware Assistant
+Name[fr]=Assistant Matériel Void
+Name[es]=Asistente de Hardware de Void
+Comment=Driver & Device Management for Void Linux
+Comment[de]=Treiber & Geräte Verwaltung für Void Linux
+Comment[en]=Driver & Device Management for Void Linux
+Comment[fr]=Gestion des Pilotes et Périphériques pour Void Linux
+Comment[es]=Gestión de Controladores y Dispositivos para Void Linux
+Exec=void-hardware-assistant
+Icon=void-hardware-assistant
+Terminal=false
+Type=Application
+Categories=System;Settings;GTK;
+StartupNotify=true
