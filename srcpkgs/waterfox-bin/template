@@ -1,0 +1,37 @@
+# Template file for 'waterfox-bin'
+pkgname=waterfox-bin
+version=6.7.9
+revision=1
+archs="x86_64 aarch64"
+short_desc="Fast and private web browser"
+maintainer="zenobit <zen@osowoso.org>"
+license="MPL-2.0"
+homepage="https://www.waterfox.net"
+changelog="https://www.waterfox.net/docs/releases/${version}/"
+distfiles="https://cdn.waterfox.com/waterfox/releases/${version}/Linux_x86_64/waterfox-${version}.tar.bz2>waterfox-${version}-x64.tar.bz2
+ https://cdn.waterfox.com/waterfox/releases/${version}/Linux_aarch64/waterfox-${version}.tar.bz2>waterfox-${version}-arm64.tar.bz2"
+checksum="b528cca5e96a2d9676b021277c1cb632f9e10dbfa27e845866278754e0c8c5b6
+ 6586b715b4ac92e6e4cede5347e20a1d3a456f8fe6651b193411325a66e2e261"
+nopie=yes
+
+do_extract() {
+	case "$XBPS_TARGET_MACHINE" in
+		x86_64) a="x64" ;;
+		aarch64) a="arm64" ;;
+	esac
+	vextract "${XBPS_SRCDISTDIR}/${pkgname}-${version}/waterfox-${version}-${a}.tar.bz2"
+}
+
+do_install() {
+	vmkdir opt/waterfox
+	vcopy * opt/waterfox
+	vbin ${FILESDIR}/waterfox
+	vinstall "${FILESDIR}/waterfox.desktop" 0644 usr/share/applications
+	for res in 16 32 48 64 128; do
+		vmkdir usr/share/icons/hicolor/${res}x${res}/apps
+		ln -rfs "${DESTDIR}/opt/waterfox/browser/chrome/icons/default/default${res}.png" \
+			"${DESTDIR}/usr/share/icons/hicolor/${res}x${res}/apps/waterfox.png"
+	done
+	vinstall "${FILESDIR}/vendor.js" 644 opt/waterfox/browser/defaults/preferences
+	vinstall "${FILESDIR}/policies.json" 644 opt/waterfox/distribution
+}
