@@ -1,0 +1,38 @@
+# Template file for 'Sysentra'
+pkgname=Sysentra
+version=0.3.0
+revision=1
+build_style=go
+go_import_path="sysentra"
+go_package=". ./cmd/sysentrad"
+hostmakedepends="nodejs pkg-config wails"
+makedepends="gtk4-devel libwebkitgtk60-devel"
+depends="gtk4 libwebkitgtk60 xbps runit dbus polkit"
+short_desc="System management center for Void Linux and derivatives"
+maintainer="zenobit <zen@osowoso.org>"
+license="BSD-2-Clause"
+homepage="https://github.com/nerdyslacker/Sysentra"
+distfiles="https://github.com/nerdyslacker/Sysentra/archive/refs/tags/v${version}.tar.gz"
+checksum=970b21ae9cff5547798068a3a8d42694b7b6bdbf931fbbec4f7384e7bb14fe34
+
+pre_build() {
+	npm --prefix frontend ci
+	wails3 generate bindings -ts .
+	npm --prefix frontend run check
+	npm --prefix frontend run build
+}
+
+post_install() {
+	vmkdir usr/libexec
+	mv "${DESTDIR}/usr/bin/sysentrad" "${DESTDIR}/usr/libexec/sysentrad"
+	vinstall packaging/dbus/io.github.nerdyslacker.Sysentra.System1.conf \
+	 644 usr/share/dbus-1/system.d
+	vinstall packaging/dbus/io.github.nerdyslacker.Sysentra.System1.service \
+	 644 usr/share/dbus-1/system-services
+	vinstall packaging/polkit/io.github.nerdyslacker.sysentra.policy \
+	 644 usr/share/polkit-1/actions
+	vinstall packaging/linux/io.github.nerdyslacker.Sysentra.desktop \
+	 644 usr/share/applications
+	vinstall assets/sysentra.png 644 usr/share/pixmaps
+	vlicense LICENSE
+}
