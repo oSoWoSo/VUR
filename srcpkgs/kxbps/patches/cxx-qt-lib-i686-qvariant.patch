@@ -1,0 +1,32 @@
+Fix the Qt 6 QVariant layout on 32-bit x86 in both Rust and C++.
+Other architectures and Qt 5 retain their existing layout.
+
+--- a/vendor/cxx-qt-lib-0.10.0/src/core/qvariant/mod.rs
++++ b/vendor/cxx-qt-lib-0.10.0/src/core/qvariant/mod.rs
+@@ -80,7 +80,9 @@
+ 
+     #[cfg(cxxqt_qt_version_major = "5")]
+     _space: MaybeUninit<u32>,
+-    #[cfg(cxxqt_qt_version_major = "6")]
++    #[cfg(all(cxxqt_qt_version_major = "6", target_arch = "x86"))]
++    _space: MaybeUninit<[usize; 2]>,
++    #[cfg(all(cxxqt_qt_version_major = "6", not(target_arch = "x86")))]
+     _space: MaybeUninit<[usize; 3]>,
+ }
+ 
+--- a/vendor/cxx-qt-lib-0.10.0/src/core/qvariant/qvariant.cpp
++++ b/vendor/cxx-qt-lib-0.10.0/src/core/qvariant/qvariant.cpp
+@@ -25,7 +25,12 @@
+ // The three uints are optimised to a reduced size of ushorts
+ // https://code.qt.io/cgit/qt/qtbase.git/tree/src/corelib/kernel/qvariant.h?h=v5.15.6-lts-lgpl#n491
+ // https://code.qt.io/cgit/qt/qtbase.git/tree/src/corelib/kernel/qvariant.h?h=v5.15.6-lts-lgpl#n411
+-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
++#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)) && defined(Q_PROCESSOR_X86_32)
++assert_alignment_and_size(QVariant, {
++  double a0;
++  ::std::size_t a1[2];
++});
++#elif (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+ assert_alignment_and_size(QVariant, {
+   double a0;
+   ::std::size_t a1[3];
