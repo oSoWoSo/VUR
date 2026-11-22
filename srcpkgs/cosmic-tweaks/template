@@ -1,0 +1,22 @@
+# Template file for 'cosmic-tweaks'
+pkgname=cosmic-tweaks
+version=0.2.6
+revision=1
+archs="x86_64"
+hostmakedepends="pkg-config cargo just"
+makedepends="libxkbcommon-devel openssl-devel"
+depends="libssl3 libxkbcommon"
+short_desc="Tweaks for COSMIC"
+maintainer="Bella109 <belladev109@proton.me>"
+license="GPL-3.0-only"
+homepage="https://github.com/cosmic-utils/cosmic-tweaks"
+distfiles="https://github.com/cosmic-utils/cosmic-tweaks/archive/refs/tags/${version}.tar.gz"
+checksum=cbe30e5f9bb44426cff6bee709ba1eeca5ee47da07f1458060a4208c39d9db3c
+
+do_build() {
+	just build-release
+}
+
+do_install() {
+	just rootdir=${DESTDIR} install
+}
