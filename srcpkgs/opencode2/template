@@ -1,0 +1,101 @@
+# Template file for 'opencode2'
+pkgname=opencode2
+version=2.4.0
+revision=1
+archs="x86_64 aarch64"
+hostmakedepends="bun nodejs python3 git"
+makedepends="alsa-lib at-spi2-atk at-spi2-core cairo libcups libgbm
+ libX11 libXcomposite libXdamage libXext libXfixes libXrandr libxcb
+ libxkbcommon eudev-libudev gtk+3 nspr nss"
+depends="ripgrep"
+short_desc="Open source AI coding agent"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/anomalyco/opencode"
+distfiles="https://github.com/anomalyco/opencode/archive/refs/tags/v${version}.tar.gz"
+checksum=c36a18288b4679ca48cb30b905c3c7ffdc0c8ff1e0e72fb13f38f0f2d29f1b37
+nostrip_files="/usr/bin/opencode /usr/lib/opencode2-desktop/*"
+nopie_files="/usr/bin/opencode /usr/lib/opencode2-desktop/*"
+noshlibprovides=yes
+nocross="opencode build uses process.arch"
+conflicts="opencode>=0"
+conf_files="/etc/sv/opencode/conf"
+system_accounts="_opencode"
+_opencode_homedir="/var/lib/opencode"
+_opencode_descr="OpenCode server"
+make_dirs="/var/lib/opencode 0750 _opencode _opencode"
+
+case "$XBPS_TARGET_MACHINE" in
+	x86_64)
+		_cli_target=linux-x64-baseline
+		_electron_arch=x64
+		_electron_output=linux-unpacked
+		;;
+	aarch64)
+		_cli_target=linux-arm64
+		_electron_arch=arm64
+		_electron_output=linux-arm64-unpacked
+		;;
+esac
+
+do_build() {
+	# Upstream scripts use bunx, which the Void bun package does not provide.
+	mkdir -p "${wrksrc}/.bin"
+	ln -sf "$(command -v bun)" "${wrksrc}/.bin/bunx"
+	export PATH="${wrksrc}/.bin:${PATH}"
+	export OPENCODE_VERSION="${version}"
+	export OPENCODE_CHANNEL=latest
+	export OPENCODE_TARGET="${_cli_target}"
+	export ELECTRON_SKIP_BINARY_DOWNLOAD=1
+	export OPENCODE_INSTALL_DIR=/usr/bin
+	export VITE_CONFIG_NATIVE_IGNORE_WARNING=true
+	bun install --frozen-lockfile --ignore-scripts
+	bun run --cwd packages/cli build -- --single --skip-install
+	# Desktop target keys omit -baseline, but select the baseline x64 CLI.
+	export OPENCODE_TARGET="linux-${_electron_arch}"
+	bun run --cwd packages/desktop build
+	(
+		cd packages/desktop
+		bun x --no-install electron-builder --linux --${_electron_arch} --dir \
+			--publish never --config electron-builder.config.ts
+	)
+}
+
+do_install() {
+	vbin packages/cli/dist/cli-${_cli_target}/bin/opencode
+	for shell in bash fish zsh; do
+		"${DESTDIR}/usr/bin/opencode" --completions ${shell} > opencode.${shell}
+		vcompletion opencode.${shell} ${shell}
+	done
+	vlicense LICENSE
+	vsv opencode
+	chmod 600 "${DESTDIR}/etc/sv/opencode/conf"
+	vdoc "${FILESDIR}/README.voidlinux"
+
+	vmkdir usr/lib/opencode2-desktop
+	vcopy "packages/desktop/dist/${_electron_output}/*" usr/lib/opencode2-desktop
+	# Share the CLI with the main package rather than shipping a second copy.
+	rm "${DESTDIR}/usr/lib/opencode2-desktop/resources/opencode-cli"
+	ln -s /usr/bin/opencode \
+		"${DESTDIR}/usr/lib/opencode2-desktop/resources/opencode-cli"
+	chmod 4755 "${DESTDIR}/usr/lib/opencode2-desktop/chrome-sandbox"
+	vbin "${FILESDIR}/opencode-desktop"
+	vinstall "${FILESDIR}/ai.opencode.desktop.desktop" 644 usr/share/applications
+	vinstall packages/desktop/icons/prod/icon.png 644 \
+		usr/share/icons/hicolor/256x256/apps ai.opencode.desktop.png
+	vinstall packages/desktop/resources/ai.opencode.desktop.metainfo.xml 644 \
+		usr/share/metainfo
+}
+
+opencode2-desktop_package() {
+	depends="${sourcepkg}>=${version}_${revision} hicolor-icon-theme"
+	short_desc+=" - desktop application"
+	pkg_install() {
+		vmove usr/bin/opencode-desktop
+		vmove usr/lib/opencode2-desktop
+		vmove usr/share/applications
+		vmove usr/share/icons
+		vmove usr/share/metainfo
+		vlicense LICENSE
+	}
+}
