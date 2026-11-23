@@ -1,0 +1,60 @@
+# Template file for 'distrobox'
+pkgname=distrobox
+version=1.8.2.6
+revision=1
+depends="curl"
+short_desc="Podman/Docker wrapper to use any linux distribution in your terminal"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-or-later"
+homepage="https://distrobox.it/"
+distfiles="https://github.com/89luca89/distrobox/archive/${version}.tar.gz"
+checksum=693c85f44720f9c2be8691141eaa1dc2773ee37e63ae02fff8b838dcf54c413e
+
+do_install() {
+	# binaries
+	vbin distrobox
+	vbin distrobox-assemble
+	vbin distrobox-create
+	vbin distrobox-enter
+	vbin distrobox-ephemeral
+	vbin distrobox-export
+	vbin distrobox-generate-entry
+	vbin distrobox-host-exec
+	vbin distrobox-init
+	vbin distrobox-list
+	vbin distrobox-rm
+	vbin distrobox-stop
+	vbin distrobox-upgrade
+}
+
+post_install() {
+	# docs
+	vdoc docs/README.md
+	vdoc docs/compatibility.md
+	vdoc docs/featured_articles.md
+	vdoc docs/useful_tips.md
+	vdoc docs/posts/distrobox_custom.md
+	vdoc docs/posts/execute_commands_on_host.md
+	vdoc docs/posts/install_lilipod_static.md
+	vdoc docs/posts/install_podman_static.md
+	vdoc docs/posts/integrate_vscode_distrobox.md
+	vdoc docs/posts/run_latest_gnome_kde_hyprland_on_distrobox.md
+	vdoc docs/posts/run_libvirt_in_distrobox.md
+	vdoc docs/posts/steamdeck_guide.md
+	# manpages
+	for f in man/man1/*; do
+		vman "$f"
+	done
+	# icons
+	vinstall icons/terminal-distrobox-icon.svg 644 usr/share/icons/hicolor/scalable/apps
+	for sz in 16 22 24 32 36 48 64 72 96 128 256; do
+		vinstall icons/hicolor/${sz}x${sz}/apps/terminal-distrobox-icon.png 644 usr/share/icons/hicolor/${sz}x${sz}/apps
+	done
+	# completion
+	for c in completions/bash/*; do
+		vcompletion "$c" bash "$c"
+	done
+	for c in completions/zsh/*; do
+		vcompletion "$c" zsh "$c"
+	done
+}
