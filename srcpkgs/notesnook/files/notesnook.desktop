@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Notesnook
+Comment=Your private note taking space
+Exec=notesnook %U
+Icon=notesnook
+Terminal=false
+Type=Application
+Categories=Office;
+MimeType=x-scheme-handler/nn;

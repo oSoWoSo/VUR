@@ -1,0 +1,56 @@
+# Template file for 'notesnook'
+pkgname=notesnook
+version=3.4.14
+revision=1
+archs="x86_64* aarch64*"
+hostmakedepends="nodejs python3 git yarn"
+short_desc="End-to-end encrypted note taking alternative to Evernote"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/streetwriters/notesnook"
+distfiles="https://github.com/streetwriters/notesnook/archive/refs/tags/v${version}.tar.gz"
+checksum=ec4fd8a30a4b701226d961448d8b71a20217c716263d6a629307682187836e66
+if [ "$XBPS_TARGET_MACHINE" = "aarch64-musl" ]; then
+	noverifyrdeps=yes
+	depends="gcompat libX11 libXcomposite libXdamage libXext libXfixes libXrandr
+		alsa-lib atk at-spi2-atk at-spi2-core cairo libcups dbus-libs expat
+		eudev-libudev glib gtk+3 libgcc libgbm libstdc++ libxcb libxkbcommon
+		nspr nss pango"
+fi
+if [ "$XBPS_TARGET_MACHINE" = "x86_64-musl" ]; then
+	noverifyrdeps=yes
+	depends="gcompat libX11 libXcomposite libXdamage libXext libXfixes libXrandr
+		alsa-lib atk at-spi2-atk at-spi2-core cairo libcups dbus-libs expat
+		eudev-libudev glib gtk+3 libgcc libgbm libstdc++ libxcb libxkbcommon
+		nspr nss pango"
+fi
+noshlibprovides=yes
+
+do_build() {
+	npm install
+
+	case "$XBPS_TARGET_MACHINE" in
+		x86_64*) electron_arch=x64 ;;
+		aarch64*) electron_arch=arm64 ;;
+	esac
+
+	(
+		cd apps/desktop
+		npm run release -- --rebuild
+		npx electron-builder --dir --linux --${electron_arch} \
+			--config=electron-builder.config.js --publish never
+	)
+}
+
+do_install() {
+	vmkdir usr/lib/notesnook
+	case "$XBPS_TARGET_MACHINE" in
+		x86_64*) electron_output=linux-unpacked ;;
+		aarch64*) electron_output=linux-arm64-unpacked ;;
+	esac
+	vcopy "apps/desktop/output/${electron_output}/*" usr/lib/notesnook
+	vbin "$FILESDIR/notesnook"
+	vinstall "$FILESDIR/notesnook.desktop" 644 usr/share/applications
+	vinstall apps/desktop/assets/icons/256x256.png 644 \
+		usr/share/icons/hicolor/256x256/apps notesnook.png
+}
