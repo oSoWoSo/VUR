@@ -1,0 +1,32 @@
+# Template file for 'helium-browser-bin'
+pkgname=helium-browser-bin
+version=0.22.2.1
+revision=1
+archs="x86_64 aarch64"
+depends="gtk+3 libXScrnSaver nss alsa-lib"
+short_desc="Private, fast, and honest web browser based on Chromium (binary build)"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-only, BSD-3-Clause"
+homepage="https://helium.computer"
+distfiles="https://github.com/imputnet/helium-linux/releases/download/${version}/helium-${version}-x86_64_linux.tar.xz
+ https://github.com/imputnet/helium-linux/releases/download/${version}/helium-${version}-arm64_linux.tar.xz"
+checksum="f7546bc7dd86027e924916fdeb62604dfc9b4507bc74c572cbd1c596cec4d0ca
+ ba8f96fed7620a64f14d7a5606039a2ef012890d5fa3b53932cf869fb962d985"
+
+do_extract() {
+	local archiv
+	case $XBPS_TARGET_MACHINE in
+		x86_64) archiv="helium-${version}-x86_64_linux.tar.xz" ;;
+		aarch64) archiv="helium-${version}-arm64_linux.tar.xz" ;;
+	esac
+	vextract "${XBPS_SRCDISTDIR}/${pkgname}-${version}/${archiv}"
+}
+
+do_install() {
+	vmkdir usr/lib/helium-browser
+	vcopy * usr/lib/helium-browser
+	vbin ${FILESDIR}/helium
+	vinstall helium.desktop 644 usr/share/applications
+	vinstall product_logo_256.png 644 usr/share/pixmaps helium.png
+	vlicense ${FILESDIR}/LICENSE.ungoogled_chromium
+}
