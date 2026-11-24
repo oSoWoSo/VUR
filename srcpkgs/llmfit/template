@@ -1,0 +1,28 @@
+# Template file for 'llmfit'
+pkgname=llmfit
+version=1.1.21
+revision=1
+build_style=cargo
+build_wrksrc="llmfit-tui"
+make_install_args="--force"
+hostmakedepends="nodejs"
+short_desc="Hundreds of models & providers, easy to find what fits your hardware"
+maintainer="zenobit <zenobit@disroot.org>"
+license="MIT"
+homepage="https://github.com/AlexsJones/llmfit"
+distfiles="https://github.com/AlexsJones/llmfit/archive/refs/tags/v${version}.tar.gz"
+checksum=48ea3b071a2f724376ec0f6db33dabf7fe5733bc4b673adfb96debe895049035
+
+pre_build() {
+	cd ../llmfit-web
+	npm ci
+	npm run build
+}
+
+do_install() {
+	cargo install --force --path . --root="${DESTDIR}/usr" --locked
+}
+
+post_install() {
+	vlicense ../LICENSE
+}
