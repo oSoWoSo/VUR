@@ -1,0 +1,17 @@
+# Template file for 'fast_float'
+pkgname=fast_float
+version=8.4.0
+revision=1
+archs="x86_64"
+build_style=cmake
+short_desc="Exact implementation of the C++ from_chars functions for number types"
+maintainer="Naz <ndpm13@ch-naseem.com>"
+license="Apache-2.0, BSL-1.0, MIT"
+homepage="https://github.com/fastfloat/fast_float"
+changelog="https://github.com/fastfloat/fast_float/releases"
+distfiles="https://github.com/fastfloat/fast_float/archive/refs/tags/v${version}.tar.gz"
+checksum=0bf4277827259720028bbef6c11d400f07482608bea5952b289baaef6af141a4
+
+post_install() {
+	vlicense LICENSE-MIT
+}
