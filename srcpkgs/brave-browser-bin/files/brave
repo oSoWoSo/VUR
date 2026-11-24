@@ -1,0 +1,4 @@
+#!/bin/sh
+FLAGS_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/brave-flags.conf"
+[ -f "$FLAGS_FILE" ] && set -- $(grep -v '^\s*#' "$FLAGS_FILE" | tr '\n' ' ') "$@"
+exec /opt/brave/brave-browser "$@"

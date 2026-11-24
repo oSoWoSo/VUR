@@ -1,0 +1,2 @@
+site="https://github.com/brave/brave-browser/releases/latest"
+pattern='(?<=/tag/v)\d+\.\d+\.\d+(?=")'
