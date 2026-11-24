@@ -1,0 +1,49 @@
+# Template file for 'luciole-git'
+pkgname=luciole-git
+version=0.1.0.20261123
+revision=2
+_commit=74cbfa8baade95ae703367a7c3f5d32419b2527a
+build_style=meson
+configure_args="-Dbuild_revision=${_commit}"
+make_check_args="--exclude=operation-activity --exclude=thumbnail --exclude=archive-service --print-errorlogs"
+hostmakedepends="pkgconf wayland-devel"
+makedepends="acl-devel cairo-devel fontconfig-devel freetype-devel
+ gdk-pixbuf-devel harfbuzz-devel json-c++ libarchive-devel
+ libcurl-devel libglib-devel libglvnd-devel liblzma-devel libpng-devel
+ librsvg-devel libxkbcommon-devel libxml2-devel pango-devel stb
+ tomlplusplus-devel wayland-devel wayland-protocols"
+depends="gsettings-desktop-schemas hicolor-icon-theme"
+checkdepends="7zip dbus ffmpeg ffmpegthumbnailer libwebp-devel poppler
+ python3"
+short_desc="Native Wayland file manager using Noctalia rendering and controls"
+maintainer="Coolllyn <leanhduc673@gmail.com>"
+license="MIT"
+homepage="https://github.com/noctalia-dev/luciole"
+distfiles="https://github.com/noctalia-dev/luciole/archive/${_commit}.tar.gz"
+checksum="1ba2f0ce1450a3591e617bdaac4188952b8923f8f963d54f581b5425a9902631"
+
+# chroot HOME=/tmp collides with hardcoded /tmp paths in upstream tests
+make_check_pre="env HOME=/tmp/luciole-check-home"
+
+# librsvg 2.59.2 header triggers -Wexpansion-to-defined under -Wpedantic
+CXXFLAGS+=" -Wno-error=expansion-to-defined"
+
+# permission-service SIGSEGVs under musl.
+if [ "$XBPS_TARGET_LIBC" = musl ]; then
+	make_check_args+=" --exclude=permission-service"
+fi
+
+if [ "$XBPS_CHECK_PKGS" ]; then
+	configure_args+=" -Dtests=enabled"
+else
+	configure_args+=" -Dtests=disabled"
+fi
+
+pre_check() {
+	mkdir -p /tmp/luciole-check-home
+}
+
+post_install() {
+	vlicense LICENSE
+	vlicense lib/assets/fonts/tabler-icons-license.txt tabler-icons.LICENSE
+}

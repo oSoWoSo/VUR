@@ -1,0 +1,34 @@
+# Template file for 'panel'
+pkgname=panel
+version=2.0.2.001
+revision=1
+build_style=go
+build_helper=qemu
+go_import_path="github.com/oSoWoSo/panel/v2"
+go_package="${go_import_path}/cmd/panel"
+go_ldflags="-X main.Version=${version}"
+short_desc="Multi-panel terminal interface for your shell scripts"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://github.com/oSoWoSo/panel"
+changelog="https://github.com/oSoWoSo/panel/releases"
+distfiles="https://github.com/oSoWoSo/panel/archive/refs/tags/${version}.tar.gz"
+checksum=61039d43166d509a75d2cc2afa18f2cf9c1c21e67d01a94cc3281369b6a162e3
+replaces="gum-panel>=0"
+
+post_install() {
+	vlicense LICENSE
+
+	for shell in bash fish zsh; do
+		vtargetrun ${DESTDIR}/usr/bin/panel completion $shell > panel.${shell}
+		vcompletion panel.${shell} $shell
+	done
+	vtargetrun ${DESTDIR}/usr/bin/panel man > panel.1
+	vman panel.1
+}
+
+gum-panel_package() {
+	metapackage=yes
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" (transitional dummy package)"
+}
