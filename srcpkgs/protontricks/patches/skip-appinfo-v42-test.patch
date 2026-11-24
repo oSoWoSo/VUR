@@ -1,0 +1,9 @@
+--- a/tests/test_steam.py
++++ b/tests/test_steam.py
+@@ -1654,6 +1654,7 @@ def test_parse_appinfo_v42():
+ 
+ 
++@pytest.mark.skip(reason="updated fixtures not shipped")
+ def test_parse_appinfo_v42():
+     """
+     Test parsing a directory with multiple appinfo V42 files and
