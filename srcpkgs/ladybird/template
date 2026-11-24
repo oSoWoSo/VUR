@@ -1,0 +1,37 @@
+# Template file for 'ladybird'
+pkgname=ladybird
+version=2026.47.7
+revision=1
+_vcpkgver=8f363bd
+archs="x86_64"
+#build_wrksrc=
+build_style=cmake
+build_helper=rust
+configure_args="-DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake"
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="curl zip unzip tar git pkg-config"
+makedepends="libedit-devel mimalloc-devel cpptrace-devel
+ libzstd-devel fast_float"
+#depends=""
+short_desc="Truly independent web browser"
+maintainer="Naz <ndpm13@ch-naseem.com>"
+license="BSD-2-Clause "
+homepage="https://ladybird.org/"
+changelog="https://github.com/LadybirdBrowser/ladybird/releases"
+distfiles="https://github.com/LadybirdBrowser/ladybird/archive/refs/tags/${version}.tar.gz
+ https://github.com/microsoft/vcpkg/archive/${_vcpkgver}.tar.gz"
+checksum="e53f5b72f0bfbf0ca1fac674848bacb296d8c2b48f4fdb484cb357bd2b63fd5b
+ 058b2acdb61d9d775a6cbbfe493e13fbe1b4aa675de97676f114c631fd4d3d3f"
+skip_extraction="${_vcpkgver}.tar.gz"
+
+post_extract() {
+	vsrcextract -C vcpkg "${_vcpkgver}.tar.gz"
+}
+
+pre_configure() {
+	export VCPKG_ROOT="vcpkg"
+	vcpkg/bootstrap-vcpkg.sh -disableMetrics
+}
