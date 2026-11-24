@@ -1,0 +1,54 @@
+# Template file for 'bun-bootstrap'
+pkgname=bun-bootstrap
+version=1.4.5
+revision=1
+archs="x86_64* aarch64*"
+hostmakedepends="patchelf unzip"
+short_desc="Bootstrap package for bun (prebuilt binary)"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT"
+homepage="https://bun.sh"
+distfiles="https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip
+ https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64-musl.zip
+ https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip
+ https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64-musl.zip
+ https://raw.githubusercontent.com/oven-sh/bun/refs/tags/bun-v${version}/LICENSE.md"
+checksum="94559b3b528995a49452f9f2404cec74f2efd7d06e0a000a8cd214b02c3666eb
+ 9b6bdba1fa0914b6adfe48e4438212e2c106d9199b77ba642a9b8a3968a49a59
+ 18656a3bf0ea5641f5796ae4213b75255579a70a0fded2f337933785568cdf84
+ d655765d3a0c0fdf707e27c7aa1a4f2c84f1bbc1f759db7e6e3d3c5be414396c
+ 362fe32c954ec829240bd7429c53d705eef08c6bfa45ffc2d02005f857cba4dd"
+skip_extraction="bun-linux-x64.zip bun-linux-x64-musl.zip bun-linux-aarch64.zip bun-linux-aarch64-musl.zip LICENSE.md"
+repository=bootstrap
+nostrip=yes
+#nocross=yes
+conflicts="bun>=0 bun-bin>=0 bun-musl-bin>=0 bun-arm-musl-bin>=0"
+
+do_extract() {
+	local arch_zip
+	case "$XBPS_TARGET_MACHINE" in
+		x86_64)      arch_zip="bun-linux-x64.zip" ;;
+		x86_64-musl) arch_zip="bun-linux-x64-musl.zip" ;;
+		aarch64)     arch_zip="bun-linux-aarch64.zip" ;;
+		aarch64-musl) arch_zip="bun-linux-aarch64-musl.zip" ;;
+	esac
+	unzip -o "${XBPS_SRCDISTDIR}/${pkgname}-${version}/${arch_zip}" -d "${wrksrc}"
+}
+
+do_install() {
+	if [ "$XBPS_TARGET_MACHINE" = 'aarch64' ]; then
+		vbin bun-linux-aarch64/bun
+	elif [ "$XBPS_TARGET_MACHINE" = 'aarch64-musl' ]; then
+		patchelf --replace-needed "libc.musl-${XBPS_TARGET_MACHINE%-musl}.so.1" libc.so "${wrksrc}/bun-linux-aarch64-musl/bun"
+		vbin bun-linux-aarch64-musl/bun
+	elif [ "$XBPS_TARGET_MACHINE" = 'x86_64' ]; then
+		vbin bun-linux-x64/bun
+	elif [ "$XBPS_TARGET_MACHINE" = 'x86_64-musl' ]; then
+		patchelf --replace-needed "libc.musl-${XBPS_TARGET_MACHINE%-musl}.so.1" libc.so "${wrksrc}/bun-linux-x64-musl/bun"
+		vbin bun-linux-x64-musl/bun
+	fi
+}
+
+post_install() {
+	vlicense ${XBPS_SRCDISTDIR}/${pkgname}-${version}/LICENSE.md
+}
