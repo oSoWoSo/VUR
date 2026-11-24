@@ -1,0 +1,34 @@
+# Template file for 'cosign'
+pkgname=cosign
+version=3.1.5
+revision=1
+build_style=go
+build_helper="qemu"
+go_import_path="github.com/sigstore/cosign/v3"
+go_package=./cmd/cosign
+go_build_tags="-buildmode=pie -mod=vendor -modcacherw"
+go_ldflags="-X sigs.k8s.io/release-utils/version.gitVersion=v$version -compressdwarf=false -linkmode=external"
+make_check_args="-skip=TestIntegration"
+hostmakedepends="git"
+short_desc="Code signing and transparency for containers and binaries"
+maintainer="zenobit <zen@osowoso.org>"
+license="Apache-2.0"
+homepage="https://github.com/sigstore/cosign"
+distfiles="https://github.com/sigstore/cosign/archive/refs/tags/v${version}.tar.gz"
+checksum=eab9e35839fd50dd17d128b6c22cb0cf12e6f1e782fe598a321f7dbc467585ce
+
+post_install() {
+	for shell in bash zsh fish; do
+		case "$XBPS_TARGET_MACHINE" in
+			aarch64*)
+				vtargetrun _build-cosign-xbps/bin/linux_arm64/cosign completion ${shell} > ${pkgname}.${shell} ;;
+			i686*)
+				vtargetrun _build-cosign-xbps/bin/linux_386/cosign completion ${shell} > ${pkgname}.${shell} ;;
+			armv*)
+				vtargetrun _build-cosign-xbps/bin/linux_arm/cosign completion ${shell} > ${pkgname}.${shell} ;;
+			*)
+				vtargetrun $DESTDIR/usr/bin/${pkgname} completion ${shell} > ${pkgname}.${shell} ;;
+		esac
+		vcompletion ${pkgname}.${shell} ${shell} && echo "$shell completion added"
+	done
+}
