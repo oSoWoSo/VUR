@@ -1,0 +1,46 @@
+# Template file for 'cosmic-initial-setup'
+pkgname=cosmic-initial-setup
+version=1.12.0
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config just rust-std"
+makedepends="libxkbcommon-devel libzstd-devel eudev-libudev-devel libinput-devel"
+depends="blocaled iso-codes"
+short_desc="Initial setup for the COSMIC desktop"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/pop-os/cosmic-initial-setup"
+distfiles="https://github.com/pop-os/cosmic-initial-setup/archive/refs/tags/epoch-${version}.tar.gz"
+checksum=1002f38c8c1f1e552e7fe14b02bac65709b66545c887b33aa8bb998e8c72860d
+
+_crabtime_host_build_env() {
+	if [ -z "$CROSS_BUILD" ]; then
+		return 0
+	fi
+	unset RUSTFLAGS
+	_triple_env="${RUST_TARGET^^}"
+	export "CARGO_TARGET_${_triple_env//-/_}_RUSTFLAGS=$XBPS_CROSS_RUSTFLAGS"
+	unset _triple_env
+}
+
+do_build() {
+	: ${make_cmd:=cargo auditable}
+	: ${make_verbose:=-v}
+	_crabtime_host_build_env
+
+	${make_cmd} build ${XBPS_VERBOSE+${make_verbose}} --release --locked --target ${RUST_TARGET} \
+		${configure_args} ${make_build_args}
+}
+
+do_check() {
+	: ${make_cmd:=cargo auditable}
+	: ${make_verbose:=-v}
+	_crabtime_host_build_env
+
+	${make_check_pre} ${make_cmd} test ${XBPS_VERBOSE+${make_verbose}} --release --locked --target ${RUST_TARGET} \
+		${configure_args} ${make_check_args}
+}
+
+do_install() {
+	just cargo-target-dir="target/${RUST_TARGET}" rootdir="${DESTDIR}" prefix=/usr install
+}
