@@ -1,0 +1,19 @@
+# Template file for 'cosmic-desktop-full'
+pkgname=cosmic-desktop-full
+version=1.11.0
+revision=1
+metapackage="yes"
+depends="bluez cosmic-applets cosmic-applibrary cosmic-bg cosmic-comp cosmic-edit
+ cosmic-files cosmic-icons cosmic-idle cosmic-launcher cosmic-monitor
+ cosmic-notifications cosmic-osd cosmic-panel cosmic-player cosmic-randr
+ cosmic-screenshot cosmic-session cosmic-settings cosmic-settings-daemon
+ cosmic-term cosmic-wallpapers cosmic-workspaces-epoch dbus dejavu-fonts-ttf
+ elogind fontconfig freetype gsettings-desktop-schemas gstreamer1-pipewire
+ liberation-fonts-ttf libglvnd libspa-bluetooth mesa-dri noto-fonts-emoji
+ noto-fonts-ttf pipewire wayland wireplumber xdg-desktop-portal-cosmic
+ xdg-user-dirs xorg-server-xwayland"
+short_desc="Full Cosmic Desktop"
+maintainer="Bella109 <belladev109@proton.me>"
+license="GPL-3.0-only, MPL-2.0"
+homepage="https://github.com/pop-os/cosmic-epoch"
+skip_extraction=yes
