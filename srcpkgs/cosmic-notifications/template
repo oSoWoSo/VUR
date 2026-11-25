@@ -1,0 +1,17 @@
+# Template file for 'cosmic-notifications'
+pkgname=cosmic-notifications
+version=1.12.0
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config just"
+makedepends="libxkbcommon-devel"
+short_desc="Layer Shell notifications daemon for the COSMIC desktop"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/pop-os/cosmic-notifications"
+distfiles="https://github.com/pop-os/cosmic-notifications/archive/refs/tags/epoch-${version}.tar.gz"
+checksum=67d8d569a147bdc6e5e62056fdb075e63f27a1c091e16157bf05a63691ce84be
+
+do_install() {
+	just cargo-target-dir="target/${RUST_TARGET}" rootdir="${DESTDIR}" prefix=/usr install
+}

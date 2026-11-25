@@ -1,0 +1,14 @@
+# Template file for 'cosmic-wallpapers'
+pkgname=cosmic-wallpapers
+version=1.12.0
+revision=1
+short_desc="Wallpapers for the COSMIC Desktop Environment"
+maintainer="zenobit <zen@osowoso.org>"
+license="CC-BY-SA-4.0"
+homepage="https://github.com/pop-os/cosmic-wallpapers"
+distfiles="https://github.com/pop-os/cosmic-wallpapers/archive/refs/tags/epoch-${version}.tar.gz"
+checksum=3d871f1561ed9e1f2239c770a3aefb1c5399eaf2afcb6a7faf756c2f8cf3ea69
+
+do_install() {
+	make DESTDIR="${DESTDIR}" install
+}
