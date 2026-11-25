@@ -1,0 +1,17 @@
+# Template file for 'cosmic-player'
+pkgname=cosmic-player
+version=1.12.0
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config just"
+makedepends="libxkbcommon-devel glib-devel gstreamer1-devel gst-plugins-base1-devel"
+short_desc="Media player for the COSMIC desktop"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/pop-os/cosmic-player"
+distfiles="https://github.com/pop-os/cosmic-player/archive/refs/tags/epoch-${version}.tar.gz"
+checksum=dce7745d3109ee911f2e802d592fc86f32065f66eb67c6e8791ec8e3878efae8
+
+do_install() {
+	just cargo-target-dir="target/${RUST_TARGET}" rootdir="${DESTDIR}" prefix=/usr install
+}

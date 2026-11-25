@@ -1,0 +1,58 @@
+Use the system libheif and libjpeg-turbo instead of building vendored copies.
+With both crates off cmake, the cmake binary is no longer needed at all.
+
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -41,7 +41,6 @@
+ ] }
+ kamadak-exif = "0.6.1"
+ libheif-rs = { version = "2.7.0", default-features = false, features = [
+-  "embedded-libheif",
+   "v1_17",
+ ] }
+ lru = "0.16.3"
+@@ -51,7 +50,9 @@
+ thiserror = "2.0.18"
+ tokio = { version = "1.49.0", features = ["rt-multi-thread", "sync", "fs"] }
+ tracing = "0.1.44"
+-turbojpeg = "1.4.0"
++turbojpeg = { version = "1.4.0", default-features = false, features = [
++  "pkg-config",
++] }
+ zune-image = "0.5.0"
+ 
+ 
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -908,15 +908,6 @@
+ ]
+ 
+ [[package]]
+-name = "cmake"
+-version = "0.1.58"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c0f78a02292a74a88ac736019ab962ece0bc380e3f977bf72e376c5d78ff0678"
+-dependencies = [
+- "cc",
+-]
+-
+-[[package]]
+ name = "cocoa"
+ version = "0.25.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -3425,7 +3416,6 @@
+ checksum = "f554864c5f34c7f285ff6acdcadb64bcc2a3de1609e9135cec702c5edc703864"
+ dependencies = [
+  "cfg-if",
+- "cmake",
+  "libc",
+  "system-deps",
+  "vcpkg",
+@@ -5908,7 +5898,6 @@
+ checksum = "49b5a974bc59382d35927e3a07eef2ba9a24fe7227cefe52ec44b508e1b90f86"
+ dependencies = [
+  "anyhow",
+- "cmake",
+  "libc",
+  "pkg-config",
+ ]
