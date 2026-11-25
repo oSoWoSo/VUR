@@ -1,0 +1,24 @@
+# Template file for 'pop-launcher'
+pkgname=pop-launcher
+version=1.12.0
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config just clang lld"
+makedepends="libxkbcommon-devel libqalculate-devel"
+depends="fd bash xdg-utils"
+short_desc="Modular IPC-based desktop launcher service"
+maintainer="zenobit <zen@osowoso.org>"
+license="MPL-2.0, GPL-3.0-only"
+homepage="https://github.com/pop-os/launcher"
+distfiles="https://github.com/pop-os/launcher/archive/refs/tags/epoch-${version}.tar.gz"
+checksum=2d3a8d31b374db5661062623bc86d64ea9b09d28aff65f8f4cd71f44dd74c941
+
+do_build() {
+	export RUSTFLAGS="${RUSTFLAGS} -C link-arg=-fuse-ld=lld"
+	export CARGO_BUILD_TARGET="${RUST_TARGET}"
+	CC=clang just build-release --locked
+}
+
+do_install() {
+	just target-dir="target/${RUST_TARGET}/release" rootdir="${DESTDIR}" install
+}

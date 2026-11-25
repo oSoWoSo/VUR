@@ -1,0 +1,17 @@
+# Template file for 'cosmic-monitor'
+pkgname=cosmic-monitor
+version=1.12.0
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config just"
+makedepends="libxkbcommon-devel"
+short_desc="System monitor for the COSMIC desktop"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/pop-os/cosmic-monitor"
+distfiles="https://github.com/pop-os/cosmic-monitor/archive/refs/tags/epoch-${version}.tar.gz"
+checksum=48341c2b17216b7dbd084cb3b09ad0665f60b65856548a9aff7755834500cd4d
+
+do_install() {
+	just cargo-target-dir="target/${RUST_TARGET}" rootdir="${DESTDIR}" prefix=/usr install
+}

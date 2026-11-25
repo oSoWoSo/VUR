@@ -1,0 +1,17 @@
+# Template file for 'cosmic-idle'
+pkgname=cosmic-idle
+version=1.12.0
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config just"
+makedepends="libxkbcommon-devel"
+short_desc="Idle daemon for the COSMIC desktop"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/pop-os/cosmic-idle"
+distfiles="https://github.com/pop-os/cosmic-idle/archive/refs/tags/epoch-${version}.tar.gz"
+checksum=894a3934d37f0041d33756af8fae73f0abad40b9174d40b2af13ead7ab916b64
+
+do_install() {
+	just cargo-target-dir="target/${RUST_TARGET}" rootdir="${DESTDIR}" prefix=/usr install
+}
