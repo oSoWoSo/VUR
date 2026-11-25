@@ -1,0 +1,17 @@
+# Template file for 'cosmic-term'
+pkgname=cosmic-term
+version=1.12.0
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config just"
+makedepends="libxkbcommon-devel libzstd-devel"
+short_desc="COSMIC terminal emulator"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/pop-os/cosmic-term"
+distfiles="https://github.com/pop-os/cosmic-term/archive/refs/tags/epoch-${version}.tar.gz"
+checksum=7c06ccf7231056c3445d16fa6d3b5c4f9de59c1a06225dc2989b1065527ccae4
+
+do_install() {
+	just cargo-target-dir="target/${RUST_TARGET}" rootdir="${DESTDIR}" prefix=/usr install
+}
