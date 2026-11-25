@@ -1,0 +1,21 @@
+# Template file for 'cosmic-viewer'
+pkgname=cosmic-viewer
+version=1.12.0
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config just cmake nasm"
+makedepends="libxkbcommon-devel libheif-devel libjpeg-turbo-devel"
+short_desc="COSMIC Image Viewer"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/pop-os/cosmic-viewer"
+distfiles="https://github.com/pop-os/cosmic-viewer/archive/refs/tags/epoch-${version}.tar.gz"
+checksum=e6c3f6f5682d96d20289f008fee2874ef6c348cc0f9add531eb44ea3fec92038
+
+do_build() {
+	just build-release --target "${RUST_TARGET}"
+}
+
+do_install() {
+	just cargo-target-dir="target/${RUST_TARGET}" rootdir="${DESTDIR}" prefix=/usr install
+}

@@ -1,0 +1,22 @@
+# Template file for 'cosmic-settings-daemon'
+pkgname=cosmic-settings-daemon
+version=1.12.0
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config clang"
+makedepends="eudev-libudev-devel libinput-devel geoclue2-devel libxkbcommon-devel openssl-devel pipewire-devel"
+depends="geoclue2 acpid alsa-utils playerctl wireplumber xdg-utils"
+short_desc="Settings daemon for the COSMIC desktop environment"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/pop-os/cosmic-settings-daemon"
+distfiles="https://github.com/pop-os/cosmic-settings-daemon/archive/refs/tags/epoch-${version}.tar.gz"
+checksum=78307226db5e1c99e638cc2be104380ecfc6c27cf1fdaf325f92f3ea8e65dce7
+
+post_install() {
+	vinstall data/system_actions.ron 644 \
+		usr/share/cosmic/com.system76.CosmicSettings.Shortcuts/v1 system_actions
+
+	vinstall data/polkit-1/rules.d/cosmic-settings-daemon.rules 644 \
+		usr/share/polkit-1/rules.d
+}

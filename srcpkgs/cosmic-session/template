@@ -1,0 +1,18 @@
+# Template file for 'cosmic-session'
+pkgname=cosmic-session
+version=1.12.0
+revision=1
+build_style=cargo
+configure_args="--features autostart"
+hostmakedepends="just"
+depends="cosmic-icons default-cursors bash desktop-file-utils polkit elogind"
+short_desc="Session manager for the COSMIC desktop environment"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/pop-os/cosmic-session"
+distfiles="https://github.com/pop-os/cosmic-session/archive/refs/tags/epoch-${version}.tar.gz"
+checksum=b193591595716052a77c8b3620c31bc447725394ce4a78ebcd43ca630a51006e
+
+do_install() {
+	just cargo-target-dir="target/${RUST_TARGET}" rootdir="${DESTDIR}" prefix=/usr install
+}
