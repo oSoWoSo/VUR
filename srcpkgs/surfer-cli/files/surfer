@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Surfer command line client. Installed as /usr/bin/surfer by surfer-cli.
+
+exec /usr/bin/node /usr/lib/surfer/cli/surfer.js "$@"
