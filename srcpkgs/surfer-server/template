@@ -1,0 +1,110 @@
+# Template file for 'surfer-server'
+pkgname=surfer-server
+version=7.5.0
+revision=1
+hostmakedepends="nodejs"
+depends="nodejs better-sqlite3"
+checkdepends="shared-mime-info"
+short_desc="Simple static file server with web interface and resumable uploads"
+maintainer="zenobit <zen@osoweso.org>"
+license="AGPL-3.0-only"
+homepage="https://github.com/cloudron-io/surfer"
+distfiles="https://github.com/cloudron-io/surfer/archive/refs/tags/v${version}.tar.gz"
+checksum=c16fd2833a6efcdd3987ef353c9e67c06ed6a7f1662963b1adb9ab938b53bf60
+nocross="depends on better-sqlite3, which cannot be cross built"
+system_accounts="_surfer"
+system_groups="_surfer"
+_surfer_homedir="/var/lib/surfer"
+_surfer_descr="Surfer file server user"
+make_dirs="/var/lib/surfer/public 0750 _surfer _surfer"
+
+export npm_config_audit=false
+export npm_config_fund=false
+export npm_config_loglevel=error
+export npm_config_update_notifier=false
+
+# libc infix as better-sqlite3 spells it in its prebuilds/ dirs,
+# i.e. prebuilds/<linux|linuxmusl>-<arch>.node
+_node_libc() {
+	case "${XBPS_TARGET_LIBC}" in
+		musl) echo "musl-" ;;
+		*) echo "-" ;;
+	esac
+}
+
+# nodejs arch string as npm spells it
+_node_arch() {
+	case "${XBPS_TARGET_MACHINE}" in
+		x86_64*) echo x64 ;;
+		aarch64*) echo arm64 ;;
+		*) node -p "process.arch" ;;
+	esac
+}
+
+post_patch() {
+	# cli/package.json lags a release behind on every tag
+	vsed -i -e "s/\"version\": \"[0-9.]*\"/\"version\": \"${version}\"/" \
+		cli/package.json
+}
+
+do_configure() {
+	# npm insists on a writable HOME for its cache
+	export HOME="${WRKDIR}/.home"
+	export npm_config_cache="${HOME}/.npm"
+	mkdir -p "${HOME}"
+}
+
+do_build() {
+	local _arch="${_node_arch}"
+
+	# --ignore-scripts: npm would rebuild better-sqlite3 from source here, and
+	# we take the compiled module from the better-sqlite3 package instead. Its
+	# own prebuild is only used to run the test suite, do_install() drops it.
+	npm install --ignore-scripts --os=linux --cpu="${_arch}"
+
+	# esbuild (a vite dependency) wires up its platform binary in an install script that we just skipped
+	(cd node_modules/esbuild && node install.js) || true
+
+	# builds frontend/ into dist/
+	npm run build
+}
+
+do_check() {
+	./run-tests
+}
+
+do_install() {
+	local _libdir="usr/lib/surfer"
+	local _mod
+
+	# devDependencies are only needed for the frontend build and the test suite
+	npm prune --omit=dev
+
+	vcopy dist "${_libdir}"
+	vcopy src "${_libdir}"
+	vcopy node_modules "${_libdir}"
+	vinstall server.js 644 "${_libdir}"
+	vinstall package.json 644 "${_libdir}"
+
+	# the mocha sources of upstream are of no use on an installed system
+	rm -rf "${PKGDESTDIR}/${_libdir}/src/test" \
+		"${PKGDESTDIR}/${_libdir}/src/routes/test"
+
+	# use one we build from source
+	rm -rf "${PKGDESTDIR}/${_libdir}/node_modules/better-sqlite3"
+	ln -s /usr/lib/node_modules/better-sqlite3 \
+		"${PKGDESTDIR}/${_libdir}/node_modules/better-sqlite3"
+
+	# tar-stream lists bare-fs as a dependency because the same tarball is
+	# published for the Bare runtime, but nothing in the Node build imports it
+	# and the addons only load there ("Bare is not defined"). They are the last
+	# native binaries in the payload, so what is left is pure JavaScript.
+	for _mod in bare-fs bare-path bare-url; do
+		rm -rf "${PKGDESTDIR}/${_libdir}/node_modules/${_mod}"
+	done
+
+	vbin "${FILESDIR}/surferd"
+	vsv surfer
+
+	vlicense LICENSE
+}

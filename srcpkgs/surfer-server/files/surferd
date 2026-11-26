@@ -1,0 +1,15 @@
+#!/bin/sh
+#
+# Start the Surfer file server.
+#
+# Environment:
+#   SURFER_ROOT     directory to serve       (default: /var/lib/surfer/public)
+#   SURFER_DB       sqlite database          (default: /var/lib/surfer/db.sqlite)
+#   SURFER_FAVICON  favicon to serve         (default: /var/lib/surfer/favicon.png)
+
+export NODE_ENV=production
+
+exec /usr/bin/node /usr/lib/surfer/server.js \
+	"${SURFER_ROOT:-/var/lib/surfer/public}" \
+	"${SURFER_DB:-/var/lib/surfer/db.sqlite}" \
+	"${SURFER_FAVICON:-/var/lib/surfer/favicon.png}"
