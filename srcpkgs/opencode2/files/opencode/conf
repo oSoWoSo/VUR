@@ -1,0 +1,7 @@
+# Listen locally unless explicitly configured for remote access.
+OPENCODE_HOSTNAME=127.0.0.1
+OPENCODE_PORT=4096
+# The service user must have access to this directory and your projects.
+OPENCODE_DIRECTORY=/var/lib/opencode
+# Set a strong password before exposing the server to the network.
+# export OPENCODE_SERVER_PASSWORD='change-me'

@@ -1,0 +1,21 @@
+OpenCode server
+===============
+The opencode2 package includes an optional runit service named opencode.
+It is not enabled automatically. To enable it:
+
+    ln -s /etc/sv/opencode /var/service/
+
+Configure /etc/sv/opencode/conf, then run `sv restart opencode` after changes.
+The default endpoint is http://127.0.0.1:4096. Set a strong
+OPENCODE_SERVER_PASSWORD before listening on a non-loopback address.
+
+The service runs as _opencode, with HOME=/var/lib/opencode. Its credentials,
+configuration and sessions are separate from your interactive user's data.
+Configure providers for this account and grant it access only to the projects
+it needs. OPENCODE_DIRECTORY selects its working directory.
+
+OpenCode desktop
+================
+Install opencode2-desktop and launch OpenCode from your application menu or
+run `opencode-desktop`. The desktop uses the CLI from opencode2; the runit
+service is not required for desktop use.
