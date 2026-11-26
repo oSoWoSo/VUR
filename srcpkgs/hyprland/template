@@ -1,0 +1,93 @@
+# Template file for 'hyprland'
+pkgname=hyprland
+version=0.57.2
+revision=3
+build_style=cmake
+configure_args="-DNO_SYSTEMD:BOOL=true -Dglaze_DIR:PATH=/usr/share/glaze"
+hostmakedepends="pkg-config cpio glslang hyprwayland-scanner hyprwire-devel jq python3 xxd"
+makedepends="aquamarine-devel
+ cairo-devel
+ file-devel
+ glaze7
+ glslang-devel
+ hwids
+ hyprcursor
+ hyprgraphics
+ hyprland-protocols
+ hyprlang
+ hyprutils-devel
+ hyprwire-devel
+ lcms2-devel
+ libdisplay-info-devel
+ libdrm-devel
+ libei-devel
+ libgbm-devel
+ libglvnd-devel
+ libheif-devel
+ libinput-devel
+ libjpeg-turbo-devel
+ libjxl-devel
+ libliftoff-devel
+ libpng-devel
+ librsvg-devel
+ libseat-devel
+ libwebp-devel
+ libxcb-devel
+ libXcursor-devel
+ libxkbcommon-devel
+ lua55-devel
+ muparser-devel
+ pango-devel
+ readline-devel
+ re2-devel
+ SPIRV-Tools-devel
+ tomlplusplus-devel
+ udis86-devel
+ wayland-devel
+ wayland-protocols
+ xcb-util-errors-devel
+ xcb-util-renderutil-devel
+ xcb-util-wm-devel
+ xorg-server-xwayland libcanberra-devel sdbus-c++-devel"
+short_desc="Dynamic tiling Wayland compositor that doesn't sacrifice on its looks"
+maintainer="zenobit <zen@osowoso.org>"
+license="BSD-3-Clause"
+homepage="https://hyprland.org/"
+changelog="https://github.com/hyprwm/Hyprland/releases"
+distfiles="https://github.com/hyprwm/Hyprland/releases/download/v${version}/source-v${version}.tar.gz"
+checksum=34dbec0738ab88c8228caf89385662688ab1601ea58fbe5c60a6b6ab383db46d
+make_check=no # cant run in sandbox
+
+if [ "$XBPS_TARGET_LIBC" = "musl" ]; then
+	configure_args+=" -DCMAKE_CXX_FLAGS=\"-lexecinfo\""
+	makedepends+=" libexecinfo-devel"
+	depends+=" libexecinfo"
+fi
+
+pre_configure() {
+	xxd -i -n EXAMPLE_CONFIG_BYTES_LUA example/hyprland.lua > src/config/lua/example_config_lua_data.h
+}
+
+post_install() {
+	vlicense LICENSE
+
+	# headers
+	vmkdir usr/include/hyprland
+	vmkdir usr/include/hyprland/protocols
+	vmkdir usr/share/pkgconfig
+
+	cmake --build ./build --config Release --target generate-protocol-headers
+
+	find src -type f \( -name '*.hpp' -o -name '*.h' -o -name '*.inc' \) -print0 | cpio --quiet -0dump ${DESTDIR}/usr/include/hyprland
+	install -Dm0644 protocols/*.h* ${DESTDIR}/usr/include/hyprland/protocols
+	vinstall build/hyprland.pc 644 usr/share/pkgconfig
+}
+
+hyprland-devel_package() {
+	depends="${sourcepkg}>=${version}_${revision} ${makedepends}"
+	short_desc="Dynamic tiling Wayland compositor - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/share/pkgconfig
+	}
+}

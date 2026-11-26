@@ -1,0 +1,15 @@
+Fix the build on musl
+
+glibc's <sys/un.h> includes <string.h>, so strncpy() happens to be declared
+here, while musl's <sys/un.h> does not - it only forward-declares strlen()
+for its own SUN_LEN(). Include <cstring> explicitly.
+--- a/src/ipc/HyprlandSocket.cpp
++++ b/src/ipc/HyprlandSocket.cpp
+@@ -7,6 +7,7 @@
+ #include <sys/un.h>
+ #include <unistd.h>
+
++#include <cstring>
+ #include <format>
+
+ #include <hyprutils/memory/Casts.hpp>

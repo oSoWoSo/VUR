@@ -1,0 +1,11 @@
+--- a/src/element/rowLayout/RowLayout.cpp
++++ b/src/element/rowLayout/RowLayout.cpp
+@@ -76,7 +76,7 @@
+     Vector2D max;
+     for (const auto& child : impl->children) {
+         // We never want percent children to drive the preferred size of their parent.
+-        Vector2D childPref = child->preferredSize(parentForChild, false).value_or({ 0, 0 });
++        Vector2D childPref = child->preferredSize(parentForChild, false).value_or(Vector2D{ 0, 0 });
+         max.x += childPref.x + m_impl->data.gap;
+         max.y = std::max(max.y, childPref.y);
+     }

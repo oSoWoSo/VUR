@@ -1,0 +1,25 @@
+Use the sysroot-aware pkgdatadir instead of the pkg-config prefix.
+
+HYPRLAND_PROTOS_PREFIX comes from "prefix" in hyprland-protocols.pc, which is
+baked in as /usr at build time and therefore does not carry the cross base.
+In cross builds hyprwayland-scanner (a host tool) then looks for the protocol
+XML in /usr/share/hyprland-protocols, which does not exist, and every
+protocol code generation step fails with "Couldn't load proto".
+
+pkg_get_variable() resolves pkgdatadir, which is defined as
+${pc_sysrootdir}${datarootdir}/hyprland-protocols. The xbps-src pkg-config
+wrapper exports PKG_CONFIG_SYSROOT_DIR=$XBPS_CROSS_BASE, so pc_sysrootdir is
+set during cross builds and this resolves to the real location there.
+Native builds are unchanged (pc_sysrootdir is empty).
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -79,7 +79,7 @@
+ # same for hyprland-protocols
+ pkg_check_modules(HYPRLAND_PROTOS IMPORTED_TARGET hyprland-protocols)
+ if(HYPRLAND_PROTOS_FOUND)
+-  set(HYPRLAND_PROTOCOLS "${HYPRLAND_PROTOS_PREFIX}/share/hyprland-protocols")
++  pkg_get_variable(HYPRLAND_PROTOCOLS hyprland-protocols pkgdatadir)
+ else()
+   set(HYPRLAND_PROTOCOLS "${CMAKE_SOURCE_DIR}/subprojects/hyprland-protocols")
+ endif()
