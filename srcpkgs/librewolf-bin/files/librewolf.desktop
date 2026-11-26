@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=LibreWolf
+Comment=Web Browser focused on privacy, security, and freedom
+Exec=/usr/bin/librewolf %u
+Terminal=false
+Type=Application
+Icon=librewolf
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;application/xml;application/vnd.mozilla.xul+xml;application/rss+xml;application/rdf+xml;x-scheme-handler/http;x-scheme-handler/https;
+StartupWMClass=LibreWolf

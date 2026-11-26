@@ -1,0 +1,3 @@
+site="https://codeberg.org/api/v1/repos/librewolf/bsys6/releases"
+pattern='\d+\.\d+(\.\d+)*-\d+'
+ignore="alpha|beta|rc"
