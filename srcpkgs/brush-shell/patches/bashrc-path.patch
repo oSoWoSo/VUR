@@ -1,0 +1,11 @@
+--- a/brush-core/src/sys/unix/fs.rs
++++ b/brush-core/src/sys/unix/fs.rs
+@@ -232,7 +232,7 @@
+
+ /// Returns the path to the system-wide shell rc script.
+ pub fn get_system_rc_path() -> Option<&'static Path> {
+-    Some(Path::new("/etc/bash.bashrc"))
++    Some(Path::new("/etc/bash/bashrc"))
+ }
+
+ /// Returns true if the string contains a path separator character.

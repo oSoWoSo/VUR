@@ -1,0 +1,16 @@
+--- a/brush-core/src/shell/fs.rs
++++ b/brush-core/src/shell/fs.rs
+@@ -62,9 +62,11 @@ impl Shell {
+     /// * `s` - The string to shorten.
+     pub fn tilde_shorten(&self, s: String) -> String {
+-        if let Some(home_dir) = self.home_dir()
+-            && let Some(stripped) = s.strip_prefix(home_dir.to_string_lossy().as_ref())
++        // Bash only tilde-shortens against the HOME environment variable; when HOME is
++        // unset it leaves the path untouched (even if passwd provides a home dir).
++        if let Some(home) = self.env.get_str("HOME", self)
++            && let Some(stripped) = s.strip_prefix(home.as_ref())
+             // Home must match whole path components: /home/user is not a prefix of /home/users.
+             && (stripped.is_empty() || stripped.starts_with(std::path::is_separator))
+         {
+             return format!("~{stripped}");
+         }

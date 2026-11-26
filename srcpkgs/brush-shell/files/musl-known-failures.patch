@@ -1,0 +1,20 @@
+--- a/brush-shell/tests/cases/compat/builtins/fc.yaml
++++ b/brush-shell/tests/cases/compat/builtins/fc.yaml
+@@ -45,6 +45,7 @@
+       fc -l -3 -1
+ 
+   - name: "fc -l with a negative index past the start"
++    known_failure: true # musl: output ordering differs from glibc bash
+     args: ["-o", "history"]
+     env:
+       HISTFILE: "history-file.txt"
+--- a/brush-shell/tests/cases/compat/prompt.yaml
++++ b/brush-shell/tests/cases/compat/prompt.yaml
+@@ -565,6 +565,7 @@
+ 
+   - name: "Date format: unknown and incomplete directives"
+     incompatible_platforms: ["macos"] # macOS's strftime supports %v and drops the % of what it doesn't know
++    known_failure: true # musl: strftime directive handling differs
+     stdin: |
+       prompt='\D{[%E][%O][%v][%%]%}'
+       echo "Unknown directives: '${prompt@P}'"
