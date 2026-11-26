@@ -1,0 +1,43 @@
+# Template file for 'nogon'
+pkgname=nogon
+version=0.22.0
+revision=1
+build_style=go
+go_import_path="github.com/asciimoo/nogon"
+hostmakedepends="nodejs"
+checkdepends="libeatmydata"
+short_desc="Your own search engine"
+maintainer="zenobit <zen@osowoso.org>"
+license="AGPL-3.0-only"
+homepage="https://github.com/asciimoo/nogon"
+changelog="https://raw.githubusercontent.com/asciimoo/nogon/refs/heads/master/CHANGELOG.md"
+distfiles="https://github.com/asciimoo/nogon/archive/refs/tags/v${version}.tar.gz"
+checksum=e78fe5fb2d8c612f06104605aa234c8840eab0f14146829757706b59258c0154
+replaces="hister>=0"
+
+do_build() {
+	GOFLAGS="-modcacherw" ./manage.sh build
+}
+
+do_check() {
+	# These suites execute temporary scripts and cannot use noexec /dev/shm.
+	# Disable SQLite fsyncs for tests only, leaving the installed binary unchanged.
+	env LD_PRELOAD=/usr/lib/libeatmydata.so go test -p "$XBPS_MAKEJOBS" . ./cmd
+	# Keep database and index fixtures on tmpfs to avoid fsync-driven timeouts.
+	# Set these in the test process only, since Go's build directory must be executable.
+	go test -p "$XBPS_MAKEJOBS" -exec 'env TMPDIR=/dev/shm GOTMPDIR=/dev/shm' \
+		$(go list ./... | grep -vx -e "$go_import_path" -e "$go_import_path/cmd")
+}
+
+post_install() {
+	vbin nogon
+	vdoc README.md
+	vdoc SECURITY.md
+	vlicense LICENSE
+}
+
+hister_package() {
+	short_desc+=" (transitional dummy package)"
+	depends="nogon>=${version}_${revision}"
+	metapackage=yes
+}
