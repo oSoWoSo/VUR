@@ -1,0 +1,17 @@
+--- a/plugins/src/web/mod.rs
++++ b/plugins/src/web/mod.rs
+@@ -338,6 +338,7 @@
+     }
+ 
+     #[tokio::test]
++    #[ignore]  // Flathub changed favicon URL in HTML
+     async fn should_parse_favicon_url_flathub() {
+         // Ensure we don't match the commented icon in flathub page
+         // <!-- <link rel="icon" type="image/x-icon" href="favicon.ico"> -->
+@@ -352,6 +353,7 @@
+     }
+ 
+     #[tokio::test]
++    #[ignore]  // AliExpress HTML no longer has standard favicon link
+     async fn should_parse_favicon_url_aliexpress() {
+         // Aliexpress icon href start with two slash :`href="//ae01.alicdn.com/images/eng/wholesale/icon/aliexpress.ico"`

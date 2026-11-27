@@ -1,0 +1,20 @@
+# Template file for 'cosmic-settings'
+pkgname=cosmic-settings
+version=1.12.0
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config just"
+makedepends="libxkbcommon-devel eudev-libudev-devel libinput-devel
+ libdav1d-devel libzstd-devel"
+depends="cosmic-icons cosmic-randr accountsservice NetworkManager iso-codes
+ pipewire ttf-opensans"
+short_desc="Settings application for the COSMIC desktop environment"
+maintainer="zenobit <zen@osowoso.org>"
+license="GPL-3.0-only"
+homepage="https://github.com/pop-os/cosmic-settings"
+distfiles="https://github.com/pop-os/cosmic-settings/archive/refs/tags/epoch-${version}.tar.gz"
+checksum=801712c5394369d91a3386a3ff9473c5c96f5ac5a6a9eefaa79ac39fa11a9d65
+
+do_install() {
+	just cargo-target-dir="target/${RUST_TARGET}" rootdir="${DESTDIR}" prefix=/usr install
+}
