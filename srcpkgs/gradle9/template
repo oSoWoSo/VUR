@@ -1,0 +1,20 @@
+# Template file for 'gradle9'
+pkgname=gradle9
+version=9.9.3
+revision=1
+depends="virtual?java-environment"
+short_desc="Build system for Java/C/C++ software"
+maintainer="zenobit <zen@osowoso.org>"
+license="Apache-2.0"
+homepage="https://gradle.org"
+changelog="https://docs.gradle.org/${version}/release-notes.html"
+distfiles="https://services.gradle.org/distributions/gradle-${version}-bin.zip"
+checksum=4f2135b741f272acc88c168a52202a0a63fceee0cd61ee753da79694cd2b1e4b
+
+do_install() {
+	vmkdir usr/lib/gradle
+	sed ${FILESDIR}/gradle -e "s;@VERSION@;${version};" > gradle
+	vbin gradle
+	vdoc README
+	mv lib ${DESTDIR}/usr/lib/gradle/
+}
