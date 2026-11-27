@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=brow6el
+Comment=sixel-based web browser (terminal only)
+Exec=brow6el %U
+Icon=brow6el
+Type=Application
+Categories=Network;WebBrowser;
+Terminal=true

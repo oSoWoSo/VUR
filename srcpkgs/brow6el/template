@@ -1,0 +1,79 @@
+# Template file for 'brow6el'
+pkgname=brow6el
+version=0.3.6
+revision=1
+archs=x86_64
+build_style=cmake
+hostmakedepends="curl tar pkg-config git"
+makedepends="libsixel-devel libX11-devel libglib-devel nspr-devel nss-devel
+ dbus-devel alsa-lib-devel cairo-devel pango-devel atk-devel cups-devel
+ libXcomposite-devel libXdamage-devel libXext-devel libXfixes-devel
+ libXrandr-devel libgbm-devel libxkbcommon-devel eudev-libudev-devel
+ at-spi2-core-devel at-spi2-atk-devel expat-devel libdrm-devel MesaLib-devel
+ gtk+3-devel"
+short_desc="Minimalistic graphical terminal web browser using sixels"
+maintainer="zenobit <zen@osowoso.org>"
+license="MIT,BSD-3-Clause"
+homepage="https://brow6el.dev/"
+distfiles="https://tangled.org/janantos.tngl.sh/brow6el/archive/refs%2Ftags%2Fv${version}?format=tar.gz>brow6el-v${version}.tar.gz"
+checksum=b6d0360807e57b087643293046ab578cd015256e8603d842d7ec4764bf3cffef
+
+pre_configure() {
+	./download_cef.sh
+	ln -snf Release ${wrksrc}/cef_binary/None
+
+	# Create fake git repo for version detection
+	git init
+	git config user.email "builder@voidlinux.org"
+	git config user.name "XBPS Builder"
+	git add -A
+	git commit -m "Version ${version}"
+	git tag -a "v${version}" -m "Version ${version}"
+}
+
+do_install() {
+	# Create main directory
+	vmkdir usr/lib/brow6el
+
+	# Install main binary
+	vinstall build/brow6el 755 usr/lib/brow6el
+
+	# Install CEF libraries
+	vinstall build/libcef.so 755 usr/lib/brow6el
+	vinstall build/libvk_swiftshader.so 755 usr/lib/brow6el
+	vinstall build/libvulkan.so.1 755 usr/lib/brow6el
+
+	# Install CEF support files
+	vinstall build/chrome-sandbox 755 usr/lib/brow6el
+	vinstall build/v8_context_snapshot.bin 644 usr/lib/brow6el
+	vinstall build/vk_swiftshader_icd.json 644 usr/lib/brow6el
+
+	# Install resource files
+	vinstall build/chrome_100_percent.pak 644 usr/lib/brow6el
+	vinstall build/chrome_200_percent.pak 644 usr/lib/brow6el
+	vinstall build/resources.pak 644 usr/lib/brow6el
+	vinstall build/icudtl.dat 644 usr/lib/brow6el
+
+	# Install locales directory
+	vcopy build/locales usr/lib/brow6el
+
+	# Install bundled scripts
+	vmkdir usr/share/brow6el
+	vcopy build/scripts usr/share/brow6el
+
+	# Install wrapper script
+	vbin "${FILESDIR}/brow6el"
+}
+
+post_install() {
+	vdoc README.md
+	vdoc USERSCRIPTS.md
+
+	vmkdir usr/share/applications
+	vcopy "${FILESDIR}/brow6el.desktop" usr/share/applications
+
+	vmkdir usr/share/icons/hicolor/scalable/apps
+	vcopy "${FILESDIR}/brow6el.svg" usr/share/icons/hicolor/scalable/apps
+
+	vlicense "${FILESDIR}/LICENSE"
+}
