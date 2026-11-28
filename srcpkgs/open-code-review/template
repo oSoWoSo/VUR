@@ -1,0 +1,15 @@
+# Template file for 'open-code-review'
+pkgname=open-code-review
+version=1.14.4
+revision=1
+build_style=go
+go_import_path="github.com/alibaba/open-code-review"
+go_package="./cmd/opencodereview"
+go_ldflags="-X main.Version=v${version}"
+hostmakedepends="go git"
+short_desc="Hybrid architecture code review tool"
+maintainer="zenobit <zen@osowoso.org>"
+license="Apache-2.0"
+homepage="https://github.com/alibaba/open-code-review"
+distfiles="https://github.com/alibaba/open-code-review/archive/refs/tags/v${version}.tar.gz"
+checksum=9be8741c0c7c73a807c3e01a172f00226598c6246c597add462365a528cc2254
